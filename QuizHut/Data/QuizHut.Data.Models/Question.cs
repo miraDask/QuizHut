@@ -10,7 +10,7 @@
         public int Id { get; set; }
 
         [Required]
-        [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
+        [StringLength(TextMaxLength, MinimumLength = TextMinLength)]
         public string Text { get; set; }
 
         public ICollection<Answer> Answers { get; set; } = new HashSet<Answer>();

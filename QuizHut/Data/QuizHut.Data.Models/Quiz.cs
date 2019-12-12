@@ -28,6 +28,10 @@
 
         public Category Category { get; set; }
 
+        public int CodeId { get; set; }
+
+        public Code Code { get; set; }
+
         public ICollection<Question> Questions { get; set; } = new HashSet<Question>();
     }
 }
