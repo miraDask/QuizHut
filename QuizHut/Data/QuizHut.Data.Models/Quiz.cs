@@ -18,7 +18,7 @@
 
         public DateTime? StartTime { get; set; }
 
-        public DateTime? ActivationTime { get; set; }
+        public DateTime? ActivationDateAndTime { get; set; }
 
         public bool IsActive { get; set; }
 
