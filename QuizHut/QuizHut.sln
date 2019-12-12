@@ -5,6 +5,14 @@ VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHut.Console", "QuizHut.Console\QuizHut.Console.csproj", "{07FFB800-E0E4-4EE6-AC43-0ACE0C93E3FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{BAB52D21-A4C8-4F66-BEEB-D3BB4C22E18F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{55E62414-DC81-4CA6-9E46-AA93DD47821B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHut.Data", "Data\QuizHut.Data\QuizHut.Data.csproj", "{ED5619CC-117B-4754-95D3-191BC4E8FF29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHut.Data.Models", "Data\QuizHut.Data.Models\QuizHut.Data.Models.csproj", "{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +23,21 @@ Global
 		{07FFB800-E0E4-4EE6-AC43-0ACE0C93E3FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07FFB800-E0E4-4EE6-AC43-0ACE0C93E3FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07FFB800-E0E4-4EE6-AC43-0ACE0C93E3FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED5619CC-117B-4754-95D3-191BC4E8FF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED5619CC-117B-4754-95D3-191BC4E8FF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED5619CC-117B-4754-95D3-191BC4E8FF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED5619CC-117B-4754-95D3-191BC4E8FF29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED5619CC-117B-4754-95D3-191BC4E8FF29} = {BAB52D21-A4C8-4F66-BEEB-D3BB4C22E18F}
+		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6} = {BAB52D21-A4C8-4F66-BEEB-D3BB4C22E18F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5E5E6F7-516C-4FC6-92B8-59EB556C128C}
