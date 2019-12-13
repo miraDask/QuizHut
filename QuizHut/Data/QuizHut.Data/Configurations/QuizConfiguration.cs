@@ -14,6 +14,11 @@
                 .HasForeignKey(q => q.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            quiz.HasOne(q => q.Creator)
+                .WithMany(c => c.CreatedQuizzes)
+                .HasForeignKey(q => q.CreatorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             quiz.HasOne(q => q.Code)
                 .WithOne(c => c.Quiz)
                 .HasForeignKey<Quiz>(q => q.CodeId)

@@ -14,6 +14,10 @@
         [StringLength(NameMaxLength, MinimumLength = NameMinLength)]
         public string Name { get; set; }
 
+        public int CreatorId { get; set; }
+
+        public User Creator { get; set; }
+
         public TimeSpan? Duration { get; set; }
 
         public DateTime? StartTime { get; set; }
@@ -33,5 +37,7 @@
         public Code Code { get; set; }
 
         public ICollection<Question> Questions { get; set; } = new HashSet<Question>();
+
+        public ICollection<UserQuiz> UsersQuizes { get; set; } = new HashSet<UserQuiz>();
     }
 }

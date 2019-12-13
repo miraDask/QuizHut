@@ -15,6 +15,9 @@
 
         public DbSet<Code> Codes { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<UserQuiz> UsersQuizzes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
         {
