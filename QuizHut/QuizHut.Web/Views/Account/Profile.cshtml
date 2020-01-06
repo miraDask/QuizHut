@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+<div class="container-fluid">
+    @* TODO - fix ui for IPad *@
+    <div class="row mb-5 mt-4">
+        <div class="col-12 col-md-3 offset-md-1 border-right">
+
+            <div class="mt-5">
+                <div class="mb-4">
+                    <h3>Hello, Mira</h3>
+                    <p class="lead">Manage your account.</p>
+                </div>
+            </div>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <div class="my-2"><button class="btn btn-primary manage-account-btn">Edit Profile</button></div>
+                </li>
+                <li class="nav-item dropdown">
+                    <div class="my-2">
+                        <button class="nav-link btn btn-primary manage-account-btn dropdown-toggle" href="https://bootstrapbay.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Quizzes
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            @*add actual count of pending and saved quizzes*@
+                            <a class="dropdown-item" href="#">Saved<span class="badge badge-primary ml-1">9</span></a>
+                            <a class="dropdown-item" href="#">Pending<span class="badge badge-primary ml-1">9</span></a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="my-2"><button class="btn btn-primary manage-account-btn">Email List</button></div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-12 col-md-6 mt-5">
+            <div class="row">
+                <div class="flex-grow-1">
+                    <partial name="_BublesAndCirclesPrtial" />
+                </div>
+                <div class="col-md-5">
+                    <div class="component">
+                        <div class="card mb-3 mt-3">
+                            <div class="card-header text-primary" style="font-size: xx-large">
+                                <i class="fas fa-folder-plus"></i>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Make Quiz</h4>
+                                <p class="card-text">Save Or Print...</p>
+                            </div>
+                            <div class="card-footer pb-5">
+                                <a href="#a" class="btn btn-primary">New Quiz</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="component">
+                        <div class="card mb-3 mt-3">
+                            <div class="card-header text-warning" style="font-size: xx-large">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Take Quiz</h4>
+                                <p class="card-text">Enter Quiz Code...</p>
+                            </div>
+                            <div class="card-footer pb-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Here">
+                                    <span class="input-group-btn ">
+                                        <button class="btn btn-default pt-0 text-warning" type="submit" style="font-size: xx-large">
+                                            <i class="fas fa-sign-in-alt"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

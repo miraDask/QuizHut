@@ -3,15 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHut.Console", "QuizHut.Console\QuizHut.Console.csproj", "{07FFB800-E0E4-4EE6-AC43-0ACE0C93E3FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizHut.Console", "QuizHut.Console\QuizHut.Console.csproj", "{07FFB800-E0E4-4EE6-AC43-0ACE0C93E3FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{BAB52D21-A4C8-4F66-BEEB-D3BB4C22E18F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{55E62414-DC81-4CA6-9E46-AA93DD47821B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHut.Data", "Data\QuizHut.Data\QuizHut.Data.csproj", "{ED5619CC-117B-4754-95D3-191BC4E8FF29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizHut.Data", "Data\QuizHut.Data\QuizHut.Data.csproj", "{ED5619CC-117B-4754-95D3-191BC4E8FF29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHut.Data.Models", "Data\QuizHut.Data.Models\QuizHut.Data.Models.csproj", "{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizHut.Data.Models", "Data\QuizHut.Data.Models\QuizHut.Data.Models.csproj", "{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizHut.Services", "Services\QuizHut.Services\QuizHut.Services.csproj", "{FBE24891-911D-46D8-9916-607F59A985B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuizHut.Services.Models", "Services\QuizHut.Services.Models\QuizHut.Services.Models.csproj", "{584B0628-6275-40A9-8F0A-9A61424FB881}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuizHut.Web", "QuizHut.Web\QuizHut.Web.csproj", "{0160CF30-C94C-4A7D-AC69-A9BD50D91D95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +37,18 @@ Global
 		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBE24891-911D-46D8-9916-607F59A985B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBE24891-911D-46D8-9916-607F59A985B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBE24891-911D-46D8-9916-607F59A985B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBE24891-911D-46D8-9916-607F59A985B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{584B0628-6275-40A9-8F0A-9A61424FB881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{584B0628-6275-40A9-8F0A-9A61424FB881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{584B0628-6275-40A9-8F0A-9A61424FB881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{584B0628-6275-40A9-8F0A-9A61424FB881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0160CF30-C94C-4A7D-AC69-A9BD50D91D95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0160CF30-C94C-4A7D-AC69-A9BD50D91D95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0160CF30-C94C-4A7D-AC69-A9BD50D91D95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0160CF30-C94C-4A7D-AC69-A9BD50D91D95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +56,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ED5619CC-117B-4754-95D3-191BC4E8FF29} = {BAB52D21-A4C8-4F66-BEEB-D3BB4C22E18F}
 		{49194A71-4A24-40FD-99BC-B5BDCB59E8C6} = {BAB52D21-A4C8-4F66-BEEB-D3BB4C22E18F}
+		{FBE24891-911D-46D8-9916-607F59A985B6} = {55E62414-DC81-4CA6-9E46-AA93DD47821B}
+		{584B0628-6275-40A9-8F0A-9A61424FB881} = {55E62414-DC81-4CA6-9E46-AA93DD47821B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E5E5E6F7-516C-4FC6-92B8-59EB556C128C}
