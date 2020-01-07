@@ -1,87 +1,90 @@
 ﻿
-<head>
-    <meta charset="utf-8">
-    <title>QuizHut</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    @*<meta name="description" content="A new design system for developing with less effort.">
+    <head>
+        <meta charset="utf-8">
+        <title>QuizHut</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        @*<meta name="description" content="A new design system for developing with less effort.">
         <meta name="author" content="BootstrapBay">*@
 
-    <link href="./assets/img/favicon.ico" rel="icon" type="image/png">
+        <link href="./assets/img/favicon.ico" rel="icon" type="image/png">
 
-    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../assets/css/lazy.css">
-    <link rel="stylesheet" href="../assets/css/demo.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
-</head>
-<body class="index">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-            <div class="container">
-                <a class="navbar-brand" asp-action="Index" asp-controller="Home">QuizHut</a>
-                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-7" aria-controls="navbarNavDropdown-7" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown-7">
-                    <div class="navbar-collapse collapse" id="navbarNavDropdown-7">
-                        <ul class="navbar-nav ml-auto">
-                            <partial name="_LoginPartial" />
-                        </ul>
+        <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="../assets/css/lazy.css">
+        <link rel="stylesheet" href="../assets/css/demo.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    </head>
+    <body class="index">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+                <div class="container">
+                    <a class="navbar-brand" asp-action="Index" asp-controller="Home">QuizHut</a>
+                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-7" aria-controls="navbarNavDropdown-7" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown-7">
+                        <div class="navbar-collapse collapse" id="navbarNavDropdown-7">
+                            <ul class="navbar-nav ml-auto">
+                                <partial name="_LoginPartial" />
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
 
-    <main role="main">
-        @RenderBody()
-    </main>
+        <main role="main">
+            @RenderBody()
+        </main>
 
-    <footer class="footer-1 bg-light text-dark">
-        <div class="container">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                <div class="links">
-                    <ul class="footer-menu list-unstyled d-flex flex-row text-center text-md-left">
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
-                    </ul>
-                </div>
-                <div class="social mt-4 mt-md-0">
-                    <a class="twitter btn btn-outline-primary btn-icon" href="https://twitter.com/bootstrapbay" target="_blank">
-                        <i class="fab fa-twitter"></i>
-                        <span class="sr-only">View our Twitter Profile</span>
-                    </a>
-                    <a class="facebook btn btn-outline-primary btn-icon" href="https://www.facebook.com/bootstrapbayofficial/" target="_blank">
-                        <i class="fab fa-facebook"></i>
-                        <span class="sr-only">
-                            View our Facebook Profile
-                            <span>
+        <footer class="footer-1 bg-light text-dark">
+            <div class="container">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <div class="links">
+                        <ul class="footer-menu list-unstyled d-flex flex-row text-center text-md-left">
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                        </ul>
+                    </div>
+                    <div class="social mt-4 mt-md-0">
+                        <a class="twitter btn btn-outline-primary btn-icon" href="https://twitter.com/bootstrapbay" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                            <span class="sr-only">View our Twitter Profile</span>
+                        </a>
+                        <a class="facebook btn btn-outline-primary btn-icon" href="https://www.facebook.com/bootstrapbayofficial/" target="_blank">
+                            <i class="fab fa-facebook"></i>
+                            <span class="sr-only">
+                                View our Facebook Profile
+                                <span>
+                                </span>
                             </span>
-                        </span>
-                    </a>
-                    <a class="github btn btn-outline-primary btn-icon" href="https://github.com/bootstrapbay" target="_blank">
-                        <i class="fab fa-github"></i>
-                        <span class="sr-only">View our GitHub Profile</span>
-                    </a>
+                        </a>
+                        <a class="github btn btn-outline-primary btn-icon" href="https://github.com/bootstrapbay" target="_blank">
+                            <i class="fab fa-github"></i>
+                            <span class="sr-only">View our GitHub Profile</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="copyright text-center">
+                    <hr>
+                    <p class="small">© 2020, made with <span class="text-danger"><i class="fas fa-heart"></i></span> by MiraDask</p>
                 </div>
             </div>
-            <div class="copyright text-center">
-                <hr>
-                <p class="small">© 2020, made with <span class="text-danger"><i class="fas fa-heart"></i></span> by MiraDask</p>
-            </div>
-        </div>
-    </footer>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="../assets/vendor/jquery/jquery.min.js"></script>
-    <script src="../assets/vendor/popper/popper.min.js"></script>
-    <script src="../assets/vendor/bootstrap/bootstrap.min.js"></script>
+        </footer>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="../assets/vendor/jquery/jquery.min.js"></script>
+        <script src="../assets/vendor/popper/popper.min.js"></script>
+        <script src="../assets/vendor/bootstrap/bootstrap.min.js"></script>
 
-    <!-- optional plugins -->
-    <script src="./assets/vendor/nouislider/js/nouislider.min.js"></script>
+        <!-- optional plugins -->
+        <script src="../assets/vendor/nouislider/js/nouislider.min.js"></script>
 
-    <!--   lazy javascript -->
-    <script src="../assets/js/lazy.js"></script>
-    @RenderSection("scripts", required: false)
-</body>
+        <!--   lazy javascript -->
+        <script src="../assets/js/lazy.js"></script>
+
+        <!--   createQuiz javascript -->
+        <script src="../assets/js/createQuiz.js"></script>
+        @RenderSection("scripts", required: false)
+    </body>
 

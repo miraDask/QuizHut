@@ -1,5 +1,5 @@
-$(document).ready(function() {
-    
+$(document).ready(function () {
+
     // NoUI Slider
     if ($(".input-slider-container")[0]) {
         $('.input-slider-container').each(function() {
