@@ -13,10 +13,12 @@
     let questionCount = 1;
     
     let addNameBtn = document.getElementById("addName");
+    let addQuestionBtn = document.getElementById("addQuestion");
 
     if (addNameBtn) {
 
         addNameBtn.addEventListener("click", addName);
+        addQuestionBtn.addEventListener("click", addQuestion)
     }
 
     function addName(event) {
@@ -35,8 +37,14 @@
                .map(b => b.classList.replace("btn-outline-primary", "btn-primary"));
     }
 
+    function addQuestion() {
+        event.stopPropagation()
+        displayQuizElement(quiz, "Question " + questionCount++, "");
+    }
+
     function displayQuizElement(quiz, labelText, text) {
-        let element = document.getElementById("template");
+        let template = document.getElementById("template");
+        let element = template.cloneNode(true);
         element.getElementsByTagName("label")[0].textContent = labelText;
         quiz.appendChild(element);
 
