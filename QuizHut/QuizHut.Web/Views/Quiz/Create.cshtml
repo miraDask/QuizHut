@@ -3,7 +3,7 @@
 }
 <div class="container-fluid">
     <div class="row mb-5 mt-4">
-        <div class="col-12 col-md-2 border-right ml-2">
+        <div class="col-12 col-md-3 border-right ml-2">
             <div class="mt-5">
                 <div class="mb-4">
                     <h3>Elements</h3>
@@ -13,46 +13,35 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
                     <div class="my-2">
-                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Question</button>
+                        <button type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Question</button>
                     </div>
                 </li>
                 <li class="nav-item active">
                     <div class="my-2">
-                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Answer</button>
+                        <button type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Answer</button>
                     </div>
                 </li>
                 <li class="nav-item active">
                     <div class="my-2">
-                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Image</button>
+                        <button type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Image</button>
                     </div>
                 </li>
                 <li class="nav-item active">
                     <div class="my-2">
-                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i>Text Field</button>
+                        <button type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i>Text Field</button>
                     </div>
                 </li>
             </ul>
         </div>
 
-        <div class="col-12 offset-md-2 col-md-6 mt-4 row">
-            <form id="quiz" class="mb-3 col-12" id="quizForm" style="display: none;">
-                <div class="form-group flex-grow-1 d-inline">
-                    <h4><label for="name">Name</label></h4>
-                    
-                    <input id="name" type="text" class="form-control form-control-lg flex-grow-1 mr-2">
-                </div>
+        <div class="col-12 offset-md-1 col-md-7 mt-4 row">
+            <form id="quiz" class="mb-3 col-12" style="display: none;">
+                @*<div id="formGroup" class="form-group flex-grow-1 d-inline">
+                    <h4><label for="content">Name</label></h4>
+                    <input id="content" type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline  text-truncate">
+                </div>*@
 
             </form>
-            @*<div class="form-group">
-            <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled="" style="display:none">
-        </div>*@
-            @*<div class="row">
-        <form class="form-subscribe form-inline mb-3" id="disabledInput" style="display:none">
-            <div class="form-group flex-grow-1 d-inline">
-                <input id="input" type="text" class="form-control form-control-lg flex-grow-1 mr-2" disabled="">
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg mt-0 mt-md-3 mt-lg-0 d-inline-block">Edit</button>
-        </form>*@
             <div id="nameCard" class="col-10 ml-4">
                 <div class="component">
                     <div class="card mb-3 mt-3">
@@ -60,12 +49,12 @@
                             <i class="fas fa-folder-plus"></i>
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title">Name</h4>
-                            <p class="card-text">Name Your Quiz...</p>
+                            <h4 class="card-title">Name Your Quiz First</h4>
+                            <p class="card-text"><span class="text-primary mr-1">&lowast;</span>You can always change the name later.</p>
                         </div>
                         <div class="card-footer pb-5">
                             <div class="input-group">
-                                <input id="nameInput" type="text" class="form-control" placeholder="Here">
+                                <input id="nameInput" type="text" class="form-control" placeholder="Name">
                             </div>
                             <div class="row mx-4 text-white">
                                 <a id="addName" class="btn btn-primary col-md-5 mt-5">Add</a>
@@ -76,9 +65,14 @@
                     </div>
                 </div>
             </div>
-            @*</div>*@
         </div>
     </div>
+</div>
+
+@*----------formGroup template-------------------*@
+<div id="template" class="form-group flex-grow-1 d-inline" style="display:none">
+    <h4><label for="content"></label></h4>
+    <input id="content" type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline  text-truncate">
 </div>
 
 

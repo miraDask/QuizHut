@@ -1,5 +1,5 @@
 ﻿(function () {
-
+    
     //prevents Enter key to submit form:
     window.addEventListener('keydown', function (e) {
         if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
@@ -23,26 +23,26 @@
         event.stopPropagation()
 
         let nameInput = document.getElementById("nameInput");
-        let input = document.getElementsByTagName("input")[0];
-        let form = document.getElementById("quiz");
+        let quiz = document.getElementById("quiz");
+        let text = nameInput.value;
 
-        let name = nameInput.value;
-        input.value = name;
-
+        displayQuizElement(quiz, "Name", text);
         document.getElementById("nameCard").style.display = "none";
-        form.style.display = "block";
-        //document.getElementById("addQuestion").addEventListener("click", addQuestion);
+        quiz.style.display = "block";
+        let buttons = Array.from(document.getElementsByTagName("button"));
+
+        buttons.filter(b => b.classList[0] === "btn")
+               .map(b => b.classList.replace("btn-outline-primary", "btn-primary"));
     }
 
-    //function addQuestion(event) {
-    //    event.stopPropagation();
-    //    let questionText = document.getElementById("questionText").value;
+    function displayQuizElement(quiz, labelText, text) {
+        let element = document.getElementById("template");
+        element.getElementsByTagName("label")[0].textContent = labelText;
+        quiz.appendChild(element);
 
-    //    displayQuestion(questionText);
-    //}
-
-
-    function displayQuestion(text) {
-
+        let input = element.getElementsByTagName("input")[0];
+        input.value = text;
+        element.style.display = "block";
     }
+
 })();
