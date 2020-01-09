@@ -49,12 +49,35 @@
                                 <h4 class="card-title">Make Quiz</h4>
                                 <p class="card-text">Save Or Print...</p>
                             </div>
-                            <div class="card-footer pb-5">
+                            <div class="card-footer pb-5 mt-3">
                                 <a class="btn btn-primary" asp-action="Create" asp-controller="Quiz">New Quiz</a>
                             </div>
                         </div>
                     </div>
                 </div>
+                @*<div class="col-md-5">
+            <div class="component">
+                <div class="card mb-3 mt-3">
+                    <div class="card-header text-warning" style="font-size: xx-large">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Take Quiz</h4>
+                        <p class="card-text">Enter Quiz Code...</p>
+                    </div>
+                    <div class="card-footer pb-5">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Here">
+                            <span class="input-group-btn ">
+                                <button class="btn btn-default pt-0 text-warning" type="submit" style="font-size: xx-large">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
                 <div class="col-md-5">
                     <div class="component">
                         <div class="card mb-3 mt-3">
@@ -63,17 +86,14 @@
                             </div>
                             <div class="card-body">
                                 <h4 class="card-title">Take Quiz</h4>
-                                <p class="card-text">Enter Quiz Code...</p>
+
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Quiz Code...">
+
+                                </div>
                             </div>
                             <div class="card-footer pb-5">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Here">
-                                    <span class="input-group-btn ">
-                                        <button class="btn btn-default pt-0 text-warning" type="submit" style="font-size: xx-large">
-                                            <i class="fas fa-sign-in-alt"></i>
-                                        </button>
-                                    </span>
-                                </div>
+                                <a class="btn btn-primary" asp-action="Take" asp-controller="Quiz">Enter Quiz</a>
                             </div>
                         </div>
                     </div>

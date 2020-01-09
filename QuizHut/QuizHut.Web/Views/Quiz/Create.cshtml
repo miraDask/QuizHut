@@ -3,84 +3,80 @@
 }
 <div class="container-fluid">
     <div class="row mb-5 mt-4">
-        <div class="col-12 col-md-4  border-right">
-
+        <div class="col-12 col-md-2 border-right ml-2">
             <div class="mt-5">
-                <div class="mb-4 px-4">
-                    <h3 id="quizName">New Quiz</h3>
-                    @*<p  id="info" class="lead">Quiz content will apear here.  If you want to edit it just click over the element.</p>*@
-                    <button type="button" class="btn btn-danger btn-lg">Large button</button>
+                <div class="mb-4">
+                    <h3>Elements</h3>
+                    <p id="info" class="lead">Choose element to add.</p>
                 </div>
             </div>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <div class="my-2">
+                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Question</button>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <div class="my-2">
+                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Answer</button>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <div class="my-2">
+                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Image</button>
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <div class="my-2">
+                        <button type="button" class="btn btn-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i>Text Field</button>
+                    </div>
+                </li>
+            </ul>
         </div>
 
-        <div class="col-12 offset-md-1 col-md-6 mt-5">
-            <div class="row">
-                <div class="col-10 ml-4">
-                    <div class="component">
-                        <div id="name" class="card mb-3 mt-3" style="">
-                            <div class="card-header text-warning" style="font-size: xx-large">
-                                <i class="fas fa-folder-plus"></i>
-                            </div>
-                            <div class="card-body">
-                                <h4 class="card-title">Name</h4>
-                                <p class="card-text">Name Your Quiz...</p>
-                            </div>
-                            <div class="card-footer pb-5">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Here">
-                                </div>
-                                <div class="row mx-4 text-white">
-                                    <a id="addName" class="btn btn-primary col-md-5 mt-5">Add</a>
-                                    <div class="col-1 mr-4"></div>
-                                    <a id="cancel" class="btn btn-primary col-md-5 mt-5" asp-action="Profile" asp-controller="Account">Cancel</a>
-                                </div>
-                            </div>
+        <div class="col-12 offset-md-2 col-md-6 mt-4 row">
+            <form id="quiz" class="mb-3 col-12" id="quizForm" style="display: none;">
+                <div class="form-group flex-grow-1 d-inline">
+                    <h4><label for="name">Name</label></h4>
+                    
+                    <input id="name" type="text" class="form-control form-control-lg flex-grow-1 mr-2">
+                </div>
+
+            </form>
+            @*<div class="form-group">
+            <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled="" style="display:none">
+        </div>*@
+            @*<div class="row">
+        <form class="form-subscribe form-inline mb-3" id="disabledInput" style="display:none">
+            <div class="form-group flex-grow-1 d-inline">
+                <input id="input" type="text" class="form-control form-control-lg flex-grow-1 mr-2" disabled="">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg mt-0 mt-md-3 mt-lg-0 d-inline-block">Edit</button>
+        </form>*@
+            <div id="nameCard" class="col-10 ml-4">
+                <div class="component">
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header text-warning" style="font-size: xx-large">
+                            <i class="fas fa-folder-plus"></i>
                         </div>
-                        <div id="question" class="card mb-3 mt-3" style="display:none">
-                            <div class="card-header text-warning" style="font-size: xx-large">
-                                <i class="fas fa-folder-plus"></i>
-                            </div>
-                            <div class="card-body">
-                                <h4 class="card-title">Question</h4>
-                                <p class="card-text">Add New Question...</p>
-                            </div>
-                            <div class="card-footer pb-5">
-                                <div class="input-group">
-                                    <input id="questionText" type="text" class="form-control" placeholder="Here">
-                                </div>
-                                <div class="row mx-4 text-white">
-                                    <a id="addQuestion" class="btn btn-primary col-md-5 mt-5">Add</a>
-                                    <div class="col-1 mr-4"></div>
-                                    <a class="btn btn-primary col-md-5 mt-5">Cancel</a>
-                                </div>
-                            </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Name</h4>
+                            <p class="card-text">Name Your Quiz...</p>
                         </div>
-                        <div id="answer" class="card mb-3 mt-3" style="display:none">
-                            <div class="card-header text-warning" style="font-size: xx-large">
-                                <i class="fas fa-folder-plus"></i>
+                        <div class="card-footer pb-5">
+                            <div class="input-group">
+                                <input id="nameInput" type="text" class="form-control" placeholder="Here">
                             </div>
-                            <div class="card-body">
-                                <h4 class="card-title">Answer</h4>
-                                <div class="custom-control custom-checkbox my-2">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck2">
-                                    <label class="custom-control-label" for="customCheck2">Mark The Right Answer</label>
-                                </div>
-                            </div>
-                            <div class="card-footer pb-5">
-                                <div class="input-group">
-                                    <input id="answerText" type="text" class="form-control" placeholder="Here">
-                                </div>
-                                <div class="row mx-4 text-white">
-                                    <a id="addAnswer" class="btn btn-primary col-md-5 mt-5">Add Answer</a>
-                                    <div class="col-1 mr-4"></div>
-                                    <a id="cancel" class="btn btn-primary col-md-5 mt-5">Add New Question</a>
-                                </div>
+                            <div class="row mx-4 text-white">
+                                <a id="addName" class="btn btn-primary col-md-5 mt-5">Add</a>
+                                <div class="col-1 mr-4"></div>
+                                <a id="cancel" class="btn btn-primary col-md-5 mt-5" asp-action="Profile" asp-controller="Account">Cancel</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            @*</div>*@
         </div>
     </div>
 </div>
