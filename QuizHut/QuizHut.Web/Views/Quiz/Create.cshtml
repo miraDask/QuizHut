@@ -18,17 +18,17 @@
                 </li>
                 <li class="nav-item active">
                     <div class="my-2">
-                        <button type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Answer</button>
+                        <button id="addAnswer" type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Answer</button>
                     </div>
                 </li>
                 <li class="nav-item active">
                     <div class="my-2">
-                        <button type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Image</button>
+                        <button id="addImage" type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Image</button>
                     </div>
                 </li>
                 <li class="nav-item active">
                     <div class="my-2">
-                        <button type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i>Text Field</button>
+                        <button id="addTextField" type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i>Text Field</button>
                     </div>
                 </li>
             </ul>
@@ -36,7 +36,6 @@
 
         <div class="col-12 offset-md-1 col-md-7 mt-4 row">
             <form id="quiz" class="mb-3 col-12" style="display: none;">
-             
             </form>
             <div id="nameCard" class="col-10 ml-4">
                 <div class="component">
@@ -68,7 +67,13 @@
 @*----------formGroup template-------------------*@
 <div id="template" class="form-group flex-grow-1 d-inline" style="display:none">
     <h4><label for="content"></label></h4>
-    <input id="content" type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate mb-3">
+    <div class="form-group" style="display:none">
+        <div class="custom-control custom-checkbox my-2">
+            <input type="checkbox" class="custom-control-input" id="customCheck2">
+            <label class="custom-control-label" for="customCheck2">The 1975</label>
+        </div>
+    </div>
+    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate mb-3">
 </div>
 
 
