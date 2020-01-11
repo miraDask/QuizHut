@@ -1,9 +1,50 @@
 ﻿@{
     ViewData["Title"] = "Create";
 }
-<div class="container-fluid">
-    <div class="row mb-5 mt-4">
-        <div class="col-12 col-md-3 border-right ml-2">
+    <div class="container-fluid">
+        <div class="flex-grow-1">
+            <partial name="_BublesAndCirclesPrtial" />
+        </div>
+
+        <div class="col-12 offset-md-2 col-md-8 mt-4 row">
+            <form id="quiz" class="mb-3 col-12" style="display: none;">
+            </form>
+            <div id="nameCard" class="col-11 ml-4">
+                <div class="component">
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header text-warning" style="font-size: xx-large">
+                            <i class="fas fa-folder-plus"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Name Your Quiz First</h4>
+                            <p class="card-text">
+                                <span class="text-primary mr-1">&lowast;</span>
+                                You can always edit it later.
+                            </p>
+                            <p class="card-text" style="display:none">
+                                <span class="text-primary mr-1">
+                                    <input type="checkbox" name="rightAnswer" value="rightAnswer">
+                                </span>
+                                Check the box if the answer is right;
+                            </p>
+                        </div>
+                        <div class="card-footer pb-5">
+                            <div class="input-group">
+                                <input id="nameInput" type="text" class="form-control" placeholder="...">
+                            </div>
+                            <div class="row mx-4 text-white">
+                                <a id="add" class="btn btn-primary col-md-5 mt-5">Add Name</a>
+                                <div class="col-1 mr-4"></div>
+                                <a id="cancel" class="btn btn-primary col-md-5 mt-5" asp-action="Profile" asp-controller="Account">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="done" class="btn btn-primary offset-md-4 col-md-4 mt-2 text-white">Finish Quiz</button>
+        </div>
+        @*<div class="row mb-5 mt-4">*@
+        @*<div class="col-12 col-md-3 border-right ml-2">
             <div class="mt-5">
                 <div class="mb-4">
                     <h3>Elements</h3>
@@ -32,41 +73,15 @@
                     </div>
                 </li>
             </ul>
-        </div>
+        </div>*@
 
-        <div class="col-12 offset-md-1 col-md-7 mt-4 row">
-            <form id="quiz" class="mb-3 col-12" style="display: none;">
-            </form>
-            <div id="nameCard" class="col-10 ml-4">
-                <div class="component">
-                    <div class="card mb-3 mt-3">
-                        <div class="card-header text-warning" style="font-size: xx-large">
-                            <i class="fas fa-folder-plus"></i>
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-title">Name Your Quiz First</h4>
-                            <p class="card-text"><span class="text-primary mr-1">&lowast;</span>You can always change the name later.</p>
-                        </div>
-                        <div class="card-footer pb-5">
-                            <div class="input-group">
-                                <input id="nameInput" type="text" class="form-control" placeholder="Name">
-                            </div>
-                            <div class="row mx-4 text-white">
-                                <a id="addName" class="btn btn-primary col-md-5 mt-5">Add</a>
-                                <div class="col-1 mr-4"></div>
-                                <a id="cancel" class="btn btn-primary col-md-5 mt-5" asp-action="Profile" asp-controller="Account">Cancel</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @*</div>*@
+
     </div>
-</div>
 
 @*----------formGroup template-------------------*@
-<div id="template" class="form-group flex-grow-1 d-inline" style="display:none">
-    <h4><label for="content"></label></h4>
+<div id="template" class="form-group flex-grow-1 d-inline invisible">
+    <h4><label></label></h4>
     <div class="form-group" style="display:none">
         <div class="custom-control custom-checkbox my-2">
             <input type="checkbox" class="custom-control-input" id="customCheck2">

@@ -5,6 +5,13 @@
         ANSWER: "Answer",
         NAME: "Name"
     };
+
+    const BUTTONS_NAMES = {
+        ADD_NAME : "Add Name",
+        ADD_QUESTION: "Add Question",
+        ADD_NEW_QUESTION: "Add  New Question",
+        ADD_ANSWER : "Add Answer"
+    }
     
     //prevents Enter key to submit form:
     window.addEventListener('keydown', function (e) {
@@ -18,59 +25,53 @@
 
     let questionCount = 1;
     
-    let addNameBtn = document.getElementById("addName");
-    let addQuestionBtn = document.getElementById("addQuestion");
-    let addAnswerBtn = document.getElementById("addAnswer");
-    let addImageBtn = document.getElementById("addImage");
-    let addTextFieldBtn = document.getElementById("addTextField");
+    let addNameBtn = document.getElementById("add");
+    //let addQuestionBtn = document.getElementById("addQuestion");
+    //let addAnswerBtn = document.getElementById("addAnswer");
+    //let addImageBtn = document.getElementById("addImage");
+    //let addTextFieldBtn = document.getElementById("addTextField");
 
     if (addNameBtn) {
-
-        addNameBtn.addEventListener("click", addName);
-        addQuestionBtn.addEventListener("click", addQuestion);
-        addAnswerBtn.addEventListener("click", addAnswer);
-        addImageBtn.addEventListener("click", addImage);
-        addTextFieldBtn.addEventListener("click", addTextField);
+        addNameBtn.addEventListener("click", addElementToQuiz);
+        //addQuestionBtn.addEventListener("click", addQuestion);
+        //addAnswerBtn.addEventListener("click", addAnswer);
+        //addImageBtn.addEventListener("click", addImage);
+        //addTextFieldBtn.addEventListener("click", addTextField);
     }
 
-    function addName(event) {
-        event.stopPropagation()
+    function addElementToQuiz(event) {
+        event.stopPropagation();
+            let input = document.getElementById("nameInput");
+            let quiz = document.getElementById("quiz");
+            let text = input.value;
 
-        let nameInput = document.getElementById("nameInput");
-        let quiz = document.getElementById("quiz");
-        let text = nameInput.value;
+        if (addNameBtn.textContent === BUTTONS_NAMES.ADD_QUESTION) {
+            addQuestion(quiz, text, input);
 
-        let newElement = displayQuizElement(quiz, LABEL.NAME, text);
-        //document.getElementById("nameCard").style.display = "none";
-        quiz.style.display = "block";
-        let buttons = Array.from(document.getElementsByTagName("button"));
+        } else if (addNameBtn.textContent === BUTTONS_NAMES.ADD_NAME) {
+            addName(quiz, text, input);
 
-        buttons.filter(b => b.classList[0] === "btn")
-            .map(b => b.classList.replace("btn-outline-primary", "btn-primary"));
-
-        window.scroll(0, findPos(newElement));
-
-    }
-
-    function findPos(obj) {
-        var curtop = 0;
-        if (obj.offsetParent) {
-            do {
-                curtop += obj.offsetTop;
-            } while (obj = obj.offsetParent);
-            return [curtop];
         }
     }
 
-    function addQuestion() {
-        event.stopPropagation()
-        let newElement = displayQuizElement(quiz, LABEL.QUESTION, "");
+    function addName(quiz, text, input) {
+        let newElement = displayQuizElement(quiz, LABEL.NAME, text);
+        quiz.style.display = "block";
+      
+        renderAddQuestionCard(input);
         window.scroll(0, findPos(newElement));
     }
 
-    function addAnswer() {
-        event.stopPropagation()
-        let newElement = displayQuizElement(quiz, LABEL.ANSWER, "");
+    function addQuestion(quiz, text, input) {
+        event.stopPropagation();
+        let newElement = displayQuizElement(quiz, LABEL.QUESTION, text);
+        window.scroll(0, findPos(newElement));
+        renderAddAnswerCard(input);
+    }
+
+    function addAnswer(text) {
+        event.stopPropagation();
+        let newElement = displayQuizElement(quiz, LABEL.ANSWER, text);
         window.scroll(0, findPos(newElement));
     }
 
@@ -90,18 +91,70 @@
 
         if (labelText === LABEL.QUESTION) {
             labelText = labelText + " " + questionCount;
-            element.id = labelText.toLowerCase() + questionCount;
+            element.id = LABEL.QUESTION.toLowerCase() + questionCount;
             questionCount++;
         }
 
         element.getElementsByTagName("label")[0].textContent = labelText;
         quiz.appendChild(element);
-
         let input = element.getElementsByTagName("input")[1];
         input.value = text;
-        element.style.display = "block";
+        element.classList.replace("invisible", "visible");
 
         return element;
+    }
+
+    function renderAddQuestionCard(input) {
+        document.getElementsByClassName("card-text")[1].style.display = "none";
+
+        let secondBtn = document.getElementById("cancel");
+        let firstCardTextElement = document.getElementsByClassName("card-text")[0];
+        let secondCardTextElement = document.getElementsByClassName("card-text")[1];
+
+        if (firstCardTextElement.style.display === "none") {
+            firstCardTextElement.style.display = "block";
+            secondCardTextElement.style.display = "none";
+        }
+
+        addNameBtn.parentNode.classList.replace("mx-4", "mx-1");
+        addNameBtn.textContent = BUTTONS_NAMES.ADD_QUESTION;
+        secondBtn.style.display = "none";
+        secondBtn.removeAttribute("href");
+        document.getElementsByClassName("card-title")[0].textContent = "Add New Question";
+        input.value = "";
+    }
+
+    function renderAddAnswerCard(input) {
+        let secondBtn = document.getElementById("cancel");
+        let checkBox = document.getElementsByClassName("card-text")[1];
+
+        addNameBtn.parentNode.classList.replace("mx-1", "mx-4");
+        addNameBtn.textContent = BUTTONS_NAMES.ADD_ANSWER;
+        secondBtn.style.display = "block";
+        secondBtn.textContent = BUTTONS_NAMES.ADD_NEW_QUESTION;
+        document.getElementsByClassName("card-title")[0].textContent = "Add New Answer";
+        // document.getElementsByClassName("card-text")[0].style.display = "none";
+        if (checkBox.checked) {
+            checkBox.checked = false;
+        }
+        checkBox.style.display = "block";
+        secondBtn.addEventListener("click", function (event) {
+            event.stopPropagation();
+
+            renderAddQuestionCard(input);
+        });
+        input.value = "";
+    }
+
+
+    function findPos(obj) {
+        var curtop = 0;
+        if (obj.offsetParent) {
+            do {
+                curtop += obj.offsetTop;
+            } while (obj = obj.offsetParent);
+            return [curtop];
+        }
     }
 
 })();
