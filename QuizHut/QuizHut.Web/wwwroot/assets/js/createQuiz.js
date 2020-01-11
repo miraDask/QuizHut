@@ -51,6 +51,8 @@
         } else if (addNameBtn.textContent === BUTTONS_NAMES.ADD_NAME) {
             addName(quiz, text, input);
 
+        } else if (addNameBtn.textContent === BUTTONS_NAMES.ADD_ANSWER) {
+            addAnswer(quiz, text, input);
         }
     }
 
@@ -69,16 +71,19 @@
         renderAddAnswerCard(input);
     }
 
-    function addAnswer(text) {
+    function addAnswer(quiz, text, input) {
         event.stopPropagation();
         let newElement = displayQuizElement(quiz, LABEL.ANSWER, text);
         window.scroll(0, findPos(newElement));
+        renderAddAnswerCard(input); 
+
     }
 
     function displayQuizElement(quiz, labelText, text) {
         let template = document.getElementById("template");
         let element = template.cloneNode(true);
         let checkbox = element.getElementsByTagName("input")[0].parentNode.parentNode;
+        let label = element.getElementsByTagName("h4")[0];
 
         if (labelText === LABEL.NAME) {
             element.id = labelText.toLowerCase();
@@ -86,10 +91,17 @@
 
         if (labelText === LABEL.ANSWER) {
             checkbox.style.display = "block";
-            element.getElementsByTagName("h4")[0].style.display = "none";
+            label.style.display = "none";
+            element.getElementsByTagName("div")[0].style.display = "block";
         }
 
         if (labelText === LABEL.QUESTION) {
+            if (label.style.display === "none") {
+                label.style.display = "block";
+                element.getElementsByTagName("div")[0].style.display = "none";
+            }
+
+            label.parentNode.className = "mt-5";
             labelText = labelText + " " + questionCount;
             element.id = LABEL.QUESTION.toLowerCase() + questionCount;
             questionCount++;
@@ -118,7 +130,8 @@
 
         addNameBtn.parentNode.classList.replace("mx-4", "mx-1");
         addNameBtn.textContent = BUTTONS_NAMES.ADD_QUESTION;
-        secondBtn.style.display = "none";
+        //secondBtn.style.display = "none";
+        secondBtn.textContent = "Finish Quiz";
         secondBtn.removeAttribute("href");
         document.getElementsByClassName("card-title")[0].textContent = "Add New Question";
         input.value = "";
