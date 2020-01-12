@@ -90,7 +90,7 @@
         let element = template.cloneNode(true);
         let checkbox = element.getElementsByTagName("input")[0].parentNode.parentNode;
         let label = element.querySelector("h4");
-        console.log(label)
+
         if (labelText === LABEL.NAME) {
             element.id = labelText.toLowerCase();
         }
@@ -98,16 +98,25 @@
         if (labelText === LABEL.ANSWER) {
             checkbox.style.display = "block";
             element.getElementsByTagName("nav")[0].style.display = "none";
-           // element.getElementsByTagName("div")[0].style.display = "block";
         }
 
         if (labelText === LABEL.QUESTION) {
-            let buttons = Array.from(element.getElementsByTagName("a"));
-            console.log(buttons);
+            let buttons = element.getElementsByTagName("a");
+
+            Array.from(buttons).forEach(b =>  {
+                b.style.display = "block";
+                console.log(b.classList)
+                b.classList.add(questionCount);
+            });
+
+            buttons[0].addEventListener("click", addAnswerToCurrentQuestion);
+
+
+            buttons[1].addEventListener("click", deleteCurrentQuestion);
+
             element.getElementsByTagName("nav")[0].style.display = "block";
             checkbox.style.display = "none";
 
-            buttons.forEach(b => b.style.display = "block");
             labelText = labelText + " " + questionCount;
             element.id = LABEL.QUESTION.toLowerCase() + questionCount;
             questionCount++;
@@ -124,7 +133,7 @@
 
     function renderAddQuestionCard(input) {
        
-          secondBtn.addEventListener("click", finishQuiz);
+        secondBtn.addEventListener("click", finishQuiz);
         document.getElementsByClassName("card-text")[1].style.display = "none";
 
         let firstCardTextElement = document.getElementsByClassName("card-text")[0];
@@ -182,7 +191,20 @@
             card.style.display = "block";
         })
 
-        submitBtn.addEventListener("click", );
+       // submitBtn.addEventListener("click", );
+    }
+
+    function addAnswerToCurrentQuestion(event) {
+        console.log(event.target);
+
+    }
+
+    function deleteCurrentQuestion(event) {
+        console.log(event.target);
+        let currentQuestionNumber = event.target.classList[3];
+        let question = document.getElementById("question" + currentQuestionNumber);
+        question.remove();
+        renderAddQuestionCard();
     }
 
 
