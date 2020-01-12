@@ -1,4 +1,8 @@
 ﻿(function () {
+    const TITLES = {
+        QUESTION: "Add New Question",
+        ANSWER: "Add New Answer"
+    }
 
     const LABEL = {
         QUESTION: "Question",
@@ -9,8 +13,9 @@
     const BUTTONS_NAMES = {
         ADD_NAME: "Add Name",
         ADD_QUESTION: "Add Question",
-        ADD_NEW_QUESTION: "Add  New Question",
-        ADD_ANSWER: "Add Answer"
+        ADD_NEW_QUESTION: "Question / Finish",
+        ADD_ANSWER: "Add Answer",
+        FINISH: "Finish Quiz"
     }
 
     //prevents Enter key to submit form:
@@ -26,7 +31,8 @@
     let questionCount = 1;
 
     let addBtn = document.getElementById("add");
-
+    let secondBtn = document.getElementById("cancel");
+    let card = document.getElementById("nameCard");
 
     if (addBtn) {
         addBtn.addEventListener("click", addElementToQuiz);
@@ -45,11 +51,9 @@
             addName(quiz, text, input);
 
         } else if (addBtn.textContent === BUTTONS_NAMES.ADD_ANSWER) {
-            let card = document.getElementById("nameCard");
             let checkBox = card.getElementsByTagName("input")[0];
-
             let isRightAnswer = checkBox.checked;
-       
+
             addAnswer(quiz, text, input, isRightAnswer);
         }
     }
@@ -73,8 +77,6 @@
         event.stopPropagation();
         let newElement = displayQuizElement(quiz, LABEL.ANSWER, text);
 
-        console.log(isRightAnswer);
-
         if (isRightAnswer) {
             newElement.getElementsByTagName("input")[0].checked = true;
         }
@@ -87,31 +89,31 @@
         let template = document.getElementById("template");
         let element = template.cloneNode(true);
         let checkbox = element.getElementsByTagName("input")[0].parentNode.parentNode;
-        let label = element.getElementsByTagName("h4")[0];
-
+        let label = element.querySelector("h4");
+        console.log(label)
         if (labelText === LABEL.NAME) {
             element.id = labelText.toLowerCase();
         }
 
         if (labelText === LABEL.ANSWER) {
             checkbox.style.display = "block";
-            label.style.display = "none";
-            element.getElementsByTagName("div")[0].style.display = "block";
+            element.getElementsByTagName("nav")[0].style.display = "none";
+           // element.getElementsByTagName("div")[0].style.display = "block";
         }
 
         if (labelText === LABEL.QUESTION) {
-            if (label.style.display === "none") {
-                label.style.display = "block";
-                element.getElementsByTagName("div")[0].style.display = "none";
-            }
+            let buttons = Array.from(element.getElementsByTagName("a"));
+            console.log(buttons);
+            element.getElementsByTagName("nav")[0].style.display = "block";
+            checkbox.style.display = "none";
 
-            label.parentNode.className = "mt-5";
+            buttons.forEach(b => b.style.display = "block");
             labelText = labelText + " " + questionCount;
             element.id = LABEL.QUESTION.toLowerCase() + questionCount;
             questionCount++;
         }
 
-        element.getElementsByTagName("label")[0].textContent = labelText;
+        element.querySelector("h4").textContent = labelText;
         quiz.appendChild(element);
         let input = element.getElementsByTagName("input")[1];
         input.value = text;
@@ -121,9 +123,10 @@
     }
 
     function renderAddQuestionCard(input) {
+       
+          secondBtn.addEventListener("click", finishQuiz);
         document.getElementsByClassName("card-text")[1].style.display = "none";
 
-        let secondBtn = document.getElementById("cancel");
         let firstCardTextElement = document.getElementsByClassName("card-text")[0];
         let secondCardTextElement = document.getElementsByClassName("card-text")[1];
 
@@ -134,24 +137,22 @@
 
         addBtn.parentNode.classList.replace("mx-4", "mx-1");
         addBtn.textContent = BUTTONS_NAMES.ADD_QUESTION;
-        //secondBtn.style.display = "none";
-        secondBtn.textContent = "Finish Quiz";
+        secondBtn.textContent = BUTTONS_NAMES.FINISH;
         secondBtn.removeAttribute("href");
-        document.getElementsByClassName("card-title")[0].textContent = "Add New Question";
+        document.getElementsByClassName("card-title")[0].textContent = TITLES.QUESTION;
         input.value = "";
     }
 
     function renderAddAnswerCard(input) {
-        let secondBtn = document.getElementById("cancel");
+        secondBtn.removeEventListener("click", finishQuiz);
         let cardTextForCheckBox = document.getElementsByClassName("card-text")[1];
         let checkBox = cardTextForCheckBox.getElementsByTagName("input")[0];
 
         addBtn.parentNode.classList.replace("mx-1", "mx-4");
         addBtn.textContent = BUTTONS_NAMES.ADD_ANSWER;
-        secondBtn.style.display = "block";
         secondBtn.textContent = BUTTONS_NAMES.ADD_NEW_QUESTION;
-        document.getElementsByClassName("card-title")[0].textContent = "Add New Answer";
-        // document.getElementsByClassName("card-text")[0].style.display = "none";
+        document.getElementsByClassName("card-title")[0].textContent = TITLES.ANSWER;
+
         if (checkBox.checked) {
             checkBox.checked = false;
         }
@@ -159,10 +160,29 @@
         cardTextForCheckBox.style.display = "block";
         secondBtn.addEventListener("click", function (event) {
             event.stopPropagation();
-
             renderAddQuestionCard(input);
         });
+
         input.value = "";
+    }
+
+    function finishQuiz() {
+        let continueBtn = document.getElementById("continue");
+        let submitBtn = document.getElementById("submit");
+        let quiz = document.getElementById("quiz");
+
+        card.style.display = "none";
+        quiz.appendChild(submitBtn);
+        submitBtn.style.display = "block";
+        continueBtn.style.display = "block";
+
+        continueBtn.addEventListener("click", function () {
+            continueBtn.style.display = "none";
+            submitBtn.style.display = "none";
+            card.style.display = "block";
+        })
+
+        submitBtn.addEventListener("click", );
     }
 
 

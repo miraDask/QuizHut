@@ -41,7 +41,9 @@
                     </div>
                 </div>
             </div>
-            <button id="done" class="btn btn-primary offset-md-4 col-md-4 mt-2 text-white">Finish Quiz</button>
+            <button id="saveForLater" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2">Save For Later</button>
+            <button id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" style="display:none">Continue</button>
+            <button id="submit" type="submit" class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white" style="display:none">Submit</button>
         </div>
         @*<div class="row mb-5 mt-4">*@
         @*<div class="col-12 col-md-3 border-right ml-2">
@@ -81,7 +83,25 @@
 
 @*----------formGroup template-------------------*@
 <div id="template" class="form-group flex-grow-1 d-inline invisible">
-    <h4><label></label></h4>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+        <div class="container">
+            <h4></h4>
+            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNavDropdown-4" aria-controls="navbarNavDropdown-4" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-4" style="">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item mx-1">
+                        <a class="nav-link  btn btn-primary" style="display:none">Add Answer</a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a class="nav-link btn btn-primary" style="display:none">Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="form-group mb-0" style="display:none">
         <div class="mt-2">
             <input type="checkbox">
