@@ -29,6 +29,7 @@
     }, true);
 
     let questionCount = 1;
+    let navbarsCount = 1;
 
     let addBtn = document.getElementById("add");
     let secondBtn = document.getElementById("cancel");
@@ -60,6 +61,7 @@
 
     function addName(quiz, text, input) {
         let newElement = displayQuizElement(quiz, LABEL.NAME, text);
+        quiz.appendChild(newElement);
         quiz.style.display = "block";
 
         renderAddQuestionCard(input);
@@ -69,6 +71,7 @@
     function addQuestion(quiz, text, input) {
         event.stopPropagation();
         let newElement = displayQuizElement(quiz, LABEL.QUESTION, text);
+        quiz.appendChild(newElement);
         window.scroll(0, findPos(newElement));
         renderAddAnswerCard(input);
     }
@@ -81,6 +84,7 @@
             newElement.getElementsByTagName("input")[0].checked = true;
         }
 
+        quiz.lastChild.appendChild(newElement);
         window.scroll(0, findPos(newElement));
         renderAddAnswerCard(input);
     }
@@ -102,28 +106,31 @@
 
         if (labelText === LABEL.QUESTION) {
             let buttons = element.getElementsByTagName("a");
+            let navBtn = element.querySelector("button");
+            let navbarNavDropdown = element.querySelector("#navbarNavDropdown");
+            let navId = navbarNavDropdown.id + navbarsCount;
+            navbarNavDropdown.id = navId;
 
-            Array.from(buttons).forEach(b =>  {
-                b.style.display = "block";
-                console.log(b.classList)
-                b.classList.add(questionCount);
-            });
+            navBtn.setAttribute("data-target", "#" + navId);
+            navBtn.setAttribute("aria-controls", navId);
+
+            navbarNavDropdown.classList.replace("invisible", "visible");
+            navBtn.classList.replace("invisible", "visible");
+
+            Array.from(buttons).forEach(b => b.classList.add(questionCount));
 
             buttons[0].addEventListener("click", addAnswerToCurrentQuestion);
-
-
             buttons[1].addEventListener("click", deleteCurrentQuestion);
 
             element.getElementsByTagName("nav")[0].style.display = "block";
             checkbox.style.display = "none";
 
-            labelText = labelText + " " + questionCount;
-            element.id = LABEL.QUESTION.toLowerCase() + questionCount;
+            element.id = questionCount;
             questionCount++;
+            navbarsCount++
         }
 
-        element.querySelector("h4").textContent = labelText;
-        quiz.appendChild(element);
+        label.textContent = labelText;
         let input = element.getElementsByTagName("input")[1];
         input.value = text;
         element.classList.replace("invisible", "visible");
@@ -191,20 +198,22 @@
             card.style.display = "block";
         })
 
-       // submitBtn.addEventListener("click", );
+        //TODO: SUBMIT BTN 
     }
 
     function addAnswerToCurrentQuestion(event) {
-        console.log(event.target);
+        let currentQuestionNumber = event.target.classList[3];
+        let question = document.getElementById(currentQuestionNumber);
+        let newElement = displayQuizElement(null, LABEL.ANSWER, "");
+        question.appendChild(newElement);
 
     }
 
     function deleteCurrentQuestion(event) {
-        console.log(event.target);
         let currentQuestionNumber = event.target.classList[3];
-        let question = document.getElementById("question" + currentQuestionNumber);
+        let question = document.getElementById(currentQuestionNumber);
         question.remove();
-        renderAddQuestionCard();
+        renderAddQuestionCard(null);
     }
 
 
