@@ -60,7 +60,7 @@
     }
 
     function addName(quiz, text, input) {
-        let newElement = displayQuizElement(quiz, LABEL.NAME, text);
+        let newElement = displayQuizElement(LABEL.NAME, text);
         quiz.appendChild(newElement);
         quiz.style.display = "block";
 
@@ -70,7 +70,7 @@
 
     function addQuestion(quiz, text, input) {
         event.stopPropagation();
-        let newElement = displayQuizElement(quiz, LABEL.QUESTION, text);
+        let newElement = displayQuizElement(LABEL.QUESTION, text);
         quiz.appendChild(newElement);
         window.scroll(0, findPos(newElement));
         renderAddAnswerCard(input);
@@ -78,10 +78,13 @@
 
     function addAnswer(quiz, text, input, isRightAnswer) {
         event.stopPropagation();
-        let newElement = displayQuizElement(quiz, LABEL.ANSWER, text);
+        let newElement = displayQuizElement(LABEL.ANSWER, text);
+        let checkbox = newElement.querySelector("input[type='checkbox']");
 
         if (isRightAnswer) {
-            newElement.getElementsByTagName("input")[0].checked = true;
+            checkbox.setAttribute("checked", true);
+        } else {
+            checkbox.removeAttribute("checked");
         }
 
         quiz.lastChild.appendChild(newElement);
@@ -89,7 +92,7 @@
         renderAddAnswerCard(input);
     }
 
-    function displayQuizElement(quiz, labelText, text) {
+    function displayQuizElement(labelText, text) {
         let template = document.getElementById("template");
         let element = template.cloneNode(true);
         let checkbox = element.getElementsByTagName("input")[0].parentNode.parentNode;
