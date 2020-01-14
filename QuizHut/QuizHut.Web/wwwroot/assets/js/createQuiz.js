@@ -82,7 +82,7 @@
         let checkbox = newElement.querySelector("input[type='checkbox']");
 
         if (isRightAnswer) {
-            checkbox.setAttribute("checked", true);
+            checkbox.setAttribute("checked", "");
         } else {
             checkbox.removeAttribute("checked");
         }
@@ -207,7 +207,7 @@
     function addAnswerToCurrentQuestion(event) {
         let currentQuestionNumber = event.target.classList[3];
         let question = document.getElementById(currentQuestionNumber);
-        let newElement = displayQuizElement(null, LABEL.ANSWER, "");
+        let newElement = displayQuizElement(LABEL.ANSWER, "");
         question.appendChild(newElement);
 
     }
