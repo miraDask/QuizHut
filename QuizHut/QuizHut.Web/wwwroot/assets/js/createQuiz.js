@@ -78,7 +78,7 @@
 
     function addName(quiz, text) {
         let newElement = displayQuizElement(LABEL.NAME, text);
-        quiz.appendChild(newElement);
+        quiz.insertBefore(newElement, infoDiv);
         showElement(quiz);
 
         renderAddQuestionCard();
@@ -89,7 +89,7 @@
         event.stopPropagation();
         let newElement = displayQuizElement(LABEL.QUESTION, text);
         newElement.getElementsByTagName("input")[1].type = "text";
-        quiz.appendChild(newElement);
+        quiz.insertBefore(newElement, infoDiv);
         window.scroll(0, findPos(newElement));
         renderAddAnswerCard();
     }
@@ -104,8 +104,7 @@
         } else {
             checkbox.removeAttribute("checked");
         }
-
-        quiz.lastChild.appendChild(newElement);
+        quiz.insertBefore(newElement, infoDiv);
         window.scroll(0, findPos(newElement));
         renderAddAnswerCard();
     }
