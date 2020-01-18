@@ -1,13 +1,17 @@
 ﻿(function () {
     const TITLES = {
         QUESTION: "Add New Question",
-        ANSWER: "Add New Answer"
+        ANSWER: "Add New Answer",
+        DATE: "Add Activation Date",
+        DURATION: "Duration"
     }
 
     const LABEL = {
         QUESTION: "Question",
         ANSWER: "Answer",
-        NAME: "Name"
+        NAME: "Name",
+        DURATION: "Duration",
+        ACTIVATION_DATE: "Actvation Date"
     };
 
     const BUTTONS_NAMES = {
@@ -15,7 +19,10 @@
         ADD_QUESTION: "Add Question",
         ADD_NEW_QUESTION: "Question / Finish",
         ADD_ANSWER: "Add Answer",
-        FINISH: "Finish Quiz"
+        FINISH: "Finish Quiz",
+        ADD_DATE: "Add Date",
+        ADD_DURATION: "Add Duration",
+        NO: "No"
     }
 
     //prevents Enter key to submit form:
@@ -34,6 +41,13 @@
     let addBtn = document.getElementById("add");
     let secondBtn = document.getElementById("cancel");
     let card = document.getElementById("nameCard");
+    let cardTitle = document.getElementsByClassName("card-title")[0];
+    let continueBtn = document.getElementById("continue");
+    let submitBtn = document.getElementById("activation");
+    let firstCardTextElement = document.getElementsByClassName("card-text")[0];
+    let secondCardTextElement = document.getElementsByClassName("card-text")[1];
+    let input = document.getElementById("nameInput");
+    let infoDiv = document.getElementById("info");
 
     if (addBtn) {
         addBtn.addEventListener("click", addElementToQuiz);
@@ -41,42 +55,46 @@
 
     function addElementToQuiz(event) {
         event.stopPropagation();
-        let input = document.getElementById("nameInput");
         let quiz = document.getElementById("quiz");
         let text = input.value;
 
         if (addBtn.textContent === BUTTONS_NAMES.ADD_QUESTION) {
-            addQuestion(quiz, text, input);
+            addQuestion(quiz, text);
 
         } else if (addBtn.textContent === BUTTONS_NAMES.ADD_NAME) {
-            addName(quiz, text, input);
+            addName(quiz, text);
 
         } else if (addBtn.textContent === BUTTONS_NAMES.ADD_ANSWER) {
             let checkBox = card.getElementsByTagName("input")[0];
             let isRightAnswer = checkBox.checked;
 
-            addAnswer(quiz, text, input, isRightAnswer);
+            addAnswer(quiz, text, isRightAnswer);
+        } else if (addBtn.textContent === BUTTONS_NAMES.ADD_DATE) {
+            addActivationDate(text);
+        } else if (addBtn.textContent === BUTTONS_NAMES.ADD_DURATION) {
+            addDuration(text);
         }
     }
 
-    function addName(quiz, text, input) {
+    function addName(quiz, text) {
         let newElement = displayQuizElement(LABEL.NAME, text);
         quiz.appendChild(newElement);
-        quiz.style.display = "block";
+        showElement(quiz);
 
-        renderAddQuestionCard(input);
+        renderAddQuestionCard();
         window.scroll(0, findPos(newElement));
     }
 
-    function addQuestion(quiz, text, input) {
+    function addQuestion(quiz, text) {
         event.stopPropagation();
         let newElement = displayQuizElement(LABEL.QUESTION, text);
+        newElement.getElementsByTagName("input")[1].type = "text";
         quiz.appendChild(newElement);
         window.scroll(0, findPos(newElement));
-        renderAddAnswerCard(input);
+        renderAddAnswerCard();
     }
 
-    function addAnswer(quiz, text, input, isRightAnswer) {
+    function addAnswer(quiz, text, isRightAnswer) {
         event.stopPropagation();
         let newElement = displayQuizElement(LABEL.ANSWER, text);
         let checkbox = newElement.querySelector("input[type='checkbox']");
@@ -89,7 +107,26 @@
 
         quiz.lastChild.appendChild(newElement);
         window.scroll(0, findPos(newElement));
-        renderAddAnswerCard(input);
+        renderAddAnswerCard();
+    }
+
+    function addActivationDate(text) {
+        let newElement = displayQuizElement(LABEL.ACTIVATION_DATE, text);
+
+        showElement(infoDiv);
+        infoDiv.appendChild(newElement);
+        newElement.getElementsByTagName("input")[1].type = "date";
+        renderQuizDurationCard();
+        window.scroll(0, findPos(card));
+    }
+
+    function addDuration(text) {
+        let newElement = displayQuizElement(LABEL.DURATION, text);
+
+        newElement.getElementsByTagName("input")[1].type = "text";
+        infoDiv.appendChild(newElement);
+        window.scroll(0, findPos(newElement));
+        finishQuiz();
     }
 
     function displayQuizElement(labelText, text) {
@@ -97,17 +134,16 @@
         let element = template.cloneNode(true);
         let checkbox = element.getElementsByTagName("input")[0].parentNode.parentNode;
         let label = element.querySelector("h4");
+        let nav = element.getElementsByTagName("nav")[0];
 
         if (labelText === LABEL.NAME) {
             element.id = labelText.toLowerCase();
-        }
 
-        if (labelText === LABEL.ANSWER) {
-            checkbox.style.display = "block";
-            element.getElementsByTagName("nav")[0].style.display = "none";
-        }
+        } else if (labelText === LABEL.ANSWER) {
+            showElement(checkbox);
+            hideElement(nav);
 
-        if (labelText === LABEL.QUESTION) {
+        } else if (labelText === LABEL.QUESTION) {
             let buttons = element.getElementsByTagName("a");
             let navBtn = element.querySelector("button");
             let navbarNavDropdown = element.querySelector("#navbarNavDropdown");
@@ -125,12 +161,20 @@
             buttons[0].addEventListener("click", addAnswerToCurrentQuestion);
             buttons[1].addEventListener("click", deleteCurrentQuestion);
 
-            element.getElementsByTagName("nav")[0].style.display = "block";
-            checkbox.style.display = "none";
+            showElement(nav);
+            hideElement(checkbox);
 
             element.id = questionCount;
             questionCount++;
             navbarsCount++
+
+        } else if (labelText === LABEL.ACTIVATION_DATE) {
+            showElement(nav);
+            hideElement(checkbox);
+
+        } else if (labelText === LABEL.DURATION) {
+            showElement(nav);
+            hideElement(checkbox);
         }
 
         label.textContent = labelText;
@@ -141,67 +185,101 @@
         return element;
     }
 
-    function renderAddQuestionCard(input) {
-       
-        secondBtn.addEventListener("click", finishQuiz);
-        document.getElementsByClassName("card-text")[1].style.display = "none";
+    function renderAddQuestionCard() {
+        if (infoDiv.textContent === "") {
+            secondBtn.addEventListener("click", renderActivationQuestionCard);
 
-        let firstCardTextElement = document.getElementsByClassName("card-text")[0];
-        let secondCardTextElement = document.getElementsByClassName("card-text")[1];
+        } else {
+            secondBtn.addEventListener("click", finishQuiz);
+        }
+
+        if (secondBtn.style.display === "none") {
+            showElement(secondBtn);
+        }
+
+        hideElement(firstCardTextElement);
 
         if (firstCardTextElement.style.display === "none") {
-            firstCardTextElement.style.display = "block";
-            secondCardTextElement.style.display = "none";
+            showElement(firstCardTextElement);
+            hideElement(secondCardTextElement);
+        }
+
+        if (input.type === "date") {
+            input.type = "text";
         }
 
         addBtn.parentNode.classList.replace("mx-4", "mx-1");
         addBtn.textContent = BUTTONS_NAMES.ADD_QUESTION;
         secondBtn.textContent = BUTTONS_NAMES.FINISH;
         secondBtn.removeAttribute("href");
-        document.getElementsByClassName("card-title")[0].textContent = TITLES.QUESTION;
+        cardTitle.textContent = TITLES.QUESTION;
         input.value = "";
     }
 
-    function renderAddAnswerCard(input) {
+    function renderAddAnswerCard() {
+
+        let checkBox = secondCardTextElement.getElementsByTagName("input")[0];
+        secondBtn.removeEventListener("click", renderActivationQuestionCard);
         secondBtn.removeEventListener("click", finishQuiz);
-        let cardTextForCheckBox = document.getElementsByClassName("card-text")[1];
-        let checkBox = cardTextForCheckBox.getElementsByTagName("input")[0];
+
+        if (secondBtn.style.display === "none") {
+            showElement(secondBtn);
+        }
 
         addBtn.parentNode.classList.replace("mx-1", "mx-4");
         addBtn.textContent = BUTTONS_NAMES.ADD_ANSWER;
         secondBtn.textContent = BUTTONS_NAMES.ADD_NEW_QUESTION;
-        document.getElementsByClassName("card-title")[0].textContent = TITLES.ANSWER;
+        cardTitle.textContent = TITLES.ANSWER;
 
         if (checkBox.checked) {
             checkBox.checked = false;
         }
 
-        cardTextForCheckBox.style.display = "block";
-        secondBtn.addEventListener("click", function (event) {
-            event.stopPropagation();
-            renderAddQuestionCard(input);
-        });
+        showElement(secondCardTextElement)
+        secondBtn.addEventListener("click", renderAddQuestionCard);
 
         input.value = "";
     }
 
+    function renderActivationQuestionCard() {
+        hideElement(submitBtn);
+        hideElement(continueBtn);
+        hideElement(secondBtn);
+
+        if (firstCardTextElement.style.display === "none") {
+            showElement(firstCardTextElement);
+            hideElement(secondCardTextElement);
+        }
+
+        secondBtn.removeEventListener("click", renderActivationQuestionCard);
+        secondBtn.textContent = BUTTONS_NAMES.NO;
+        addBtn.textContent = BUTTONS_NAMES.ADD_DATE;
+        cardTitle.textContent = TITLES.DATE;
+        input.type = "date";
+        showElement(card);
+    }
+
+    function renderQuizDurationCard() {
+        addBtn.textContent = BUTTONS_NAMES.ADD_DURATION;
+        cardTitle.textContent = TITLES.DURATION;
+        input.type = "text";
+    }
+
     function finishQuiz() {
-        let continueBtn = document.getElementById("continue");
-        let submitBtn = document.getElementById("submit");
-        let quiz = document.getElementById("quiz");
 
-        card.style.display = "none";
-        quiz.appendChild(submitBtn);
-        submitBtn.style.display = "block";
-        continueBtn.style.display = "block";
+        hideElement(card);
+        showElement(submitBtn)
+        showElement(continueBtn);
 
-        continueBtn.addEventListener("click", function () {
-            continueBtn.style.display = "none";
-            submitBtn.style.display = "none";
-            card.style.display = "block";
-        })
+        continueBtn.addEventListener("click", continueQuiz)
+    }
 
-        //TODO: SUBMIT BTN 
+    function continueQuiz() {
+        hideElement(submitBtn);
+        hideElement(continueBtn);
+        renderAddQuestionCard();
+        showElement(card);
+        window.scroll(0, findPos(card));
     }
 
     function addAnswerToCurrentQuestion(event) {
@@ -219,6 +297,13 @@
         renderAddQuestionCard(null);
     }
 
+    function hideElement(element) {
+        element.style.display = "none";
+    }
+
+    function showElement(element) {
+        element.style.display = "block";
+    }
 
     function findPos(obj) {
         var curtop = 0;

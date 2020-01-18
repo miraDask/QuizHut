@@ -1,85 +1,53 @@
 ﻿@{
     ViewData["Title"] = "Create";
 }
-    <div class="container-fluid">
-        <div class="flex-grow-1">
-            <partial name="_BublesAndCirclesPrtial" />
-        </div>
-
-        <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-            <form method="post" id="quiz" class="mb-3 col-12" style="display: none;">
-            </form>
-            <div id="nameCard" class="col-11 ml-4">
-                <div class="component">
-                    <div class="card mb-3 mt-3">
-                        <div class="card-header text-warning" style="font-size: xx-large">
-                            <i class="fas fa-folder-plus"></i>
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-title">Name Your Quiz First</h4>
-                            <p class="card-text">
-                                <span class="text-primary mr-1">&lowast;</span>
-                                You can always edit it later.
-                            </p>
-                            <p class="card-text" style="display:none">
-                                <span class="text-primary mr-1">
-                                    <input type="checkbox" name="rightAnswer" value="rightAnswer">
-                                </span>
-                                Check the box if the answer is right
-                            </p>
-                        </div>
-                        <div class="card-footer pb-5">
-                            <div class="input-group">
-                                <input id="nameInput" type="text" class="form-control" placeholder="...">
-                            </div>
-                            <div class="row mx-4 text-white">
-                                <a id="add" class="btn btn-primary col-md-5 mt-5">Add Name</a>
-                                <div class="col-1 mr-4"></div>
-                                <a id="cancel" class="btn btn-primary col-md-5 mt-5" asp-action="Profile" asp-controller="Account">Cancel</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button id="saveForLater" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2">Save For Later</button>
-            <button id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" style="display:none">Continue</button>
-            <button id="submit" type="submit" class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white" style="display:none">Submit</button>
-        </div>
-        @*<div class="row mb-5 mt-4">*@
-        @*<div class="col-12 col-md-3 border-right ml-2">
-            <div class="mt-5">
-                <div class="mb-4">
-                    <h3>Elements</h3>
-                    <p id="info" class="lead">Choose element to add.</p>
-                </div>
-            </div>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <div class="my-2">
-                        <button id="addQuestion" type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Question</button>
-                    </div>
-                </li>
-                <li class="nav-item active">
-                    <div class="my-2">
-                        <button id="addAnswer" type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Answer</button>
-                    </div>
-                </li>
-                <li class="nav-item active">
-                    <div class="my-2">
-                        <button id="addImage" type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i> Image</button>
-                    </div>
-                </li>
-                <li class="nav-item active">
-                    <div class="my-2">
-                        <button id="addTextField" type="button" class="btn btn-outline-primary manage-account-btn text-left"><i class="fas fa-plus mr-1"></i>Text Field</button>
-                    </div>
-                </li>
-            </ul>
-        </div>*@
-
-        @*</div>*@
-
+<div class="container-fluid">
+    <div class="flex-grow-1">
+        <partial name="_BublesAndCirclesPrtial" />
     </div>
+
+    <div class="col-12 offset-md-2 col-md-8 mt-4 row">
+        <form method="post" id="quiz" class="mb-3 col-12" style="display: none;">
+        </form>
+
+        <div id="nameCard" class="col-11 ml-4">
+            <div class="component">
+                <div class="card mb-3 mt-3">
+                    <div class="card-header text-warning" style="font-size: xx-large">
+                        <i class="fas fa-folder-plus"></i>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Name Your Quiz First</h4>
+                        <p class="card-text">
+                            <span class="text-primary mr-1">&lowast;</span>
+                            You can always edit it later.
+                        </p>
+                        <p class="card-text" style="display:none">
+                            <span class="text-primary mr-1">
+                                <input type="checkbox" name="rightAnswer" value="rightAnswer">
+                            </span>
+                            Check the box if the answer is right
+                        </p>
+                    </div>
+                    <div class="card-footer pb-5">
+                        <div class="input-group">
+                            <input id="nameInput" type="text" class="form-control" placeholder="...">
+                        </div>
+                        <div class="row mx-4 text-white">
+                            <a id="add" class="btn btn-primary col-md-5 mt-5">Add Name</a>
+                            <div class="col-1 mr-4"></div>
+                            <a id="cancel" class="btn btn-primary col-md-5 mt-5" asp-action="Profile" asp-controller="Account">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="info" class="mb-3 col-12" style="display: none;"></div>
+        <button id="saveForLater" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2">Save For Later</button>
+        <button id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" style="display:none">Continue</button>
+        <button id="activation" class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white" style="display:none">Submit</button>
+    </div>
+</div>
 
 @*----------formGroup template-------------------*@
 <div id="template" class="form-group flex-grow-1 d-inline invisible">
@@ -87,10 +55,10 @@
         <div class="container">
             <h4></h4>
             <button class="navbar-toggler collapsed bg-primary invisible"
-                    type="button" data-toggle="collapse" 
-                    data-target="#navbarNavDropdown" 
-                    aria-controls="navbarNavDropdown" 
-                    aria-expanded="false" 
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown"
+                    aria-expanded="false"
                     aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
