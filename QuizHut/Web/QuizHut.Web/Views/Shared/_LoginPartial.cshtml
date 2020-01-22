@@ -7,10 +7,11 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item mx-2">
-        <p>Hello @(this.User.Identity.Name)!</p>
-        <a class="btn btn-outline-light" type="submit" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action(" Index", "Home" , new { area=string.Empty }))">
-            Log out
-        </a>
+
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
+            <p class="text-white mb-0 mr-3">Hello @(this.User.Identity.Name)!</p>
+            <button type="submit" class="nav-link btn btn-link btn-outline-light">Logout</button>
+        </form>
     </li>
 }
 else
@@ -23,12 +24,6 @@ else
     <li class="nav-item mx-2">
         <a class="btn btn-outline-light" asp-area="Identity" asp-page="/Account/Login">
             Log in
-        </a>
-    </li>
-    //temporary
-    <li class="nav-item mx-2">
-        <a class="btn btn-outline-light" asp-action="Profile" asp-controller="Account">
-            Profile
         </a>
     </li>
 }
