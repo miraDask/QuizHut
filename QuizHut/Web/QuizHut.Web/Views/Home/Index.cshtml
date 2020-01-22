@@ -2,94 +2,139 @@
 @{
     this.ViewData["Title"] = "Home Page";
 }
+<div class="container">
 
-    <body >
-        <div class="page-hero bg-white text-primary" id="banner">
+
+
+    <main role="main" class="pb-3">
+
+
+        <div class="page-hero bg-white text-primary pt-5 mt-4 pb-5" id="banner">
             <partial name="_BublesAndCirclesPrtial" />
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-lg-8  offset-lg-2 text-center">
-                        <div class="title">
-                            <h1 class="display-2 text-primary">QuizHut</h1>
-                            <h4 class="text-primary">Your simple quiz tool.</h4>
+            <div class="row">
+                <div class="col-12 col-lg-8  offset-lg-2 text-center">
+                    <div class="title">
+                        <h1 class="display-2 text-primary">QuizHut</h1>
+                        <h4 class="text-primary">Your simple quiz tool.</h4>
+                        <div class="col-12 mt-5 offset-1">
+                            <div class="row">
+
+                                <div class="col-md-5">
+                                    <div class="component">
+                                        <div class="card mb-3 mt-3">
+                                            <div class="card-header text-primary" style="font-size: xx-large">
+                                                <i class="fas fa-folder-plus"></i>
+                                            </div>
+                                            <div class="card-body pt-0">
+                                                <h4 class="card-title">Make Quiz</h4>
+                                                <p class="card-text">Save Or Print...</p>
+                                            </div>
+                                            <div class="card-footer pb-3 mt-3">
+                                                <a class="btn btn-outline-primary" asp-action="Create" asp-controller="Quiz">New Quiz</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="component">
+                                        <div class="card mb-3 mt-3">
+                                            <div class="card-header text-warning" style="font-size: xx-large">
+                                                <i class="fas fa-folder-open"></i>
+                                            </div>
+                                            <div class="card-body pt-0">
+                                                <h4 class="card-title">Take Quiz</h4>
+
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="Quiz Code...">
+
+                                                </div>
+                                            </div>
+                                            <div class="card-footer pb-3">
+                                                <a class="btn btn-outline-primary" asp-action="Take" asp-controller="Quiz">Enter Quiz</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div id="about" class="intro bg-light">
             <div class="container">
-                <div class="text-center">
+                <div class="text-center mb-5">
                     <h2>About</h2>
                     <p class="lead">We are constantly releasing new features. Stay up to date with us.</p>
                 </div>
             </div>
-        </div>
-        <div class="blog-posts bg-light">
+            <div class="blog-posts p-2">
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="component">
-                            <div class="card mb-3">
-                                <div class="card-header text-primary" style="font-size: xx-large">
-                                    <i class="fas fa-folder-plus"></i>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title">Make Quiz</h4>
-                                    <p class="card-text">&hellip;</p>
-                                </div>
-                                <div class="card-footer">
-                                    <a href="#a" class="btn btn-outline-primary">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="component">
-                            <div class="card mb-3">
-                                <div class="card-header text-warning" style="font-size: xx-large">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title">Take Quiz</h4>
-                                    <p class="card-text">&hellip;</p>
-                                </div>
-                                <div class="card-footer">
-                                    <a href="#a" class="btn btn-outline-warning">Read More</a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="component">
+                                <div class="card mb-3">
+                                    <div class="card-header text-primary" style="font-size: xx-large">
+                                        <i class="fas fa-folder-plus"></i>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Make Quiz</h4>
+                                        <p class="card-text">…</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="#a" class="btn btn-outline-primary">Read More</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="col-md-3">
+                            <div class="component">
+                                <div class="card mb-3">
+                                    <div class="card-header text-warning" style="font-size: xx-large">
+                                        <i class="fas fa-folder-open"></i>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Take Quiz</h4>
+                                        <p class="card-text">…</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="#a" class="btn btn-outline-warning">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="col-md-3">
-                        <div class="component">
-                            <div class="card mb-3">
-                                <div class="card-header text-danger" style="font-size: xx-large">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title">Export To PDF</h4>
-                                    <p class="card-text">&hellip;</p>
-                                </div>
-                                <div class="card-footer">
-                                    <a href="#a" class="btn btn-outline-danger">Read More</a>
+                        <div class="col-md-3">
+                            <div class="component">
+                                <div class="card mb-3">
+                                    <div class="card-header text-danger" style="font-size: xx-large">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Export To PDF</h4>
+                                        <p class="card-text">…</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="#a" class="btn btn-outline-danger">Read More</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="component">
-                            <div class="card mb-3">
-                                <div class="card-header text-info" style="font-size: xx-large">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="card-body">
-                                    <h4 class="card-title">Invite People</h4>
-                                    <p class="card-text">&hellip;</p>
-                                </div>
-                                <div class="card-footer">
-                                    <a href="#a" class="btn btn-outline-info">Read More</a>
+                        <div class="col-md-3">
+                            <div class="component">
+                                <div class="card mb-3">
+                                    <div class="card-header text-info" style="font-size: xx-large">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">Invite People</h4>
+                                        <p class="card-text">…</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="#a" class="btn btn-outline-info">Read More</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -97,4 +142,5 @@
                 </div>
             </div>
         </div>
-    </body>
+    </main>
+</div>
