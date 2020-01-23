@@ -4,30 +4,41 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item mx-2">
 
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
-            <p class="text-white mb-0 mr-3">Hello @(this.User.Identity.Name)!</p>
-            <button type="submit" class="nav-link btn btn-link btn-outline-light">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="btn btn-outline-light" asp-area="Identity" asp-page="/Account/Register">
-            Register
-        </a>
-    </li>
-    <li class="nav-item mx-2">
-        <a class="btn btn-outline-light" asp-area="Identity" asp-page="/Account/Login">
-            Log in
-        </a>
-    </li>
-}
-
+<div class="collapse navbar-collapse" id="navbarNavDropdown-7">
+    <ul class="navbar-nav ml-auto mx-2">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <li class="nav-item">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
+                    <p class="text-white mb-0 mr-3">Hello @(this.User.Identity.Name)!</p>
+                    <button type="submit" class="nav-link btn btn-link btn-outline-light">Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            @if (@Url.RouteUrl(ViewContext.RouteData.Values) == "/")
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">
+                        About
+                    </a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
+                    Register
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
+                    Log in
+                </a>
+            </li>
+        }
+    </ul>
+</div>
 @*<ul class="navbar-nav">
         @if (this.SignInManager.IsSignedIn(this.User))
         {

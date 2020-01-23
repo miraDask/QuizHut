@@ -4,7 +4,9 @@ namespace QuizHut.Data.Models
     using System;
     using System.Collections.Generic;
 
+#pragma warning disable SA1210 // Using directives should be ordered alphabetically by namespace
     using QuizHut.Data.Common.Models;
+#pragma warning restore SA1210 // Using directives should be ordered alphabetically by namespace
 
     using Microsoft.AspNetCore.Identity;
 
@@ -33,5 +35,8 @@ namespace QuizHut.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        //Quizzes
+        //QuizzesResults
     }
 }

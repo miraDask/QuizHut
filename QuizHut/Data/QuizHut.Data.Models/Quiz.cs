@@ -1,0 +1,41 @@
+﻿namespace QuizHut.Data.Models
+{
+    using System;
+    using System.Collections.Generic;
+
+    using QuizHut.Data.Common.Models;
+
+    public class Quiz : BaseDeletableModel<int>
+    {
+        public Quiz()
+        {
+            this.Questions = new HashSet<Question>();
+
+            this.QuizResults = new HashSet<QuizResult>();
+        }
+
+        public string Name { get; set; }
+
+        public TimeSpan? Duration { get; set; }
+
+        public DateTime? ActivationDateAndTime { get; set; }
+
+        public bool IsStarted { get; set; }
+
+        public string CreatorId { get; set; }
+
+        public virtual ApplicationUser Creator { get; set; }
+
+        public int? CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
+
+        public int QuizPasswordId { get; set; }
+
+        public QuizPassword QuizPassword { get; set; }
+
+        public ICollection<Question> Questions { get; set; }
+
+        public ICollection<QuizResult> QuizResults { get; set; }
+    }
+}
