@@ -12,6 +12,8 @@
             this.Questions = new HashSet<Question>();
 
             this.QuizResults = new HashSet<QuizResult>();
+
+            this.QuizzesGroups = new HashSet<QuizGroup>();
         }
 
         public string Name { get; set; }
@@ -33,6 +35,8 @@
         public int QuizPasswordId { get; set; }
 
         public QuizPassword QuizPassword { get; set; }
+
+        public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
 
         public ICollection<Question> Questions { get; set; }
 

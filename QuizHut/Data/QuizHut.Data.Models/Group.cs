@@ -8,7 +8,9 @@
     {
         public Group()
         {
-            this.Participants = new HashSet<ApplicationUser>();
+            this.ParticipanstGroups = new HashSet<ParticipantGroup>();
+
+            this.QuizzesGroups = new HashSet<QuizGroup>();
         }
 
         public string Name { get; set; }
@@ -17,8 +19,8 @@
 
         public virtual ApplicationUser Creator { get; set; }
 
-        public virtual ICollection<ApplicationUser> Participants { get; set; }
+        public virtual ICollection<ParticipantGroup> ParticipanstGroups { get; set; }
 
-        public virtual ICollection<QuizGroup> QuizGroups { get; set; }
+        public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
     }
 }

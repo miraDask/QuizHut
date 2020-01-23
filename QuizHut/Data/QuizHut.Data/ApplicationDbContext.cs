@@ -38,6 +38,12 @@
 
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<ParticipantGroup> ParticipantsGroups { get; set; }
+
+        public DbSet<QuizGroup> QuizzessGroups { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

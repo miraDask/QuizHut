@@ -17,7 +17,7 @@
             internal const int NameMaxLength = 100;
         }
 
-        internal static class QuizGroup
+        internal static class Group
         {
             internal const int NameMaxLength = 100;
         }
