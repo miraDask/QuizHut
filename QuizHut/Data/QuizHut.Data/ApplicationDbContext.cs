@@ -6,11 +6,11 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using QuizHut.Data.Common.Models;
-    using QuizHut.Data.Models;
-
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+
+    using QuizHut.Data.Common.Models;
+    using QuizHut.Data.Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -68,7 +68,8 @@
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 
-            ConfigureUserIdentityRelations(builder);
+            // ConfigureUserIdentityRelations(builder);
+            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
             EntityIndexesConfiguration.Configure(builder);
 
@@ -92,29 +93,44 @@
             }
         }
 
-        private static void ConfigureUserIdentityRelations(ModelBuilder builder)
-        {
-            builder.Entity<ApplicationUser>()
-                .HasMany(e => e.Claims)
-                .WithOne()
-                .HasForeignKey(e => e.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+        // private static void ConfigureUserIdentityRelations(ModelBuilder builder)
+        // {
+        //    builder.Entity<ApplicationUser>()
+        //        .HasMany(e => e.Claims)
+        //        .WithOne()
+        //        .HasForeignKey(e => e.UserId)
+        //        .IsRequired()
+        //        .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<ApplicationUser>()
-                .HasMany(e => e.Logins)
-                .WithOne()
-                .HasForeignKey(e => e.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+        //    builder.Entity<ApplicationUser>()
+        //        .HasMany(e => e.Logins)
+        //        .WithOne()
+        //        .HasForeignKey(e => e.UserId)
+        //        .IsRequired()
+        //        .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<ApplicationUser>()
-                .HasMany(e => e.Roles)
-                .WithOne()
-                .HasForeignKey(e => e.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-        }
+        //    builder.Entity<ApplicationUser>()
+        //        .HasMany(e => e.Roles)
+        //        .WithOne()
+        //        .HasForeignKey(e => e.UserId)
+        //        .IsRequired()
+        //        .OnDelete(DeleteBehavior.Restrict);
+
+        //    builder.Entity<ApplicationUser>()
+        //        .HasMany(e => e.ParticipantInGroups)
+        //        .WithOne(e => e.Participant)
+        //        .HasForeignKey(e => e.ParticipantId);
+
+        //    builder.Entity<ApplicationUser>()
+        //        .HasMany(e => e.Quizzes)
+        //        .WithOne(e => e.Creator)
+        //        .HasForeignKey(e => e.CreatorId);
+
+        //    builder.Entity<ApplicationUser>()
+        //        .HasMany(e => e.CreatedGroups)
+        //        .WithOne(e => e.Creator)
+        //        .HasForeignKey(e => e.CreatorId);
+        //}
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
             where T : class, IDeletableEntity

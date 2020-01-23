@@ -32,14 +32,12 @@
 
         public virtual Category Category { get; set; }
 
-        public int QuizPasswordId { get; set; }
-
-        public QuizPassword QuizPassword { get; set; }
+        public virtual QuizPassword QuizPassword { get; set; }
 
         public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
 
-        public ICollection<Question> Questions { get; set; }
+        public virtual ICollection<Question> Questions { get; set; }
 
-        public ICollection<QuizResult> QuizResults { get; set; }
+        public virtual ICollection<QuizResult> QuizResults { get; set; }
     }
 }

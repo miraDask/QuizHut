@@ -1,11 +1,11 @@
 ﻿namespace QuizHut.Data.Models
 {
     // TODO what to inherit?
-    public class QuizGroup
+    public class ParticipantGroup
     {
-        public int QuizId { get; set; }
+        public string ParticipantId { get; set; }
 
-        public virtual Quiz Quiz { get; set; }
+        public virtual ApplicationUser Participant { get; set; }
 
         public int GroupId { get; set; }
 

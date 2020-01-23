@@ -3,9 +3,9 @@ namespace QuizHut.Data.Models
 {
     using System;
 
-    using QuizHut.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+
+    using QuizHut.Data.Common.Models;
 
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity
     {

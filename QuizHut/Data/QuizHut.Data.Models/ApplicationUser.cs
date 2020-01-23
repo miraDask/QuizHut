@@ -36,7 +36,10 @@ namespace QuizHut.Data.Models
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
-        //Quizzes
-        //QuizzesResults
+        public virtual ICollection<ParticipantGroup> ParticipantInGroups { get; set; }
+
+        public virtual ICollection<Quiz> Quizzes { get; set; }
+
+        public virtual ICollection<Group> CreatedGroups { get; set; }
     }
 }
