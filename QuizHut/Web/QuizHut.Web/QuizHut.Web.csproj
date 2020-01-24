@@ -44,4 +44,8 @@
     <ProjectReference Include="..\QuizHut.Web.Infrastructure\QuizHut.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\QuizHut.Web.ViewModels\QuizHut.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Quiz\" />
+  </ItemGroup>
 </Project>
