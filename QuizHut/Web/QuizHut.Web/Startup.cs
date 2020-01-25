@@ -48,7 +48,7 @@
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
 
             // Data repositories

@@ -32,6 +32,8 @@
 
         public virtual Category Category { get; set; }
 
+        public int? QuizPasswordId { get; set; }
+
         public virtual QuizPassword QuizPassword { get; set; }
 
         public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }

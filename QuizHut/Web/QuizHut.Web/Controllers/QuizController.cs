@@ -11,9 +11,17 @@ namespace QuizHut.Web.Controllers
     public class QuizController : Controller
     {
         // GET: /<controller>/
-        public IActionResult Create()
+        public IActionResult Index()
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Create()
+        {
+
+            return View();
+        }
+
     }
 }
