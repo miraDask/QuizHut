@@ -1,6 +1,7 @@
-﻿
+﻿@using QuizHut.Web.ViewModels.Quiz
+@model InputQuizViewModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Index";
 }
 
 <div class="container-fluid">
@@ -8,7 +9,7 @@
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form id="nameCard" class="col-11 ml-4">
+        <div id="quizNameCard" class="col-11 ml-4">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -23,16 +24,16 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input id="nameInput" type="text" class="form-control" placeholder="...">
+                            <input type="text" name="Name" class="form-control" placeholder="...">
                         </div>
                         <div class="row mx-4 text-white">
-                            <button id="add" type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="Create" asp-controller="Quiz">Add Name</button>
+                            <a id="add" class="btn btn-primary col-md-5 mt-5" asp-action="QuestionInput" asp-controller="Question">Add Name</a>
                             <div class="col-1 mr-4"></div>
-                            <a id="cancel" class="btn btn-primary col-md-5 mt-5" href="/Account/Profile">Cancel</a>
+                            <a id="cancel" class="btn btn-primary col-md-5 mt-5" >Cancel</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>

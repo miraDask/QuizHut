@@ -10,9 +10,9 @@
     public class QuestionController : Controller
     {
         // GET: Question
-        public ActionResult Index()
+        public ActionResult QuestionInput()
         {
-            return View();
+            return this.View();
         }
 
         // GET: Question/Details/5

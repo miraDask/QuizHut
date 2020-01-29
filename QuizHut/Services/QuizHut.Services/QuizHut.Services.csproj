@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -16,6 +16,12 @@
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\QuizHut.Data.Common\QuizHut.Data.Common.csproj" />
+    <ProjectReference Include="..\..\Data\QuizHut.Data.Models\QuizHut.Data.Models.csproj" />
+    <ProjectReference Include="..\QuizHut.Services.Mapping\QuizHut.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>
