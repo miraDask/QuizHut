@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace QuizHut.Data.Migrations
+namespace AspNetCoreTemplate.Data.Migrations
 {
-    public partial class FixingParticipantGroupId : Migration
+    public partial class AddingDataModels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -66,11 +66,13 @@ namespace QuizHut.Data.Migrations
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    Duration = table.Column<TimeSpan>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Duration = table.Column<int>(nullable: true),
                     ActivationDateAndTime = table.Column<DateTime>(nullable: true),
                     IsStarted = table.Column<bool>(nullable: false, defaultValue: false),
                     CreatorId = table.Column<string>(nullable: true),
-                    CategoryId = table.Column<int>(nullable: true)
+                    CategoryId = table.Column<int>(nullable: true),
+                    QuizPasswordId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

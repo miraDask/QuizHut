@@ -1,14 +1,16 @@
 ﻿namespace QuizHut.Web.Controllers
 {
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Quiz;
     using QuizHut.Web.ViewModels.Quiz;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
 
     public class QuizController : Controller
     {
@@ -22,20 +24,28 @@
         }
 
         // GET: /<controller>/
-        public IActionResult NameInput()
+        public IActionResult DetailsInput()
         {
             return this.View();
         }
 
-        public IActionResult ActivationDateInput()
+        [HttpPost]
+        public async Task <IActionResult> Create(InputQuizViewModel inputQuizViewModel)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            inputQuizViewModel.CreatorId = userId;
+            await this.quizService.AddNewQuizAsync(inputQuizViewModel);
+            return this.RedirectToAction("QuestionInput", "Question");
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
         {
             return this.View();
         }
 
-        public IActionResult DurationInput()
-        {
-            return this.View();
-        }
+
+
 
         //[HttpPost]
         //public async Task<IActionResult> Create(InputQuizViewModel model)
@@ -45,6 +55,5 @@
         //    await this.quizService.AddNewQuizAsync<InputQuizViewModel>(model);
         //    return Json(model);
         //}
-
     }
 }

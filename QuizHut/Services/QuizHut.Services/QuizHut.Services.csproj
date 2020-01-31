@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\QuizHut.Data.Common\QuizHut.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\QuizHut.Data.Models\QuizHut.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Web\QuizHut.Web.ViewModels\QuizHut.Web.ViewModels.csproj" />
     <ProjectReference Include="..\QuizHut.Services.Mapping\QuizHut.Services.Mapping.csproj" />
   </ItemGroup>
 

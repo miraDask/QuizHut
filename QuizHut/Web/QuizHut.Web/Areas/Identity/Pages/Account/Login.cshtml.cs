@@ -22,13 +22,14 @@ namespace QuizHut.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
+        public LoginModel(
+            SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+            this._logger = logger;
         }
 
         [BindProperty]

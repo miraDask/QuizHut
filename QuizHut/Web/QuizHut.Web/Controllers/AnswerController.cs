@@ -12,5 +12,11 @@
         {
             return this.View();
         }
+
+        [HttpPost]
+        public IActionResult Create()
+        {
+            return this.View("AnswerInput");
+        }
     }
 }

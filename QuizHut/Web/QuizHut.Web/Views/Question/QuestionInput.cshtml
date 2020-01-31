@@ -7,7 +7,7 @@
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <div id="questionCard" class="col-11 ml-4">
+        <form id="questionCard" method="post" class="col-11 ml-4" asp-action="Create" asp-controller="Question">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -25,13 +25,13 @@
                             <input id="questionInput" type="text" class="form-control" placeholder="...">
                         </div>
                         <div class="row mx-1 text-white">
-                            <a id="add" asp-action="AnswerInput" asp-controller="Answer" class="btn btn-primary col-md-5 mt-5">Add Question</a>
+                            <button id="add" type="submit" class="btn btn-primary col-md-5 mt-5">Save Question</button>
                             <div class="col-1 mr-4"></div>
-                            <a id="cancel" asp-action="ActivationDateInput" asp-controller="Quiz" class="btn btn-primary col-md-5 mt-5">Finish Quiz</a>
+                            <a id="cancel" asp-action="Details" asp-controller="Quiz" class="btn btn-primary col-md-5 mt-5">Finish Quiz</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>

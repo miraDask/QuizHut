@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Data.Migrations
+﻿namespace AspNetCoreTemplate.Data.Migrations
 {
     using System;
 

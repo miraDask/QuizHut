@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web
 {
     using System.Reflection;
+    using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -47,6 +48,7 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -62,7 +64,6 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IQuizService, QuizService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

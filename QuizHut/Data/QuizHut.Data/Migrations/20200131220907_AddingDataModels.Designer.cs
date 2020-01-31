@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizHut.Data;
 
-namespace QuizHut.Data.Migrations
+namespace AspNetCoreTemplate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200123173027_FixingParticipantGroupId")]
-    partial class FixingParticipantGroupId
+    [Migration("20200131220907_AddingDataModels")]
+    partial class AddingDataModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -430,8 +430,11 @@ namespace QuizHut.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan?>("Duration")
-                        .HasColumnType("time");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Duration")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -446,6 +449,9 @@ namespace QuizHut.Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("QuizPasswordId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
