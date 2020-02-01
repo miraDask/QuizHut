@@ -5,6 +5,7 @@ namespace QuizHut.Services.Quiz
 {
     public interface IQuizService
     {
-        Task AddNewQuizAsync(InputQuizViewModel quizModel);
+        Task<int> AddNewQuizAsync(InputQuizViewModel quizModel);
+
     }
 }

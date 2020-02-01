@@ -6,13 +6,30 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Services.Question;
+    using QuizHut.Web.ViewModels.Question;
 
     public class QuestionController : Controller
     {
-        // GET: Question
-        public ActionResult QuestionInput()
+        private readonly IQuestionService questionService;
+
+        public QuestionController(IQuestionService questionService)
         {
-            return this.View();
+            this.questionService = questionService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> QuestionInput(int q)
+        {
+            if (q == 0)
+            {
+                var previousQuestioId = (int)this.TempData["QuestionId"];
+                q = await this.questionService.GetQuizIdByQuestionIdAsync(previousQuestioId);
+            }
+
+            var questionViewModel = new QuestionViewModel();
+            questionViewModel.QuizId = q;
+            return this.View(questionViewModel);
         }
 
         // GET: Question/Details/5
@@ -23,9 +40,12 @@
 
         // GET: Question/Create
         [HttpPost]
-        public ActionResult Create()
+        public async Task<ActionResult> Create(QuestionViewModel questionViewModel)
         {
-            return this.RedirectToAction("AnswerInput", "Answer");
+            questionViewModel.QuizId = (int)this.TempData["QuizId"];
+            var questionId = await this.questionService.AddNewQuestionAsync(questionViewModel);
+
+            return this.RedirectToAction("AnswerInput", "Answer", new { q = questionId });
         }
 
         // POST: Question/Create

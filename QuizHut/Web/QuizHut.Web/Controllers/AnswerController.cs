@@ -5,18 +5,21 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Web.ViewModels.Answer;
 
     public class AnswerController : Controller
     {
-        public IActionResult AnswerInput()
+        public IActionResult AnswerInput(int q)
         {
-            return this.View();
+            var answer = new AnswerViewModel { QuestionId = q };
+            return this.View(answer);
         }
 
         [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create(AnswerViewModel answerViewModel)
         {
-            return this.View("AnswerInput");
+            answerViewModel.QuestionId = (int)this.TempData["QuestionId"];
+            return this.RedirectToAction("AnswerInput", "Answer", new { q = answerViewModel.QuestionId });
         }
     }
 }

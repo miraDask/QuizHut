@@ -30,12 +30,13 @@
         }
 
         [HttpPost]
-        public async Task <IActionResult> Create(InputQuizViewModel inputQuizViewModel)
+        public async Task<IActionResult> Create(InputQuizViewModel inputQuizViewModel)
         {
             var userId = this.userManager.GetUserId(this.User);
             inputQuizViewModel.CreatorId = userId;
-            await this.quizService.AddNewQuizAsync(inputQuizViewModel);
-            return this.RedirectToAction("QuestionInput", "Question");
+            var quizId = await this.quizService.AddNewQuizAsync(inputQuizViewModel);
+
+            return this.RedirectToAction("QuestionInput", "Question", new { q = quizId });
         }
 
         [HttpGet]

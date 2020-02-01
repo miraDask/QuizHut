@@ -5,24 +5,21 @@
     using QuizHut.Services.Mapping;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using AutoMapper;
     using QuizHut.Web.ViewModels.Quiz;
     using System;
     using Microsoft.AspNetCore.Identity;
+    using System.Linq;
 
     public class QuizService : IQuizService
     {
         private readonly IDeletableEntityRepository<Quiz> repository;
-        private readonly IMapper mapper;
 
-        public QuizService(IDeletableEntityRepository<Quiz> repository, IMapper mapper)
+        public QuizService(IDeletableEntityRepository<Quiz> repository)
         {
             this.repository = repository;
-            this.mapper = mapper;
         }
 
-
-        public async Task AddNewQuizAsync(InputQuizViewModel quizModel)
+        public async Task<int> AddNewQuizAsync(InputQuizViewModel quizModel)
         {
             var quiz = new Quiz
             {
@@ -35,11 +32,8 @@
 
             await this.repository.AddAsync(quiz);
             await this.repository.SaveChangesAsync();
-        }
 
-        //public Task AddNewQuizAsync<TViewmodel>(TViewmodel viewmodel)
-        //{
-        //    var quiz = viewmodel.From<>
-        //}
+            return quiz.Id;
+        }
     }
 }

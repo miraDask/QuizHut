@@ -1,6 +1,7 @@
-﻿
+﻿@model AnswerViewModel
 @{
     ViewData["Title"] = "AnswerInput";
+    TempData["QuestionId"] = Model.QuestionId;
 }
 
 <div class="container-fluid">
@@ -22,14 +23,14 @@
                         </p>
                         <p class="card-text" style="display: block;">
                             <span class="text-primary mr-1">
-                                <input type="checkbox" name="rightAnswer" value="rightAnswer">
+                                <input type="checkbox" value="true" asp-for="@Model.IsRightAnswer">
                             </span>
-                            Check the box if the answer is right
+                            Check the box if the answer is right.
                         </p>
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input id="nameInput" type="text" class="form-control" placeholder="...">
+                            <input id="nameInput" type="text" class="form-control" asp-for="@Model.Text" placeholder="...">
                         </div>
                         <div class="row mx-4 text-white">
                             <button id="add" type="submit" class="btn btn-primary col-md-5 mt-5">Add Answer</button>

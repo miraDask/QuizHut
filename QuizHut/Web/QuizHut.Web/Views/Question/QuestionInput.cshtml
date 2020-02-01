@@ -1,6 +1,8 @@
-﻿
+﻿@model QuestionViewModel
 @{
     ViewData["Title"] = "QuestionInput";
+    TempData["QuizId"] = Model.QuizId;
+
 }
 <div class="container-fluid">
     <div class="flex-grow-1">
@@ -22,7 +24,7 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input id="questionInput" type="text" class="form-control" placeholder="...">
+                            <input id="questionInput" type="text" asp-for="@Model.Text" class="form-control" placeholder="...">
                         </div>
                         <div class="row mx-1 text-white">
                             <button id="add" type="submit" class="btn btn-primary col-md-5 mt-5">Save Question</button>

@@ -20,6 +20,7 @@
     using QuizHut.Services.Data;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
+    using QuizHut.Services.Question;
     using QuizHut.Services.Quiz;
     using QuizHut.Web.ViewModels;
 
@@ -64,6 +65,7 @@
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IQuizService, QuizService>();
+            services.AddTransient<IQuestionService, QuestionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
