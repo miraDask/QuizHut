@@ -1,34 +1,36 @@
 ﻿namespace QuizHut.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Answer;
+    using QuizHut.Services.Cache;
     using QuizHut.Web.ViewModels.Answer;
 
     public class AnswerController : Controller
     {
         private readonly IAnswerService answerService;
+        private readonly ICacheService cacheService;
 
-        public AnswerController(IAnswerService answerService)
+        public AnswerController(IAnswerService answerService, ICacheService cacheService)
         {
             this.answerService = answerService;
+            this.cacheService = cacheService;
         }
 
-        public IActionResult AnswerInput(int q)
+        public IActionResult AnswerInput()
         {
-            var answer = new AnswerViewModel { QuestionId = q };
-            return this.View(answer);
+            return this.View();
         }
 
         [HttpPost]
-        public IActionResult Create(AnswerViewModel answerViewModel)
+        public IActionResult AddNewAnswer(AnswerViewModel answerViewModel)
         {
-            answerViewModel.QuestionId = (int)this.TempData["QuestionId"];
-            this.answerService.AddNewAnswerAsync(answerViewModel);
-            return this.RedirectToAction("AnswerInput", "Answer", new { q = answerViewModel.QuestionId });
+            var quizViewModel = this.cacheService.GetQuizModelFromCache();
+            quizViewModel.Questions.Last().Answers.Add(answerViewModel);
+            this.cacheService.SaveQuizModelToCache(quizViewModel);
+
+            return this.RedirectToAction("AnswerInput", "Answer");
         }
     }
 }

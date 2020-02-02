@@ -24,7 +24,7 @@
                .HasForeignKey(qr => qr.QuizId);
 
             quiz.Property(q => q.IsStarted)
-                .HasDefaultValue(false);
+                .HasDefaultValue(true);
         }
     }
 }

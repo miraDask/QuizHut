@@ -1,51 +1,35 @@
 ﻿namespace QuizHut.Web.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
     using QuizHut.Web.ViewModels.Question;
 
     public class QuestionController : Controller
     {
         private readonly IQuestionService questionService;
+        private readonly ICacheService cacheService;
 
-        public QuestionController(IQuestionService questionService)
+        public QuestionController(IQuestionService questionService, ICacheService cacheService)
         {
             this.questionService = questionService;
+            this.cacheService = cacheService;
         }
 
         [HttpGet]
-        public async Task<ActionResult> QuestionInput(int q)
+        public IActionResult QuestionInput()
         {
-            if (q == 0)
-            {
-                var previousQuestioId = (int)this.TempData["QuestionId"];
-                q = await this.questionService.GetQuizIdByQuestionIdAsync(previousQuestioId);
-            }
-
-            var questionViewModel = new QuestionViewModel();
-            questionViewModel.QuizId = q;
-            return this.View(questionViewModel);
+            return this.View();
         }
 
-        // GET: Question/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
-
-        // GET: Question/Create
         [HttpPost]
-        public async Task<ActionResult> Create(QuestionViewModel questionViewModel)
+        public IActionResult AddNewQuestion(QuestionViewModel questionViewModel)
         {
-            questionViewModel.QuizId = (int)this.TempData["QuizId"];
-            var questionId = await this.questionService.AddNewQuestionAsync(questionViewModel);
+            var quizViewModel = this.cacheService.GetQuizModelFromCache();
+            quizViewModel.Questions.Add(questionViewModel);
+            this.cacheService.SaveQuizModelToCache(quizViewModel);
 
-            return this.RedirectToAction("AnswerInput", "Answer", new { q = questionId });
+            return this.RedirectToAction("AnswerInput", "Answer");
         }
 
         // POST: Question/Create

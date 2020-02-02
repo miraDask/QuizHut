@@ -3,11 +3,9 @@
     using System;
     using System.Collections.Generic;
 
-    using QuizHut.Data.Models;
-    using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Question;
 
-    public class InputQuizViewModel : IMapTo<Quiz>
+    public class InputQuizViewModel
     {
         public string Name { get; set; }
 
@@ -19,6 +17,6 @@
 
         public int? Duration { get; set; }
 
-        public IEnumerable<QuestionViewModel> Questions { get; set; }
+        public IList<QuestionViewModel> Questions { get; set; } = new List<QuestionViewModel>();
     }
 }

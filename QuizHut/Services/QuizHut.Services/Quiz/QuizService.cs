@@ -1,14 +1,12 @@
 ﻿namespace QuizHut.Services.Quiz
 {
-    
+    using System;
+    using System.Linq;
     using System.Threading.Tasks;
-    using QuizHut.Services.Mapping;
+
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Web.ViewModels.Quiz;
-    using System;
-    using Microsoft.AspNetCore.Identity;
-    using System.Linq;
 
     public class QuizService : IQuizService
     {
@@ -34,6 +32,11 @@
             await this.repository.SaveChangesAsync();
 
             return quiz.Id;
+        }
+
+        public bool GetDublicatedQuizPassword(string password)
+        {
+            return this.repository.All().Select(x => x.Password).Any(x => x == password);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿@model QuestionViewModel
 @{
     ViewData["Title"] = "QuestionInput";
-    TempData["QuizId"] = Model.QuizId;
 
 }
 <div class="container-fluid">
@@ -9,7 +8,7 @@
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form id="questionCard" method="post" class="col-11 ml-4" asp-action="Create" asp-controller="Question">
+        <form method="post" class="col-11 ml-4" asp-action="AddNewQuestion" asp-controller="Question">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -24,12 +23,12 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input id="questionInput" type="text" asp-for="@Model.Text" class="form-control" placeholder="...">
+                            <input type="text" asp-for="@Model.Text" class="form-control" placeholder="...">
                         </div>
                         <div class="row mx-1 text-white">
                             <button id="add" type="submit" class="btn btn-primary col-md-5 mt-5">Save Question</button>
                             <div class="col-1 mr-4"></div>
-                            <a id="cancel" asp-action="Details" asp-controller="Quiz" class="btn btn-primary col-md-5 mt-5">Finish Quiz</a>
+                            <a asp-action="Display" asp-controller="Quiz" class="btn btn-primary col-md-5 mt-5">Finish Quiz</a>
                         </div>
                     </div>
                 </div>

@@ -20,6 +20,8 @@
 
         public string Description { get; set; }
 
+        public string Password { get; set; }
+
         public int? Duration { get; set; }
 
         public DateTime? ActivationDateAndTime { get; set; }
@@ -35,8 +37,6 @@
         public virtual Category Category { get; set; }
 
         public int? QuizPasswordId { get; set; }
-
-        public virtual QuizPassword QuizPassword { get; set; }
 
         public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
 

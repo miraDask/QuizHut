@@ -18,6 +18,7 @@
     using QuizHut.Data.Repositories;
     using QuizHut.Data.Seeding;
     using QuizHut.Services.Answer;
+    using QuizHut.Services.Cache;
     using QuizHut.Services.Data;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
@@ -55,7 +56,7 @@
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
-
+            services.AddDistributedMemoryCache();
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -68,6 +69,7 @@
             services.AddTransient<IQuizService, QuizService>();
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswerService, AnswerService>();
+            services.AddTransient<ICacheService, CacheService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

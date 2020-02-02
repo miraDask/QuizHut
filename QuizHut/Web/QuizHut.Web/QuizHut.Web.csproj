@@ -25,17 +25,17 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.0.96" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.113" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

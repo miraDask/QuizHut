@@ -23,7 +23,6 @@
             var answer = new Answer
             {
                 Text = answerViewModel.Text,
-                QuestionId = answerViewModel.QuestionId,
                 IsRightAnswer = answerViewModel.IsRightAnswer,
             };
 

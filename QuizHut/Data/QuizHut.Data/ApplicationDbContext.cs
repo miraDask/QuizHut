@@ -32,8 +32,6 @@
 
         public DbSet<Quiz> Quizzes { get; set; }
 
-        public DbSet<QuizPassword> QuizPasswords { get; set; }
-
         public DbSet<QuizResult> QuizzesResults { get; set; }
 
         public DbSet<Category> Categories { get; set; }

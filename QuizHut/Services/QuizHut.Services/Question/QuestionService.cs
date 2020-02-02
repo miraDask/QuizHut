@@ -22,7 +22,6 @@
             var question = new Question
             {
                 Text = questionModel.Text,
-                QuizId = questionModel.QuizId,
             };
 
             await this.repository.AddAsync(question);

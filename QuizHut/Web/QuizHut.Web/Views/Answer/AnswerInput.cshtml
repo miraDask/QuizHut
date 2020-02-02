@@ -1,7 +1,6 @@
 ﻿@model AnswerViewModel
 @{
     ViewData["Title"] = "AnswerInput";
-    TempData["QuestionId"] = Model.QuestionId;
 }
 
 <div class="container-fluid">
@@ -9,7 +8,7 @@
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form id="answerCard" method="post" class="col-11 ml-4" asp-action="Create" asp-controller="Answer">
+        <form method="post" class="col-11 ml-4" asp-action="AddNewAnswer" asp-controller="Answer">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -30,12 +29,12 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input id="nameInput" type="text" class="form-control" asp-for="@Model.Text" placeholder="...">
+                            <input type="text" class="form-control" asp-for="@Model.Text" placeholder="...">
                         </div>
                         <div class="row mx-4 text-white">
-                            <button id="add" type="submit" class="btn btn-primary col-md-5 mt-5">Add Answer</button>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Answer</button>
                             <div class="col-1 mr-4"></div>
-                            <a id="cancel" class="btn btn-primary col-md-5 mt-5" asp-action="QuestionInput" asp-controller="Question">Question / Finish</a>
+                            <a class="btn btn-primary col-md-5 mt-5" asp-action="QuestionInput" asp-controller="Question">Question/Finish</a>
                         </div>
                     </div>
                 </div>
