@@ -1,8 +1,10 @@
 ﻿@model InputQuizViewModel
 @{
     ViewData["Title"] = "Display";
+    int questionCount;
+    int answerCount = 0;
 }
-<div class="form-group flex-grow-1 d-inline">
+<form class="form-group flex-grow-1 d-inline">
     <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
         <div class="container">
             <h4>Quiz Name</h4>
@@ -24,22 +26,26 @@
         </div>
     </nav>
     <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.Name">
-</div>
+</form>
 @foreach (var question in Model.Questions)
 {
+    questionCount = Model.Questions.IndexOf(question) + 1;
+    var navbarNavDropdownId = "navbarNavDropdown" + questionCount;
+    var target = "#" + navbarNavDropdownId;
+
     <div class="form-group flex-grow-1 d-inline">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
             <div class="container">
-                <h4>Question @(Model.Questions.IndexOf(question) + 1)</h4>
+                <h4>Question @questionCount </h4>
                 <button class="navbar-toggler collapsed bg-primary"
                         type="button" data-toggle="collapse"
-                        data-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown"
+                        data-target="@target"
+                        aria-controls="@navbarNavDropdownId"
                         aria-expanded="false"
                         aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item m-1">
                             <a class="nav-link  btn btn-primary">Add Answer</a>
@@ -55,8 +61,12 @@
     </div>
     @foreach (var answer in question.Answers)
     {
+        answerCount++;
+        var answerNavbarNavDropdownId = "answerNavbarNavDropdown" + answerCount;
+        var targetAnswer = "#" + answerNavbarNavDropdownId;
+
         <div class="form-group flex-grow-1 d-inline">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
                 <div class="container">
 
                     <div class="form-group mb-0">
@@ -67,13 +77,13 @@
                     </div>
                     <button class="navbar-toggler collapsed bg-primary"
                             type="button" data-toggle="collapse"
-                            data-target="#navbarNavDropdown"
-                            aria-controls="navbarNavDropdown"
+                            data-target="@targetAnswer"
+                            aria-controls="@answerNavbarNavDropdownId"
                             aria-expanded="false"
                             aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                    <div class="navbar-collapse text-center collapse" id="@answerNavbarNavDropdownId">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item m-1">
                                 <a class="nav-link  btn btn-primary">Delete</a>
@@ -89,7 +99,7 @@
 
 @* activationDatePartial *@
 <div class="form-group flex-grow-1 d-inline">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
         <div class="container">
             <h4>Activation Date</h4>
         </div>
@@ -98,11 +108,13 @@
 </div>
 @* DurationPartial *@
 <div class="form-group flex-grow-1 d-inline">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
         <div class="container">
             <h4>Duration</h4>
         </div>
     </nav>
     <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.ActivationDate">
 </div>
+<a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Question">Continue</a>
+<button class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white">Save Qiuz</button>
 
