@@ -9,5 +9,7 @@
         public string Text { get; set; }
 
         public IList<AnswerViewModel> Answers { get; set; } = new List<AnswerViewModel>();
+
+        public bool IsDeleted { get; set; }
     }
 }

@@ -3,9 +3,8 @@
     using System;
     using System.Threading.Tasks;
 
-    using QuizHut.Data.Common;
-
     using Microsoft.EntityFrameworkCore;
+    using QuizHut.Data.Common;
 
     public class DbQueryRunner : IDbQueryRunner
     {

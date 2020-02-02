@@ -1,9 +1,8 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Data;
     using QuizHut.Web.ViewModels.Administration.Dashboard;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class DashboardController : AdministrationController
     {

@@ -32,6 +32,12 @@
             return this.RedirectToAction("AnswerInput", "Answer");
         }
 
+        [HttpPost]
+        public IActionResult RemoveQuestion(QuestionViewModel questionViewModel)
+        {
+            return this.RedirectToAction("Quiz/Display");
+        }
+
         // POST: Question/Create
         //[HttpPost]
         //[ValidateAntiForgeryToken]

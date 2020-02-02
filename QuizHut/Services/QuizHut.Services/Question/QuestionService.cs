@@ -1,12 +1,13 @@
 ﻿namespace QuizHut.Services.Question
 {
-    using QuizHut.Data.Common.Repositories;
-    using QuizHut.Web.ViewModels.Question;
-    using QuizHut.Data.Models;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+
+    using QuizHut.Data.Common.Repositories;
+    using QuizHut.Data.Models;
+    using QuizHut.Web.ViewModels.Question;
 
     public class QuestionService : IQuestionService
     {

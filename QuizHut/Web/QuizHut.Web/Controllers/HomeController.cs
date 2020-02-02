@@ -2,9 +2,8 @@
 {
     using System.Diagnostics;
 
-    using QuizHut.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Web.ViewModels;
 
     public class HomeController : BaseController
     {

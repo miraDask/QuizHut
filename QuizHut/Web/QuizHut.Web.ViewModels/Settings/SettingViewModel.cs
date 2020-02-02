@@ -1,9 +1,8 @@
 ﻿namespace QuizHut.Web.ViewModels.Settings
 {
+    using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {

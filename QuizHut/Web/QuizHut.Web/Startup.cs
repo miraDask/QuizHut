@@ -56,7 +56,7 @@
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
-            services.AddDistributedMemoryCache();
+            services.AddMemoryCache();
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
