@@ -50,9 +50,10 @@
         }
 
         [HttpGet]
-        public string Display()
+        public IActionResult Display()
         {
-            return JsonConvert.SerializeObject(this.cacheService.GetQuizModelFromCache());
+            var model = this.cacheService.GetQuizModelFromCache();
+            return this.View(model);
         }
     }
 }

@@ -1,7 +1,108 @@
-﻿
+﻿@model InputQuizViewModel
 @{
     ViewData["Title"] = "Display";
 }
+<div class="form-group flex-grow-1 d-inline">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+        <div class="container">
+            <h4>Quiz Name</h4>
+            <button class="navbar-toggler collapsed bg-primary"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary">Add Question</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.Name">
+</div>
+@foreach (var question in Model.Questions)
+{
+    <div class="form-group flex-grow-1 d-inline">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+            <div class="container">
+                <h4>Question @(Model.Questions.IndexOf(question) + 1)</h4>
+                <button class="navbar-toggler collapsed bg-primary"
+                        type="button" data-toggle="collapse"
+                        data-target="#navbarNavDropdown"
+                        aria-controls="navbarNavDropdown"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item m-1">
+                            <a class="nav-link  btn btn-primary">Add Answer</a>
+                        </li>
+                        <li class="nav-item m-1">
+                            <a class="nav-link btn btn-primary">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@question.Text">
+    </div>
+    @foreach (var answer in question.Answers)
+    {
+        <div class="form-group flex-grow-1 d-inline">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+                <div class="container">
 
-<h1>Display</h1>
+                    <div class="form-group mb-0">
+                        <div class="mt-2">
+                            <input type="checkbox" asp-for="@answer.IsRightAnswer" value="true">
+                            <label>Mark the right answer</label>
+                        </div>
+                    </div>
+                    <button class="navbar-toggler collapsed bg-primary"
+                            type="button" data-toggle="collapse"
+                            data-target="#navbarNavDropdown"
+                            aria-controls="navbarNavDropdown"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-primary">Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@answer.Text">
+        </div>
+    }
+}
+
+@* activationDatePartial *@
+<div class="form-group flex-grow-1 d-inline">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+        <div class="container">
+            <h4>Activation Date</h4>
+        </div>
+    </nav>
+    <input type="date" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.ActivationDate">
+</div>
+@* DurationPartial *@
+<div class="form-group flex-grow-1 d-inline">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4">
+        <div class="container">
+            <h4>Duration</h4>
+        </div>
+    </nav>
+    <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.ActivationDate">
+</div>
 
