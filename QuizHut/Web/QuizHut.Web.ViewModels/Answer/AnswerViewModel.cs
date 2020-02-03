@@ -18,5 +18,7 @@
         public bool IsDeleted { get; set; }
 
         public int Count { get; set; }
+
+        public string QuestionId { get; set; }
     }
 }

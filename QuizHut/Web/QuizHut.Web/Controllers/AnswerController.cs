@@ -24,8 +24,19 @@
         }
 
         [HttpPost]
+        public IActionResult AddNewAnswerAjaxCall(string questionId, string answerId)
+        {
+            var answer = new AnswerViewModel() { QuestionId = questionId, Id = answerId};
+            var quizViewModel = this.cacheService.GetQuizModelFromCache();
+            quizViewModel.Questions.Where(x => x.Id == questionId).FirstOrDefault().Answers.Add(answer);
+            this.cacheService.SaveQuizModelToCache(quizViewModel);
+            return this.RedirectToAction("AnswerInput", "Answer");
+        }
+
+        [HttpPost]
         public IActionResult AddNewAnswer(AnswerViewModel answerViewModel)
         {
+
             var quizViewModel = this.cacheService.GetQuizModelFromCache();
             quizViewModel.Questions.Last().Answers.Add(answerViewModel);
             this.cacheService.SaveQuizModelToCache(quizViewModel);

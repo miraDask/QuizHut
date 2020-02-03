@@ -2,7 +2,7 @@
 @{
     var navbarNavDropdownId = "navbarNavDropdown" + Model.Count;
     var target = "#" + navbarNavDropdownId;
-    var answerCount = 1;
+    var answerCount = 0;
 }
 
 
@@ -21,7 +21,7 @@
             <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary">Add Answer</a>
+                        <a class="nav-link  btn btn-primary addAnswer @Model.Id">Add Answer</a>
                     </li>
                     <li class="nav-item m-1">
                         <a class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</a>
@@ -35,8 +35,8 @@
     @*answers*@
     @foreach (var answer in Model.Answers.Where(x => !x.IsDeleted))
     {
-        answer.Count = answerCount;
-        @await Html.PartialAsync("_AnswerInputPartial", answer);
+        answer.Count = Model.Count + answerCount;
+        @await Html.PartialAsync("_AnswerDetailsPartial", answer);
         answerCount++;
     }
 </div>

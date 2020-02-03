@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
-    using QuizHut.Web.ViewModels.Answer;
     using QuizHut.Web.ViewModels.Question;
 
     public class QuestionController : Controller

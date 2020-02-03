@@ -45,7 +45,7 @@
 
             questionCount = Model.Questions.IndexOf(question) + 1;
             question.Count = questionCount;
-            @await Html.PartialAsync("_QuestionInputPartial", question);
+            @await Html.PartialAsync("_QuestionDetailsPartial", question);
         }
 
         @* activationDate *@
@@ -66,7 +66,7 @@
             </nav>
             <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.Duration">
         </div>
-        <a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Question">Continue</a>
+        <a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Question">Add Question</a>
         <button class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white">Save Qiuz</button>
     </form>
 
