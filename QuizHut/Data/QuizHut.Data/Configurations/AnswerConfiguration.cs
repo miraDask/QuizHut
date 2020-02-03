@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using QuizHut.Data.Models;
 
-    using static Validations.DataValidation.Answer;
+    using static QuizHut.Data.Validations.DataValidation.Answer;
 
     public class AnswerConfiguration : IEntityTypeConfiguration<Answer>
     {

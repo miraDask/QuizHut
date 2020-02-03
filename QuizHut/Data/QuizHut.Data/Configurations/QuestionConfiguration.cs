@@ -1,11 +1,10 @@
 ﻿namespace QuizHut.Data.Configurations
 {
-    using Data.Models;
-
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using QuizHut.Data.Models;
 
-    using static Validations.DataValidation.Question;
+    using static QuizHut.Data.Validations.DataValidation.Question;
 
     public class QuestionConfiguration : IEntityTypeConfiguration<Question>
     {

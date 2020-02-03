@@ -2,10 +2,9 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
     using QuizHut.Data.Models;
 
-    using static Validations.DataValidation.Category;
+    using static QuizHut.Data.Validations.DataValidation.Category;
 
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {

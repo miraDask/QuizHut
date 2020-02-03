@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-
     using QuizHut.Data.Common.Models;
     using QuizHut.Data.Common.Repositories;
 

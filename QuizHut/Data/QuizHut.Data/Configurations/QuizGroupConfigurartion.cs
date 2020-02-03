@@ -2,7 +2,6 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
     using QuizHut.Data.Models;
 
     public class QuizGroupConfigurartion : IEntityTypeConfiguration<QuizGroup>

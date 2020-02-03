@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
+    using QuizHut.Web.ViewModels.Answer;
     using QuizHut.Web.ViewModels.Question;
 
     public class QuestionController : Controller
@@ -33,10 +34,14 @@
         }
 
         [HttpPost]
-        public IActionResult RemoveQuestion(QuestionViewModel questionViewModel)
+        public JsonResult RemoveQuestion(string id)
         {
-            return this.RedirectToAction("Quiz/Display");
+            this.cacheService.DeleteQuestion(id);
+            var model = this.cacheService.GetQuizModelFromCache();
+            return this.Json("Ok");
         }
+
+
 
         // POST: Question/Create
         //[HttpPost]

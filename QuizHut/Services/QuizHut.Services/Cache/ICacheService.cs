@@ -7,5 +7,9 @@
         void SaveQuizModelToCache(InputQuizViewModel model);
 
         InputQuizViewModel GetQuizModelFromCache();
+
+        void DeleteQuestion(string id);
+
+        void DeleteAnswer(string id);
     }
 }

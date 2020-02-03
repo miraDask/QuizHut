@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web
 {
     using System.Reflection;
+
     using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -10,7 +11,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
     using QuizHut.Data;
     using QuizHut.Data.Common;
     using QuizHut.Data.Common.Repositories;

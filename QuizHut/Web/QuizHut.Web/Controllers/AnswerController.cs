@@ -32,5 +32,12 @@
 
             return this.RedirectToAction("AnswerInput", "Answer");
         }
+
+        [HttpPost]
+        public JsonResult RemoveAnswer(string id)
+        {
+            this.cacheService.DeleteAnswer(id);
+            return this.Json("Ok");
+        }
     }
 }

@@ -8,7 +8,6 @@
 
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-
     using QuizHut.Data.Common.Models;
     using QuizHut.Data.Models;
 

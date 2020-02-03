@@ -1,0 +1,42 @@
+﻿@model QuestionViewModel
+@{
+    var navbarNavDropdownId = "navbarNavDropdown" + Model.Count;
+    var target = "#" + navbarNavDropdownId;
+    var answerCount = 1;
+}
+
+
+<div id="@Model.Id" class="form-group flex-grow-1 d-inline">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 py-2 pr-1">
+        <div class="container">
+            <h5>Question  @Model.Count</h5>
+            <button class="navbar-toggler collapsed bg-primary mx-1"
+                    type="button" data-toggle="collapse"
+                    data-target="@target"
+                    aria-controls="@navbarNavDropdownId"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary">Add Answer</a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Text" value="@Model.Text">
+
+    @*answers*@
+    @foreach (var answer in Model.Answers.Where(x => !x.IsDeleted))
+    {
+        answer.Count = answerCount;
+        @await Html.PartialAsync("_AnswerInputPartial", answer);
+        answerCount++;
+    }
+</div>
