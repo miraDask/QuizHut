@@ -30,7 +30,7 @@
             var quizViewModel = this.cacheService.GetQuizModelFromCache();
             quizViewModel.Questions.Where(x => x.Id == questionId).FirstOrDefault().Answers.Add(answer);
             this.cacheService.SaveQuizModelToCache(quizViewModel);
-            return this.RedirectToAction("AnswerInput", "Answer");
+            return this.PartialView("_AnswerDetailsPartial", answer);
         }
 
         [HttpPost]

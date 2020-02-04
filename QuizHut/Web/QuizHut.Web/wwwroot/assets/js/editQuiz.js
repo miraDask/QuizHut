@@ -15,35 +15,21 @@
         let classList = Array.from(e.target.classList);
         let questionId = classList[classList.length - 1];
         let question = $("#" + questionId);
-        let children = question.children();
-        let templateAnswerElement = children[children.length - 1];
-        let newAnswer = templateAnswerElement.cloneNode(true);
-        newAnswer.id = generateGuid();
+        let newAnswerId = generateGuid();
 
-        let inputs = Array.from(newAnswer.getElementsByTagName('input'));
-        inputs.forEach(input => {
-            if (input.type === "text") {
-                input.value = "";
-            } else {
-                $(input).prop('checked', false);
-            }
-        });
-
-        let deleteAnswerBtn = newAnswer.getElementsByTagName('a')[0];
-        deleteAnswerBtn.addEventListener("click", deleteAnswer);
-        $(deleteAnswerBtn).removeClass(templateAnswerElement.id);
-        $(deleteAnswerBtn).addClass(newAnswer.id);
-
-        var response = $.ajax({
+        let response = $.ajax({
             url: "/Answer/AddNewAnswerAjaxCall",
             type: "POST",
             dataType: "application/json",
-            data: { "questionId": questionId, "answerId": newAnswer.id },
+            data: { "questionId": questionId, "answerId": newAnswerId },
             async: false,
         });
 
         if (response.status == 200) {
-            
+            let newAnswer = $($.parseHTML(response.responseText));
+            console.log(newAnswer)
+            let deleteAnswerBtn = $(newAnswer).find("a")[0];
+            deleteAnswerBtn.addEventListener("click", deleteAnswer);
             $(question).append(newAnswer);
         }
     }
@@ -61,7 +47,7 @@
         });
 
         if (response.status == 200) {
-             $("#" + answerId).remove();
+            $("#" + answerId).remove();
         }
     }
 
@@ -73,7 +59,7 @@
             url: "/Question/RemoveQuestion",
             type: "POST",
             dataType: "application/json",
-            data: { "id" : questionId },
+            data: { "id": questionId },
             async: false,
         });
 
