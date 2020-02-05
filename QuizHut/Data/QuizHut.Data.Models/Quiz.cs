@@ -5,14 +5,13 @@
 
     using QuizHut.Data.Common.Models;
 
-    public class Quiz : BaseDeletableModel<int>
+    public class Quiz : BaseDeletableModel<string>
     {
         public Quiz()
         {
+            this.Id = Guid.NewGuid().ToString();
             this.Questions = new HashSet<Question>();
-
             this.QuizResults = new HashSet<QuizResult>();
-
             this.QuizzesGroups = new HashSet<QuizGroup>();
         }
 
@@ -32,11 +31,9 @@
 
         public virtual ApplicationUser Creator { get; set; }
 
-        public int? CategoryId { get; set; }
+        public string CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
-
-        public int? QuizPasswordId { get; set; }
 
         public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
 

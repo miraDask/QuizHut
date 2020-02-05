@@ -7,7 +7,7 @@
 
         public virtual ApplicationUser Participant { get; set; }
 
-        public int GroupId { get; set; }
+        public string GroupId { get; set; }
 
         public virtual Group Group { get; set; }
     }

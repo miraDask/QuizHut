@@ -1,8 +1,11 @@
 ﻿namespace QuizHut.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
+    using QuizHut.Web.ViewModels.Answer;
     using QuizHut.Web.ViewModels.Question;
 
     public class QuestionController : Controller
@@ -17,26 +20,23 @@
         }
 
         [HttpGet]
-        public IActionResult QuestionInput()
+        public IActionResult QuestionInput(QuestionViewModel questionViewModel)
         {
-            return this.View();
+            return this.View(questionViewModel);
         }
 
         [HttpPost]
-        public IActionResult AddNewQuestion(QuestionViewModel questionViewModel)
+        public async Task<IActionResult> AddNewQuestion(QuestionViewModel questionViewModel)
         {
-            var quizViewModel = this.cacheService.GetQuizModelFromCache();
-            quizViewModel.Questions.Add(questionViewModel);
-            this.cacheService.SaveQuizModelToCache(quizViewModel);
-
-            return this.RedirectToAction("AnswerInput", "Answer");
+            var questionId = await this.questionService.AddNewQuestionAsync(questionViewModel);
+            var answerModel = new AnswerViewModel() { QuestionId = questionId };
+            return this.RedirectToAction("AnswerInput", "Answer", answerModel);
         }
 
         [HttpPost]
-        public JsonResult RemoveQuestion(string id)
+        public async Task<JsonResult> RemoveQuestion(string id)
         {
-            this.cacheService.DeleteQuestion(id);
-            var model = this.cacheService.GetQuizModelFromCache();
+            await this.cacheService.DeleteQuestionAsync(id);
             return this.Json("Ok");
         }
 

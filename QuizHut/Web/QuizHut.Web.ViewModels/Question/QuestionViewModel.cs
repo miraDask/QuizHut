@@ -21,5 +21,7 @@
         public bool IsDeleted { get; set; }
 
         public int Count { get; set; }
+
+        public string QuizId { get; set; }
     }
 }

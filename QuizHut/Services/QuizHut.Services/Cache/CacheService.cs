@@ -1,45 +1,50 @@
 ﻿namespace QuizHut.Services.Cache
 {
     using System.Linq;
+    using System.Threading.Tasks;
 
-    using Microsoft.Extensions.Caching.Memory;
-    using QuizHut.Web.ViewModels.Question;
+    using Microsoft.Extensions.Caching.Distributed;
+    using Newtonsoft.Json;
+    using QuizHut.Services.Common;
     using QuizHut.Web.ViewModels.Quiz;
 
     public class CacheService : ICacheService
     {
-        private readonly IMemoryCache cache;
+        private readonly IDistributedCache cache;
 
-        public CacheService(IMemoryCache cache)
+        public CacheService(IDistributedCache cache)
         {
             this.cache = cache;
         }
 
-        public InputQuizViewModel GetQuizModelFromCache()
+        public async Task<InputQuizViewModel> GetQuizModelFromCacheAsync()
         {
-            return this.cache.Get<InputQuizViewModel>("quiz");
+            var json = await this.cache.GetStringAsync(ServicesConstants.RedisModelKey);
+            var model = JsonConvert.DeserializeObject<InputQuizViewModel>(json);
+            return model;
         }
 
-        public void SaveQuizModelToCache(InputQuizViewModel model)
+        public async Task SaveQuizModelToCacheAsync(InputQuizViewModel model)
         {
-            this.cache.Set("quiz", model);
+            var modelJson = JsonConvert.SerializeObject(model);
+            await this.cache.SetStringAsync(ServicesConstants.RedisModelKey, modelJson);
         }
 
-        public void DeleteQuestion(string id)
+        public async Task DeleteQuestionAsync(string id)
         {
-            var model = this.GetQuizModelFromCache();
+            var model = await this.GetQuizModelFromCacheAsync();
             var question = model.Questions.Where(x => x.Id == id).FirstOrDefault();
             question.IsDeleted = true;
-            this.SaveQuizModelToCache(model);
+            await this.SaveQuizModelToCacheAsync(model);
         }
 
-        public void DeleteAnswer(string id)
+        public async Task DeleteAnswerAsync(string id)
         {
-            var model = this.GetQuizModelFromCache();
+            var model = await this.GetQuizModelFromCacheAsync();
             var answers = model.Questions.SelectMany(x => x.Answers).ToList();
             var answer = answers.Where(x => x.Id == id).FirstOrDefault();
             answer.IsDeleted = true;
-            this.SaveQuizModelToCache(model);
+            await this.SaveQuizModelToCacheAsync(model);
         }
     }
 }

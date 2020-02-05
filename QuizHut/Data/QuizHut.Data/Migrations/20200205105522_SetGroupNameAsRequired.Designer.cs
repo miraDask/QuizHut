@@ -7,17 +7,17 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizHut.Data;
 
-namespace AspNetCoreTemplate.Data.Migrations
+namespace QuizHut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200131220907_AddingDataModels")]
-    partial class AddingDataModels
+    [Migration("20200205105522_SetGroupNameAsRequired")]
+    partial class SetGroupNameAsRequired
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -127,10 +127,8 @@ namespace AspNetCoreTemplate.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.Answer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -149,8 +147,8 @@ namespace AspNetCoreTemplate.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -288,10 +286,8 @@ namespace AspNetCoreTemplate.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -324,10 +320,8 @@ namespace AspNetCoreTemplate.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.Group", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -345,6 +339,7 @@ namespace AspNetCoreTemplate.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
@@ -362,8 +357,8 @@ namespace AspNetCoreTemplate.Data.Migrations
                     b.Property<string>("ParticipantId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ParticipantId", "GroupId");
 
@@ -374,10 +369,8 @@ namespace AspNetCoreTemplate.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.Question", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -391,8 +384,8 @@ namespace AspNetCoreTemplate.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuizId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -410,16 +403,14 @@ namespace AspNetCoreTemplate.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.Quiz", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ActivationDateAndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -442,16 +433,18 @@ namespace AspNetCoreTemplate.Data.Migrations
                     b.Property<bool>("IsStarted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
-                    b.Property<int?>("QuizPasswordId")
-                        .HasColumnType("int");
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -466,25 +459,11 @@ namespace AspNetCoreTemplate.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.QuizGroup", b =>
                 {
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuizId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuizId", "GroupId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("QuizzessGroups");
-                });
-
-            modelBuilder.Entity("QuizHut.Data.Models.QuizPassword", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -492,26 +471,22 @@ namespace AspNetCoreTemplate.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                    b.HasKey("QuizId", "GroupId");
 
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("QuizId")
-                        .IsUnique();
-
-                    b.ToTable("QuizPasswords");
+                    b.ToTable("QuizzessGroups");
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.QuizResult", b =>
@@ -519,13 +494,30 @@ namespace AspNetCoreTemplate.Data.Migrations
                     b.Property<string>("ParticipantId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("QuizId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuizId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
                     b.HasKey("ParticipantId", "QuizId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("QuizId");
 
@@ -619,9 +611,7 @@ namespace AspNetCoreTemplate.Data.Migrations
                 {
                     b.HasOne("QuizHut.Data.Models.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.Category", b =>
@@ -657,9 +647,7 @@ namespace AspNetCoreTemplate.Data.Migrations
                 {
                     b.HasOne("QuizHut.Data.Models.Quiz", "Quiz")
                         .WithMany("Questions")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("QuizId");
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.Quiz", b =>
@@ -684,15 +672,6 @@ namespace AspNetCoreTemplate.Data.Migrations
                     b.HasOne("QuizHut.Data.Models.Quiz", "Quiz")
                         .WithMany("QuizzesGroups")
                         .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("QuizHut.Data.Models.QuizPassword", b =>
-                {
-                    b.HasOne("QuizHut.Data.Models.Quiz", "Quiz")
-                        .WithOne("QuizPassword")
-                        .HasForeignKey("QuizHut.Data.Models.QuizPassword", "QuizId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

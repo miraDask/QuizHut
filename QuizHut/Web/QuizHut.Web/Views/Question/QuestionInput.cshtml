@@ -1,7 +1,7 @@
 ﻿@model QuestionViewModel
 @{
     ViewData["Title"] = "QuestionInput";
-
+    
 }
 <div class="container-fluid">
     <div class="flex-grow-1">
@@ -23,13 +23,14 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input type="text" asp-for="@Model.Text" class="form-control" placeholder="...">
+                            <input type="text" name="Text" class="form-control" placeholder="...">
                         </div>
                         <div class="row mx-1 text-white">
-                            <button id="add" type="submit" class="btn btn-primary col-md-5 mt-5">Add Question</button>
+                            <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-5">Add Question</button>
                             <div class="col-1 mr-4"></div>
                             <a id="viewQuiz" asp-action="Display" asp-controller="Quiz" class="btn btn-primary col-md-5 mt-5">View Quiz</a>
                         </div>
+                        <input asp-for="QuizId" type="hidden" value="@Model.QuizId" />;
                     </div>
                 </div>
             </div>

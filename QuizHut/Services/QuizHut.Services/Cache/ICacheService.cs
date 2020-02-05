@@ -1,15 +1,17 @@
 ﻿namespace QuizHut.Services.Cache
 {
+    using System.Threading.Tasks;
+
     using QuizHut.Web.ViewModels.Quiz;
 
     public interface ICacheService
     {
-        void SaveQuizModelToCache(InputQuizViewModel model);
+        Task SaveQuizModelToCacheAsync(InputQuizViewModel model);
 
-        InputQuizViewModel GetQuizModelFromCache();
+        Task<InputQuizViewModel> GetQuizModelFromCacheAsync();
 
-        void DeleteQuestion(string id);
+        Task DeleteQuestionAsync(string id);
 
-        void DeleteAnswer(string id);
+        Task DeleteAnswerAsync(string id);
     }
 }

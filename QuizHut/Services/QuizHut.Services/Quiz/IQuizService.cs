@@ -6,9 +6,8 @@
 
     public interface IQuizService
     {
-        Task<int> AddNewQuizAsync(InputQuizViewModel quizModel);
+        Task<string> AddNewQuizAsync(InputQuizViewModel quizModel);
 
         bool GetDublicatedQuizPassword(string quizPassword);
-
     }
 }

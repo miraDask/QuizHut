@@ -1,6 +1,7 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
 #pragma warning disable SA1210 // Using directives should be ordered alphabetically by namespace
 using QuizHut.Data.Common.Models;
+
 namespace QuizHut.Data.Models
 {
 #pragma warning restore SA1210 // Using directives should be ordered alphabetically by namespace

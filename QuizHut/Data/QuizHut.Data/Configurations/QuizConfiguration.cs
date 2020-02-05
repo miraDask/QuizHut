@@ -24,6 +24,10 @@
 
             quiz.Property(q => q.IsStarted)
                 .HasDefaultValue(true);
+
+            quiz.Property(q => q.Name)
+                .HasMaxLength(NameMaxLength)
+                .IsRequired();
         }
     }
 }

@@ -4,50 +4,9 @@
 @{
     ViewData["Title"] = "Log in";
 }
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 col-md-4 offset-md-1">
-                <div class="mt-5">
-                    <div class="mb-4">
-                        <h1>@ViewData["Title"]</h1>
-                        <p class="lead">Enter your account.</p>
-                    </div>
-                    <form id="account" method="post">
-                        <div class="form-group">
-                            <label asp-for="Input.Email"></label>
-                            <input asp-for="Input.Email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                            <small id="emailHelp" class="form-text text-info">We'll never share your email with anyone else.</small>
 
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Input.Password"></label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Input.Password" placeholder="Password">
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group custom-checkbox my-4">
-                            <div class="checkbox">
-                                <label asp-for="Input.RememberMe">
-                                    <input asp-for="Input.RememberMe" />
-                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-block btn-primary" asp-for="Input.RememberMe">Login</button>
-                    </form>
-
-                    <p class="small my-4 mb-5 text-center">Don't have an account? <a asp-area="Identity" asp-page="/Account/Register">Register</a>.</p>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 offset-md-1 d-flex">
-                <div class="flex-grow-1">
-                    <partial name="_BublesAndCirclesPrtial" />
-                </div>
-            </div>
-        </div>
-    </div>
-@*<h1>@ViewData["Title"]</h1>*@
-@*<div class="row">
+<h1>@ViewData["Title"]</h1>
+<div class="row">
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
@@ -116,7 +75,7 @@
             }
         </section>
     </div>
-</div>*@
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

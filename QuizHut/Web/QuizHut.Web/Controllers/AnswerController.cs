@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web.Controllers
 {
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Answer;
@@ -10,45 +11,42 @@
     public class AnswerController : Controller
     {
         private readonly IAnswerService answerService;
-        private readonly ICacheService cacheService;
 
         public AnswerController(IAnswerService answerService, ICacheService cacheService)
         {
             this.answerService = answerService;
-            this.cacheService = cacheService;
+
         }
 
-        public IActionResult AnswerInput()
+        [HttpGet]
+        public IActionResult AnswerInput(AnswerViewModel answerViewModel)
         {
-            return this.View();
+            return this.View(answerViewModel);
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> AddNewAnswerAjaxCall(string questionId, string answerId)
+        //{
+        //    var answer = new AnswerViewModel() { QuestionId = questionId, Id = answerId };
+        //    var quizViewModel = await this.cacheService.GetQuizModelFromCacheAsync();
+        //    quizViewModel.Questions.Where(x => x.Id == questionId).FirstOrDefault().Answers.Add(answer);
+        //    await this.cacheService.SaveQuizModelToCacheAsync(quizViewModel);
+        //    return this.PartialView("_AnswerDetailsPartial", answer);
+        //}
 
         [HttpPost]
-        public IActionResult AddNewAnswerAjaxCall(string questionId, string answerId)
+        public async Task<IActionResult> AddNewAnswer(AnswerViewModel answerViewModel)
         {
-            var answer = new AnswerViewModel() { QuestionId = questionId, Id = answerId};
-            var quizViewModel = this.cacheService.GetQuizModelFromCache();
-            quizViewModel.Questions.Where(x => x.Id == questionId).FirstOrDefault().Answers.Add(answer);
-            this.cacheService.SaveQuizModelToCache(quizViewModel);
-            return this.PartialView("_AnswerDetailsPartial", answer);
+            var currentQuestionId = await this.answerService.AddNewAnswerAsync(answerViewModel);
+            var answerModel = new AnswerViewModel() { QuestionId = currentQuestionId };
+            return this.RedirectToAction("AnswerInput", answerModel);
         }
 
-        [HttpPost]
-        public IActionResult AddNewAnswer(AnswerViewModel answerViewModel)
-        {
-
-            var quizViewModel = this.cacheService.GetQuizModelFromCache();
-            quizViewModel.Questions.Last().Answers.Add(answerViewModel);
-            this.cacheService.SaveQuizModelToCache(quizViewModel);
-
-            return this.RedirectToAction("AnswerInput", "Answer");
-        }
-
-        [HttpPost]
-        public JsonResult RemoveAnswer(string id)
-        {
-            this.cacheService.DeleteAnswer(id);
-            return this.Json("Ok");
-        }
+        //[HttpPost]
+        //public async Task<JsonResult> RemoveAnswer(string id)
+        //{
+        //    await this.cacheService.DeleteAnswerAsync(id);
+        //    return this.Json("Ok");
+        //}
     }
 }

@@ -18,11 +18,12 @@
             this.repository = repository;
         }
 
-        public async Task<int> AddNewQuestionAsync(QuestionViewModel questionModel)
+        public async Task<string> AddNewQuestionAsync(QuestionViewModel questionModel)
         {
             var question = new Question
             {
                 Text = questionModel.Text,
+                QuizId = questionModel.QuizId,
             };
 
             await this.repository.AddAsync(question);
@@ -31,7 +32,7 @@
             return question.Id;
         }
 
-        public async Task<int> GetQuizIdByQuestionIdAsync(int id)
+        public async Task<string> GetQuizIdByQuestionIdAsync(string id)
         {
             var question = await this.repository.GetByIdWithDeletedAsync(id);
             return question.QuizId;

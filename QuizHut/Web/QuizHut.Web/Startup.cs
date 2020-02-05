@@ -11,6 +11,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using QuizHut.Common;
     using QuizHut.Data;
     using QuizHut.Data.Common;
     using QuizHut.Data.Common.Repositories;
@@ -25,6 +26,7 @@
     using QuizHut.Services.Question;
     using QuizHut.Services.Quiz;
     using QuizHut.Web.ViewModels;
+    using StackExchange.Redis;
 
     public class Startup
     {
@@ -56,7 +58,12 @@
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
-            services.AddMemoryCache();
+            //services.AddMemoryCache();
+            //services.AddDistributedRedisCache(options =>
+            //{
+            //    options.InstanceName = GlobalConstants.SystemName;
+            //    options.Configuration = GlobalConstants.RedisConfiguration;
+            //});
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -104,7 +111,6 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
             app.UseRouting();
 
             app.UseAuthentication();

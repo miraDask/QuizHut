@@ -19,7 +19,8 @@
              .HasForeignKey(q => q.GroupId);
 
             group.Property(g => g.Name)
-               .HasMaxLength(NameMaxLength);
+             .IsRequired()
+             .HasMaxLength(NameMaxLength);
         }
     }
 }

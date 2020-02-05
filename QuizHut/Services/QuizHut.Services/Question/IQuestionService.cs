@@ -9,8 +9,8 @@
 
     public interface IQuestionService
     {
-        Task<int> AddNewQuestionAsync(QuestionViewModel questionModel);
+        Task<string> AddNewQuestionAsync(QuestionViewModel questionModel);
 
-        Task<int> GetQuizIdByQuestionIdAsync(int id);
+        Task<string> GetQuizIdByQuestionIdAsync(string id);
     }
 }

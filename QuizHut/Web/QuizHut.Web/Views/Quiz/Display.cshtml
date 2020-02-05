@@ -3,7 +3,7 @@
     ViewData["Title"] = "Display";
     int questionCount;
 }
-    <form id="quiz" method="post">
+    <form id="quiz" method="post"  asp-action="Create" asp-controller="Quiz">
         @* Name *@
         <div class="form-group flex-grow-1 d-inline">
             <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4">
@@ -20,13 +20,13 @@
                     <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item m-1">
-                                <a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Question">Add Question</a>
+                                <a class="nav-link  btn btn-primary">Add Question</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.Name">
+            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Name" value="@Model.Name">
         </div>
 
         @* Description *@
@@ -42,7 +42,6 @@
         @* questions *@
         @foreach (var question in Model.Questions.Where(x => !x.IsDeleted))
         {
-
             questionCount = Model.Questions.IndexOf(question) + 1;
             question.Count = questionCount;
             @await Html.PartialAsync("_QuestionDetailsPartial", question);
@@ -55,7 +54,7 @@
                     <h4>Activation Date</h4>
                 </div>
             </nav>
-            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.ActivationDate.ToString().Split()[0]">
+            <input type="date" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.ActivationDate" value="@Model.ActivationDate">
         </div>
         @* Duration *@
         <div class="form-group flex-grow-1 d-inline">
@@ -64,9 +63,8 @@
                     <h4>Duration</h4>
                 </div>
             </nav>
-            <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" value="@Model.Duration">
+            <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.Duration" value="@Model.Duration">
         </div>
-        <a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Question">Continue</a>
-        <button type="submit" class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white" asp-action="Quiz" asp-controller="Save">Save Qiuz</button>
+        <a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Question">Add Question</a>
+        <button type="submit" class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white">Save Qiuz</button>
     </form>
-

@@ -17,7 +17,7 @@
             this.repository = repository;
         }
 
-        public async Task<int> AddNewQuizAsync(InputQuizViewModel quizModel)
+        public async Task<string> AddNewQuizAsync(InputQuizViewModel quizModel)
         {
             var quiz = new Quiz
             {

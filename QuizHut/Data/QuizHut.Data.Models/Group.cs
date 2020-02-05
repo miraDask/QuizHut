@@ -1,15 +1,16 @@
 ﻿namespace QuizHut.Data.Models
 {
+    using System;
     using System.Collections.Generic;
 
     using QuizHut.Data.Common.Models;
 
-    public class Group : BaseDeletableModel<int>
+    public class Group : BaseDeletableModel<string>
     {
         public Group()
         {
+            this.Id = Guid.NewGuid().ToString();
             this.ParticipanstGroups = new HashSet<ParticipantGroup>();
-
             this.QuizzesGroups = new HashSet<QuizGroup>();
         }
 
