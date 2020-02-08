@@ -8,7 +8,7 @@
         <div class="form-group flex-grow-1 d-inline">
             <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4">
                 <div class="container">
-                    <h4>Quiz Name</h4>
+                    <h4 class="mb-0">Quiz Name</h4>
                     <button class="navbar-toggler collapsed bg-primary"
                             type="button" data-toggle="collapse"
                             data-target="#navbarNavDropdown"
@@ -22,6 +22,12 @@
                             <li class="nav-item m-1">
                                 <a class="nav-link  btn btn-primary">Add Question</a>
                             </li>
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-primary">Edit</a>
+                            </li>
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-primary">Delete</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -33,7 +39,7 @@
         <div class="form-group flex-grow-1 d-inline">
             <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 p-2">
                 <div class="container">
-                    <h5>Description</h5>
+                    <h5 class="mb-0">Description</h5>
                 </div>
             </nav>
             <textarea wrap="hard" class="form-control form-control-lg flex-grow-1 mr-2 d-inline" style="height: 112px;" asp-for="@Model.Description"></textarea>
@@ -43,7 +49,7 @@
         @foreach (var question in Model.Questions.Where(x => !x.IsDeleted))
         {
             questionCount = Model.Questions.IndexOf(question) + 1;
-            question.Count = questionCount;
+            question.Number = questionCount;
             @await Html.PartialAsync("_QuestionDetailsPartial", question);
         }
 
@@ -51,16 +57,16 @@
         <div class="form-group flex-grow-1 d-inline">
             <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
                 <div class="container">
-                    <h4>Activation Date</h4>
+                    <h4 class="mb-0">Activation Date</h4>
                 </div>
             </nav>
-            <input type="date" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.ActivationDate" value="@Model.ActivationDate">
+            <input type="datetime" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.ActivationDate" value="@Model.ActivationDate">
         </div>
         @* Duration *@
         <div class="form-group flex-grow-1 d-inline">
             <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
                 <div class="container">
-                    <h4>Duration</h4>
+                    <h4 class="mb-0">Duration</h4>
                 </div>
             </nav>
             <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.Duration" value="@Model.Duration">

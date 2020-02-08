@@ -1,12 +1,12 @@
 ﻿namespace QuizHut.Web
 {
+    using System;
     using System.Reflection;
 
     using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +26,7 @@
     using QuizHut.Services.Question;
     using QuizHut.Services.Quiz;
     using QuizHut.Web.ViewModels;
-    using StackExchange.Redis;
+    using ReflectionIT.Mvc.Paging;
 
     public class Startup
     {
@@ -38,6 +38,7 @@
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
@@ -58,12 +59,13 @@
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
-            //services.AddMemoryCache();
-            //services.AddDistributedRedisCache(options =>
-            //{
-            //    options.InstanceName = GlobalConstants.SystemName;
-            //    options.Configuration = GlobalConstants.RedisConfiguration;
-            //});
+            services.AddPaging();
+            services.AddMvc().AddSessionStateTempDataProvider();
+            services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(GlobalConstants.CookieTimeOut);
+            });
 
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
@@ -112,7 +114,7 @@
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 

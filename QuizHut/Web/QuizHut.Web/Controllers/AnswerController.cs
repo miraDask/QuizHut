@@ -1,11 +1,11 @@
 ﻿namespace QuizHut.Web.Controllers
 {
-    using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Answer;
     using QuizHut.Services.Cache;
+    using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Answer;
 
     public class AnswerController : Controller
@@ -19,9 +19,9 @@
         }
 
         [HttpGet]
-        public IActionResult AnswerInput(AnswerViewModel answerViewModel)
+        public IActionResult AnswerInput()
         {
-            return this.View(answerViewModel);
+            return this.View();
         }
 
         //[HttpPost]
@@ -37,9 +37,11 @@
         [HttpPost]
         public async Task<IActionResult> AddNewAnswer(AnswerViewModel answerViewModel)
         {
-            var currentQuestionId = await this.answerService.AddNewAnswerAsync(answerViewModel);
-            var answerModel = new AnswerViewModel() { QuestionId = currentQuestionId };
-            return this.RedirectToAction("AnswerInput", answerModel);
+            var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
+            answerViewModel.QuestionId = currentQuestionId;
+            await this.answerService.AddNewAnswerAsync(answerViewModel);
+
+            return this.RedirectToAction("AnswerInput");
         }
 
         //[HttpPost]

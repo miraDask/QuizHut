@@ -1,31 +1,33 @@
-﻿$(function () {
+﻿//$(function () {
 
-    let addQuestionBtn = document.getElementById("addQuestion");
+//    let addQuestionBtn = document.getElementById("addQuestion");
+//    let viewQuizBtn = document.getElementById("viewQuiz");
 
-    if (typeof (addQuestionBtn) != 'undefined' && addQuestionBtn != null) {
-        let quizId = addQuestionBtn.parentElement.nextElementSibling.value;
-        if (quizId) {
-            sessionStorage.setItem("id", quizId);
-        }
-        else {
-            addQuestionBtn.parentElement.nextElementSibling.value = sessionStorage.getItem('id');
-            //$.ajax({
-            //    url: "/Question/QuestionInput",
-            //    type: "POST",
-            //    dataType: "application/json",
-            //    data: { "quizId": sessionStorage.getItem("id") },
-            //    success: function () {
-            //        console.log("ok");
-            //    },
-            //    error: function (res) {
-            //        alert(res.getAllResponseHeaders())
-            //    }
-            //});
-        }
-    }
+//    if (typeof (addQuestionBtn) != 'undefined' && addQuestionBtn != null) {
+//        let quizId = addQuestionBtn.parentElement.nextElementSibling.value;
+//        if (quizId) {
+//            sessionStorage.setItem("id", quizId);
+//        }
+//        else {
+//            addQuestionBtn.parentElement.nextElementSibling.value = sessionStorage.getItem('id');
+//        }
 
-
-})
+//        //$(viewQuizBtn).click(function () {
+//        //    let response = $.ajax({
+//        //        url: "/quiz/getquizidajaxcall",
+//        //        type: "post",
+//        //        datatype: "application/json",
+//        //        data: { "id": sessionstorage.getitem("id") },
+//        //        async: false
+//        //    });
+//        //    if (response.status == 200) {
+//        //        $(document).html(response.responseText);
+//        //            }
+                
+            
+//        //})
+//    }
+//})
 
     //    let deleteAnswerButtons = Array.from(document.getElementsByTagName("a")).filter(e => e.classList.contains("deleteAnswer"));
     //    let addAnswerButtons = Array.from(document.getElementsByTagName("a")).filter(e => e.classList.contains("addAnswer"));

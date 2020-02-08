@@ -1,11 +1,15 @@
 ﻿namespace QuizHut.Services.Quiz
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
+    using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Quiz;
 
     public class QuizService : IQuizService
@@ -34,9 +38,22 @@
             return quiz.Id;
         }
 
-        public bool GetDublicatedQuizPassword(string password)
-        {
-            return this.repository.All().Select(x => x.Password).Any(x => x == password);
-        }
+        //public bool GetDublicatedQuizPassword(string password)
+        //{
+        //    return this.repository.AllAsNoTracking().Select(x => x.Password).Any(x => x == password);
+        //}
+
+        public async Task<T> GetQuizByIdAsync<T>(string id)
+       => await this.repository
+               .AllAsNoTracking()
+               .Where(x => x.Id == id)
+               .To<T>()
+               .FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<T>> GetAllAsync<T>()
+         => await this.repository
+                .AllAsNoTracking()
+                .To<T>()
+                .ToListAsync();
     }
 }

@@ -6,6 +6,6 @@
 
         public const string AdministratorRoleName = "Administrator";
 
-        //public const string RedisConfiguration = "localhost";
+        public const int CookieTimeOut = 4;
     }
 }

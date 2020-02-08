@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-md-5 offset-1">
+                        <form method="post" class="col-12 col-md-5 offset-1"  asp-action="Start" asp-controller="Quiz">
                             <div class="component">
                                 <div class="card mb-3 mt-3">
                                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -93,16 +93,15 @@
                                         <h4 class="card-title">Take Quiz</h4>
 
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Quiz Code...">
-
+                                            <input type="text" class="form-control" placeholder="Quiz Code..." name="id">
                                         </div>
                                     </div>
                                     <div class="card-footer pb-3">
-                                        <a class="btn btn-outline-primary" asp-action="Take" asp-controller="Quiz">Enter</a>
+                                        <button type="submit" class="btn btn-outline-primary">Enter</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

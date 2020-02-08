@@ -15,6 +15,8 @@
 
         public string Text { get; set; }
 
+        public int Number { get; set; }
+
         public ICollection<Answer> Answers { get; set; }
 
         public string QuizId { get; set; }

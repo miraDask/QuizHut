@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
 
+    using QuizHut.Data.Models;
+    using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Question;
 
-    public class InputQuizViewModel
+    public class InputQuizViewModel : IMapFrom<Quiz>
     {
         public string Name { get; set; }
 

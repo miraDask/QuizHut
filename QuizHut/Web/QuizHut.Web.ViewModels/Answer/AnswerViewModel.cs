@@ -2,7 +2,10 @@
 {
     using System;
 
-    public class AnswerViewModel
+    using QuizHut.Data.Models;
+    using QuizHut.Services.Mapping;
+
+    public class AnswerViewModel : IMapFrom<Answer>
     {
         public AnswerViewModel()
         {

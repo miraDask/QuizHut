@@ -382,6 +382,9 @@ namespace QuizHut.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
                     b.Property<string>("QuizId")
                         .HasColumnType("nvarchar(450)");
 

@@ -1,7 +1,6 @@
 ﻿@model AnswerViewModel
 @{
     ViewData["Title"] = "AnswerInput";
-    var questionId = Model;
 }
 
 <div class="container-fluid">
@@ -37,7 +36,7 @@
                             <div class="col-1 mr-4"></div>
                             <a class="btn btn-primary col-md-5 mt-5" asp-action="QuestionInput" asp-controller="Question">New Question</a>
                         </div>
-                       <input asp-for="QuestionId" type="hidden" value="@Model.QuestionId" />;
+                        @*<input asp-for="QuestionId" type="hidden" value="@Model.QuestionId" />;*@
                     </div>
                 </div>
             </div>

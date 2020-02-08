@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using QuizHut.Data.Models;
-using Microsoft.AspNetCore.Identity;
-
-namespace QuizHut.Web.Areas.Identity.Pages.Account
+﻿namespace QuizHut.Web.Areas.Identity.Pages.Account
 {
+    using System.Text;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.AspNetCore.WebUtilities;
+    using QuizHut.Data.Models;
+
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {

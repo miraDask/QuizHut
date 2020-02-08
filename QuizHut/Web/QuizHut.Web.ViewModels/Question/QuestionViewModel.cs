@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
 
+    using QuizHut.Data.Models;
+    using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Answer;
 
-    public class QuestionViewModel
+    public class QuestionViewModel : IMapFrom<Question>
     {
         public QuestionViewModel()
         {
@@ -20,7 +22,7 @@
 
         public bool IsDeleted { get; set; }
 
-        public int Count { get; set; }
+        public int Number { get; set; }
 
         public string QuizId { get; set; }
     }

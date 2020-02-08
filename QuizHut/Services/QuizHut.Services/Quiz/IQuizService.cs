@@ -1,5 +1,7 @@
 ﻿namespace QuizHut.Services.Quiz
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using QuizHut.Web.ViewModels.Quiz;
@@ -8,6 +10,8 @@
     {
         Task<string> AddNewQuizAsync(InputQuizViewModel quizModel);
 
-        bool GetDublicatedQuizPassword(string quizPassword);
+        Task<IEnumerable<T>> GetAllAsync<T>();
+
+        Task<T> GetQuizByIdAsync<T>(string id);
     }
 }

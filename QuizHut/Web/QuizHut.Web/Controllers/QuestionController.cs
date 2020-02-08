@@ -5,40 +5,50 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
-    using QuizHut.Web.ViewModels.Answer;
     using QuizHut.Web.ViewModels.Question;
+    using Microsoft.AspNetCore.Http;
+    using QuizHut.Web.Controllers.Common;
+    using ReflectionIT.Mvc.Paging;
 
     public class QuestionController : Controller
     {
         private readonly IQuestionService questionService;
-        private readonly ICacheService cacheService;
 
         public QuestionController(IQuestionService questionService, ICacheService cacheService)
         {
             this.questionService = questionService;
-            this.cacheService = cacheService;
         }
 
         [HttpGet]
-        public IActionResult QuestionInput(QuestionViewModel questionViewModel)
+        public IActionResult QuestionInput()
         {
-            return this.View(questionViewModel);
+            return this.View();
         }
 
         [HttpPost]
         public async Task<IActionResult> AddNewQuestion(QuestionViewModel questionViewModel)
         {
+            questionViewModel.QuizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
             var questionId = await this.questionService.AddNewQuestionAsync(questionViewModel);
-            var answerModel = new AnswerViewModel() { QuestionId = questionId };
-            return this.RedirectToAction("AnswerInput", "Answer", answerModel);
+            this.HttpContext.Session.SetString(Constants.CurrentQuestionId, questionId);
+            return this.RedirectToAction("AnswerInput", "Answer");
         }
 
-        [HttpPost]
-        public async Task<JsonResult> RemoveQuestion(string id)
+        [HttpGet]
+        public async Task<IActionResult> Attempt(int page = Constants.DefaultPage)
         {
-            await this.cacheService.DeleteQuestionAsync(id);
-            return this.Json("Ok");
+            var attemptedQuiz = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
+            var query = this.questionService.GetAllQuestionsQuizById(attemptedQuiz);
+            var model = await PagingList.CreateAsync(query, Constants.DefaultPage, page);
+            return this.View(model);
         }
+
+        //[HttpPost]
+        //public async Task<JsonResult> RemoveQuestion(string id)
+        //{
+        //    await this.cacheService.DeleteQuestionAsync(id);
+        //    return this.Json("Ok");
+        //}
 
 
 

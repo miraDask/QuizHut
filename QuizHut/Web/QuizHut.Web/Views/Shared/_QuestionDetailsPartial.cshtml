@@ -1,6 +1,6 @@
 ﻿@model QuestionViewModel
 @{
-    var navbarNavDropdownId = "navbarNavDropdown" + Model.Count;
+    var navbarNavDropdownId = "navbarNavDropdown" + Model.Number;
     var target = "#" + navbarNavDropdownId;
     var answerCount = 0;
 }
@@ -9,7 +9,7 @@
 <div id="@Model.Id" class="form-group flex-grow-1 d-inline">
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 py-2 pr-1">
         <div class="container">
-            <h5>Question  @Model.Count</h5>
+            <h5 class="mb-0">Question  @Model.Number</h5>
             <button class="navbar-toggler collapsed bg-primary mx-1"
                     type="button" data-toggle="collapse"
                     data-target="@target"
@@ -30,12 +30,12 @@
             </div>
         </div>
     </nav>
-    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Text" value="@Model.Text">
+    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="@Model.Text" value="@Model.Text">
 
     @*answers*@
     @foreach (var answer in Model.Answers.Where(x => !x.IsDeleted))
     {
-        answer.Count = Model.Count + answerCount;
+        answer.Count = Model.Number  + answerCount;
         @await Html.PartialAsync("_AnswerDetailsPartial", answer);
         answerCount++;
     }

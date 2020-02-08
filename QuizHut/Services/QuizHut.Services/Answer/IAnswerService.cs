@@ -6,6 +6,6 @@
 
     public interface IAnswerService
     {
-        Task<string> AddNewAnswerAsync(AnswerViewModel answerViewModel);
+        Task AddNewAnswerAsync(AnswerViewModel answerViewModel);
     }
 }
