@@ -63,6 +63,8 @@
         {
             this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
+            this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
+
             return this.View(quizModel);
         }
 

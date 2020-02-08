@@ -1,13 +1,14 @@
 ﻿namespace QuizHut.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
-    using QuizHut.Web.ViewModels.Question;
-    using Microsoft.AspNetCore.Http;
     using QuizHut.Web.Controllers.Common;
+    using QuizHut.Web.ViewModels.Question;
     using ReflectionIT.Mvc.Paging;
 
     public class QuestionController : Controller
@@ -37,10 +38,44 @@
         [HttpGet]
         public async Task<IActionResult> Index(int page = Constants.DefaultPage)
         {
+
+            this.HttpContext.Session.SetInt32(Constants.CurrentQuestionNumber, page);
+
             var attemptedQuiz = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
+
             var query = this.questionService.GetAllQuestionsQuizById(attemptedQuiz);
             var model = await PagingList.CreateAsync(query, Constants.DefaultPage, page);
             return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Index(IFormCollection collection)
+        {
+            var assumtions = collection.Where(x => x.Key.Contains("IsRightAnswerAssumption"));
+            var rightAnswers = collection.Where(x => x.Key.Contains("IsRightAnswer") && !x.Key.Contains("IsRightAnswerAssumption"));
+            var result = this.questionService.CalculateQuestionResult(assumtions, rightAnswers);
+            var quizResult = this.HttpContext.Session.GetInt32(Constants.QuizResult);
+
+            if (quizResult == null)
+            {
+                this.HttpContext.Session.SetInt32(Constants.QuizResult, result);
+            }
+            else
+            {
+                this.HttpContext.Session.SetInt32(Constants.QuizResult, (int)quizResult + result);
+            }
+
+            var questionsCount = this.HttpContext.Session.GetInt32(Constants.QuestionsCount);
+            var currentQuestionNumber = this.HttpContext.Session.GetInt32(Constants.CurrentQuestionNumber);
+
+            if (currentQuestionNumber == questionsCount)
+            {
+                return this.RedirectToAction("Index", new { page = currentQuestionNumber });
+            }
+            else
+            {
+                return this.RedirectToAction("Index", new { page = ++currentQuestionNumber });
+            }
         }
 
         //[HttpPost]

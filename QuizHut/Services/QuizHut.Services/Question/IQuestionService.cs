@@ -1,8 +1,9 @@
 ﻿namespace QuizHut.Services.Question
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.Extensions.Primitives;
     using QuizHut.Web.ViewModels.Question;
     using QuizHut.Web.ViewModels.Quiz;
 
@@ -13,5 +14,7 @@
         // Task<string> GetQuizIdByQuestionIdAsync(string id);
 
         IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id);
+
+        int CalculateQuestionResult(IEnumerable<KeyValuePair<string, StringValues>> assumtions, IEnumerable<KeyValuePair<string, StringValues>> rightAnswers);
     }
 }

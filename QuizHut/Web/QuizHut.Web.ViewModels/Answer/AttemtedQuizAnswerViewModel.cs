@@ -2,6 +2,10 @@
 {
     public class AttemtedQuizAnswerViewModel
     {
+        public AttemtedQuizAnswerViewModel()
+        {
+        }
+
         public string Text { get; set; }
 
         public bool IsRightAnswer { get; set; }
