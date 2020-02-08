@@ -1,75 +1,54 @@
-﻿@model ReflectionIT.Mvc.Paging.IPagingList<QuestionViewModel>
+﻿@model ReflectionIT.Mvc.Paging.IPagingList<AttemtedQuizQuestionViewModel>
 @using ReflectionIT.Mvc.Paging
 @addTagHelper*,ReflectionIT.Mvc.Paging
 @{
     ViewData["Title"] = "Take";
 }
 
+<div class="container-fluid">
+    <div class="flex-grow-1">
+        <partial name="_BublesAndCirclesPrtial" />
+    </div>
+    <nav aria-label="Pagination" class="mt-3">
+        @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
+    </nav>
 
-@*<div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form method="post" class="col-11 ml-4" asp-action="AddNewQuestion" asp-controller="Question">
-            <div class="component">
-                <div class="card mb-3 mt-3">
-                    <div class="card-header text-warning" style="font-size: xx-large">
-                        <i class="fas fa-folder-plus"></i>
-                    </div>
-                    <div class="card-body">
-                        <h4 class="card-title">Add New Question</h4>
-                        <p class="card-text" style="display: block;">
-                            <span class="text-primary mr-1">∗</span>
-                            You can always edit it later.
-                        </p>
-                    </div>
-                    <div class="card-footer pb-5">
-                        <div class="input-group">
-                            <input type="text" name="Text" class="form-control" placeholder="...">
+    @foreach (var question in Model)
+    {
+        <form method="post" class="col-11 mx-5" asp-action="CalculateResult" asp-controller="Quiz">
+            <div class="card m-5">
+                <div class="card-header text-warning" style="font-size: xx-large">
+                    <i class="fas fa-folder-plus"></i>
+                    <span class="text-primary ml-1">Question @question.Number</span>
+                </div>
+
+                <div class="card-title text-center mt-3 mx-2">
+                    <h4>@question.Text</h4>
+                </div>
+                <hr>
+                <div class="card-body px-4">
+                    @foreach (var answer in question.Answers)
+                    {
+                        <div class="form-group mb-0">
+                            <div class="mt-2 row">
+                                <input type="checkbox" asp-for="@answer.IsRightAnswerAssumption" value="true" class="mt-2 ml-3">
+                                <label class="display-6 col-11 mt-0">@answer.Text</label>
+                            </div>
                         </div>
-                        <div class="row mx-1 text-white">
-                            <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-5">Add Question</button>
-                            <div class="col-1 mr-4"></div>
-                        </div>
+                    }
+                </div>
+                <div class="card-footer pb-5">
+                    <div class="row mx-1 text-white">
+                        <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-2">Submit</button>
+                        <div class="col-1 mr-4"></div>
                     </div>
                 </div>
             </div>
         </form>
-    </div>*@
-    <div class="container-fluid">
-        <div class="flex-grow-1">
-            <partial name="_BublesAndCirclesPrtial" />
-        </div>
-        <nav aria-label="Suppliers navigation example" class="mt-3">
-            @await this.Component.InvokeAsync("Pager", new { pagingList = this.Model })
-        </nav>
+    }
 
-        @foreach (var item in Model)
-        {
-            <form method="post" class="col-11 mx-5" asp-action="AddNewQuestion" asp-controller="Question">
-                    <div class="card m-5">
-                        <div class="card-header text-warning" style="font-size: xx-large">
-                            <i class="fas fa-folder-plus"></i>
-                        </div>
-                        <div class="card-body">
-                            <h4 class="card-title">@item.Text</h4>
-                            @foreach (var answer in item.Answers)
-                            {
-                        <p class="card-text" style="display: block;">
-                            @answer.Text
-                        </p>
-                            }
-                            
-                        </div>
-                        <div class="card-footer pb-5">
-                            <div class="row mx-1 text-white">
-                                <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-5">Add Question</button>
-                                <div class="col-1 mr-4"></div>
-                            </div>
-                        </div>
-                    </div>
-            </form>
-        }
-
-        <nav area-label="Products navigation example">
-            <vc:pager paging-list="@Model"> </vc:pager>
-        </nav>
-    </div>
+    <nav area-label="Pagination">
+        <vc:pager paging-list="@Model"> </vc:pager>
+    </nav>
+</div>
 

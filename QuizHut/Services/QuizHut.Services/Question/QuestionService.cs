@@ -11,6 +11,7 @@
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Answer;
     using QuizHut.Web.ViewModels.Question;
+    using QuizHut.Web.ViewModels.Quiz;
 
     public class QuestionService : IQuestionService
     {
@@ -26,11 +27,14 @@
         public async Task<string> AddNewQuestionAsync(QuestionViewModel questionModel)
         {
             var quizId = questionModel.QuizId;
-            var quiz = await this.quizRepository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == quizId);
+            var quiz = await this.quizRepository.AllAsNoTracking().Select(x => new {
+                x.Id,
+                Questions = x.Questions.ToList(),
+            }).FirstOrDefaultAsync(x => x.Id == quizId);
 
             var question = new Question
             {
-                Number = quiz.Questions.Count,
+                Number = quiz.Questions.Count() + 1,
                 Text = questionModel.Text,
                 QuizId = quizId,
             };
@@ -41,19 +45,22 @@
             return question.Id;
         }
 
-        public IOrderedQueryable<QuestionViewModel> GetAllQuestionsQuizById(string id)
+        public IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id)
         {
             var questions = this.repository
                .AllAsNoTracking()
                .Where(x => x.QuizId == id)
-               .Select(x => new QuestionViewModel{ 
+               .Select(x => new AttemtedQuizQuestionViewModel
+               {
                     Text = x.Text,
-                    Answers = x.Answers.Select(y => new AnswerViewModel
+                    Number = x.Number,
+                    Answers = x.Answers.Select(y => new AttemtedQuizAnswerViewModel
                     {
                         Text = y.Text,
-                        IsRightAnswer = y.IsRightAnswer
-                    }).ToList()
-               }).OrderBy(x => x.Text);
+                        IsRightAnswer = y.IsRightAnswer,
+                        IsRightAnswerAssumption = false,
+                    }).ToList(),
+               }).OrderBy(x => x.Number);
 
             return questions;
         }

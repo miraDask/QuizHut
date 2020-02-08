@@ -1,11 +1,10 @@
 ﻿namespace QuizHut.Services.Question
 {
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using QuizHut.Data.Models;
     using QuizHut.Web.ViewModels.Question;
+    using QuizHut.Web.ViewModels.Quiz;
 
     public interface IQuestionService
     {
@@ -13,6 +12,6 @@
 
         // Task<string> GetQuizIdByQuestionIdAsync(string id);
 
-        IOrderedQueryable<QuestionViewModel> GetAllQuestionsQuizById(string id);
+        IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id);
     }
 }
