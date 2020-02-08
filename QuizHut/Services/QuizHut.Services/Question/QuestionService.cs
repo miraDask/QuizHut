@@ -46,19 +46,16 @@
             var questions = this.repository
                .AllAsNoTracking()
                .Where(x => x.QuizId == id)
-               .OrderBy(x => x.Number)
-               .ToList();
+               .Select(x => new QuestionViewModel{ 
+                    Text = x.Text,
+                    Answers = x.Answers.Select(y => new AnswerViewModel
+                    {
+                        Text = y.Text,
+                        IsRightAnswer = y.IsRightAnswer
+                    }).ToList()
+               }).OrderBy(x => x.Text);
 
-            var models = questions.Select(x => new QuestionViewModel
-            {
-                Text = x.Text,
-                Answers = x.Answers.Select(y => new AnswerViewModel
-                {
-                    Text = y.Text,
-                }).ToList(),
-            }).AsQueryable().OrderBy(x => x);
-
-            return models;
+            return questions;
         }
 
         //public async Task<string> GetQuizIdByQuestionIdAsync(string id)

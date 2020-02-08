@@ -35,7 +35,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Attempt(int page = Constants.DefaultPage)
+        public async Task<IActionResult> Index(int page = Constants.DefaultPage)
         {
             var attemptedQuiz = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
             var query = this.questionService.GetAllQuestionsQuizById(attemptedQuiz);
