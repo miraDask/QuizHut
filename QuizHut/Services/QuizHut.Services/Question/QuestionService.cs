@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Services.Question
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -92,12 +93,25 @@
             var question = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             this.repository.Delete(question);
             await this.repository.SaveChangesAsync();
+            await this.UpdateAllQuestionsInQuizNumeration(question.QuizId);
         }
 
-        //public async Task<string> GetQuizIdByQuestionIdAsync(string id)
-        //{
-        //    var question = await this.repository.GetByIdWithDeletedAsync(id);
-        //    return question.QuizId;
-        //}
+        public async Task UpdateAllQuestionsInQuizNumeration(string quizId)
+        {
+            var count = 0;
+
+            var questions = this.repository
+              .AllAsNoTracking()
+              .Where(x => x.QuizId == quizId)
+              .OrderBy(x => x.Number);
+
+            foreach (var question in questions)
+            {
+                question.Number = ++count;
+                this.repository.Update(question);
+            }
+
+            await this.repository.SaveChangesAsync();
+        }
     }
 }

@@ -15,6 +15,8 @@
 
         Task DeleteQuestionByIdAsync(string id);
 
+        Task UpdateAllQuestionsInQuizNumeration(string quizId);
+
         int CalculateQuestionResult(IEnumerable<KeyValuePair<string, StringValues>> assumtions, IEnumerable<KeyValuePair<string, StringValues>> rightAnswers);
     }
 }
