@@ -25,7 +25,7 @@
             {
                 Name = name,
                 Description = description,
-                ActivationDateAndTime = Convert.ToDateTime(activationDate),
+                ActivationDateAndTime = DateTime.Parse(activationDate),
                 Duration = duration,
                 CreatorId = creatorId,
             };

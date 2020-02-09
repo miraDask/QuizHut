@@ -8,6 +8,7 @@
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
     using QuizHut.Web.Controllers.Common;
+    using QuizHut.Web.ViewModels.Question;
     using ReflectionIT.Mvc.Paging;
 
     public class QuestionController : Controller
@@ -26,10 +27,10 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewQuestion(string questionText)
+        public async Task<IActionResult> AddNewQuestion(QuestionViewModel model)
         {
             var quizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            var questionId = await this.questionService.AddNewQuestionAsync(quizId, questionText);
+            var questionId = await this.questionService.AddNewQuestionAsync(quizId, model.Text);
             this.HttpContext.Session.SetString(Constants.CurrentQuestionId, questionId);
             return this.RedirectToAction("AnswerInput", "Answer");
         }
