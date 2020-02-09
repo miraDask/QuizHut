@@ -27,11 +27,14 @@
                     <li class="nav-item m-1">
                         <a class="nav-link  btn btn-primary deleteAnswer @Model.Id">Delete</a>
                     </li>
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary">Edit</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="@Model.Text" value="@Model.Text">
+    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled name="@Model.Text" value="@Model.Text">
 </div>
 
 

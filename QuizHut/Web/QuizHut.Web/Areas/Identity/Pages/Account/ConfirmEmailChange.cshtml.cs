@@ -18,8 +18,8 @@
 
         public ConfirmEmailChangeModel(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
         }
 
         [TempData]
@@ -29,35 +29,35 @@
         {
             if (userId == null || email == null || code == null)
             {
-                return RedirectToPage("/Index");
+                return this.RedirectToPage("/Index");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await this._userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return this.NotFound($"Unable to load user with ID '{userId}'.");
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            var result = await _userManager.ChangeEmailAsync(user, email, code);
+            var result = await this._userManager.ChangeEmailAsync(user, email, code);
             if (!result.Succeeded)
             {
-                StatusMessage = "Error changing email.";
-                return Page();
+                this.StatusMessage = "Error changing email.";
+                return this.Page();
             }
 
             // In our UI email and user name are one and the same, so when we update the email
             // we need to update the user name.
-            var setUserNameResult = await _userManager.SetUserNameAsync(user, email);
+            var setUserNameResult = await this._userManager.SetUserNameAsync(user, email);
             if (!setUserNameResult.Succeeded)
             {
-                StatusMessage = "Error changing user name.";
-                return Page();
+                this.StatusMessage = "Error changing user name.";
+                return this.Page();
             }
 
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Thank you for confirming your email change.";
-            return Page();
+            await this._signInManager.RefreshSignInAsync(user);
+            this.StatusMessage = "Thank you for confirming your email change.";
+            return this.Page();
         }
     }
 }

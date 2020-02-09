@@ -1,6 +1,6 @@
-﻿namespace QuizHut.Web.Areas.Identity.Pages.Account
+﻿
+namespace QuizHut.Web.Areas.Identity.Pages.Account
 {
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc.RazorPages;
 

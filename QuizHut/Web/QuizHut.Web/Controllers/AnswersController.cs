@@ -9,11 +9,11 @@
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Answer;
 
-    public class AnswerController : Controller
+    public class AnswersController : Controller
     {
         private readonly IAnswerService answerService;
 
-        public AnswerController(IAnswerService answerService, ICacheService cacheService)
+        public AnswersController(IAnswerService answerService, ICacheService cacheService)
         {
             this.answerService = answerService;
 
@@ -34,7 +34,6 @@
         //    await this.cacheService.SaveQuizModelToCacheAsync(quizViewModel);
         //    return this.PartialView("_AnswerDetailsPartial", answer);
         //}
-
         [HttpPost]
         public async Task<IActionResult> AddNewAnswer(AnswerViewModel model)
         {

@@ -1,46 +1,42 @@
-﻿@model AnswerViewModel
+﻿
 @{
-    ViewData["Title"] = "AnswerInput";
+    ViewData["Title"] = "ActivationDateInput";
 }
-
 <div class="container-fluid">
     <div class="flex-grow-1">
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form method="post" class="col-11 ml-4" asp-action="AddNewAnswer" asp-controller="Answer">
+        <div id="activationDateCard" class="col-11 ml-4" style="display: block;">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
                         <i class="fas fa-folder-plus"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title">Add New Answer</h4>
+                        <h4 class="card-title">Add Activation Date</h4>
                         <p class="card-text" style="display: block;">
                             <span class="text-primary mr-1">∗</span>
                             You can always edit it later.
                         </p>
-                        <p class="card-text" style="display: block;">
+                        <p class="card-text" style="display: none;">
                             <span class="text-primary mr-1">
-                                <input type="checkbox" value="true" asp-for="IsRightAnswer">
+                                <input type="checkbox" name="rightAnswer" value="rightAnswer">
                             </span>
-                            Check the box if the answer is right.
+                            Check the box if the answer is right
                         </p>
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input type="text" class="form-control" asp-for="Text" placeholder="...">
+                            <input id="nameInput" type="date" class="form-control" placeholder="...">
                         </div>
-                        <div class="row mx-4 text-white">
-                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Answer</button>
-                            <div class="col-1 mr-4"></div>
-                            <a class="btn btn-primary col-md-5 mt-5" asp-action="QuestionInput" asp-controller="Question">New Question</a>
+                        <div class="row mx-1 text-white">
+                            <a id="add" asp-action="DurationInput" asp-controller="Quizzes" class="btn btn-primary col-md-5 mt-5">Add Date</a>
                         </div>
-                        @*<input asp-for="QuestionId" type="hidden" value="@Model.QuestionId" />;*@
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 

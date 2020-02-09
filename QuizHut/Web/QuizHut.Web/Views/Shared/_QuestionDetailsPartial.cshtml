@@ -6,7 +6,7 @@
 }
 
 
-<div id="@Model.Id" class="form-group flex-grow-1 d-inline">
+<form method="post" class="form-group flex-grow-1 d-inline">
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 py-2 pr-1">
         <div class="container">
             <h5 class="mb-0">Question  @Model.Number</h5>
@@ -24,19 +24,23 @@
                         <a class="nav-link  btn btn-primary addAnswer @Model.Id">Add Answer</a>
                     </li>
                     <li class="nav-item m-1">
-                        <a class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</a>
+                        <button type="submit" asp-action="Delete" asp-controller="Questions" class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</button>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary">Edit</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="@Model.Text" value="@Model.Text">
+    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled name="@Model.Text" value="@Model.Text">
+    <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Id" value="@Model.Id">
 
     @*answers*@
-    @foreach (var answer in Model.Answers.Where(x => !x.IsDeleted))
+    @foreach (var answer in Model.Answers)
     {
         answer.Count = Model.Number  + answerCount;
         @await Html.PartialAsync("_AnswerDetailsPartial", answer);
         answerCount++;
     }
-</div>
+</form>

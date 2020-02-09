@@ -17,8 +17,8 @@
 
         public LogoutModel(SignInManager<ApplicationUser> signInManager, ILogger<LogoutModel> logger)
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            this._signInManager = signInManager;
+            this._logger = logger;
         }
 
         public void OnGet()
@@ -27,15 +27,15 @@
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            await this._signInManager.SignOutAsync();
+            this._logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
-                return LocalRedirect(returnUrl);
+                return this.LocalRedirect(returnUrl);
             }
             else
             {
-                return RedirectToPage();
+                return this.RedirectToPage();
             }
         }
     }

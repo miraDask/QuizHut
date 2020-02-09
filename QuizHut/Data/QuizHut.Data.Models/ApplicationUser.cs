@@ -1,14 +1,12 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
-#pragma warning disable SA1210 // Using directives should be ordered alphabetically by namespace
-using QuizHut.Data.Common.Models;
+
 namespace QuizHut.Data.Models
 {
-#pragma warning restore SA1210 // Using directives should be ordered alphabetically by namespace
-
     using System;
     using System.Collections.Generic;
 
     using Microsoft.AspNetCore.Identity;
+    using QuizHut.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {

@@ -12,13 +12,13 @@
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Quiz;
 
-    public class QuizController : Controller
+    public class QuizzesController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizService quizService;
         private readonly IQuizResultService quizResultService;
 
-        public QuizController(UserManager<ApplicationUser> userManager, IQuizService quizService, ICacheService cacheService, IQuizResultService quizResultService)
+        public QuizzesController(UserManager<ApplicationUser> userManager, IQuizService quizService, ICacheService cacheService, IQuizResultService quizResultService)
         {
             this.userManager = userManager;
             this.quizService = quizService;
@@ -37,7 +37,7 @@
             model.CreatorId = userId;
             var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.ActivationDate, model.Duration, model.CreatorId);
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
-            return this.RedirectToAction("QuestionInput", "Question");
+            return this.RedirectToAction("QuestionInput", "Questions");
         }
 
         [HttpGet]
@@ -49,9 +49,9 @@
             }
 
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
+
             return this.View(quizModel);
         }
-
 
         [HttpGet]
         public async Task<IActionResult> DisplayResult()

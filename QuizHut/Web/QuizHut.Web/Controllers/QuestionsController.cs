@@ -11,11 +11,11 @@
     using QuizHut.Web.ViewModels.Question;
     using ReflectionIT.Mvc.Paging;
 
-    public class QuestionController : Controller
+    public class QuestionsController : Controller
     {
         private readonly IQuestionService questionService;
 
-        public QuestionController(IQuestionService questionService, ICacheService cacheService)
+        public QuestionsController(IQuestionService questionService, ICacheService cacheService)
         {
             this.questionService = questionService;
         }
@@ -70,7 +70,7 @@
 
             if (currentQuestionNumber == questionsCount)
             {
-                return this.RedirectToAction("DisplayResult", "Quiz");
+                return this.RedirectToAction("DisplayResult", "Quizzes");
             }
             else
             {
