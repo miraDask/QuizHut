@@ -50,37 +50,23 @@
 
         public int CalculateQuestionResult(IEnumerable<KeyValuePair<string, StringValues>> assumtions, IEnumerable<KeyValuePair<string, StringValues>> answers)
         {
-            var rightAnswers = answers.Where(x => x.Value == ServicesConstants.RightAnswerValue);
-            var result = 0;
-
-            foreach (var rightAnswer in rightAnswers)
+            foreach (var assumptionAnswer in assumtions)
             {
-                var answerNumberPatern = ServicesConstants.AnswerNumberPattern;
-                var match = Regex.Match(rightAnswer.Key, answerNumberPatern);
-                var answerNumber = match.Value;
-                var assumptionAnswer = assumtions.Where(x => x.Key.Contains(answerNumber));
+                var numberPatern = ServicesConstants.AnswerNumberPattern;
+                var match = Regex.Match(assumptionAnswer.Key, numberPatern);
+                var assumtionNumber = match.Value;
 
-                foreach (var kvp in assumptionAnswer)
+                var correspondingAnswer = answers.Where(x => x.Key.Contains(assumtionNumber)).FirstOrDefault();
+                var isCorrespondingAnswerCorrect = correspondingAnswer.Value == ServicesConstants.RightAnswerValue;
+                var isAssumptionCorrect = assumptionAnswer.Value.Any(x => x == ServicesConstants.RightAnswerValue.ToLower());
+
+                if (isAssumptionCorrect != isCorrespondingAnswerCorrect)
                 {
-                    var valueCollection = kvp.Value;
-                    foreach (var value in valueCollection)
-                    {
-                        if (value == ServicesConstants.RightAnswerValue.ToLower())
-                        {
-                            result++;
-                        }
-                    }
+                    return ServicesConstants.NoPointsValue;
                 }
             }
 
-            if (result < rightAnswers.Count())
-            {
-                return ServicesConstants.NoPointsValue;
-            }
-            else
-            {
-                return ServicesConstants.PointsValue;
-            }
+            return ServicesConstants.PointsValue;
         }
 
         public IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id)
