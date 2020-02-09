@@ -2,10 +2,8 @@
 {
     using System.Threading.Tasks;
 
-    using QuizHut.Web.ViewModels.Answer;
-
     public interface IAnswerService
     {
-        Task AddNewAnswerAsync(AnswerViewModel answerViewModel);
+        Task AddNewAnswerAsync(string answerText, bool isRightAnswer, string questionId);
     }
 }

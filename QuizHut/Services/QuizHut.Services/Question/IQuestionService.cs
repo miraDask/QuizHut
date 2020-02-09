@@ -3,15 +3,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.Extensions.Primitives;
-    using QuizHut.Web.ViewModels.Question;
     using QuizHut.Web.ViewModels.Quiz;
 
     public interface IQuestionService
     {
-        Task<string> AddNewQuestionAsync(QuestionViewModel questionModel);
-
-        // Task<string> GetQuizIdByQuestionIdAsync(string id);
+        Task<string> AddNewQuestionAsync(string quizId, string quizText);
 
         IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id);
 

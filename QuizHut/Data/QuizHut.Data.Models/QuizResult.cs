@@ -20,5 +20,7 @@
         public virtual Quiz Quiz { get; set; }
 
         public int Points { get; set; }
+
+        public int MaxPoints { get; set; }
     }
 }

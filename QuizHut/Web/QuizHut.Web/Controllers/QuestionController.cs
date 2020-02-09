@@ -8,7 +8,6 @@
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
     using QuizHut.Web.Controllers.Common;
-    using QuizHut.Web.ViewModels.Question;
     using ReflectionIT.Mvc.Paging;
 
     public class QuestionController : Controller
@@ -27,10 +26,10 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewQuestion(QuestionViewModel questionViewModel)
+        public async Task<IActionResult> AddNewQuestion(string questionText)
         {
-            questionViewModel.QuizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            var questionId = await this.questionService.AddNewQuestionAsync(questionViewModel);
+            var quizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            var questionId = await this.questionService.AddNewQuestionAsync(quizId, questionText);
             this.HttpContext.Session.SetString(Constants.CurrentQuestionId, questionId);
             return this.RedirectToAction("AnswerInput", "Answer");
         }
@@ -51,8 +50,8 @@
         [HttpPost]
         public IActionResult Index(IFormCollection collection)
         {
-            var assumtions = collection.Where(x => x.Key.Contains("IsRightAnswerAssumption"));
-            var rightAnswers = collection.Where(x => x.Key.Contains("IsRightAnswer") && !x.Key.Contains("IsRightAnswerAssumption"));
+            var assumtions = collection.Where(x => x.Key.Contains(Constants.IsRightAnswerAssumption));
+            var rightAnswers = collection.Where(x => x.Key.Contains(Constants.IsRightAnswer) && !x.Key.Contains(Constants.IsRightAnswerAssumption));
             var result = this.questionService.CalculateQuestionResult(assumtions, rightAnswers);
             var quizResult = this.HttpContext.Session.GetInt32(Constants.QuizResult);
 
@@ -70,7 +69,7 @@
 
             if (currentQuestionNumber == questionsCount)
             {
-                return this.RedirectToAction("Index", new { page = currentQuestionNumber });
+                return this.RedirectToAction("DisplayResult", "Quiz");
             }
             else
             {

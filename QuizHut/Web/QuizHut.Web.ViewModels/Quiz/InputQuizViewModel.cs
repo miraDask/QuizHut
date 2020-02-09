@@ -15,7 +15,7 @@
 
         public string Description { get; set; }
 
-        public DateTime? ActivationDate { get; set; }
+        public string ActivationDate { get; set; }
 
         public int? Duration { get; set; }
 

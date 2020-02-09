@@ -8,19 +8,21 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Cache;
     using QuizHut.Services.Quiz;
+    using QuizHut.Services.QuizResult;
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Quiz;
-    using ReflectionIT.Mvc.Paging;
 
     public class QuizController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizService quizService;
+        private readonly IQuizResultService quizResultService;
 
-        public QuizController(UserManager<ApplicationUser> userManager, IQuizService quizService, ICacheService cacheService)
+        public QuizController(UserManager<ApplicationUser> userManager, IQuizService quizService, ICacheService cacheService, IQuizResultService quizResultService)
         {
             this.userManager = userManager;
             this.quizService = quizService;
+            this.quizResultService = quizResultService;
         }
 
         public IActionResult DetailsInput()
@@ -29,11 +31,11 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddDetails(InputQuizViewModel inputQuizViewModel)
+        public async Task<IActionResult> AddDetails(InputQuizViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
-            inputQuizViewModel.CreatorId = userId;
-            var quizId = await this.quizService.AddNewQuizAsync(inputQuizViewModel);
+            model.CreatorId = userId;
+            var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.ActivationDate, model.Duration, model.CreatorId);
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
             return this.RedirectToAction("QuestionInput", "Question");
         }
@@ -50,13 +52,29 @@
             return this.View(quizModel);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Display(string id)
-        //{
-        //    var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>("8986f029-4f92-49e5-a4dc-01702e10c843");
-        //    return this.View(quizModel);
-        //}
 
+        [HttpGet]
+        public async Task<IActionResult> DisplayResult()
+        {
+            var userId = this.userManager.GetUserId(this.User);
+
+            var model = new QuizResultViewModel()
+            {
+                QuizName = this.HttpContext.Session.GetString(Constants.AttemptedQuizName),
+                MaxPoints = (int)this.HttpContext.Session.GetInt32(Constants.QuestionsCount),
+                Points = (int)this.HttpContext.Session.GetInt32(Constants.QuizResult),
+            };
+
+            if (userId != null)
+            {
+                var quizId = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
+                await this.quizResultService.SaveQuizResult(userId, quizId, model.Points, model.MaxPoints);
+            }
+
+            this.HttpContext.Session.Clear();
+
+            return this.View(model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Start(string id)
@@ -64,14 +82,16 @@
             this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
             this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
+            this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
 
             return this.View(quizModel);
         }
 
-
         //[HttpPost]
         //public IActionResult Create(InputQuizViewModel quizModel)
         //{
+        //    { 
+        //    }
         //    return this.View(quizModel);
         //}
     }

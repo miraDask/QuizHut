@@ -14,6 +14,12 @@
 
         public const string AttemptedQuizId = "attemptedQuizId";
 
+        public const string AttemptedQuizName = "attemptedQuizName";
+
         public const int DefaultPage = 1;
+
+        public const string IsRightAnswerAssumption = "IsRightAnswerAssumption";
+
+        public const string IsRightAnswer = "IsRightAnswer";
     }
 }

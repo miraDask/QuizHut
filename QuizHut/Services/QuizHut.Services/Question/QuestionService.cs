@@ -12,7 +12,6 @@
     using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Answer;
-    using QuizHut.Web.ViewModels.Question;
     using QuizHut.Web.ViewModels.Quiz;
 
     public class QuestionService : IQuestionService
@@ -26,9 +25,8 @@
             this.quizRepository = quizRepository;
         }
 
-        public async Task<string> AddNewQuestionAsync(QuestionViewModel questionModel)
+        public async Task<string> AddNewQuestionAsync(string quizId, string quizText)
         {
-            var quizId = questionModel.QuizId;
             var quiz = await this.quizRepository.AllAsNoTracking().Select(x => new
             {
                 x.Id,
@@ -38,7 +36,7 @@
             var question = new Question
             {
                 Number = quiz.Questions.Count() + 1,
-                Text = questionModel.Text,
+                Text = quizText,
                 QuizId = quizId,
             };
 

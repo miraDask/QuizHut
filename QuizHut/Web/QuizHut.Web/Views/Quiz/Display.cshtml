@@ -32,7 +32,7 @@
                     </div>
                 </div>
             </nav>
-            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Name" value="@Model.Name">
+            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp-for="@Model.Name" value="@Model.Name">
         </div>
 
         @* Description *@
@@ -42,7 +42,7 @@
                     <h5 class="mb-0">Description</h5>
                 </div>
             </nav>
-            <textarea wrap="hard" class="form-control form-control-lg flex-grow-1 mr-2 d-inline" style="height: 112px;" asp-for="@Model.Description"></textarea>
+            <textarea wrap="hard" class="form-control form-control-lg flex-grow-1 mr-2 d-inline" style="height: 112px;" disabled asp-for="@Model.Description"></textarea>
         </div>
 
         @* questions *@
@@ -60,7 +60,7 @@
                     <h4 class="mb-0">Activation Date</h4>
                 </div>
             </nav>
-            <input type="datetime" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.ActivationDate" value="@Model.ActivationDate.ToString()">
+            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp.for="@Model.ActivationDate" value="@Model.ActivationDate.ToString()">
         </div>
         @* Duration *@
         <div class="form-group flex-grow-1 d-inline">
@@ -69,7 +69,7 @@
                     <h4 class="mb-0">Duration</h4>
                 </div>
             </nav>
-            <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.Duration" value="@Model.Duration">
+            <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.Duration" value="@Model.Duration" disabled>
         </div>
         <a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Question">Add Question</a>
         <button type="submit" class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white">Save Qiuz</button>

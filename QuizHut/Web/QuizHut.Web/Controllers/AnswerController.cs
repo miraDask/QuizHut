@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web.Controllers
 {
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Answer;
@@ -35,11 +36,10 @@
         //}
 
         [HttpPost]
-        public async Task<IActionResult> AddNewAnswer(AnswerViewModel answerViewModel)
+        public async Task<IActionResult> AddNewAnswer(AnswerViewModel model)
         {
             var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
-            answerViewModel.QuestionId = currentQuestionId;
-            await this.answerService.AddNewAnswerAsync(answerViewModel);
+            await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
 
             return this.RedirectToAction("AnswerInput");
         }

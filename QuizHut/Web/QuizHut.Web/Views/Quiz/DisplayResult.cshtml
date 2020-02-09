@@ -1,0 +1,38 @@
+﻿@model QuizResultViewModel
+@{
+    ViewData["Title"] = "_QuizResultPartial";
+}
+
+<div class="container-fluid">
+    <div class="flex-grow-1">
+        <partial name="_BublesAndCirclesPrtial" />
+    </div>
+    <div class="col-12 offset-md-2 col-md-8 my-5 row">
+        <div class="col-11 ml-4 my-4">
+            <div class="component">
+                <div class="card mb-3 mt-3">
+                    <div class="card-header text-info pb-0" style="font-size:large">
+                        <i class="fas fa-question-circle"></i>
+                        <p class="display-5 d-inline-block">Your Result for Quiz:</p>
+                    </div>
+                    <div class="card-body pt-1">
+                        <h4 class="card-title text-center">@Model.QuizName</h4>
+                        <h3 class="border-top pt-2 text-center">
+                           @Model.Points / @Model.MaxPoints
+                        </h3>
+                    </div>
+                    <div class="card-footer pb-5">
+                        <div class="input-group">
+
+                        </div>
+                        <div class="row mx-1 text-white">
+                            <a class="btn btn-primary col-md-4 mt-5 offset-md-4" asp-action="Index" asp-controller="Home">Lieve Quiz</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

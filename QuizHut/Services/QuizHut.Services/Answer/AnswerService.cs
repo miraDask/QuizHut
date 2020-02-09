@@ -16,13 +16,13 @@
             this.repository = repository;
         }
 
-        public async Task AddNewAnswerAsync(AnswerViewModel answerViewModel)
+        public async Task AddNewAnswerAsync(string answerText, bool isRightAnswer, string questionId)
         {
             var answer = new Answer
             {
-                Text = answerViewModel.Text,
-                IsRightAnswer = answerViewModel.IsRightAnswer,
-                QuestionId = answerViewModel.QuestionId,
+                Text = answerText,
+                IsRightAnswer = isRightAnswer,
+                QuestionId = questionId,
             };
 
             await this.repository.AddAsync(answer);

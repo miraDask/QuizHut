@@ -25,6 +25,7 @@
     using QuizHut.Services.Messaging;
     using QuizHut.Services.Question;
     using QuizHut.Services.Quiz;
+    using QuizHut.Services.QuizResult;
     using QuizHut.Web.ViewModels;
     using ReflectionIT.Mvc.Paging;
 
@@ -79,6 +80,7 @@
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswerService, AnswerService>();
             services.AddTransient<ICacheService, CacheService>();
+            services.AddTransient<IQuizResultService, QuizResultService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
