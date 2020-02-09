@@ -32,7 +32,7 @@
             var quizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
             var questionId = await this.questionService.AddNewQuestionAsync(quizId, model.Text);
             this.HttpContext.Session.SetString(Constants.CurrentQuestionId, questionId);
-            return this.RedirectToAction("AnswerInput", "Answer");
+            return this.RedirectToAction("AnswerInput", "Answers");
         }
 
         [HttpGet]
@@ -76,6 +76,13 @@
             {
                 return this.RedirectToAction("Index", new { page = ++currentQuestionNumber });
             }
+        }
+
+        public async Task<IActionResult> Delete(QuestionViewModel model)
+        {
+            await this.questionService.DeleteQuestionByIdAsync(model.Id);
+
+            return this.RedirectToAction("Display", "Quizzes");
         }
 
         //[HttpPost]

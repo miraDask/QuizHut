@@ -87,6 +87,13 @@
             return questions;
         }
 
+        public async Task DeleteQuestionByIdAsync(string id)
+        {
+            var question = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            this.repository.Delete(question);
+            await this.repository.SaveChangesAsync();
+        }
+
         //public async Task<string> GetQuizIdByQuestionIdAsync(string id)
         //{
         //    var question = await this.repository.GetByIdWithDeletedAsync(id);

@@ -13,6 +13,8 @@
 
         IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id);
 
+        Task DeleteQuestionByIdAsync(string id);
+
         int CalculateQuestionResult(IEnumerable<KeyValuePair<string, StringValues>> assumtions, IEnumerable<KeyValuePair<string, StringValues>> rightAnswers);
     }
 }
