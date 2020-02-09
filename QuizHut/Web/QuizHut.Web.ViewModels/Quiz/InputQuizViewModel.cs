@@ -26,7 +26,7 @@
             configuration.CreateMap<Quiz, InputQuizViewModel>()
                 .ForMember(
                     x => x.ActivationDate,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime != null ? x.ActivationDateAndTime.Value.ToString("dd/MM/yyyy") : "n/a"));
+                    opt => opt.MapFrom(x => x.ActivationDateAndTime != null ? x.ActivationDateAndTime.Value.ToString("dd/MM/yyyy") : string.Empty));
         }
     }
 }

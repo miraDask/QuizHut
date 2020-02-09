@@ -21,11 +21,13 @@
 
         public async Task<string> AddNewQuizAsync(string name, string description, string activationDate, int? duration, string creatorId)
         {
+            DateTime? date = null;
+
             var quiz = new Quiz
             {
                 Name = name,
                 Description = description,
-                ActivationDateAndTime = DateTime.Parse(activationDate),
+                ActivationDateAndTime = activationDate == null ? date : DateTime.Parse(activationDate),
                 Duration = duration,
                 CreatorId = creatorId,
             };
