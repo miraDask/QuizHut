@@ -8,7 +8,7 @@
     using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
     using QuizHut.Web.Controllers.Common;
-    using QuizHut.Web.ViewModels.Question;
+    using QuizHut.Web.ViewModels.Questions;
     using ReflectionIT.Mvc.Paging;
 
     public class QuestionsController : Controller

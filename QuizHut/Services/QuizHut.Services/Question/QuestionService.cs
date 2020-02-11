@@ -12,8 +12,8 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Answer;
-    using QuizHut.Web.ViewModels.Quiz;
+    using QuizHut.Web.ViewModels.Answers;
+    using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuestionService : IQuestionService
     {

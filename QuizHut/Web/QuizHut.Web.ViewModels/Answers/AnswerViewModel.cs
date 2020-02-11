@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.ViewModels.Answer
+﻿namespace QuizHut.Web.ViewModels.Answers
 {
     using System;
 
@@ -7,18 +7,13 @@
 
     public class AnswerViewModel : IMapFrom<Answer>
     {
-        public AnswerViewModel()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
-
         public string Id { get; set; }
 
         public string Text { get; set; }
 
         public bool IsRightAnswer { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } //???
 
         public int Count { get; set; }
 

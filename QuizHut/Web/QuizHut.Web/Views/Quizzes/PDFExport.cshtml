@@ -1,0 +1,74 @@
+﻿@model InputQuizViewModel
+@{
+    ViewData["Title"] = "DemoViewAsPdf";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>QuizHut</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>PDF</title>
+
+    <environment names="Development">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/assets/img/favicon.ico" rel="icon" type="image/png">
+
+        <link rel="stylesheet" href="~/assets/vendor/bootstrap/bootstrap.min.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/assets/css/lazy.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/assets/css/demo.css" asp-append-version="true">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+              integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h"
+              crossorigin="anonymous" asp-append-version="true">
+    </environment>
+    <environment names="Staging,Production">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/assets/img/favicon.ico" rel="icon" type="image/png">
+
+        <link rel="stylesheet" href="~/assets/vendor/bootstrap/bootstrap.min.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/assets/css/lazy.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/assets/css/demo.css" asp-append-version="true">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+              integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h"
+              crossorigin="anonymous" asp-append-version="true">
+    </environment>
+</head>
+<body class="index">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-neutral">
+            <div class="container">
+                <h2>@Model.Name</h2>
+            </div>
+        </nav>
+    </header>
+    <div class="mt-4 text-right">
+        <label>Date</label>
+        <input type="text" value="" style="width: 20%">
+    </div>
+    <div class="text-right">
+        <label>Name</label>
+        <input type="text" value="" style="width: 40%">
+    </div>
+    <hr>
+    @foreach (var question in Model.Questions.OrderBy(x => x.Number))
+    {
+        <div class=" mb-2">
+            <span class="pr-2">@question.Number.</span>@question.Text
+        </div>
+        foreach (var answer in question.Answers)
+        {
+            <div>
+                <input type="checkbox" class="mr-2">
+                <label>@answer.Text</label>
+            </div>
+        }
+        <hr>
+    }
+</body>
+</html>
+

@@ -7,7 +7,7 @@
     using QuizHut.Services.Answer;
     using QuizHut.Services.Cache;
     using QuizHut.Web.Controllers.Common;
-    using QuizHut.Web.ViewModels.Answer;
+    using QuizHut.Web.ViewModels.Answers;
 
     public class AnswersController : Controller
     {
@@ -16,7 +16,6 @@
         public AnswersController(IAnswerService answerService, ICacheService cacheService)
         {
             this.answerService = answerService;
-
         }
 
         [HttpGet]
@@ -41,6 +40,34 @@
             await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
 
             return this.RedirectToAction("AnswerInput");
+        }
+
+        [HttpGet]
+        public IActionResult EditAnswerInput(EditAnswerViewModel model)
+        {
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditAnswerInput(AnswerViewModel model)
+        {
+            var answerId = await this.answerService.GetAnswerId(model.Id, model.Text);
+
+            var editModel = new EditAnswerViewModel()
+            {
+                Id = answerId,
+                Text = model.Text,
+                IsRightAnswer = model.IsRightAnswer,
+            };
+
+            return this.View(editModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(EditAnswerViewModel model)
+        {
+            await this.answerService.UpdateAsync(model.Id, model.Text, model.IsRightAnswer);
+            return this.RedirectToAction("Display", "Quizzes");
         }
 
         //[HttpPost]

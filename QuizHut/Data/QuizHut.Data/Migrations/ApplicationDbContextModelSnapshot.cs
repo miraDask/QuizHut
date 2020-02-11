@@ -492,10 +492,7 @@ namespace QuizHut.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.QuizResult", b =>
                 {
-                    b.Property<string>("ParticipantId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("QuizId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -503,9 +500,6 @@ namespace QuizHut.Data.Migrations
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -516,12 +510,20 @@ namespace QuizHut.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ParticipantId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.HasKey("ParticipantId", "QuizId");
+                    b.Property<string>("QuizId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ParticipantId");
 
                     b.HasIndex("QuizId");
 
@@ -684,15 +686,11 @@ namespace QuizHut.Data.Migrations
                 {
                     b.HasOne("QuizHut.Data.Models.ApplicationUser", "Participant")
                         .WithMany()
-                        .HasForeignKey("ParticipantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ParticipantId");
 
                     b.HasOne("QuizHut.Data.Models.Quiz", "Quiz")
                         .WithMany("QuizResults")
-                        .HasForeignKey("QuizId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("QuizId");
                 });
 #pragma warning restore 612, 618
         }

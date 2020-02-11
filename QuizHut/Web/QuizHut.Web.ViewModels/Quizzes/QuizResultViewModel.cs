@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.ViewModels.Quiz
+﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
     public class QuizResultViewModel
     {

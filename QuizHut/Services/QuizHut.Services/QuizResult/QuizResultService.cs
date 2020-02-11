@@ -14,7 +14,7 @@
             this.repository = repository;
         }
 
-        public async Task SaveQuizResult(string participantId, string quizId, int points, int maxPoints)
+        public async Task CreateQuizResultAsync(string participantId, int points, int maxPoints, string quizId)
         {
             var quizResult = new QuizResult()
             {

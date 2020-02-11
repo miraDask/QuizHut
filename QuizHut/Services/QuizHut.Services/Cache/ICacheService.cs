@@ -2,7 +2,7 @@
 {
     using System.Threading.Tasks;
 
-    using QuizHut.Web.ViewModels.Quiz;
+    using QuizHut.Web.ViewModels.Quizzes;
 
     public interface ICacheService
     {

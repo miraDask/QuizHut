@@ -10,5 +10,7 @@
         Task<IEnumerable<T>> GetAllAsync<T>();
 
         Task<T> GetQuizByIdAsync<T>(string id);
+
+        Task DeleteByIdAsync(string id);
     }
 }

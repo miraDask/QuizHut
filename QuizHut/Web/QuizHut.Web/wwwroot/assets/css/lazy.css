@@ -1261,6 +1261,11 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     color: #fff
 }
 
+.nav-tabs {
+    border-bottom: 1px solid #611F6A;
+}
+
+
 .nav.nav-tabs {
     display: inline-flex;
     margin-bottom: 1.5rem
@@ -1270,8 +1275,9 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
         padding-right: .5rem
     }
 
-    .nav.nav-tabs .nav-item .nav-link {
-        color: #686868;
+    .nav.nav-tabs .nav-item .nav-link
+    {
+        color: whitesmoke;
         padding: 0.7rem 1.3rem;
         font-size: 1.1rem
     }
@@ -1294,8 +1300,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
                 }
 
             .nav.nav-tabs .nav-item .nav-link:hover {
-                border-bottom: 1px solid #611F6A;
-                color: #611F6A
+                border-bottom: 1px solid white;
+                color: white
             }
 
                 .nav.nav-tabs .nav-item .nav-link:hover i {
@@ -1501,9 +1507,13 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
         color: #212529
     }
 
-        .nav.nav-tabs.nav-dark .nav-item .nav-link.active i {
-            color: #212529
-        }
+.dropdown-toggle .nav-link.active:hover {
+    color: #611F6A
+}
+
+.nav.nav-tabs.nav-dark .nav-item .nav-link.active i {
+    color: #212529
+}
 
     .nav.nav-tabs.nav-dark .nav-item .nav-link:hover {
         border-bottom: 1px solid #212529;

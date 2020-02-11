@@ -22,7 +22,7 @@
                             <a class="nav-link  btn btn-primary">Add Question</a>
                         </li>
                         <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary">Delete Quiz</a>
+                            <a class="nav-link  btn btn-primary" asp-action="DeleteQuiz" asp-controller="Quizzes">Delete Quiz</a>
                         </li>
                         <li class="nav-item m-1">
                             <a class="nav-link  btn btn-primary">Edit</a>
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </nav>
-        <textarea wrap="hard" class="form-control form-control-lg flex-grow-1 mr-2 d-inline" style="height: 112px;" disabled asp-for="@Model.Description"></textarea>
+        <textarea wrap="hard" class="form-control form-control-lg flex-grow-1 mr-2 d-inline" style="height: 100px;" disabled asp-for="@Model.Description"></textarea>
     </div>
 
     @* questions *@
@@ -116,5 +116,5 @@
         <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.Duration" value="@Model.Duration" disabled>
     </div>
     <a id="continue" class="btn btn-outline-primary offset-md-4 col-md-4 mt-2" asp-action="QuestionInput" asp-controller="Questions">Add Question</a>
-    <button type="submit" class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white">Save Qiuz</button>
+    <a class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white" target="_blank" asp-action="PDFExport" asp-controller="Quizzes">Save Qiuz</a>
 </form>

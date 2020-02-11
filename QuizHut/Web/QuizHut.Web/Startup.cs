@@ -28,6 +28,7 @@
     using QuizHut.Services.QuizResult;
     using QuizHut.Web.ViewModels;
     using ReflectionIT.Mvc.Paging;
+    using Rotativa.AspNetCore;
 
     public class Startup
     {
@@ -39,7 +40,7 @@
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        [Obsolete]
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
@@ -55,6 +56,7 @@
                         options.MinimumSameSitePolicy = SameSiteMode.None;
                     });
 
+            services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -100,6 +102,8 @@
 
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
+
+            RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
 
             if (env.IsDevelopment())
             {

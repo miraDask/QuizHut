@@ -5,36 +5,40 @@
     var targetAnswer = "#" + answerNavbarNavDropdownId;
 }
 
-<div id="@Model.Id" asp-action="RemoveAnswer" asp-controller="Question" class="form-group flex-grow-1 d-inline">
-    <nav class="navbar navbar-expand-lg  bg-light navbar-dark p-0">
-        <div class="container">
-            <div class="form-group mb-0">
-                <div class="mt-2">
-                    <input type="checkbox" asp-for="@Model.IsRightAnswer" value="true">
-                    <label class="display-6">Answer</label>
+    <form method="post" id="@Model.Id" class="form-group flex-grow-1 d-inline">
+        <nav class="navbar navbar-expand-lg  bg-light navbar-dark p-0">
+            <div class="container">
+                <div class="form-group mb-0">
+                    <div class="mt-2">
+                        <input type="checkbox" disabled asp-for="@Model.IsRightAnswer" value="true">
+                        <label class="display-6">Answer</label>
+                    </div>
+                </div>
+                <button class="navbar-toggler collapsed bg-primary mr-2"
+                        type="button" data-toggle="collapse"
+                        data-target="@targetAnswer"
+                        aria-controls="@answerNavbarNavDropdownId"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse text-center collapse" id="@answerNavbarNavDropdownId">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item m-1">
+                            <button class="nav-link  btn btn-primary deleteAnswer @Model.Id" asp-action="Delete" asp-controller="Answers">Delete</button>
+                        </li>
+                        <li class="nav-item m-1">
+                            <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
+                            <button type="submit" class="nav-link  btn btn-primary" asp-action="EditAnswerInput" asp-controller="Answers">Edit</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <button class="navbar-toggler collapsed bg-primary mr-2"
-                    type="button" data-toggle="collapse"
-                    data-target="@targetAnswer"
-                    aria-controls="@answerNavbarNavDropdownId"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse text-center collapse" id="@answerNavbarNavDropdownId">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary deleteAnswer @Model.Id">Delete</a>
-                    </li>
-                    <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary">Edit</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled name="@Model.Text" value="@Model.Text">
-</div>
+        </nav>
+        <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp-for="@Model.Text" value="@Model.Text">
+        @*<input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Id" value="@Model.Id">*@
+        @Html.HiddenFor(model => model.Text)
+        @Html.HiddenFor(model => model.IsRightAnswer)
+    </form>
 
 

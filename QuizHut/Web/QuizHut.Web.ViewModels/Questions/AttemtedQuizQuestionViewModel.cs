@@ -1,8 +1,8 @@
-﻿namespace QuizHut.Web.ViewModels.Quiz
+﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
     using System.Collections.Generic;
 
-    using QuizHut.Web.ViewModels.Answer;
+    using QuizHut.Web.ViewModels.Answers;
 
     public class AttemtedQuizQuestionViewModel
     {

@@ -2,10 +2,9 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Common;
-    using QuizHut.Web.ViewModels.Answer;
 
     public class AnswerService : IAnswerService
     {
@@ -26,6 +25,32 @@
             };
 
             await this.repository.AddAsync(answer);
+            await this.repository.SaveChangesAsync();
+        }
+
+        public async Task<string> GetAnswerId(string questionId, string answerText)
+        {
+            var answer = await this.repository
+                .AllAsNoTracking()
+                .FirstOrDefaultAsync(x => x.QuestionId == questionId && x.Text == answerText);
+
+            if (answer == null)
+            {
+                 answer = await this.repository
+                .AllAsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == questionId && x.Text == answerText);
+            }
+
+            return answer.Id;
+        }
+
+        public async Task UpdateAsync(string id, string text, bool isRightAnswer)
+        {
+            var answer = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            answer.Text = text;
+            answer.IsRightAnswer = isRightAnswer;
+
+            this.repository.Update(answer);
             await this.repository.SaveChangesAsync();
         }
 

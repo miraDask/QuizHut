@@ -5,11 +5,11 @@
     using System.Threading.Tasks;
 
     using Microsoft.Extensions.Primitives;
-    using QuizHut.Web.ViewModels.Quiz;
+    using QuizHut.Web.ViewModels.Quizzes;
 
     public interface IQuestionService
     {
-        Task<string> AddNewQuestionAsync(string quizId, string quizText);
+        Task<string> AddNewQuestionAsync(string quizId, string quizText); 
 
         IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id);
 

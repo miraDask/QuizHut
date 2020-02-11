@@ -1,11 +1,11 @@
-﻿namespace QuizHut.Web.ViewModels.Question
+﻿namespace QuizHut.Web.ViewModels.Questions
 {
     using System;
     using System.Collections.Generic;
 
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Answer;
+    using QuizHut.Web.ViewModels.Answers;
 
     public class QuestionViewModel : IMapFrom<Question>
     {

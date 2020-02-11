@@ -4,6 +4,6 @@
 
     public interface IQuizResultService
     {
-        Task SaveQuizResult(string participantId, string quizId, int points, int maxPoints);
+        Task CreateQuizResultAsync(string participantId, int points, int maxPoints, string quizId);
     }
 }

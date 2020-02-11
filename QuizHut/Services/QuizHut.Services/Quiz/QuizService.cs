@@ -51,5 +51,12 @@
                 .Where(x => !x.IsDeleted)
                 .To<T>()
                 .ToListAsync();
+
+        public async Task DeleteByIdAsync(string id)
+        {
+            var quiz = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            this.repository.Delete(quiz);
+            await this.repository.SaveChangesAsync();
+        }
     }
 }

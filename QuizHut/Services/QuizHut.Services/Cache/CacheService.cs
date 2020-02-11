@@ -6,7 +6,7 @@
     using Microsoft.Extensions.Caching.Distributed;
     using Newtonsoft.Json;
     using QuizHut.Services.Common;
-    using QuizHut.Web.ViewModels.Quiz;
+    using QuizHut.Web.ViewModels.Quizzes;
 
     public class CacheService : ICacheService
     {

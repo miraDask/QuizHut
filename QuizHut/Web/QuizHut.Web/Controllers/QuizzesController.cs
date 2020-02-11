@@ -10,7 +10,8 @@
     using QuizHut.Services.Quiz;
     using QuizHut.Services.QuizResult;
     using QuizHut.Web.Controllers.Common;
-    using QuizHut.Web.ViewModels.Quiz;
+    using QuizHut.Web.ViewModels.Quizzes;
+    using Rotativa.AspNetCore;
 
     public class QuizzesController : Controller
     {
@@ -18,7 +19,11 @@
         private readonly IQuizService quizService;
         private readonly IQuizResultService quizResultService;
 
-        public QuizzesController(UserManager<ApplicationUser> userManager, IQuizService quizService, ICacheService cacheService, IQuizResultService quizResultService)
+        public QuizzesController(
+            UserManager<ApplicationUser> userManager,
+            IQuizService quizService,
+            ICacheService cacheService,
+            IQuizResultService quizResultService)
         {
             this.userManager = userManager;
             this.quizService = quizService;
@@ -65,11 +70,8 @@
                 Points = (int)this.HttpContext.Session.GetInt32(Constants.QuizResult),
             };
 
-            if (userId != null)
-            {
-                var quizId = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
-                await this.quizResultService.SaveQuizResult(userId, quizId, model.Points, model.MaxPoints);
-            }
+            var quizId = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
+            await this.quizResultService.CreateQuizResultAsync(userId, model.Points, model.MaxPoints, quizId);
 
             this.HttpContext.Session.Clear();
 
@@ -85,6 +87,27 @@
             this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
 
             return this.View(quizModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PDFExport()
+        {
+            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
+
+            return new ViewAsPdf("PDFExport", quizModel)
+            {
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageMargins = { Left = 20, Bottom = 20, Right = 20, Top = 20 },
+            };
+        }
+
+        public async Task<IActionResult> DeleteQuiz()
+        {
+            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            await this.quizService.DeleteByIdAsync(id);
+
+            return this.RedirectToAction("Index", "Home");
         }
 
         //[HttpPost]

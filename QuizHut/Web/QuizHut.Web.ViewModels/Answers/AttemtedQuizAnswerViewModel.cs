@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.ViewModels.Answer
+﻿namespace QuizHut.Web.ViewModels.Answers
 {
     public class AttemtedQuizAnswerViewModel
     {
