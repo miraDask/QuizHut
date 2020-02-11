@@ -1,13 +1,12 @@
 ﻿namespace QuizHut.Web.Controllers
 {
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Answer;
     using QuizHut.Services.Cache;
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Answers;
+    using System.Threading.Tasks;
 
     public class AnswersController : Controller
     {
@@ -24,6 +23,12 @@
             return this.View();
         }
 
+        [HttpPost]
+        public IActionResult AnswerInput(string id)
+        {
+            var model = new AnswerViewModel() { QuestionId = id, AnswerToAdd = true };
+            return this.View(model);
+        }
         //[HttpPost]
         //public async Task<IActionResult> AddNewAnswerAjaxCall(string questionId, string answerId)
         //{
@@ -36,10 +41,17 @@
         [HttpPost]
         public async Task<IActionResult> AddNewAnswer(AnswerViewModel model)
         {
-            var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
-            await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
-
-            return this.RedirectToAction("AnswerInput");
+            if (!model.AnswerToAdd)
+            {
+                var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
+                await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
+                return this.RedirectToAction("AnswerInput");
+            }
+            else
+            {
+                await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
+                return this.RedirectToAction("Display", "Quizzes");
+            }
         }
 
         [HttpGet]

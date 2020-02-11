@@ -30,19 +30,22 @@
                     <div class="card-footer pb-5">
                         <div class="input-group">
                             <input type="text" class="form-control" asp-for="Text" placeholder="...">
+                            <input type="hidden" class="form-control" name="AnswerToAdd" value="true">
+                            @Html.HiddenFor(model => model.QuestionId);
+
                         </div>
                         <div class="row mx-1 text-white">
                             <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Answer</button>
                             <div class="col-1 mr-4"></div>
                         </div>
-                        @*<input asp-for="QuestionId" type="hidden" value="@Model.QuestionId" />;*@
                     </div>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<div class="text-center">
-    <a class="btn btn-primary col-md-5 mt-2" asp-action="QuestionInput" asp-controller="Questions">New Question</a>
-</div>
+    <div class="text-center">
+        <a class="btn btn-primary col-md-5 mt-2" asp-action="QuestionInput" asp-controller="Questions">New Question</a>
+    </div>
+
 

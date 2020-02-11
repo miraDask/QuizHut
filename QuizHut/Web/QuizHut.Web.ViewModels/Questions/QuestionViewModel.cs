@@ -20,7 +20,7 @@
 
         public IList<AnswerViewModel> Answers { get; set; } = new List<AnswerViewModel>();
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } //???
 
         public int Number { get; set; }
 

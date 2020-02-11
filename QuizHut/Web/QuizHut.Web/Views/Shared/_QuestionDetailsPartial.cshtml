@@ -21,9 +21,10 @@
             <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary addAnswer @Model.Id">Add Answer</a>
+                        <button type="submit" class="nav-link  btn btn-primary addAnswer @Model.Id" asp-action="AnswerInput" asp-controller="Answers">Add Answer</button>
                     </li>
                     <li class="nav-item m-1">
+                        <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="id" value="@Model.Id">
                         <button type="submit" asp-action="Delete" asp-controller="Questions" class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</button>
                     </li>
                     <li class="nav-item m-1">

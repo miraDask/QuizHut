@@ -38,7 +38,6 @@
         [HttpGet]
         public async Task<IActionResult> Index(int page = Constants.DefaultPage)
         {
-
             this.HttpContext.Session.SetInt32(Constants.CurrentQuestionNumber, page);
 
             var attemptedQuiz = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
