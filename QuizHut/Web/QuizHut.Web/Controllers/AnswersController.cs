@@ -70,6 +70,15 @@
             return this.RedirectToAction("Display", "Quizzes");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(AnswerViewModel model)
+        {
+            var answerId = await this.answerService.GetAnswerId(model.Id, model.Text);
+            await this.answerService.Delete(answerId);
+
+            return this.RedirectToAction("Display", "Quizzes");
+        }
+
         //[HttpPost]
         //public async Task<JsonResult> RemoveAnswer(string id)
         //{

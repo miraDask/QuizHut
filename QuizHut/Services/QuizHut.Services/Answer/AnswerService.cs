@@ -54,6 +54,13 @@
             await this.repository.SaveChangesAsync();
         }
 
+        public async Task Delete(string id)
+        {
+            var answer = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            this.repository.Delete(answer);
+            await this.repository.SaveChangesAsync();
+        }
+
         //public async Task UpdateAnswerAsync(string id, string text, bool isRightAnswer)
         //{
         //    var answer = await this.repository.GetByIdWithDeletedAsync(id);
