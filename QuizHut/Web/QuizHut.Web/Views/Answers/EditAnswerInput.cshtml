@@ -15,7 +15,7 @@
                         <i class="fas fa-folder-plus"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title">Add New Answer</h4>
+                        <h4 class="card-title">Edit Answer</h4>
                         <p class="card-text" style="display: block;">
                             <span class="text-primary mr-1">∗</span>
                             You can always edit it later.
@@ -29,7 +29,7 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input type="text" class="form-control" asp-for="Text" placeholder="...">
+                            <input type="text" class="form-control" asp-for="Text" value="@Model.Text">
                             <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
                         </div>
                         <div class="row mx-1 text-white">

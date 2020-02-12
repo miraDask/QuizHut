@@ -22,16 +22,17 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
                         <input type="hidden" class="form-control" name="AnswerToAdd" value="true">
-                        <input type="hidden" class="form-control" name="Id" value="@Model.Id">
 
-                        <button type="submit" class="nav-link  btn btn-primary addAnswer @Model.Id" asp-action="AnswerInput" asp-controller="Answers">Add Answer</button>
+                        <button type="submit" class="nav-link  btn btn-primary addAnswer @Model.Id" asp-action="ApendAnswerInput" asp-controller="Answers">Add Answer</button>
                     </li>
                     <li class="nav-item m-1">
                         <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="id" value="@Model.Id">
                         <button type="submit" asp-action="Delete" asp-controller="Questions" class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</button>
                     </li>
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary">Edit</a>
+                        <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Text" value="@Model.T">
+
+                        <button type="submit" asp-action="EditQuestionInput" asp-controller="Questions" class="nav-link  btn btn-primary">Edit</button>
                     </li>
                 </ul>
             </div>

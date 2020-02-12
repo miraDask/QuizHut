@@ -113,5 +113,13 @@
 
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task Update(string id, string text)
+        {
+            var question = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            question.Text = text;
+            this.repository.Update(question);
+            await this.repository.SaveChangesAsync();
+        }
     }
 }

@@ -17,6 +17,8 @@
 
         Task UpdateAllQuestionsInQuizNumeration(string quizId);
 
+        Task Update(string id, string text);
+
         int CalculateQuestionResult(IEnumerable<KeyValuePair<string, StringValues>> assumtions, IEnumerable<KeyValuePair<string, StringValues>> rightAnswers);
     }
 }

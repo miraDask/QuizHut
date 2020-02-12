@@ -77,6 +77,19 @@
             }
         }
 
+        [HttpPost]
+        public IActionResult EditQuestionInput(QuestionViewModel model)
+        {
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> Edit(QuestionViewModel model)
+        {
+            await this.questionService.Update(model.Id, model.Text);
+
+            return this.RedirectToAction("Display", "Quizzes");
+        }
+
         public async Task<IActionResult> Delete(QuestionViewModel model)
         {
             await this.questionService.DeleteQuestionByIdAsync(model.Id);

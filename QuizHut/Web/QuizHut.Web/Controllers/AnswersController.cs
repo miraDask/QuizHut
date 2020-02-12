@@ -1,12 +1,14 @@
 ﻿namespace QuizHut.Web.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Answer;
     using QuizHut.Services.Cache;
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Answers;
-    using System.Threading.Tasks;
+    using QuizHut.Web.ViewModels.Questions;
 
     public class AnswersController : Controller
     {
@@ -23,20 +25,6 @@
             return this.View();
         }
 
-        [HttpPost]
-        public IActionResult AnswerInput(string id)
-        {
-            var answerToAdd = true;
-
-            if (id == null)
-            {
-                answerToAdd = false;
-            }
-
-            var model = new AnswerViewModel() { QuestionId = id, AnswerToAdd = answerToAdd };
-            return this.View(model);
-        }
-
         //[HttpPost]
         //public async Task<IActionResult> AddNewAnswerAjaxCall(string questionId, string answerId)
         //{
@@ -46,45 +34,43 @@
         //    await this.cacheService.SaveQuizModelToCacheAsync(quizViewModel);
         //    return this.PartialView("_AnswerDetailsPartial", answer);
         //}
+
         [HttpPost]
         public async Task<IActionResult> AddNewAnswer(AnswerViewModel model)
         {
-            if (!model.AnswerToAdd)
-            {
-                var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
-                await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
-                return this.RedirectToAction("AnswerInput");
-            }
-            else
-            {
-                await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
-                return this.RedirectToAction("Display", "Quizzes");
-            }
+
+            var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
+            await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
+
+            return this.RedirectToAction("AnswerInput");
         }
 
-        [HttpGet]
-        public IActionResult EditAnswerInput(EditAnswerViewModel model)
+        [HttpPost]
+        public IActionResult ApendAnswerInput(string id)
         {
+            var model = new AnswerViewModel() { QuestionId = id };
             return this.View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditAnswerInput(AnswerViewModel model)
+        public async Task<IActionResult> AppendNewAnswer(AnswerViewModel model)
         {
-            var answerId = await this.answerService.GetAnswerId(model.Id, model.Text);
+            await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
+            return this.RedirectToAction("Display", "Quizzes");
+        }
 
-            var editModel = new EditAnswerViewModel()
-            {
-                Id = answerId,
-                Text = model.Text,
-                IsRightAnswer = model.IsRightAnswer,
-            };
 
-            return this.View(editModel);
+        [HttpPost]
+        public async Task<IActionResult> EditAnswerInput(string id, string questionId, string text, string isRightAnswer)
+        {
+            //var answerId = await this.answerService.GetAnswerId(model.Id, model.Text);
+            //model.Id = answerId;
+            
+            return this.View(/*model*/);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(EditAnswerViewModel model)
+        public async Task<IActionResult> Update(AnswerViewModel model)
         {
             await this.answerService.UpdateAsync(model.Id, model.Text, model.IsRightAnswer);
             return this.RedirectToAction("Display", "Quizzes");

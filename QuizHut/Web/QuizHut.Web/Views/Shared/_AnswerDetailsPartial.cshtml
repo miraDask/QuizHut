@@ -25,11 +25,12 @@
                 <div class="navbar-collapse text-center collapse" id="@answerNavbarNavDropdownId">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item m-1">
-                            <input type="hidden" class="form-control" asp-for="QuestionId" value="@Model.QuestionId">
+                            <input type="hidden" class="form-control" name="QuestionId" value="@Model.QuestionId">
                             <button type="submit" class="nav-link  btn btn-primary deleteAnswer @Model.Id" asp-action="Delete" asp-controller="Answers">Delete</button>
                         </li>
                         <li class="nav-item m-1">
-                            <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
+                            <input type="hidden" class="form-control" name="Id" value="@Model.Id">
+                            <input type="hidden" class="form-control" name="Text" value="@Model.Text">
                             <button type="submit" class="nav-link  btn btn-primary" asp-action="EditAnswerInput" asp-controller="Answers">Edit</button>
                         </li>
                     </ul>
@@ -37,8 +38,7 @@
             </div>
         </nav>
         <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp-for="@Model.Text" value="@Model.Text">
-        @*<input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Id" value="@Model.Id">*@
-        @Html.HiddenFor(model => model.Text)
+        <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Id" value="@Model.Id">
         @Html.HiddenFor(model => model.IsRightAnswer)
     </form>
 
