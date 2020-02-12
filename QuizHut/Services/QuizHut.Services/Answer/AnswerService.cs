@@ -1,10 +1,12 @@
 ﻿namespace QuizHut.Services.Answer
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Web.ViewModels.Answers;
 
     public class AnswerService : IAnswerService
     {
@@ -28,21 +30,16 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<string> GetAnswerId(string questionId, string answerText)
-        {
-            var answer = await this.repository
-                .AllAsNoTracking()
-                .FirstOrDefaultAsync(x => x.QuestionId == questionId && x.Text == answerText);
-
-            if (answer == null)
+        public async Task<AnswerViewModel> GetAnswerModelAsync(string id)
+        => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.Id == id)
+            .Select(x => new AnswerViewModel()
             {
-                 answer = await this.repository
-                .AllAsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == questionId && x.Text == answerText);
-            }
-
-            return answer.Id;
-        }
+                Id = x.Id,
+                Text = x.Text,
+                IsRightAnswer = x.IsRightAnswer,
+            }).FirstOrDefaultAsync();
 
         public async Task UpdateAsync(string id, string text, bool isRightAnswer)
         {

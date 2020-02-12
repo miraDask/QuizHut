@@ -60,13 +60,12 @@
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> EditAnswerInput(string id, string questionId, string text, string isRightAnswer)
+        [HttpGet]
+        public async Task<IActionResult> EditAnswerInput(string id)
         {
-            //var answerId = await this.answerService.GetAnswerId(model.Id, model.Text);
-            //model.Id = answerId;
-            
-            return this.View(/*model*/);
+            var model = await this.answerService.GetAnswerModelAsync(id);
+
+            return this.View(model);
         }
 
         [HttpPost]
@@ -76,11 +75,10 @@
             return this.RedirectToAction("Display", "Quizzes");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Delete(AnswerViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
         {
-            var answerId = await this.answerService.GetAnswerId(model.Id, model.Text);
-            await this.answerService.Delete(answerId);
+            await this.answerService.Delete(id);
 
             return this.RedirectToAction("Display", "Quizzes");
         }

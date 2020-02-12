@@ -2,7 +2,6 @@
 @{
     var navbarNavDropdownId = "navbarNavDropdown" + Model.Number;
     var target = "#" + navbarNavDropdownId;
-    var answerCount = 0;
 }
 
 
@@ -30,7 +29,7 @@
                         <button type="submit" asp-action="Delete" asp-controller="Questions" class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</button>
                     </li>
                     <li class="nav-item m-1">
-                        <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Text" value="@Model.T">
+                        <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Text" value="@Model.Text">
 
                         <button type="submit" asp-action="EditQuestionInput" asp-controller="Questions" class="nav-link  btn btn-primary">Edit</button>
                     </li>
@@ -42,10 +41,46 @@
     <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Id" value="@Model.Id">
 
     @*answers*@
-    @foreach (var answer in Model.Answers)
+    @for (int i = 0; i < Model.Answers.Count; i++)
     {
-        answer.Count = Model.Number  + answerCount;
-        @await Html.PartialAsync("_AnswerDetailsPartial", answer);
-        answerCount++;
+        @*@await Html.PartialAsync("_AnswerDetailsPartial", answer);*@
+    var answerNavbarNavDropdownId = "answerNavbarNavDropdown" + i;
+    var targetAnswer = "#" + answerNavbarNavDropdownId;
+    var answer = Model.Answers[i];
+
+        <div class="form-group flex-grow-1 d-inline">
+            <nav class="navbar navbar-expand-lg  bg-light navbar-dark p-0">
+                <div class="container">
+                    <div class="form-group mb-0">
+                        <div class="mt-2">
+                            <input type="checkbox" disabled asp-for="@answer.IsRightAnswer" value="true">
+                            <label class="display-6">Answer</label>
+                        </div>
+                    </div>
+                    <button class="navbar-toggler collapsed bg-primary mr-2"
+                            type="button" data-toggle="collapse"
+                            data-target="@targetAnswer"
+                            aria-controls="@answerNavbarNavDropdownId"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse text-center collapse" id="@answerNavbarNavDropdownId">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-primary" href="/Answers/Delete?id=@answer.Id">Delete</a>
+                            </li>
+                            <li class="nav-item m-1">
+                                <input type="hidden" class="form-control" name="id" value="@answer.Id">
+                                <a class="nav-link  btn btn-primary" href="/Answers/EditAnswerInput?id=@answer.Id">Edit</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp-for="@answer.Text" value="@answer.Text">
+        </div>
+
+
     }
 </form>

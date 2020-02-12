@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Services.Answer
 {
+    using QuizHut.Web.ViewModels.Answers;
     using System.Threading.Tasks;
 
     public interface IAnswerService
@@ -8,7 +9,7 @@
 
         Task UpdateAsync(string id, string text, bool isRightAnswer);
 
-        Task<string> GetAnswerId(string questionId, string answerText);
+        Task<AnswerViewModel> GetAnswerModelAsync(string id);
 
         Task Delete(string id);
     }

@@ -13,12 +13,6 @@
 
         public bool IsRightAnswer { get; set; }
 
-        public bool AnswerToAdd { get; set; }
-
-        public bool IsDeleted { get; set; } //???
-
-        public int Count { get; set; } //???
-
         public string QuestionId { get; set; }
     }
 }

@@ -43,7 +43,6 @@
             var model = await this.GetQuizModelFromCacheAsync();
             var answers = model.Questions.SelectMany(x => x.Answers).ToList();
             var answer = answers.Where(x => x.Id == id).FirstOrDefault();
-            answer.IsDeleted = true;
             await this.SaveQuizModelToCacheAsync(model);
         }
     }
