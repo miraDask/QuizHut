@@ -21,6 +21,9 @@
             <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
+                        <input type="hidden" class="form-control" name="AnswerToAdd" value="true">
+                        <input type="hidden" class="form-control" name="Id" value="@Model.Id">
+
                         <button type="submit" class="nav-link  btn btn-primary addAnswer @Model.Id" asp-action="AnswerInput" asp-controller="Answers">Add Answer</button>
                     </li>
                     <li class="nav-item m-1">

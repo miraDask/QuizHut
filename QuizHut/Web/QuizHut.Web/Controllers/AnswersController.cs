@@ -26,9 +26,17 @@
         [HttpPost]
         public IActionResult AnswerInput(string id)
         {
-            var model = new AnswerViewModel() { QuestionId = id, AnswerToAdd = true };
+            var answerToAdd = true;
+
+            if (id == null)
+            {
+                answerToAdd = false;
+            }
+
+            var model = new AnswerViewModel() { QuestionId = id, AnswerToAdd = answerToAdd };
             return this.View(model);
         }
+
         //[HttpPost]
         //public async Task<IActionResult> AddNewAnswerAjaxCall(string questionId, string answerId)
         //{
