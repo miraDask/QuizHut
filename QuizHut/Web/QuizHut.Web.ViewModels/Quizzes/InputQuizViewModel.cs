@@ -1,7 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -16,6 +16,9 @@
         public string Description { get; set; }
 
         public string ActivationDate { get; set; }
+
+        [Required]
+        public string Password { get; set; }
 
         public int? Duration { get; set; }
 

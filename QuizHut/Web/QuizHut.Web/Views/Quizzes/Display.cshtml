@@ -50,6 +50,10 @@
                             <th scope="row">Duration</th>
                             <td>@Model.Duration</td>
                         </tr>
+                        <tr class="table-active bg-white">
+                            <th scope="row">Quiz Password</th>
+                            <td>@Model.Password</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -60,5 +64,6 @@
             @await Html.PartialAsync("_QuestionDetailsPartial", question);
         }
         <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="QuestionInput" asp-controller="Questions">Add Question</a>
-        <a class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes">Export To PDF</a>
+        <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes">Export To PDF</a>
+        <a class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white d-inline-block"  asp-action="" asp-controller="">Go To Dashboard</a>
     </form>

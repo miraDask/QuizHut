@@ -26,6 +26,11 @@
                             <div class="input-group">
                                 <input type="text" asp-for="@Model.Name" class="form-control" placeholder="...">
                             </div>
+                            <div class="mt-4"><label asp-for="@Model.Password">Password</label></div>
+
+                            <div class="input-group">
+                                <input type="text" asp-for="@Model.Password" class="form-control" placeholder="...">
+                            </div>
                             <div class="mt-4"><label asp-for="@Model.Description">Description</label></div>
                             <textarea class="form-control" asp-for="@Model.Description">
                         </textarea>

@@ -14,6 +14,8 @@
 
         public int? Duration { get; set; }
 
+        public string Password { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Quiz, EditDetailsViewModel>()

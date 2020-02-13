@@ -19,7 +19,7 @@
             this.repository = repository;
         }
 
-        public async Task<string> AddNewQuizAsync(string name, string description, string activationDate, int? duration, string creatorId)
+        public async Task<string> AddNewQuizAsync(string name, string description, string activationDate, int? duration, string creatorId, string password)
         {
             DateTime? date = null;
 
@@ -30,6 +30,7 @@
                 ActivationDateAndTime = activationDate == null ? date : DateTime.Parse(activationDate),
                 Duration = duration,
                 CreatorId = creatorId,
+                Password = password,
             };
 
             await this.repository.AddAsync(quiz);
@@ -59,7 +60,7 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(string id, string name, string description, string activationDate, int? duration)
+        public async Task UpdateAsync(string id, string name, string description, string activationDate, int? duration, string password)
         {
             DateTime? date = null;
 
@@ -68,9 +69,16 @@
             quiz.Description = description;
             quiz.ActivationDateAndTime = activationDate == null ? date : DateTime.Parse(activationDate);
             quiz.Duration = duration;
+            quiz.Password = password;
 
             this.repository.Update(quiz);
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task<string> GetQuizIdByPasswordAsync(string password)
+        => await this.repository.AllAsNoTracking()
+            .Where(x => x.Password == password)
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync();
     }
 }

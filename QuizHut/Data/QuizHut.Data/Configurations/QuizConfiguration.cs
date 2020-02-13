@@ -22,12 +22,12 @@
                .WithOne(qr => qr.Quiz)
                .HasForeignKey(qr => qr.QuizId);
 
-            quiz.Property(q => q.IsStarted)
-                .HasDefaultValue(true);
-
             quiz.Property(q => q.Name)
                 .HasMaxLength(NameMaxLength)
                 .IsRequired();
+
+            quiz.HasIndex(x => x.Password)
+                .IsUnique();
         }
     }
 }
