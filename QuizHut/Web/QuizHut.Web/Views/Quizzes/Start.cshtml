@@ -2,36 +2,50 @@
 @{
     ViewData["Title"] = "Start";
 }
-<div class="container-fluid">
-    <div class="flex-grow-1">
-        <partial name="_BublesAndCirclesPrtial" />
-    </div>
-    <div class="col-12 offset-md-2 col-md-8 my-5 row">
-        <form method="post" class="col-11 ml-4 my-4" action="/Question/AddNewQuestion">
-            <div class="component">
-                <div class="card mb-3 mt-3">
-                    <div class="card-header text-info pb-0" style="font-size: xx-large">
-                        <i class="far fa-list-alt"></i>
-                        <p class="display-5 d-inline-block">Quiz:</p>
-                    </div>
-                    <div class="card-body pt-1">
-                        <h4 class="card-title">@Model.Name</h4>
-                        <p class="card-text border-top pt-2" style="display: block;">
-                            <span class="text-primary mr-1">∗</span>@Model.Description
-                        </p>
-                    </div>
-                    <div class="card-footer pb-5">
-                        <div class="input-group">
-
+    <div class="container-fluid">
+        <div class="flex-grow-1">
+            <partial name="_BublesAndCirclesPrtial" />
+        </div>
+        @if (Model.Duration != 0)
+        {
+        <div>
+            Time Left :
+            <input id="minutes" type="text" style="width: 20px;
+                   border: none; font-size: 16px;
+                   font-weight: bold; color: black;" value="@Model.Duration"><font size="5">
+                :
+            </font>
+            <input id="seconds" type="text" style="width: 20px;
+                        border: none; font-size: 16px;
+                        font-weight: bold; color: black;" value="00">
+        </div>
+        }
+        <div class="col-12 offset-md-2 col-md-8 my-5 row">
+            <form method="post" class="col-11 ml-4 my-4" action="/Question/AddNewQuestion">
+                <div class="component">
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header text-info pb-0" style="font-size: xx-large">
+                            <i class="far fa-list-alt"></i>
+                            <p class="display-5 d-inline-block">Quiz:</p>
                         </div>
-                        <div class="row mx-1 text-white">
-                            <a id="start" class="btn btn-danger col-md-4 mt-5 offset-1" asp-action="Index" asp-controller="Questions">Start</a>
-                            <a class="btn btn-success col-md-4 mt-5 offset-2" asp-action="Index" asp-controller="Home">Cancel</a>
+                        <div class="card-body pt-1">
+                            <h4 class="card-title">@Model.Name</h4>
+                            <p class="card-text border-top pt-2" style="display: block;">
+                                <span class="text-primary mr-1">∗</span>@Model.Description
+                            </p>
+                        </div>
+                        <div class="card-footer pb-5">
+                            <div class="input-group">
+
+                            </div>
+                            <div class="row mx-1 text-white">
+                                <a id="start" class="btn btn-danger col-md-4 mt-5 offset-1" asp-action="Index" asp-controller="Questions">Start</a>
+                                <a class="btn btn-success col-md-4 mt-5 offset-2" asp-action="Index" asp-controller="Home">Cancel</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 

@@ -86,6 +86,10 @@
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
             this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
             this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
+            if (quizModel.Duration != null)
+            {
+                this.HttpContext.Session.SetInt32(Constants.AttemptedQuizDuration, (int)quizModel.Duration);
+            }
 
             return this.View(quizModel);
         }

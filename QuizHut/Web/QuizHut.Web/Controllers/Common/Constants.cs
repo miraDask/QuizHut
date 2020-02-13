@@ -16,6 +16,8 @@
 
         public const string AttemptedQuizName = "attemptedQuizName";
 
+        public const string AttemptedQuizDuration = "attemptedQuizDuration";
+
         public const int DefaultPage = 1;
 
         public const string IsRightAnswerAssumption = "IsRightAnswerAssumption";
