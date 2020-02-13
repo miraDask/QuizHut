@@ -12,5 +12,7 @@
         Task<T> GetQuizByIdAsync<T>(string id);
 
         Task DeleteByIdAsync(string id);
+
+        Task UpdateAsync(string id, string name, string description, string activationDate, int? duration);
     }
 }

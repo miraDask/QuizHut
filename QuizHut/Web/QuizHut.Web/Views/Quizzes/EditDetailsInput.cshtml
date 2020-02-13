@@ -1,0 +1,60 @@
+﻿@model EditDetailsViewModel
+@{
+    ViewData["Title"] = "EditDetailsInput";
+}
+
+    <div class="container-fluid">
+        <div class="flex-grow-1">
+            <partial name="_BublesAndCirclesPrtial" />
+        </div>
+        <div class="col-12 offset-md-2 col-md-8 mt-4 row">
+            <form id="quizNameCard" method="post" asp-action="EditDetails" asp-controller="Quizzes" class="col-11 ml-4">
+                <div class="component">
+                    <div class="card mb-3 mt-3">
+                        <div class="card-header text-warning" style="font-size: xx-large">
+                            <i class="fas fa-folder-plus"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">Edit Quiz Details</h4>
+                            <p class="card-text">
+                                <span class="text-primary mr-1">∗</span>
+                                You can always edit details later.
+                            </p>
+                        </div>
+                        <div class="card-footer pb-5">
+                            <div><label asp-for="@Model.Name">Name</label></div>
+                            <div class="input-group">
+                                <input type="text" asp-for="@Model.Name" class="form-control" placeholder="...">
+                            </div>
+                            <div class="mt-4"><label asp-for="@Model.Description">Description</label></div>
+                            <textarea class="form-control" asp-for="@Model.Description">
+                        </textarea>
+
+                            <div class="mt-4"><label asp-for="@Model.ActivationDate">Activation Date</label></div>
+
+                            <div class="input-group">
+                                <input type="text" asp-for="@Model.ActivationDate" class="form-control" placeholder="dd/mm/yyyy">
+                            </div>
+                            <p class="card-text text-primary">
+                                <span class=" mr-1">∗</span>
+                                If you want your quiz to be active leave the field blank.
+                            </p>
+                            <div class="mt-4"><label asp-for="@Model.Duration">Duration</label></div>
+                            <div class="input-group">
+                                <input type="number" asp-for="@Model.Duration" class="form-control">
+                            </div>
+                            <p class="card-text text-primary ">
+                                <span class="mr-1">∗</span>
+                                If you don't want timer leave the field blank.
+                            </p>
+                            <div class="row mx-4 text-white">
+                                <button type="submit" class="btn btn-primary col-md-5 mt-5">Save Changes</button>
+                                <div class="col-1 mr-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+

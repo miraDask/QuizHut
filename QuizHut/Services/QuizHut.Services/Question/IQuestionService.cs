@@ -9,7 +9,7 @@
 
     public interface IQuestionService
     {
-        Task<string> AddNewQuestionAsync(string quizId, string quizText); 
+        Task<string> AddNewQuestionAsync(string quizId, string quizText);
 
         IOrderedQueryable<AttemtedQuizQuestionViewModel> GetAllQuestionsQuizById(string id);
 

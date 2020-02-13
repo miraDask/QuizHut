@@ -110,6 +110,23 @@
             return this.RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> EditDetailsInput()
+        {
+            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            var editModel = await this.quizService.GetQuizByIdAsync<EditDetailsViewModel>(id);
+
+            return this.View(editModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDetails(EditDetailsViewModel model)
+        {
+            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            await this.quizService.UpdateAsync(id, model.Name, model.Description, model.ActivationDate, model.Duration);
+
+            return this.RedirectToAction("Display");
+        }
         //[HttpPost]
         //public IActionResult Create(InputQuizViewModel quizModel)
         //{

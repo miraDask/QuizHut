@@ -22,16 +22,16 @@
                     <li class="nav-item m-1">
                         <input type="hidden" class="form-control" name="AnswerToAdd" value="true">
 
-                        <button type="submit" class="nav-link  btn btn-primary addAnswer @Model.Id" asp-action="ApendAnswerInput" asp-controller="Answers">Add Answer</button>
+                        <button type="submit" class="nav-link  btn btn-primary col-lg-12" asp-action="ApendAnswerInput" asp-controller="Answers">Add Answer</button>
                     </li>
                     <li class="nav-item m-1">
                         <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="id" value="@Model.Id">
-                        <button type="submit" asp-action="Delete" asp-controller="Questions" class="nav-link btn btn-primary deleteQuestion @Model.Id">Delete</button>
+                        <button type="submit" asp-action="Delete" asp-controller="Questions" class="nav-link btn btn-primary col-lg-12">Delete</button>
                     </li>
                     <li class="nav-item m-1">
                         <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Text" value="@Model.Text">
 
-                        <button type="submit" asp-action="EditQuestionInput" asp-controller="Questions" class="nav-link  btn btn-primary">Edit</button>
+                        <button type="submit" asp-action="EditQuestionInput" asp-controller="Questions" class="nav-link  btn btn-primary col-lg-12">Edit</button>
                     </li>
                 </ul>
             </div>
@@ -43,10 +43,9 @@
     @*answers*@
     @for (int i = 0; i < Model.Answers.Count; i++)
     {
-        @*@await Html.PartialAsync("_AnswerDetailsPartial", answer);*@
-    var answerNavbarNavDropdownId = "answerNavbarNavDropdown" + i;
-    var targetAnswer = "#" + answerNavbarNavDropdownId;
-    var answer = Model.Answers[i];
+        var answerNavbarNavDropdownId = "answerNavbarNavDropdown"+ Model.Number + i;
+        var targetAnswer = "#" + answerNavbarNavDropdownId;
+        var answer = Model.Answers[i];
 
         <div class="form-group flex-grow-1 d-inline">
             <nav class="navbar navbar-expand-lg  bg-light navbar-dark p-0">

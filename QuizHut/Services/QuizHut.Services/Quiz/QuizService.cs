@@ -58,5 +58,19 @@
             this.repository.Delete(quiz);
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task UpdateAsync(string id, string name, string description, string activationDate, int? duration)
+        {
+            DateTime? date = null;
+
+            var quiz = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            quiz.Name = name;
+            quiz.Description = description;
+            quiz.ActivationDateAndTime = activationDate == null ? date : DateTime.Parse(activationDate);
+            quiz.Duration = duration;
+
+            this.repository.Update(quiz);
+            await this.repository.SaveChangesAsync();
+        }
     }
 }

@@ -2,119 +2,63 @@
 @{
     ViewData["Title"] = "Display";
 }
-<form id="quiz" method="post" asp-action="Create" asp-controller="Quizzes">
-    @* Name *@
-    <div class="form-group flex-grow-1 d-inline">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4">
-            <div class="container">
-                <h4 class="mb-0">Quiz Name</h4>
-                <button class="navbar-toggler collapsed bg-primary"
-                        type="button" data-toggle="collapse"
-                        data-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary"  asp-action="QuestionInput" asp-controller="Questions">Add Question</a>
-                        </li>
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary" asp-action="DeleteQuiz" asp-controller="Quizzes">Delete Quiz</a>
-                        </li>
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary">Edit</a>
-                        </li>
-                    </ul>
+    <form id="quiz" method="post">
+        @* Name *@
+        <div class="form-group flex-grow-1 d-inline">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 p-2">
+                <div class="container">
+                    <h5 class="mb-0">Quiz Details</h5>
+                    <button class="navbar-toggler collapsed bg-primary"
+                            type="button" data-toggle="collapse"
+                            data-target="#navbarNavDropdown"
+                            aria-controls="navbarNavDropdown"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-primary" asp-action="QuestionInput" asp-controller="Questions">Add Question</a>
+                            </li>
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-primary" asp-action="DeleteQuiz" asp-controller="Quizzes">Delete Quiz</a>
+                            </li>
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-primary" asp-action="EditDetailsInput" asp-controller="Quizzes">Edit</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+            <div class="component">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr class="table-active bg-white">
+                            <th scope="row">Name</th>
+                            <td>@Model.Name</td>
+                        </tr>
+                        <tr class="table-active bg-light">
+                            <th scope="row">Description</th>
+                            <td>@Model.Description</td>
+                        </tr>
+                        <tr class="table-active bg-white">
+                            <th scope="row">Activation Date</th>
+                            <td>@Model.ActivationDate</td>
+                        </tr>
+                        <tr class="table-active bg-light">
+                            <th scope="row">Duration</th>
+                            <td>@Model.Duration</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </nav>
-        <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp-for="@Model.Name" value="@Model.Name">
-    </div>
-
-    @* Description *@
-    <div class="form-group flex-grow-1 d-inline">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 p-2">
-            <div class="container">
-                <h5 class="mb-0">Description</h5>
-
-                <button class="navbar-toggler collapsed bg-primary"
-                        type="button" data-toggle="collapse"
-                        data-target="#navbarNavDropdown123"
-                        aria-controls="navbarNavDropdown123"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown123">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary">Edit</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <textarea wrap="hard" class="form-control form-control-lg flex-grow-1 mr-2 d-inline" style="height: 100px;" disabled asp-for="@Model.Description"></textarea>
-    </div>
-
-    @* questions *@
-    @foreach (var question in Model.Questions.OrderBy(x => x.Number))
-    {
-        @await Html.PartialAsync("_QuestionDetailsPartial", question);
-    }
-
-    @* activationDate *@
-    <div class="form-group flex-grow-1 d-inline">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
-            <div class="container">
-                <h4 class="mb-0">Activation Date</h4>
-
-                <button class="navbar-toggler collapsed bg-primary"
-                        type="button" data-toggle="collapse"
-                        data-target="#navbarNavDropdown232"
-                        aria-controls="navbarNavDropdown232"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown232">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary">Edit</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp.for="@Model.ActivationDate" value="@Model.ActivationDate.ToString()">
-    </div>
-    @* Duration *@
-    <div class="form-group flex-grow-1 d-inline">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light mt-4 p-2">
-            <div class="container">
-                <h4 class="mb-0">Duration</h4>
-                <button class="navbar-toggler collapsed bg-primary"
-                        type="button" data-toggle="collapse"
-                        data-target="#navbarNavDropdown234"
-                        aria-controls="navbarNavDropdown234"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown234">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary">Edit</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <input type="number" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp.for="@Model.Duration" value="@Model.Duration" disabled>
-    </div>
-    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="QuestionInput" asp-controller="Questions">Add Question</a>
-    <a class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes">Export To PDF</a>
-</form>
+        </div>
+        @* questions *@
+        @foreach (var question in Model.Questions.OrderBy(x => x.Number))
+        {
+            @await Html.PartialAsync("_QuestionDetailsPartial", question);
+        }
+        <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="QuestionInput" asp-controller="Questions">Add Question</a>
+        <a class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes">Export To PDF</a>
+    </form>

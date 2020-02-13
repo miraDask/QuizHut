@@ -21,7 +21,7 @@
         public const string IsRightAnswerAssumption = "IsRightAnswerAssumption";
 
         public const string IsRightAnswer = "IsRightAnswer";
-        
+
         public const string AnswerForEditingId = "answerEdit";
     }
 }
