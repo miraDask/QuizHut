@@ -83,15 +83,19 @@
         {
             var id = await this.quizService.GetQuizIdByPasswordAsync(password);
             this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
-            var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
+            var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
             this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
             this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
-            if (quizModel.Duration != null)
-            {
-                this.HttpContext.Session.SetInt32(Constants.AttemptedQuizDuration, (int)quizModel.Duration);
-            }
 
             return this.View(quizModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Submit(AttemtedQuizViewModel model)
+        {
+            var quizId = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
+            //TODO CALCULATE RESULT, save it to db, return QuizResultViewModel to pass to DisplayResult action
+            return this.View("DisplayResult");
         }
 
         [HttpGet]
@@ -132,12 +136,5 @@
 
             return this.RedirectToAction("Display");
         }
-        //[HttpPost]
-        //public IActionResult Create(InputQuizViewModel quizModel)
-        //{
-        //    { 
-        //    }
-        //    return this.View(quizModel);
-        //}
     }
 }

@@ -1,4 +1,4 @@
-﻿@model InputQuizViewModel
+﻿@model AttemtedQuizViewModel
 @{
     ViewData["Title"] = "Start";
 }
@@ -8,21 +8,38 @@
         </div>
         @if (Model.Duration != 0)
         {
-        <div>
-            Time Left :
-            <input id="minutes" type="text" style="width: 20px;
-                   border: none; font-size: 16px;
-                   font-weight: bold; color: black;" value="@Model.Duration"><font size="5">
-                :
-            </font>
-            <input id="seconds" type="text" style="width: 20px;
-                        border: none; font-size: 16px;
-                        font-weight: bold; color: black;" value="00">
-        </div>
+            <input id="minutes" type="hidden" value="@Model.Duration" />
+            <div id="clockdiv" style="display:none">
+                <div>
+                    <span class="minutes"></span>
+                </div>
+                <div>
+                    <span class="seconds"></span>
+                </div>
+            </div>
         }
-        <div class="col-12 offset-md-2 col-md-8 my-5 row">
-            <form method="post" class="col-11 ml-4 my-4" action="/Question/AddNewQuestion">
-                <div class="component">
+        @*<div id="pagging" style="display:none">
+            <ul class="pagination pagination-lg mt-2">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#a"><i class="fas fa-long-arrow-alt-left"></i></a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link">1</a>
+                </li>
+                @for (int i = 1; i < Model.Questions.Count; i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link">@(i + 1)</a>
+                    </li>
+                }
+                <li class="page-item">
+                    <a class="page-link"><i class="fas fa-long-arrow-alt-right"></i></a>
+                </li>
+            </ul>
+        </div>*@
+        <div class="col-12 offset-md-2 col-md-8 my-2 row">
+            <form id="@(Model.Questions.Count.ToString())f" method="post" class="col-11 ml-4 my-2">
+                <div id="details" class="component">
                     <div class="card mb-3 mt-3">
                         <div class="card-header text-info pb-0" style="font-size: xx-large">
                             <i class="far fa-list-alt"></i>
@@ -39,12 +56,54 @@
 
                             </div>
                             <div class="row mx-1 text-white">
-                                <a id="start" class="btn btn-danger col-md-4 mt-5 offset-1" asp-action="Index" asp-controller="Questions">Start</a>
-                                <a class="btn btn-success col-md-4 mt-5 offset-2" asp-action="Index" asp-controller="Home">Cancel</a>
+                                <a id="start" class="btn btn-danger col-md-4 mt-5 offset-md-1">Start</a>
+                                <a class="btn btn-success col-md-4 mt-md-5 mt-2 offset-md-2" asp-action="Index" asp-controller="Home">Cancel</a>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                @for (int i = 0; i < Model.Questions.Count; i++)
+                {
+                    var question = Model.Questions[i];
+
+                    <div id="@question.Number" class="component" style="display:none">
+                        <div class="card mb-3">
+                            <div class="card-header text-warning">
+                                <i class="fas fa-question-circle"></i>
+                                @Html.HiddenFor(model => model.Questions[i].Id)
+                                @Html.HiddenFor(model => model.Questions[i].Number)
+                                <span class="text-primary ml-1">Question @question.Number</span>
+                            </div>
+
+                            <div class="card-title text-center m-1">
+                                <h4>@question.Text</h4>
+                            </div>
+                            <hr>
+                            <div class="card-body px-4">
+                                @for (int j = 0; j < question.Answers.Count; j++)
+                                {
+                                    var answer = question.Answers[j];
+                                    <div class="form-group mb-0">
+                                        <div class="mt-2">
+                                            @Html.EditorFor(x => x.Questions[i].Answers[j].IsRightAnswerAssumption)
+                                            <h6 class="d-inline-block mt-0 ml-1">@answer.Text</h6>
+                                            @Html.HiddenFor(model => model.Questions[i].Answers[j].Id)
+
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="card-footer pb-5">
+                                <div class="row mx-1 text-white">
+                                    <a  id="prev" class="btn btn-primary col-md-5 mt-2">Previous</a>
+                                    <a  id="@(question.Number.ToString())next" class="btn btn-primary col-md-5 mt-2 offset-md-2 d-inline-block">Next</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <button type="submit" id="submit" class="btn btn-primary col-md-5 mt-2 offset-md-3" asp-action="Submit" asp-controller="Quizzes" style="display:none">Submit Quiz</button>
             </form>
         </div>
     </div>
