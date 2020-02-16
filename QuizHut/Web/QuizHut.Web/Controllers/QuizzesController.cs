@@ -59,22 +59,8 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> DisplayResult()
+        public IActionResult Submit(QuizResultViewModel model)
         {
-            var userId = this.userManager.GetUserId(this.User);
-
-            var model = new QuizResultViewModel()
-            {
-                QuizName = this.HttpContext.Session.GetString(Constants.AttemptedQuizName),
-                MaxPoints = (int)this.HttpContext.Session.GetInt32(Constants.QuestionsCount),
-                Points = (int)this.HttpContext.Session.GetInt32(Constants.QuizResult),
-            };
-
-            var quizId = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
-            await this.quizResultService.CreateQuizResultAsync(userId, model.Points, model.MaxPoints, quizId);
-
-            this.HttpContext.Session.Clear();
-
             return this.View(model);
         }
 
@@ -93,9 +79,12 @@
         [HttpPost]
         public async Task<IActionResult> Submit(AttemtedQuizViewModel model)
         {
+            var userId = this.userManager.GetUserId(this.User);
             var quizId = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
-            //TODO CALCULATE RESULT, save it to db, return QuizResultViewModel to pass to DisplayResult action
-            return this.View("DisplayResult");
+            var originalQuizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(quizId);
+            var resultModel = await this.quizResultService.GetResultModel(quizId, userId, originalQuizModel.Questions, model.Questions);
+            resultModel.QuizName = this.HttpContext.Session.GetString(Constants.AttemptedQuizName);
+            return this.View(resultModel);
         }
 
         [HttpGet]

@@ -1,12 +1,22 @@
 ﻿$(document).ready(function () {
     var startBtn = document.getElementById('start');
+    var questionsCount = 0;
     var counter = 1;
 
     if (startBtn) {
         var mins = document.getElementById("minutes").value;
-        var questionCount = parseInt(document.getElementsByTagName("form")[0].id);
+        var forms = document.getElementsByTagName('form');
+        var form;
+        if (forms.length > 1) {
+            form = forms[1]
+        } else {
+            form = forms[0]
+        }
+        questionsCount = parseInt(form.id);
         var nextBtns = Array.from(document.getElementsByTagName('a')).filter(x => x.id.includes('next'));
+        var prevBtns = Array.from(document.getElementsByTagName('a')).filter(x => x.id.includes('prev'));
         $(nextBtns).click(loadNextQuestion);
+        $(prevBtns).click(loadPreviousQuestion);
         $(startBtn).click(startQuiz)
     }
 
@@ -21,28 +31,25 @@
 
     function loadNextQuestion(e) {
         e.preventDefault();
-        $(`#${counter}`).hide();
-        if (counter == questionCount) {
-            $(`#${counter}`).show();
+        hideQuestion(counter)
+        if (counter == questionsCount) {
+            showQuestion(counter);
         } else {
-            $(`#${counter + 1}`).show();
+            showQuestion(counter + 1)
         }
 
-        if (counter < questionCount) {
+        if (counter < questionsCount) {
             counter++;
         }
-        let prevBtn = $(`#${counter} #prev`)[0];
-        $(prevBtn).click(loadPreviousQuestion);
-
     }
 
     function loadPreviousQuestion(e) {
         e.preventDefault();
-        $(`#${counter}`).hide();
+        hideQuestion(counter);
         if (counter == 1) {
-            $(`#${counter}`).show();
+            showQuestion(counter);
         } else {
-            $(`#${counter - 1}`).show();
+            showQuestion(counter - 1)
         }
 
         if (counter > 1) {
@@ -52,6 +59,10 @@
 
     function showQuestion(counter) {
         $(`#${counter}`).show();
+    }
+
+    function hideQuestion(counter) {
+        $(`#${counter}`).hide();
     }
 
     function startTimer() {

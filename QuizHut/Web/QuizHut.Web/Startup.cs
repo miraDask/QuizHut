@@ -27,7 +27,6 @@
     using QuizHut.Services.Quiz;
     using QuizHut.Services.QuizResult;
     using QuizHut.Web.ViewModels;
-    using ReflectionIT.Mvc.Paging;
     using Rotativa.AspNetCore;
 
     public class Startup
@@ -62,7 +61,6 @@
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
-            services.AddPaging();
             services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession(options =>
             {
