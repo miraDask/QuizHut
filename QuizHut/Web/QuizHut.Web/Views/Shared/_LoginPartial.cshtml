@@ -9,23 +9,23 @@
 {
     <ul class="nav nav-tabs d-flex flex-column flex-md-row ml-4 mb-0">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+            <a class="nav-link header" asp-area="" asp-action="Index" asp-controller="Home">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#profile">Categories</a>
+            <a class="nav-link header" asp-action="All" asp-controller="Categories" asp-area="">Categories</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#">Quizzes</a>
+            <a class="nav-link header" asp-action="All" asp-controller="Quizzes" asp-area="">Quizzes</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="tab">
+            <a class="nav-link header" asp-action="All" asp-controller="Groups" asp-area="">
                 Groups
             </a>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
+            <a class="nav-link header" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
             <div class="dropdown-menu" style="will-change: transform;">
-                <a class="dropdown-item" href="#">Manage</a>
+                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage</a>
                 <a class="dropdown-item" href="#">Email list</a>
 
                 <div class="dropdown-divider"></div>
