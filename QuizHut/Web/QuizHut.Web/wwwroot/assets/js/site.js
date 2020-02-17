@@ -22,8 +22,9 @@
     let readMoreBtns = Array.from(document.getElementsByTagName(ELEMENTS.LINK)).filter(x => x.classList.contains(ELEMENTS.CLASSES.READ));
     $(readMoreBtns).click(loadInfo);
 
+
     var navLinks = Array.from(document.getElementsByTagName(ELEMENTS.LINK)).filter(x => x.classList.contains(ELEMENTS.CLASSES.HEADER));
-    if (navLinks) {
+    if (navLinks.length > 0) {
         let pageUrl = window.location.href;
         if (pageUrl.includes(URLPART.QUIZZES)) {
             activateNavLink(navLinks[2]);
