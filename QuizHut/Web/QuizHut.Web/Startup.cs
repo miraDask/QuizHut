@@ -39,7 +39,6 @@
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
@@ -101,7 +100,7 @@
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
-            RotativaConfiguration.Setup(env.ContentRootPath, "wwwroot/Rotativa");
+            RotativaConfiguration.Setup(env.ContentRootPath, GlobalConstants.RotativaPath);
 
             if (env.IsDevelopment())
             {
@@ -110,7 +109,7 @@
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler(GlobalConstants.ExceptionHandlerPath);
                 app.UseHsts();
             }
 

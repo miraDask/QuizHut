@@ -7,6 +7,10 @@
         public const string AdministratorRoleName = "Administrator";
 
         public const string ModeratorRoleName = "Moderator";
+        
+        public const string RotativaPath = "wwwroot/Rotativa";
+
+        public const string ExceptionHandlerPath = "/Home/Error";
 
         public const int CookieTimeOut = 4;
     }
