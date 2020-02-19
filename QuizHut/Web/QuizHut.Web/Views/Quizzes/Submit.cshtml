@@ -1,6 +1,10 @@
 ﻿@model QuizResultViewModel
 @{
     ViewData["Title"] = "_QuizResultPartial";
+    var returnUrl = this.User.IsInRole(GlobalConstants.AdministratorRoleName)
+        || this.User.IsInRole(GlobalConstants.ModeratorRoleName)
+        ? "/Administration/Dashboard/"
+        : "/";
 }
 
 <div class="container-fluid">
@@ -26,7 +30,7 @@
 
                         </div>
                         <div class="row mx-1 text-white">
-                            <a class="btn btn-primary col-md-4 mt-5 offset-md-4" href="/">Lieve Quiz</a>
+                            <a class="btn btn-primary col-md-4 mt-5 offset-md-4" href="@returnUrl">Lieve Quiz</a>
                         </div>
                     </div>
                 </div>

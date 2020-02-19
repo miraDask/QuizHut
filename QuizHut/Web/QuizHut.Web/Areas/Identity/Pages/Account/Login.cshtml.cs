@@ -12,6 +12,7 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
     using QuizHut.Data.Models;
+    using QuizHut.Common;
 
     [AllowAnonymous]
     public class LoginModel : PageModel
@@ -72,7 +73,7 @@
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? this.Url.Content("~/");
+            returnUrl ??= this.Url.Content("~/");
 
             if (this.ModelState.IsValid)
             {
@@ -81,13 +82,18 @@
                 var result = await this._signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(this.Input.Email);
+                    var roles = await _userManager.GetRolesAsync(user);
+
+                    if (roles.Count > 0)
+                    {
+                        returnUrl = this.Url.Content("~/Administration/Dashboard/");
+                    }
+
                     this._logger.LogInformation("User logged in.");
                     return this.LocalRedirect(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return this.RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = this.Input.RememberMe });
-                }
+
                 if (result.IsLockedOut)
                 {
                     this._logger.LogWarning("User account locked out.");

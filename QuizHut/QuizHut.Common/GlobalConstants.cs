@@ -6,6 +6,8 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public const string ModeratorRoleName = "Moderator";
+
         public const int CookieTimeOut = 4;
     }
 }

@@ -2235,3 +2235,9 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
             }
 
 
+#dashboard-home {
+  margin-bottom: 5rem!important;
+  margin-top: 5rem!important;
+}
+
+

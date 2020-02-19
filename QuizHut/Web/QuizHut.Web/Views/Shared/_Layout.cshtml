@@ -1,4 +1,9 @@
-﻿@using QuizHut.Common
+﻿@{ 
+    var homeUrl = this.User.IsInRole(GlobalConstants.AdministratorRoleName)
+        || this.User.IsInRole(GlobalConstants.ModeratorRoleName)
+        ? "/Administration/Dashboard/"
+        : "/";
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +42,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-action="Index" asp-controller="Home">QuizHut</a>
+                <a class="navbar-brand" href="@homeUrl">QuizHut</a>
 
                         <partial name="_LoginPartial" />
 
@@ -78,13 +83,9 @@
         <!-- optional plugins -->
         <script src="~/assets/vendor/nouislider/js/nouislider.min.js" asp-append-version="true"></script>
 
-        <!--   lazy javascript -->
-        <script src="~/assets/js/lazy.js" asp-append-version="true"></script>
-
-        <!--   edit Quiz javascript -->
-        <script src="~/assets/js/editQuiz.js" asp-append-version="true"></script>
+        @*<script src="~/assets/js/lazy.js" asp-append-version="true"></script>*@
         <script src="~/assets/js/site.js" asp-append-version="true"></script>
-        <script src="~/assets/js/timer.js" asp-append-version="true"></script>
+        <script src="~/assets/js/attemptQuiz.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
@@ -97,10 +98,9 @@
         <!-- optional plugins -->
         <script src="~/assets/vendor/nouislider/js/nouislider.min.js" asp-append-version="true"></script>
 
-        <!--   lazy javascript -->
-        <script src="~/assets/js/lazy.js" asp-append-version="true"></script>
+       @*// <script src="~/assets/js/lazy.js" asp-append-version="true"></script>*@
         <script src="~/assets/js/site.js" asp-append-version="true"></script>
-        <script src="~/assets/js/timer.js" asp-append-version="true"></script>
+        <script src="~/assets/js/attemptQuiz.js" asp-append-version="true"></script>
 
     </environment>
 

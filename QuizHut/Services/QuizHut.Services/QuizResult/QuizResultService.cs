@@ -34,7 +34,7 @@
 
         public async Task<QuizResultViewModel> GetResultModel(
             string quizId,
-            string participantId, 
+            string participantId,
             IList<QuestionViewModel> originalQuizQuestions,
             IList<AttemtedQuizQuestionViewModel> attemptedQuizQuestions)
         {
