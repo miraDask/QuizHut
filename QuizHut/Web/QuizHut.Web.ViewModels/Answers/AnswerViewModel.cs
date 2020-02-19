@@ -1,6 +1,5 @@
 ﻿namespace QuizHut.Web.ViewModels.Answers
 {
-    using System;
 
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;

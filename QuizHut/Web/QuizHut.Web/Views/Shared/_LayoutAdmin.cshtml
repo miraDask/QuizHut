@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "_Layout";
+﻿
+@{
+    ViewData["Title"] = "_LayoutAdmin";
 
 }
 <!DOCTYPE html>
@@ -38,10 +39,13 @@
 </head>
 <body class="index">
     <partial name="~/Views/Shared/_HeaderNavbarPartial.cshtml" />
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
+    <div id="dashboard-home" class="container p-0">
         <main role="main" class="pb-3">
-            @this.RenderBody()
+            <div class="row">
+                <partial name="_BublesAndCirclesPrtial" />
+                <partial name="_AdminSideNavBarPartial" />
+                    @this.RenderBody()
+            </div>
         </main>
     </div>
     <partial name="~/Views/Shared/_FooterPartial.cshtml" />
@@ -81,3 +85,5 @@
     @this.RenderSection("Scripts", required: false)
 </body>
 </html>
+
+

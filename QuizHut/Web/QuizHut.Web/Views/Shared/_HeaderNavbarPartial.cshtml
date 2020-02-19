@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "_HeaderNavbarPartial";
+    var area = this.User.IsInRole(GlobalConstants.AdministratorRoleName)
+        || this.User.IsInRole(GlobalConstants.ModeratorRoleName)
+        ? "Administration"
+        : "";
+}
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" asp-area="@area" asp-action="Index" asp-controller="Home">QuizHut</a>
+
+            <partial name="~/Views/Shared/_LoginPartial.cshtml" />
+
+        </div>
+    </nav>
+</header>
+

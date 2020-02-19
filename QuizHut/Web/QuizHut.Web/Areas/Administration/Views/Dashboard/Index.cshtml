@@ -1,79 +1,8 @@
-﻿@model QuizHut.Web.ViewModels.Administration.Dashboard.IndexViewModel
-@using QuizHut.Common
+﻿
 @{
-    this.ViewData["Title"] = "Admin dashboard";
+    ViewData["Title"] = "Index";
+
 }
 
-<div id="dashboard-home" class="container p-0">
-    <main role="main" class="pb-3">
-        <div class="row">
-            <div class="col-12 col-md-4 border-right">
-                <ul class="navbar-nav ml-auto">
-                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                    {
-                        <li class="nav-item active">
-                            <div class="my-2">
-                                <button class="btn btn-primary manage-account-btn">Dashboard</button>
-                            </div>
-                        </li>
-                    }
-                    <li class="nav-item active">
-                        <div class="my-2">
-                            <button class="btn btn-primary manage-account-btn">Groups</button>
-                        </div>
-                    </li>
-                    <li class="nav-item active">
-                        <div class="my-2">
-                            <button class="btn btn-primary manage-account-btn">Categories</button>
-                        </div>
-                    </li>
-                    <li class="nav-item active">
-                        <div class="my-2">
-                            <button class="btn btn-primary manage-account-btn">Quizzes</button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-12 col-md-7 offset-md-1">
-                <partial name="_BublesAndCirclesPrtial" />
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="component">
-                            <div class="card mb-3 mt-3">
-                                <div class="card-header text-primary" style="font-size: xx-large">
-                                    <i class="fas fa-folder-plus"></i>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <h4 class="card-title">Make Quiz</h4>
-                                    <p class="card-text">Save Or Print...</p>
-                                </div>
-                                <div class="card-footer pb-3 mt-3">
-                                    <a class="btn btn-outline-primary" asp-area="" asp-action="DetailsInput" asp-controller="Quizzes">Enter</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <form class="col-12 col-md-5 offset-md-1" asp-area="" asp-action="Start" asp-controller="Quizzes">
-                        <div class="component">
-                            <div class="card mb-3 mt-3">
-                                <div class="card-header text-warning" style="font-size: xx-large">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <h4 class="card-title">Take Quiz</h4>
+<h1>Dashboard</h1>
 
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Password..." name="password">
-                                    </div>
-                                </div>
-                                <div class="card-footer pb-3">
-                                    <button type="submit" class="btn btn-outline-primary">Enter</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>

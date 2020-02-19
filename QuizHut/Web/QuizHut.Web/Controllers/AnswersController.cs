@@ -8,7 +8,6 @@
     using QuizHut.Services.Cache;
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Answers;
-    using QuizHut.Web.ViewModels.Questions;
 
     public class AnswersController : Controller
     {

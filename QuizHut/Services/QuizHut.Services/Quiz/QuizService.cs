@@ -9,7 +9,6 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuizService : IQuizService
     {

@@ -12,7 +12,6 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
     using QuizHut.Data.Models;
-    using QuizHut.Common;
 
     [AllowAnonymous]
     public class LoginModel : PageModel
@@ -87,7 +86,7 @@
 
                     if (roles.Count > 0)
                     {
-                        returnUrl = this.Url.Content("~/Administration/Dashboard/");
+                        returnUrl = this.Url.Content("~/Administration/Home/");
                     }
 
                     this._logger.LogInformation("User logged in.");

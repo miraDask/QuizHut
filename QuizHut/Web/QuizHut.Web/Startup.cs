@@ -21,6 +21,7 @@
     using QuizHut.Services.Answer;
     using QuizHut.Services.Cache;
     using QuizHut.Services.Data;
+    using QuizHut.Services.Group;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
     using QuizHut.Services.Question;
@@ -80,6 +81,7 @@
             services.AddTransient<IAnswerService, AnswerService>();
             services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IQuizResultService, QuizResultService>();
+            services.AddTransient<IGroupService, GroupService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
