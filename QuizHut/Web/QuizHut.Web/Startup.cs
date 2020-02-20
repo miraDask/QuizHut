@@ -26,6 +26,7 @@
     using QuizHut.Services.Messaging;
     using QuizHut.Services.Question;
     using QuizHut.Services.Quiz;
+    using QuizHut.Services.QuizGroup;
     using QuizHut.Services.QuizResult;
     using QuizHut.Web.ViewModels;
     using Rotativa.AspNetCore;
@@ -82,6 +83,7 @@
             services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IQuizResultService, QuizResultService>();
             services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<IQuizGroupService, QuizGroupService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

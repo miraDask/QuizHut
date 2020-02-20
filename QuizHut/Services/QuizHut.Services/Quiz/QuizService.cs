@@ -46,10 +46,9 @@
                .To<T>()
                .FirstOrDefaultAsync();
 
-        public async Task<IEnumerable<T>> GetAllAsync<T>()
+        public async Task<IList<T>> GetAllAsync<T>()
          => await this.repository
                 .AllAsNoTracking()
-                .Where(x => !x.IsDeleted)
                 .To<T>()
                 .ToListAsync();
 

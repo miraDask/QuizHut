@@ -479,8 +479,7 @@
         background: #00816A;
         display: inline-block;
     }
-/*#pagging {
-    display: inline-block;
-    float: right;
-}*/
+#side-bar {
+    margin-bottom: 70px;
+}
 

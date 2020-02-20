@@ -7,7 +7,7 @@
     {
         Task<string> AddNewQuizAsync(string name, string description, string activationDate, int? duration, string creatorId, string password);
 
-        Task<IEnumerable<T>> GetAllAsync<T>();
+        Task<IList<T>> GetAllAsync<T>();
 
         Task<T> GetQuizByIdAsync<T>(string id);
 

@@ -43,7 +43,7 @@
     @*answers*@
     @for (int i = 0; i < Model.Answers.Count; i++)
     {
-        var answerNavbarNavDropdownId = "answerNavbarNavDropdown"+ Model.Number + i;
+        var answerNavbarNavDropdownId = "answerNavbarNavDropdown" + Model.Number + i;
         var targetAnswer = "#" + answerNavbarNavDropdownId;
         var answer = Model.Answers[i];
 
@@ -79,7 +79,5 @@
             </nav>
             <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp-for="@answer.Text" value="@answer.Text">
         </div>
-
-
     }
 </form>

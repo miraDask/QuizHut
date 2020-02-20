@@ -3,7 +3,7 @@
     ViewData["Title"] = "_AdminSideNavBarPartial";
 }
 
-<div class="col-12 col-md-2 border-right">
+<div id="side-bar" class="col-12 col-md-2 border-right">
     <ul class="navbar-nav ml-auto">
         @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
         {

@@ -1,8 +1,50 @@
-﻿
+﻿@model GroupWithQuizzesViewModel
 @{
     ViewData["Title"] = "AssignQuiz";
 
 }
+<div class="col-12 offset-md-1 col-md-8 row">
+    <form method="post" class="col-11 ml-4">
 
-<h1>AssignQuiz</h1>
+        <div class="card mb-3 mt-3">
+            <div class="card-header text-warning" style="font-size: xx-large">
+                <i class="fas fa-folder-plus"></i>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Assign Quizzes to @Model.Name</h4>
+                <input type="hidden" asp-for="@Model.GroupId" value="@Model.GroupId" />
+
+                <p class="card-text" style="display: block;">
+                    <span class="text-primary mr-1">∗</span>
+                    You can always edit it later.
+                </p>
+            </div>
+            <div class="card-footer">
+                <div class="component">
+
+                    @for (int i = 0; i < Model.Quizzes.Count(); i++)
+                    {
+                        var quiz = Model.Quizzes[i];
+                        <div class="form-group mb-0">
+                            <div class="mt-2">
+                                @Html.EditorFor(x => x.Quizzes[i].IsAssigned)
+                                <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
+                                @Html.HiddenFor(model => model.Quizzes[i].Id)
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="row mx-4 mb-4 text-white">
+                <button type="submit" class="btn btn-primary col-md-5 mt-5">Assign Quizzes</button>
+                <div class="col-1 mr-4"></div>
+                <a id="cancel" asp-action="Index" asp-controller="Home" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+
 
