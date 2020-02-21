@@ -6,6 +6,8 @@
 
     public class GroupListViewModel : IMapFrom<Group>, IHaveCustomMappings
     {
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public int ParticipantsCount { get; set; }

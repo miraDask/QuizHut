@@ -16,7 +16,15 @@ namespace QuizHut.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+            this.ParticipantInGroups = new HashSet<ParticipantGroup>();
+            this.Participants = new HashSet<ApplicationUser>();
+            this.Quizzes = new HashSet<Quiz>();
+            this.CreatedGroups = new HashSet<Group>();
         }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }
@@ -28,6 +36,10 @@ namespace QuizHut.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
+        public string ManagerId { get; set; }
+
+        public virtual ApplicationUser Manager { get; set; }
+
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
@@ -35,6 +47,8 @@ namespace QuizHut.Data.Models
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
         public virtual ICollection<ParticipantGroup> ParticipantInGroups { get; set; }
+
+        public virtual ICollection<ApplicationUser> Participants { get; set; }
 
         public virtual ICollection<Quiz> Quizzes { get; set; }
 

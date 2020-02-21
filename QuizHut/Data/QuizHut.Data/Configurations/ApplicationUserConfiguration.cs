@@ -43,6 +43,11 @@
                 .HasMany(e => e.CreatedGroups)
                 .WithOne(e => e.Creator)
                 .HasForeignKey(e => e.CreatorId);
+
+            user
+                .HasMany(e => e.Participants)
+                .WithOne(e => e.Manager)
+                .HasForeignKey(e => e.ManagerId);
         }
     }
 }

@@ -1,8 +1,16 @@
 ﻿namespace QuizHut.Data.Models
 {
-    // TODO what to inherit?
-    public class ParticipantGroup
+    using System;
+
+    using QuizHut.Data.Common.Models;
+
+    public class ParticipantGroup : BaseDeletableModel<string>
     {
+        public ParticipantGroup()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         public string ParticipantId { get; set; }
 
         public virtual ApplicationUser Participant { get; set; }

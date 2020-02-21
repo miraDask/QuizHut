@@ -8,22 +8,27 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Group;
     using QuizHut.Services.Quiz;
+    using QuizHut.Services.User;
     using QuizHut.Web.ViewModels.Groups;
+    using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
 
     public class GroupsController : AdministrationController
     {
         private readonly IGroupService service;
         private readonly IQuizService quizService;
+        private readonly IUserService userService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public GroupsController(
             IGroupService service,
             IQuizService quizService,
+            IUserService userService,
             UserManager<ApplicationUser> userManager)
         {
             this.service = service;
             this.quizService = quizService;
+            this.userService = userService;
             this.userManager = userManager;
         }
 
@@ -64,12 +69,36 @@
         {
             var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
             await this.service.AssignQuizzesToGroup(model.GroupId, quizzesIds);
-            return this.RedirectToAction("AssignParticipantsToGroup", new { id = model.GroupId });
+            return this.RedirectToAction("AssignParticipants", new { id = model.GroupId });
         }
 
         public async Task<IActionResult> AssignParticipants(string id)
         {
-            return this.View();
+            var userId = this.userManager.GetUserId(this.User);
+            var participants = await this.userService.GetAllByUserIdAsync<ParticipantViewModel>(userId);
+            var model = new GroupWithParticipantsViewModel() { GroupId = id, Participants = participants };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignParticipants(GroupWithParticipantsViewModel model)
+        {
+            var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+            await this.service.AssignParticipantsToGroup(model.GroupId, participantsIds);
+            return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GroupDetails(string id)
+        {
+            var model = await this.service.GetGroupDetailsModelAsync(id);
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(string id)
+        {
+            return this.RedirectToAction("GroupDetails", new { id });
         }
     }
 }

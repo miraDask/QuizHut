@@ -14,6 +14,10 @@
 
         Task<GroupWithQuizzesViewModel> GetGroupModelAsync(string groupId, string creatorId, IList<QuizAssignViewModel> quizzes);
 
+        Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId);
+
         Task AssignQuizzesToGroup(string groupId, List<string> quizzesIds);
+
+        Task AssignParticipantsToGroup(string groupId, IList<string> participantsIds);
     }
 }

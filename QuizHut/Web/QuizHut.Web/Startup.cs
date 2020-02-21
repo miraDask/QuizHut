@@ -24,10 +24,12 @@
     using QuizHut.Services.Group;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
+    using QuizHut.Services.ParticipantGroup;
     using QuizHut.Services.Question;
     using QuizHut.Services.Quiz;
     using QuizHut.Services.QuizGroup;
     using QuizHut.Services.QuizResult;
+    using QuizHut.Services.User;
     using QuizHut.Web.ViewModels;
     using Rotativa.AspNetCore;
 
@@ -84,6 +86,8 @@
             services.AddTransient<IQuizResultService, QuizResultService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<IQuizGroupService, QuizGroupService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IParticipantGroupService, ParticipantGroupService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

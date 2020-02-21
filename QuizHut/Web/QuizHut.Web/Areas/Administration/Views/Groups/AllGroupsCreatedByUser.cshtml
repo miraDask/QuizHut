@@ -41,28 +41,31 @@
             <tbody>
                 @if (Model.Groups.Any())
                 {
-                    @foreach (var group in Model.Groups)
+                    @for (int i = 0; i < Model.Groups.Count(); i++)
                     {
+                        var group = Model.Groups[i];
+
                         <tr class="table-warning">
                             <th scope="row">@group.Name</th>
                             <td>@group.CreatedOn</td>
                             <td>@group.ParticipantsCount</td>
                             <td>@group.AssignedQuizzesCount</td>
                             <td>
-                                <div class="component  navbar-expand-lg text-right">
+                                <form method="post" class="component  navbar-expand-lg text-right">
+                                    <input type="hidden" name="id" value="@group.Id" />
                                     <ul class="navbar-nav ml-auto">
                                         <li class="nav-item m-1">
-                                            <a class="nav-link  btn btn-white" asp-action="Edit" asp-controller="Groups">
+                                            <button type="submit" class="nav-link  btn btn-white" asp-action="Edit" asp-controller="Groups">
                                                 <i class="far fa-edit"></i>
-                                            </a>
+                                            </button>
                                         </li>
                                         <li class="nav-item m-1">
-                                            <a class="nav-link  btn btn-white" asp-action="Delete" asp-controller="Groups">
+                                            <button class="nav-link  btn btn-white" asp-action="Delete" asp-controller="Groups">
                                                 <i class="far fa-times-circle"></i>
-                                            </a>
+                                            </button>
                                         </li>
                                     </ul>
-                                </div>
+                                </form>
                             </td>
                         </tr>
                     }

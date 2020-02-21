@@ -4,6 +4,6 @@
 
     public class GroupsListAllViewModel
     {
-        public IEnumerable<GroupListViewModel> Groups { get; set; } = new HashSet<GroupListViewModel>();
+        public IList<GroupListViewModel> Groups { get; set; } = new List<GroupListViewModel>();
     }
 }

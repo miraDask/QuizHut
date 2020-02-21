@@ -1,0 +1,19 @@
+﻿@model QuizAssignViewModel
+@{
+    ViewData["Title"] = "_QuizzesDetailsPartial";
+}
+<tr class="table-warning">
+    <th scope="row">@Model.Name</th>
+    <td>
+        <form method="post" class="component  navbar-expand-lg text-right">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item m-1">
+                    <button class="nav-link  btn btn-white" asp-action="Delete" asp-controller="Groups">
+                        <i class="far fa-times-circle"></i>
+                    </button>
+                </li>
+            </ul>
+        </form>
+    </td>
+</tr>

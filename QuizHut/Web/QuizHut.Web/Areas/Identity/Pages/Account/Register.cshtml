@@ -14,6 +14,16 @@
                     <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
+                            <label for="first-name" asp-for="Input.FirstName">First Name</label>
+                            <input type="text" class="form-control" id="first-name" aria-describedby="emailHelp" asp-for="Input.FirstName" placeholder="First Name">
+                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name" asp-for="Input.LastName">Email address</label>
+                            <input type="text" class="form-control" id="last-name" aria-describedby="emailHelp" asp-for="Input.LastName" placeholder="Enter email">
+                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1" asp-for="Input.Email">Email address</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" asp-for="Input.Email" placeholder="Enter email">
                             <span asp-validation-for="Input.Email" class="text-danger"></span>

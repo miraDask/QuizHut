@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizHut.Data;
 
 namespace QuizHut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200220204002_AddParticipantsFirstAndLastNamePropertiesToApplicationUser")]
+    partial class AddParticipantsFirstAndLastNamePropertiesToApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,6 +213,9 @@ namespace QuizHut.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -242,9 +247,6 @@ namespace QuizHut.Data.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("ManagerId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
@@ -278,9 +280,9 @@ namespace QuizHut.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IsDeleted");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("ManagerId");
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -369,26 +371,9 @@ namespace QuizHut.Data.Migrations
                     b.Property<string>("GroupId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("ParticipantId", "GroupId");
 
                     b.HasIndex("GroupId");
-
-                    b.HasIndex("IsDeleted");
 
                     b.ToTable("ParticipantsGroups");
                 });
@@ -649,9 +634,9 @@ namespace QuizHut.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("QuizHut.Data.Models.ApplicationUser", "Manager")
+                    b.HasOne("QuizHut.Data.Models.ApplicationUser", null)
                         .WithMany("Participants")
-                        .HasForeignKey("ManagerId");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.Category", b =>

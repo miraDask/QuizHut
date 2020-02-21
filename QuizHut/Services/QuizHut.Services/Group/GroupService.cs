@@ -8,19 +8,26 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
+    using QuizHut.Services.ParticipantGroup;
     using QuizHut.Services.QuizGroup;
     using QuizHut.Web.ViewModels.Groups;
+    using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
 
     public class GroupService : IGroupService
     {
         private readonly IDeletableEntityRepository<Group> repository;
         private readonly IQuizGroupService quizGroupService;
+        private readonly IParticipantGroupService participantGroupService;
 
-        public GroupService(IDeletableEntityRepository<Group> repository, IQuizGroupService quizGroupService)
+        public GroupService(
+            IDeletableEntityRepository<Group> repository,
+            IQuizGroupService quizGroupService,
+            IParticipantGroupService participantGroupService)
         {
             this.repository = repository;
             this.quizGroupService = quizGroupService;
+            this.participantGroupService = participantGroupService;
         }
 
         public async Task AssignQuizzesToGroup(string groupId, List<string> quizzesIds)
@@ -28,6 +35,14 @@
             foreach (var quizId in quizzesIds)
             {
                 await this.quizGroupService.CreateAsync(groupId, quizId);
+            }
+        }
+
+        public async Task AssignParticipantsToGroup(string groupId, IList<string> participantsIds)
+        {
+            foreach (var participantId in participantsIds)
+            {
+                await this.participantGroupService.CreateAsync(groupId, participantId);
             }
         }
 
@@ -58,6 +73,31 @@
             };
 
             return model;
+        }
+
+        public async Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId)
+        {
+            var group = await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.Id == groupId)
+                .Select(x => new GroupDetailsViewModel() 
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Quizzes = x.QuizzesGroups.Select(x => new QuizAssignViewModel()
+                    {
+                        Name = x.Quiz.Name,
+                        Id = x.QuizId,
+                    }).ToList(),
+                    Participants = x.ParticipanstGroups.Select(x => new ParticipantViewModel()
+                    {
+                        FullName = $"{x.Participant.FirstName} {x.Participant.LastName}",
+                        Email = x.Participant.Email,
+                    }).ToList(),
+                })
+                .FirstOrDefaultAsync();
+
+            return group;
         }
     }
 }
