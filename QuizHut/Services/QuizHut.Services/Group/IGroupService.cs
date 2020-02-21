@@ -21,5 +21,9 @@
         Task AssignParticipantsToGroupAsync(string groupId, IList<string> participantsIds);
 
         Task DeleteAsync(string groupId);
+
+        Task DeleteQuizFromGroupAsync(string groupId, string quizId);
+
+        Task DeleteParticipantFromGroupAsync(string groupId, string participantId);
     }
 }

@@ -5,5 +5,7 @@
     public interface IQuizGroupService
     {
         Task CreateAsync(string groupId, string quizId);
+
+        Task DeleteAsync(string groupId, string quizId);
     }
 }

@@ -82,7 +82,11 @@
                             <tr class="table-active bg-white">
                                 <th scope="row">@quiz.Name</th>
                                 <td class="text-right">
-                                    <button class="btn btn-primary mr-md-3">Delete</button>
+                                    <form method="post" asp-action="DeleteQuizFromGroup" asp-controller="Groups">
+                                        <input type="hidden" name="groupId" value="@Model.Id" />
+                                        <input type="hidden" name="quizId" value="@quiz.Id" />
+                                        <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         }
@@ -121,7 +125,11 @@
                                 <th scope="row">@participant.FullName</th>
                                 <th scope="row">@participant.Email</th>
                                 <td class="text-right">
-                                    <button class="btn btn-primary mr-md-3">Delete</button>
+                                    <form method="post" asp-action="DeleteParticipantFromGroup" asp-controller="Groups">
+                                        <input type="hidden" name="groupId" value="@Model.Id" />
+                                        <input type="hidden" name="participantId" value="@participant.Id" />
+                                        <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
                         }

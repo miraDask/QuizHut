@@ -91,6 +91,7 @@
                     }).ToList(),
                     Participants = x.ParticipanstGroups.Select(x => new ParticipantViewModel()
                     {
+                        Id = x.ParticipantId,
                         FullName = $"{x.Participant.FirstName} {x.Participant.LastName}",
                         Email = x.Participant.Email,
                     }).ToList(),
@@ -108,6 +109,16 @@
                 .FirstOrDefaultAsync();
             this.repository.Delete(group);
             await this.repository.SaveChangesAsync();
+        }
+
+        public async Task DeleteQuizFromGroupAsync(string groupId, string quizId)
+        {
+            await this.quizGroupService.DeleteAsync(groupId, quizId);
+        }
+
+        public async Task DeleteParticipantFromGroupAsync(string groupId, string participantId)
+        {
+            await this.participantGroupService.DeleteAsync(groupId, participantId);
         }
     }
 }

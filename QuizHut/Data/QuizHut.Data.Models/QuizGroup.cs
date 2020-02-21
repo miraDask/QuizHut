@@ -1,16 +1,7 @@
 ﻿namespace QuizHut.Data.Models
 {
-    using System;
-
-    using QuizHut.Data.Common.Models;
-
-    public class QuizGroup : BaseDeletableModel<string>
+    public class QuizGroup
     {
-        public QuizGroup()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
-
         public string QuizId { get; set; }
 
         public virtual Quiz Quiz { get; set; }

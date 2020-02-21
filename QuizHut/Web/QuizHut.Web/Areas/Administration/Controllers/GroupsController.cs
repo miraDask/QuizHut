@@ -107,5 +107,20 @@
             await this.service.DeleteAsync(id);
             return this.RedirectToAction("AllGroupsCreatedByUser");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteQuizFromGroup(string groupId, string quizId)
+        {
+            await this.service.DeleteQuizFromGroupAsync(groupId, quizId);
+            return this.RedirectToAction("GroupDetails", new { id = groupId });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteParticipantFromGroup(string groupId, string participantId)
+        {
+            await this.service.DeleteParticipantFromGroupAsync(groupId, participantId);
+            return this.RedirectToAction("GroupDetails", new { id = groupId });
+        }
     }
 }
