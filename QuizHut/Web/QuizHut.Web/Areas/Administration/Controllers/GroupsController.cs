@@ -68,7 +68,7 @@
         public async Task<IActionResult> AssignQuiz(GroupWithQuizzesViewModel model)
         {
             var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignQuizzesToGroup(model.GroupId, quizzesIds);
+            await this.service.AssignQuizzesToGroupAsync(model.GroupId, quizzesIds);
             return this.RedirectToAction("AssignParticipants", new { id = model.GroupId });
         }
 
@@ -84,7 +84,7 @@
         public async Task<IActionResult> AssignParticipants(GroupWithParticipantsViewModel model)
         {
             var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignParticipantsToGroup(model.GroupId, participantsIds);
+            await this.service.AssignParticipantsToGroupAsync(model.GroupId, participantsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
 
@@ -99,6 +99,13 @@
         public IActionResult Edit(string id)
         {
             return this.RedirectToAction("GroupDetails", new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await this.service.DeleteAsync(id);
+            return this.RedirectToAction("AllGroupsCreatedByUser");
         }
     }
 }

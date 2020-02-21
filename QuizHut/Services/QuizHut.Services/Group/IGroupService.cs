@@ -16,8 +16,10 @@
 
         Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId);
 
-        Task AssignQuizzesToGroup(string groupId, List<string> quizzesIds);
+        Task AssignQuizzesToGroupAsync(string groupId, List<string> quizzesIds);
 
-        Task AssignParticipantsToGroup(string groupId, IList<string> participantsIds);
+        Task AssignParticipantsToGroupAsync(string groupId, IList<string> participantsIds);
+
+        Task DeleteAsync(string groupId);
     }
 }

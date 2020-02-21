@@ -30,7 +30,7 @@
             this.participantGroupService = participantGroupService;
         }
 
-        public async Task AssignQuizzesToGroup(string groupId, List<string> quizzesIds)
+        public async Task AssignQuizzesToGroupAsync(string groupId, List<string> quizzesIds)
         {
             foreach (var quizId in quizzesIds)
             {
@@ -38,7 +38,7 @@
             }
         }
 
-        public async Task AssignParticipantsToGroup(string groupId, IList<string> participantsIds)
+        public async Task AssignParticipantsToGroupAsync(string groupId, IList<string> participantsIds)
         {
             foreach (var participantId in participantsIds)
             {
@@ -98,6 +98,16 @@
                 .FirstOrDefaultAsync();
 
             return group;
+        }
+
+        public async Task DeleteAsync(string groupId)
+        {
+            var group = await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.Id == groupId)
+                .FirstOrDefaultAsync();
+            this.repository.Delete(group);
+            await this.repository.SaveChangesAsync();
         }
     }
 }
