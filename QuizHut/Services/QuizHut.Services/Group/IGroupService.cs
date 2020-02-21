@@ -25,5 +25,7 @@
         Task DeleteQuizFromGroupAsync(string groupId, string quizId);
 
         Task DeleteParticipantFromGroupAsync(string groupId, string participantId);
+
+        Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisGroup(string qroupId, IList<QuizAssignViewModel> quizzes);
     }
 }

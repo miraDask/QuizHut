@@ -32,5 +32,12 @@
             this.repository.Delete(quizGroup);
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task<string[]> GetAllQizzesIdsByGroupIdAsync(string groupId)
+        => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.GroupId == groupId)
+            .Select(x => x.QuizId)
+            .ToArrayAsync();
     }
 }

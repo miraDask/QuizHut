@@ -120,5 +120,11 @@
         {
             await this.participantGroupService.DeleteAsync(groupId, participantId);
         }
+
+        public async Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisGroup(string qroupId, IList<QuizAssignViewModel> quizzes)
+        {
+            var assignedQuizzesIds = await this.quizGroupService.GetAllQizzesIdsByGroupIdAsync(qroupId);
+            return quizzes.Where(x => !assignedQuizzesIds.Contains(x.Id)).ToList();
+        }
     }
 }

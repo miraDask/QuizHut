@@ -115,12 +115,30 @@
             return this.RedirectToAction("GroupDetails", new { id = groupId });
         }
 
-
         [HttpPost]
         public async Task<IActionResult> DeleteParticipantFromGroup(string groupId, string participantId)
         {
             await this.service.DeleteParticipantFromGroupAsync(groupId, participantId);
             return this.RedirectToAction("GroupDetails", new { id = groupId });
+        }
+
+        public async Task<IActionResult> AddNewQuiz(string id)
+        {
+
+            var userId = this.userManager.GetUserId(this.User);
+            var quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>();
+            quizzes = await this.service.FilterQuizzesThatAreNotAssignedToThisGroup(id, quizzes);
+            var model = await this.service.GetGroupModelAsync(id, userId, quizzes);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewQuiz(GroupWithQuizzesViewModel model)
+        {
+            var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+            await this.service.AssignQuizzesToGroupAsync(model.GroupId, quizzesIds);
+            return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
     }
 }

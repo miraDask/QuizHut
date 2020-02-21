@@ -7,5 +7,7 @@
         Task CreateAsync(string groupId, string quizId);
 
         Task DeleteAsync(string groupId, string quizId);
+
+        Task<string[]> GetAllQizzesIdsByGroupIdAsync(string groupId);
     }
 }
