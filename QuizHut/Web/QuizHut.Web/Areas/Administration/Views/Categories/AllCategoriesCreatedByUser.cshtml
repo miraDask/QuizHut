@@ -1,7 +1,72 @@
-﻿
+﻿@model CategoriesListAllViewModel
 @{
-    ViewData["Title"] = "All";
+    ViewData["Title"] = "AllCategoriesCreatedByUser";
 }
 
-<h1>All Categories</h1>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+    <div class="container">
+        <h5 class="mb-0">Categories Managment</h5>
+        <button class="navbar-toggler collapsed bg-primary"
+                type="button" data-toggle="collapse"
+                data-target="#navbarNavDropdown-3"
+                aria-controls="navbarNavDropdown-3"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item m-1">
+                    <a class="nav-link  btn btn-warning" asp-action="Create" asp-controller="Categories">
+                        <i class="fas fa-plus-circle"></i>
+                        <span class="text-primary">Add New</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active bg-white">
+            <th scope="col">Name</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Quizzes</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Categories.Any())
+        {
+            @for (int i = 0; i < Model.Categories.Count(); i++)
+            {
+                var category = Model.Categories[i];
+
+                <tr class="table-warning">
+                    <th scope="row">@category.Name</th>
+                    <td>@category.CreatedOn</td>
+                    <td>@category.QuizzesCount</td>
+                    <td>
+                        <form method="post" class="component  navbar-expand-lg text-right">
+                            <input type="hidden" name="id" value="@category.Id" />
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item m-1">
+                                    <a class="nav-link  btn btn-white" href="/Administration/Categories/CategoryDetails?id=@category.Id">
+                                        <i class="far fa-edit"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item m-1">
+                                    <a class="nav-link  btn btn-white" href="/Administration/Categories/Delete?id=@category.Id">
+                                        <i class="far fa-times-circle"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
 

@@ -1,4 +1,6 @@
-﻿
+﻿@using QuizHut.Data.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 @model InputQuizViewModel
 @{
     ViewData["Title"] = "Index";
@@ -60,7 +62,14 @@
                         <div class="row mx-4 text-white">
                             <button id="addQuiz" type="submit" class="btn btn-primary col-md-5 mt-5">Add Details</button>
                             <div class="col-1 mr-4"></div>
-                            <a id="cancel" asp-action="Index" asp-controller="Home" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <a href="/Administration/Categories/AllCategoriesCreatedByUser" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+                            }
+                            else
+                            {
+                                <a id="cancel" asp-action="Index" asp-controller="Home" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+                            }
                         </div>
                     </div>
                 </div>
