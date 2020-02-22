@@ -35,7 +35,7 @@
                 .HasForeignKey(e => e.ParticipantId);
 
             user
-                .HasMany(e => e.Quizzes)
+                .HasMany(e => e.CreatedQuizzes)
                 .WithOne(e => e.Creator)
                 .HasForeignKey(e => e.CreatorId);
 

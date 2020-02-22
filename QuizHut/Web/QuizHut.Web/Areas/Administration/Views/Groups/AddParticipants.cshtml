@@ -19,17 +19,23 @@
             </div>
             <div class="card-footer">
                 <div class="component">
-
-                    @for (int i = 0; i < Model.Participants.Count(); i++)
+                    @if (Model.Participants.Count() > 0)
                     {
-                        var participant = Model.Participants[i];
-                        <div class="form-group mb-0">
-                            <div class="mt-2">
-                                @Html.EditorFor(x => x.Participants[i].IsAssigned)
-                                <h6 class="d-inline-block mt-0 ml-1">@participant.FullName <span class="ml-2">@participant.Email</span></h6>
-                                @Html.HiddenFor(model => model.Participants[i].Id)
+                        @for (int i = 0; i < Model.Participants.Count(); i++)
+                        {
+                            var participant = Model.Participants[i];
+                            <div class="form-group mb-0">
+                                <div class="mt-2">
+                                    @Html.EditorFor(x => x.Participants[i].IsAssigned)
+                                    <h6 class="d-inline-block mt-0 ml-1">@participant.FullName <span class="ml-2">@participant.Email</span></h6>
+                                    @Html.HiddenFor(model => model.Participants[i].Id)
+                                </div>
                             </div>
-                        </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>There are currently no unassigned participants</p>
                     }
                 </div>
             </div>

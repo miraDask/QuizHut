@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizHut.Data;
 
 namespace QuizHut.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200222172214_LastChangesToApplicationUser")]
+    partial class LastChangesToApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -663,7 +665,7 @@ namespace QuizHut.Data.Migrations
                         .HasForeignKey("CategoryId");
 
                     b.HasOne("QuizHut.Data.Models.ApplicationUser", "Creator")
-                        .WithMany("CreatedQuizzes")
+                        .WithMany("Quizzes")
                         .HasForeignKey("CreatorId");
                 });
 

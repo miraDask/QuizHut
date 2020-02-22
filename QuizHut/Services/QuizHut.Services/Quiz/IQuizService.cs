@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Services.Quiz
 {
+    using QuizHut.Web.ViewModels.Quizzes;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -8,6 +9,8 @@
         Task<string> AddNewQuizAsync(string name, string description, string activationDate, int? duration, string creatorId, string password);
 
         Task<IList<T>> GetAllAsync<T>();
+
+        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id);
 
         Task<T> GetQuizByIdAsync<T>(string id);
 

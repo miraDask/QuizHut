@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200222170527_LastChanges.cs" />
+    <Compile Remove="Migrations\20200222170527_LastChanges.Designer.cs" />
+    <Compile Remove="Migrations\20200222170642_LastChangesToDbContext.cs" />
+    <Compile Remove="Migrations\20200222170642_LastChangesToDbContext.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
 

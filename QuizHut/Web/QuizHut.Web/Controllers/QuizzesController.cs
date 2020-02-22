@@ -53,6 +53,11 @@
                 id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
             }
 
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = "~/Views/Shared/_LayoutAdmin.cshtml";
+            }
+
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
 
             return this.View(quizModel);
@@ -88,9 +93,13 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> PDFExport()
+        public async Task<IActionResult> PDFExport(string id)
         {
-            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+            {
+                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            }
+
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
 
             return new ViewAsPdf("PDFExport", quizModel)
@@ -100,12 +109,17 @@
             };
         }
 
-        public async Task<IActionResult> DeleteQuiz()
+        public async Task<IActionResult> DeleteQuiz(string id)
         {
-            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            await this.quizService.DeleteByIdAsync(id);
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+            {
+                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+                await this.quizService.DeleteByIdAsync(id);
+                return this.RedirectToAction("Index", "Home");
+            }
 
-            return this.RedirectToAction("Index", "Home");
+            await this.quizService.DeleteByIdAsync(id);
+            return this.RedirectToAction("AllQuizzesCreatedByUser", "Quizzes", new { area = "Administration" });
         }
 
         [HttpGet]

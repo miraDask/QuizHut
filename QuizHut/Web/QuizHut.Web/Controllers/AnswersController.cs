@@ -3,7 +3,9 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Data.Models;
     using QuizHut.Services.Answer;
     using QuizHut.Services.Cache;
     using QuizHut.Web.Controllers.Common;
@@ -11,10 +13,14 @@
 
     public class AnswersController : Controller
     {
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IAnswerService answerService;
 
-        public AnswersController(IAnswerService answerService, ICacheService cacheService)
+        public AnswersController(
+            UserManager<ApplicationUser> userManager,
+            IAnswerService answerService)
         {
+            this.userManager = userManager;
             this.answerService = answerService;
         }
 
@@ -55,6 +61,11 @@
         public async Task<IActionResult> AppendNewAnswer(AnswerViewModel model)
         {
             await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = "~/Views/Shared/_LayoutAdmin.cshtml";
+            }
+
             return this.RedirectToAction("Display", "Quizzes");
         }
 

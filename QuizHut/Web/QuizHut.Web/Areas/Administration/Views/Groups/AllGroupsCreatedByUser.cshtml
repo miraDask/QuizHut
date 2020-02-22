@@ -3,76 +3,74 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="col-12 col-md-9 ml-md-5">
-    <div class="component bg-light">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
-            <div class="container">
-                <h5 class="mb-0">Groups Managment</h5>
-                <button class="navbar-toggler collapsed bg-primary"
-                        type="button" data-toggle="collapse"
-                        data-target="#navbarNavDropdown-3"
-                        aria-controls="navbarNavDropdown-3"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-warning" asp-action="Create" asp-controller="Groups">
-                                <i class="fas fa-plus-circle"></i>
-                                <span class="text-primary">Add New</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <table class="table table-hover">
-            <thead>
-                <tr class="table-active bg-white">
-                    <th scope="col">Name</th>
-                    <th scope="col">Created On</th>
-                    <th scope="col">Participants</th>
-                    <th scope="col">Assigned Quizzes</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Groups.Any())
-                {
-                    @for (int i = 0; i < Model.Groups.Count(); i++)
-                    {
-                        var group = Model.Groups[i];
 
-                        <tr class="table-warning">
-                            <th scope="row">@group.Name</th>
-                            <td>@group.CreatedOn</td>
-                            <td>@group.ParticipantsCount</td>
-                            <td>@group.AssignedQuizzesCount</td>
-                            <td>
-                                <form method="post" class="component  navbar-expand-lg text-right">
-                                    <input type="hidden" name="id" value="@group.Id" />
-                                    <ul class="navbar-nav ml-auto">
-                                        <li class="nav-item m-1">
-                                            <button type="submit" class="nav-link  btn btn-white" asp-action="Edit" asp-controller="Groups">
-                                                <i class="far fa-edit"></i>
-                                            </button>
-                                        </li>
-                                        <li class="nav-item m-1">
-                                            <button class="nav-link  btn btn-white" asp-action="Delete" asp-controller="Groups">
-                                                <i class="far fa-times-circle"></i>
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </form>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
+<nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+    <div class="container">
+        <h5 class="mb-0">Groups Managment</h5>
+        <button class="navbar-toggler collapsed bg-primary"
+                type="button" data-toggle="collapse"
+                data-target="#navbarNavDropdown-3"
+                aria-controls="navbarNavDropdown-3"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item m-1">
+                    <a class="nav-link  btn btn-warning" asp-action="Create" asp-controller="Groups">
+                        <i class="fas fa-plus-circle"></i>
+                        <span class="text-primary">Add New</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
+</nav>
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active bg-white">
+            <th scope="col">Name</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Participants</th>
+            <th scope="col">Assigned Quizzes</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Groups.Any())
+        {
+            @for (int i = 0; i < Model.Groups.Count(); i++)
+            {
+                var group = Model.Groups[i];
+
+                <tr class="table-warning">
+                    <th scope="row">@group.Name</th>
+                    <td>@group.CreatedOn</td>
+                    <td>@group.ParticipantsCount</td>
+                    <td>@group.AssignedQuizzesCount</td>
+                    <td>
+                        <form method="post" class="component  navbar-expand-lg text-right">
+                            <input type="hidden" name="id" value="@group.Id" />
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item m-1">
+                                    <button type="submit" class="nav-link  btn btn-white" asp-action="Edit" asp-controller="Groups">
+                                        <i class="far fa-edit"></i>
+                                    </button>
+                                </li>
+                                <li class="nav-item m-1">
+                                    <button class="nav-link  btn btn-white" asp-action="Delete" asp-controller="Groups">
+                                        <i class="far fa-times-circle"></i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
 
 

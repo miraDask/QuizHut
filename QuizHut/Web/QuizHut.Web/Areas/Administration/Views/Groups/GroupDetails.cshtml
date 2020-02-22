@@ -4,137 +4,136 @@
 
 }
 
-    <div class="col-12 offset-md-1 col-md-8 row">
-        @* Name *@
-        <div class="form-group flex-grow-1 col-12">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
-                <div class="container">
-                    <h5 class="my-2">Group Details</h5>
-                    <button class="navbar-toggler collapsed bg-primary"
-                            type="button" data-toggle="collapse"
-                            data-target="#navbarNavDropdown111"
-                            aria-controls="navbarNavDropdown111"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown111">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary" href="/Administration/Groups/EditName?id=@Model.Id&name=@Model.Name">Edit Name</a>
-                            </li>
-                            <li class="nav-item m-1">
-                                <form method="post" asp-action="Delete" asp-controller="Groups">
-                                    <input type="hidden" name="id" value="@Model.Id" />
-                                    <button type="submit" class="nav-link  btn btn-primary col-12">Delete Group</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <div class="component">
-                <table class="table table-hover">
-                    <tbody>
-                        <tr class="table-active bg-white">
-                            <th scope="row">Name</th>
-                            <td>@Model.Name</td>
-                        </tr>
-                        <tr class="table-active bg-light">
-                            <th scope="row">Participants</th>
-                            <td>@Model.Participants.Count()</td>
-                        </tr>
-                        <tr class="table-active bg-white">
-                            <th scope="row">Assigned Quizzes</th>
-                            <td>@Model.Quizzes.Count</td>
-                        </tr>
-                    </tbody>
-                </table>
+@* Name *@
+<div class="form-group flex-grow-1">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
+        <div class="container">
+            <h5 class="my-2">Group Details</h5>
+            <button class="navbar-toggler collapsed bg-primary"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown111"
+                    aria-controls="navbarNavDropdown111"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown111">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary" href="/Administration/Groups/EditName?id=@Model.Id&name=@Model.Name">Edit Name</a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <form method="post" asp-action="Delete" asp-controller="Groups">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="nav-link  btn btn-primary col-12">Delete Group</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
-        @* quizzes *@
-        <div class="form-group flex-grow-1 col-12">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-warning mt-4 p-2">
-                <div class="container">
-                    <h5 class="mb-0">Assigned Quizzes</h5>
-                    <button class="navbar-toggler collapsed bg-primary"
-                            type="button" data-toggle="collapse"
-                            data-target="#navbarNavDropdown222"
-                            aria-controls="navbarNavDropdown222"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item m-1">
-                                <a href="/Administration/Groups/AddNewQuiz?id=@Model.Id" class="nav-link  btn btn-primary">Add New</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <div class="component">
-                <table class="table table-hover">
-                    <tbody>
-                        @foreach (var quiz in Model.Quizzes)
-                        {
-                            <tr class="table-active bg-white">
-                                <th scope="row">@quiz.Name</th>
-                                <td class="text-right">
-                                    <form method="post" asp-action="DeleteQuizFromGroup" asp-controller="Groups">
-                                        <input type="hidden" name="groupId" value="@Model.Id" />
-                                        <input type="hidden" name="quizId" value="@quiz.Id" />
-                                        <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        @* participants *@
-        <div class="form-group flex-grow-1 col-12">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-warning mt-4 p-2">
-                <div class="container">
-                    <h5 class="mb-0">Participants</h5>
-                    <button class="navbar-toggler collapsed bg-primary"
-                            type="button" data-toggle="collapse"
-                            data-target="#navbarNavDropdown333"
-                            aria-controls="navbarNavDropdown333"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown333">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary" href="/Administration/Groups/AddParticipants?id=@Model.Id">Add New</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <div class="component">
-                <table class="table table-hover">
-                    <tbody>
-                        @foreach (var participant in Model.Participants)
-                        {
-                            <tr class="table-active bg-white">
-                                <th scope="row">@participant.FullName</th>
-                                <th scope="row">@participant.Email</th>
-                                <td class="text-right">
-                                    <form method="post" asp-action="DeleteParticipantFromGroup" asp-controller="Groups">
-                                        <input type="hidden" name="groupId" value="@Model.Id" />
-                                        <input type="hidden" name="participantId" value="@participant.Id" />
-                                        <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    </nav>
+    <div class="component">
+        <table class="table table-hover">
+            <tbody>
+                <tr class="table-active bg-white">
+                    <th scope="row">Name</th>
+                    <td>@Model.Name</td>
+                </tr>
+                <tr class="table-active bg-light">
+                    <th scope="row">Participants</th>
+                    <td>@Model.Participants.Count()</td>
+                </tr>
+                <tr class="table-active bg-white">
+                    <th scope="row">Assigned Quizzes</th>
+                    <td>@Model.Quizzes.Count</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+</div>
+@* quizzes *@
+<div class="form-group flex-grow-1">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning mt-4 p-2">
+        <div class="container">
+            <h5 class="mb-0">Assigned Quizzes</h5>
+            <button class="navbar-toggler collapsed bg-primary"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown222"
+                    aria-controls="navbarNavDropdown222"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a href="/Administration/Groups/AddNewQuiz?id=@Model.Id" class="nav-link  btn btn-primary">Add New</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="component">
+        <table class="table table-hover">
+            <tbody>
+                @foreach (var quiz in Model.Quizzes)
+                {
+                    <tr class="table-active bg-white">
+                        <th scope="row">@quiz.Name</th>
+                        <td class="text-right">
+                            <form method="post" asp-action="DeleteQuizFromGroup" asp-controller="Groups">
+                                <input type="hidden" name="groupId" value="@Model.Id" />
+                                <input type="hidden" name="quizId" value="@quiz.Id" />
+                                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@* participants *@
+<div class="form-group flex-grow-1">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning mt-4 p-2">
+        <div class="container">
+            <h5 class="mb-0">Participants</h5>
+            <button class="navbar-toggler collapsed bg-primary"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown333"
+                    aria-controls="navbarNavDropdown333"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown333">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary" href="/Administration/Groups/AddParticipants?id=@Model.Id">Add New</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="component">
+        <table class="table table-hover">
+            <tbody>
+                @foreach (var participant in Model.Participants)
+                {
+                    <tr class="table-active bg-white">
+                        <th scope="row">@participant.FullName</th>
+                        <th scope="row">@participant.Email</th>
+                        <td class="text-right">
+                            <form method="post" asp-action="DeleteParticipantFromGroup" asp-controller="Groups">
+                                <input type="hidden" name="groupId" value="@Model.Id" />
+                                <input type="hidden" name="participantId" value="@participant.Id" />
+                                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

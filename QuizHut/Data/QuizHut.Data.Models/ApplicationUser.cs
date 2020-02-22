@@ -18,8 +18,7 @@ namespace QuizHut.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.ParticipantInGroups = new HashSet<ParticipantGroup>();
             this.Participants = new HashSet<ApplicationUser>();
-            this.Quizzes = new HashSet<Quiz>();
-            this.QuizzesResults = new HashSet<QuizResult>();
+            this.CreatedQuizzes = new HashSet<Quiz>();
             this.CreatedGroups = new HashSet<Group>();
         }
 
@@ -51,9 +50,7 @@ namespace QuizHut.Data.Models
 
         public virtual ICollection<ApplicationUser> Participants { get; set; }
 
-        public virtual ICollection<Quiz> Quizzes { get; set; }
-
-        public virtual ICollection<QuizResult> QuizzesResults { get; set; }
+        public virtual ICollection<Quiz> CreatedQuizzes { get; set; }
 
         public virtual ICollection<Group> CreatedGroups { get; set; }
     }

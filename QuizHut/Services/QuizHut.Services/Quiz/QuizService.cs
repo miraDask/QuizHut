@@ -9,6 +9,7 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
+    using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuizService : IQuizService
     {
@@ -38,6 +39,14 @@
 
             return quiz.Id;
         }
+
+        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id)
+          => await this.repository
+                 .AllAsNoTracking()
+                 .Where(x => x.CreatorId == id)
+                 .OrderByDescending(x => x.CreatedOn)
+                 .To<T>()
+                 .ToListAsync();
 
         public async Task<T> GetQuizByIdAsync<T>(string id)
        => await this.repository

@@ -32,10 +32,11 @@
                             <input type="text" class="form-control" asp-for="Text" value="@Model.Text">
                             <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
                         </div>
+                            <span asp-validation-for="@Model.Text" class="text-danger"></span>
                         <div class="row mx-1 text-white">
                             <button type="submit" class="btn btn-primary col-md-5 mt-5">Save Changes</button>
                             <div class="col-1 mr-4"></div>
-                            <button class="btn btn-primary col-md-5 mt-5" href="/Quizzes/Display">Cancel</button>
+                            <a class="btn btn-primary col-md-5 mt-5" href="/Quizzes/Display">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -43,4 +44,7 @@
         </form>
     </div>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 
