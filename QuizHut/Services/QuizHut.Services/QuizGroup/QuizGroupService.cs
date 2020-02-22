@@ -18,8 +18,13 @@
         public async Task CreateAsync(string groupId, string quizId)
         {
             var quizGroup = new QuizGroup() { GroupId = groupId, QuizId = quizId };
-            await this.repository.AddAsync(quizGroup);
-            await this.repository.SaveChangesAsync();
+            var quizGroupExists = await this.repository.AllAsNoTracking().Where(x => x.GroupId == groupId && x.QuizId == quizId).FirstOrDefaultAsync() != null;
+
+            if (!quizGroupExists)
+            {
+                await this.repository.AddAsync(quizGroup);
+                await this.repository.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteAsync(string groupId, string quizId)

@@ -19,8 +19,17 @@
         public async Task CreateAsync(string groupId, string participantId)
         {
             var participantGroup = new ParticipantGroup() { GroupId = groupId, ParticipantId = participantId };
-            await this.repository.AddAsync(participantGroup);
-            await this.repository.SaveChangesAsync();
+            var participantExists = await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.GroupId == groupId && x.ParticipantId == participantId)
+                .FirstOrDefaultAsync() 
+                != null;
+
+            if (!participantExists)
+            {
+                await this.repository.AddAsync(participantGroup);
+                await this.repository.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteAsync(string groupId, string participantId)
@@ -33,5 +42,12 @@
             this.repository.Delete(participantGroup);
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task<string[]> GetAllParticipantsIdsByGroupIdAsync(string groupId)
+       => await this.repository
+           .AllAsNoTracking()
+           .Where(x => x.GroupId == groupId)
+           .Select(x => x.ParticipantId)
+           .ToArrayAsync();
     }
 }

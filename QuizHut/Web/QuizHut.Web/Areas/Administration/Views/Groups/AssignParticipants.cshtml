@@ -37,7 +37,7 @@
             <div class="row mx-4 mb-4 text-white">
                 <button type="submit" class="btn btn-primary col-md-5 mt-5">Assign Participants</button>
                 <div class="col-1 mr-4"></div>
-                <a asp-action="Edit" asp-controller="Groups" class="btn btn-primary col-md-5 mt-5">Skip</a>
+                <a href="/Administration/Groups/GroupDetails?id=@Model.GroupId" class="btn btn-primary col-md-5 mt-5">Skip</a>
             </div>
         </div>
     </form>

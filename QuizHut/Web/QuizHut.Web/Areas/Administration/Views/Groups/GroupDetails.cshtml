@@ -10,27 +10,27 @@
             <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
                 <div class="container">
                     <h5 class="my-2">Group Details</h5>
-                    @*<button class="navbar-toggler collapsed bg-primary"
+                    <button class="navbar-toggler collapsed bg-primary"
                             type="button" data-toggle="collapse"
-                            data-target="#navbarNavDropdown"
-                            aria-controls="navbarNavDropdown"
+                            data-target="#navbarNavDropdown111"
+                            aria-controls="navbarNavDropdown111"
                             aria-expanded="false"
                             aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown111">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary" asp-action="QuestionInput" asp-controller="Questions">Add Question</a>
+                                <a class="nav-link  btn btn-primary" href="/Administration/Groups/EditName?id=@Model.Id&name=@Model.Name">Edit Name</a>
                             </li>
                             <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary" asp-action="DeleteQuiz" asp-controller="Quizzes">Delete Quiz</a>
-                            </li>
-                            <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary" asp-action="EditDetailsInput" asp-controller="Quizzes">Edit</a>
+                                <form method="post" asp-action="Delete" asp-controller="Groups">
+                                    <input type="hidden" name="id" value="@Model.Id" />
+                                    <button type="submit" class="nav-link  btn btn-primary col-12">Delete Group</button>
+                                </form>
                             </li>
                         </ul>
-                    </div>*@
+                    </div>
                 </div>
             </nav>
             <div class="component">
@@ -59,13 +59,13 @@
                     <h5 class="mb-0">Assigned Quizzes</h5>
                     <button class="navbar-toggler collapsed bg-primary"
                             type="button" data-toggle="collapse"
-                            data-target="#navbarNavDropdown"
-                            aria-controls="navbarNavDropdown"
+                            data-target="#navbarNavDropdown222"
+                            aria-controls="navbarNavDropdown222"
                             aria-expanded="false"
                             aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item m-1">
                                 <a href="/Administration/Groups/AddNewQuiz?id=@Model.Id" class="nav-link  btn btn-primary">Add New</a>
@@ -101,16 +101,16 @@
                     <h5 class="mb-0">Participants</h5>
                     <button class="navbar-toggler collapsed bg-primary"
                             type="button" data-toggle="collapse"
-                            data-target="#navbarNavDropdown"
-                            aria-controls="navbarNavDropdown"
+                            data-target="#navbarNavDropdown333"
+                            aria-controls="navbarNavDropdown333"
                             aria-expanded="false"
                             aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                    <div class="navbar-collapse text-center collapse" id="navbarNavDropdown333">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary" asp-action="DeleteQuiz" asp-controller="Quizzes">Add New</a>
+                                <a class="nav-link  btn btn-primary" href="/Administration/Groups/AddParticipants?id=@Model.Id">Add New</a>
                             </li>
                         </ul>
                     </div>
@@ -137,5 +137,4 @@
                 </table>
             </div>
         </div>
-        <a class="btn btn-primary offset-md-4 col-md-4 mt-3 text-white d-inline-block" asp-action="" asp-controller="">Go To Dashboard</a>
     </div>

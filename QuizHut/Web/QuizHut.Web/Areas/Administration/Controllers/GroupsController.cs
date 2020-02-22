@@ -140,5 +140,35 @@
             await this.service.AssignQuizzesToGroupAsync(model.GroupId, quizzesIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
+
+        public async Task<IActionResult> AddParticipants(string id)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var participants = await this.userService.GetAllByUserIdAsync<ParticipantViewModel>(userId);
+            participants = await this.service.FilterParticipantsThatAreNotAssignedToThisGroup(id, participants);
+            var model = new GroupWithParticipantsViewModel() { GroupId = id, Participants = participants };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddParticipants(GroupWithParticipantsViewModel model)
+        {
+            var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+            await this.service.AssignParticipantsToGroupAsync(model.GroupId, participantsIds);
+            return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
+        }
+
+        public IActionResult EditName(string id, string name)
+        {
+            var model = new EditGroupNameInputViewModel() { Id = id, Name = name };
+            return this.View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditName(EditGroupNameInputViewModel model)
+        {
+            await this.service.UpdateNameAsync(model.Id, model.Name);
+            return this.RedirectToAction("GroupDetails", new { id = model.Id});
+        }
     }
 }

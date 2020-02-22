@@ -126,5 +126,19 @@
             var assignedQuizzesIds = await this.quizGroupService.GetAllQizzesIdsByGroupIdAsync(qroupId);
             return quizzes.Where(x => !assignedQuizzesIds.Contains(x.Id)).ToList();
         }
+
+        public async Task<IList<ParticipantViewModel>> FilterParticipantsThatAreNotAssignedToThisGroup(string qroupId, IList<ParticipantViewModel> participants)
+        {
+            var assignedparticipantsIds = await this.participantGroupService.GetAllParticipantsIdsByGroupIdAsync(qroupId);
+            return participants.Where(x => !assignedparticipantsIds.Contains(x.Id)).ToList();
+        }
+
+        public async Task UpdateNameAsync(string groupId, string newName)
+        {
+            var group = await this.repository.AllAsNoTracking().Where(x => x.Id == groupId).FirstOrDefaultAsync();
+            group.Name = newName;
+            this.repository.Update(group);
+            await this.repository.SaveChangesAsync();
+        }
     }
 }

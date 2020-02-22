@@ -19,7 +19,7 @@
                 <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item m-1">
-                            <input type="email" class="mt-1 mr-1" name="email" value="" />
+                            <input type="email" class="mt-1 mr-1 px-2" name="email" value="" />
                         </li>
                         <li class="nav-item m-1">
                             <button type="submit" class="btn btn-light" asp-action="Add" asp-controller="Participants">
@@ -44,15 +44,15 @@
                 {
                     @foreach (var participant in Model.Participants)
                     {
-                        <tr class="table-white">
+                        <tr class="table-warning">
                             <th scope="row">@participant.FullName</th>
                             <td>@participant.Email</td>
                             <td>
                                 <div class="component  navbar-expand-lg text-right">
                                     <ul class="navbar-nav ml-auto">
                                         <li class="nav-item m-1">
-                                            <a class="nav-link  btn btn-white" asp-action="Delete" asp-controller="Participants">
-                                                <i class="far fa-times-circle"></i>
+                                            <a class="nav-link  btn btn-white" href="/Administration/Participants/Delete?id=@participant.Id">
+                                                Delete
                                             </a>
                                         </li>
                                     </ul>

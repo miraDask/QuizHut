@@ -43,13 +43,23 @@
             return false;
         }
 
+        public async Task DeleteAsync(string id, string managerId)
+        {
+            var participantToRemove = await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
+
+            participantToRemove.ManagerId = null;
+            this.repository.Update(participantToRemove);
+            await this.repository.SaveChangesAsync();
+        }
+
         public async Task<IList<T>> GetAllByUserIdAsync<T>(string id)
           => await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.ManagerId == id)
                 .To<T>()
                 .ToListAsync();
-
-
     }
 }

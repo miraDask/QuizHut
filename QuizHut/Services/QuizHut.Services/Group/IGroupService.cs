@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using QuizHut.Web.ViewModels.Groups;
+    using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
 
     public interface IGroupService
@@ -22,10 +23,14 @@
 
         Task DeleteAsync(string groupId);
 
+        Task UpdateNameAsync(string groupId, string newName);
+
         Task DeleteQuizFromGroupAsync(string groupId, string quizId);
 
         Task DeleteParticipantFromGroupAsync(string groupId, string participantId);
 
         Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisGroup(string qroupId, IList<QuizAssignViewModel> quizzes);
+
+        Task<IList<ParticipantViewModel>> FilterParticipantsThatAreNotAssignedToThisGroup(string qroupId, IList<ParticipantViewModel> participants);
     }
 }

@@ -33,7 +33,14 @@
 
             // if participantIsAded == false -> display error : participant doesn't exist
 
-            return RedirectToAction("AllParticipantsAddedByUser");
+            return this.RedirectToAction("AllParticipantsAddedByUser");
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            await this.service.DeleteAsync(id, userId);
+            return this.RedirectToAction("AllParticipantsAddedByUser");
         }
     }
 }
