@@ -18,10 +18,10 @@
 
         public string Password { get; set; }
 
-        [RegularExpression(@"^[0-2][0-3]:[0-5][0-9]$", ErrorMessage = "Input format should be 'HH:MM'")]
+        [RegularExpression(@"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Input format should be 'HH:MM'")]
         public string ActiveFrom { get; set; }
 
-        [RegularExpression(@"^[0-2][0-3]:[0-5][0-9]$", ErrorMessage = "Input format should be 'HH:MM'")]
+        [RegularExpression(@"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Input format should be 'HH:MM'")]
         public string ActiveTo { get; set; }
 
         public int? Timer { get; set; }
