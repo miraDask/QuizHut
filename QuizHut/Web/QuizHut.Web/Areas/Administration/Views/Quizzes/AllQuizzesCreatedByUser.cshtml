@@ -32,8 +32,7 @@
             <th scope="col">Name</th>
             <th scope="col">Created On</th>
             <th scope="col">Questions</th>
-            <th scope="col">Activation Date</th>
-            <th scope="col">Duration</th>
+            <th scope="col">Is Active</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -48,8 +47,7 @@
                     <th scope="row">@quiz.Name</th>
                     <td>@quiz.CreatedOn</td>
                     <td>@quiz.QuestionsCount</td>
-                    <td>@quiz.ActivationDate</td>
-                    <td>@quiz.Duration</td>
+                    <td style="color:@quiz.Color"><i class="fas fa-circle"></i></td>
                     <td>
                         <form method="post" class="component  navbar-expand-lg text-right">
                             <ul class="navbar-nav ml-auto">

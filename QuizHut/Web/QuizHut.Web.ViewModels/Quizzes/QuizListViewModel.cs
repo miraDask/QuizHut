@@ -3,6 +3,7 @@
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
+    using System;
 
     public class QuizListViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
@@ -19,9 +20,9 @@
 
         public string CreatedOn { get; set; }
 
-        public string ActivationDate { get; set; }
+        public bool IsActive { get; set; }
 
-        public int Duration { get; set; }
+        public string Color { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -33,8 +34,39 @@
                     x => x.QuestionsCount,
                     opt => opt.MapFrom(x => x.Questions.Count))
                 .ForMember(
-                    x => x.ActivationDate,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime == null ? string.Empty : x.ActivationDateAndTime.Value.ToString("dd/MM/yyyy")));
+                    x => x.IsActive,
+                    opt => opt.MapFrom(x => IsTheQuizActive(x.ActivationDateAndTime, x.DurationOfActivity)))
+                .ForMember(
+                    x => x.Color,
+                    opt => opt.MapFrom(x => IsTheQuizActive(x.ActivationDateAndTime, x.DurationOfActivity) == true ? "green" : "red"));
+        }
+
+        private static bool IsTheQuizActive(DateTime? activationDateAndTime, TimeSpan? duration)
+        {
+            if (activationDateAndTime == null)
+            {
+                return true;
+            }
+
+            var now = DateTime.UtcNow;
+            if (duration != null)
+            {
+                var end = activationDateAndTime.Value.Add((TimeSpan)duration);
+
+                if (now < activationDateAndTime || now > end)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (now.Date < activationDateAndTime.Value.Date || now.Date > activationDateAndTime.Value.Date)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
