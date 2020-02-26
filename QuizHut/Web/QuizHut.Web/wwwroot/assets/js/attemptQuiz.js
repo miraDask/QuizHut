@@ -4,7 +4,13 @@
     var counter = 1;
 
     if (startBtn) {
-        var mins = document.getElementById("minutes").value;
+        var minsInput = document.getElementById("minutes");
+        var mins = null;
+
+        if (minsInput) {
+
+            mins = minsInput.value;
+        }
         var forms = document.getElementsByTagName('form');
         var form;
         if (forms.length > 1) {
@@ -17,16 +23,20 @@
         var prevBtns = Array.from(document.getElementsByTagName('a')).filter(x => x.id.includes('prev'));
         $(nextBtns).click(loadNextQuestion);
         $(prevBtns).click(loadPreviousQuestion);
-        $(startBtn).click(startQuiz)
+        startQuizEventHandler(mins)
     }
 
-    function startQuiz() {
-        $('#clockdiv').show();
-        $('#pagging').show();
-        $('#submit').show();
-        $('#details').hide();
-        startTimer();
-        showQuestion(counter);
+    function startQuizEventHandler(mins) {
+        $(startBtn).click(function () {
+            if (mins) {
+                $('#clockdiv').show();
+                startTimer();
+            }
+            $('#pagging').show();
+            $('#submit').show();
+            $('#details').hide();
+            showQuestion(counter);
+        })
     }
 
     function loadNextQuestion(e) {

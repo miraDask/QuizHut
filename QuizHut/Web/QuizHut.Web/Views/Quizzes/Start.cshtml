@@ -6,9 +6,9 @@
         <div class="flex-grow-1">
             <partial name="_BublesAndCirclesPrtial" />
         </div>
-        @if (Model.Duration != 0)
+        @if (Model.Timer != 0)
         {
-            <input id="minutes" type="hidden" value="@Model.Duration" />
+            <input id="minutes" type="hidden" value="@Model.Timer" />
             <div id="clockdiv" style="display:none">
                 <div>
                     <span class="minutes"></span>
