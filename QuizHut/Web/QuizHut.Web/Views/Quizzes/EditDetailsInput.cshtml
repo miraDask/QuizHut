@@ -25,6 +25,7 @@
                             <div><label asp-for="@Model.Name">Name</label></div>
                             <div class="input-group">
                                 <input type="text" asp-for="@Model.Name" class="form-control" placeholder="...">
+                                <input type="hidden" asp-for="@Model.Id" value="@Model.Id">
                             </div>
                             <div class="mt-4"><label asp-for="@Model.Password">Password</label></div>
 
@@ -40,13 +41,21 @@
                             <div class="input-group">
                                 <input type="text" asp-for="@Model.ActivationDate" class="form-control" placeholder="dd/mm/yyyy">
                             </div>
+                            <div class="input-group">
+                                <label asp-for="@Model.ActiveFrom">
+                                    <input type="time" asp-for="@Model.ActiveFrom" class="form-control" min="07:00" max="22:00">
+                                </label>
+                                <label asp-for="@Model.ActiveTo">
+                                    <input type="time" asp-for="@Model.ActiveTo" class="form-control" min="07:00" max="22:00">
+                                </label>
+                            </div>
                             <p class="card-text text-primary">
                                 <span class=" mr-1">∗</span>
                                 If you want your quiz to be active leave the field blank.
                             </p>
-                            <div class="mt-4"><label asp-for="@Model.Duration">Duration</label></div>
+                            <div class="mt-4"><label asp-for="@Model.Timer">Timer</label></div>
                             <div class="input-group">
-                                <input type="number" asp-for="@Model.Duration" class="form-control">
+                                <input type="number" asp-for="@Model.Timer" class="form-control">
                             </div>
                             <p class="card-text text-primary ">
                                 <span class="mr-1">∗</span>

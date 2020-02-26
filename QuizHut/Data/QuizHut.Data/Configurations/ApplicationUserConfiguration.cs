@@ -48,6 +48,11 @@
                 .HasMany(e => e.Participants)
                 .WithOne(e => e.Manager)
                 .HasForeignKey(e => e.ManagerId);
+
+            user
+                .HasMany(e => e.QuizResults)
+                .WithOne(e => e.Participant)
+                .HasForeignKey(e => e.ParticipantId);
         }
     }
 }

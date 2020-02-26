@@ -14,41 +14,8 @@
                 </div>
                 <div class="col-12 col-md-7 offset-md-1">
                     <div class="row">
-                        <div class="col-md-5">
-                            <div class="component">
-                                <div class="card mb-3 mt-3">
-                                    <div class="card-header text-primary" style="font-size: xx-large">
-                                        <i class="fas fa-folder-plus"></i>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <h4 class="card-title">Make Quiz</h4>
-                                        <p class="card-text">Save Or Print...</p>
-                                    </div>
-                                    <div class="card-footer pb-3 mt-3">
-                                        <a class="btn btn-outline-primary" asp-action="DetailsInput" asp-controller="Quizzes">Enter</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <form class="col-12 col-md-5 offset-md-1" asp-action="Start" asp-controller="Quizzes">
-                            <div class="component">
-                                <div class="card mb-3 mt-3">
-                                    <div class="card-header text-warning" style="font-size: xx-large">
-                                        <i class="fas fa-folder-open"></i>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <h4 class="card-title">Take Quiz</h4>
-
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Password..." name="password">
-                                        </div>
-                                    </div>
-                                    <div class="card-footer pb-3">
-                                        <button type="submit" class="btn btn-outline-primary">Enter</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        <partial name="_MakeQuizPartial">
+                        <partial name="_TakeQuizPartial">
                     </div>
                 </div>
             </div>
@@ -57,8 +24,10 @@
             <div class="container">
                 <div class="text-center mb-5">
                     <h2>About</h2>
-                    <p class="lead">Depending on your needs QuizHut can be just a simple tool for making and taking quizzes online
-                    or whole quiz centered network, that can be used for educational purposes.</p>
+                    <p class="lead">
+                        Depending on your needs QuizHut can be just a simple tool for making and taking quizzes online
+                        or whole quiz centered network, that can be used for educational purposes.
+                    </p>
                 </div>
             </div>
             <div class="blog-posts p-2">
@@ -78,7 +47,7 @@
                                             You will be able to store all of your quizzes in one place, order them by categories and modify them.
                                             Registering as Teacher gives you opportunity to make Groups, where you can add another users and assign them quizzes,
                                             witch will appear directly in their accounts. This is functionality can be used for exams, because you will receive their results
-                                            right after they finish the quiz...or just for fun. 
+                                            right after they finish the quiz...or just for fun.
                                         </p>
                                     </div>
                                     <div class="card-footer">
@@ -115,8 +84,10 @@
                                     </div>
                                     <div class="card-body">
                                         <h4 class="card-title">Export To PDF</h4>
-                                        <p class="card-text" style="display:none">If you only want to print your quiz, you can make it with just one click
-                                        at the end of the process of creating.</p>
+                                        <p class="card-text" style="display:none">
+                                            If you only want to print your quiz, you can make it with just one click
+                                            at the end of the process of creating.
+                                        </p>
                                     </div>
                                     <div class="card-footer">
                                         <a class="btn btn-outline-danger read">Read More</a>

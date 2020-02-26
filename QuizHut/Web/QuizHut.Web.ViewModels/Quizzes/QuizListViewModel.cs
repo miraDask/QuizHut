@@ -34,7 +34,7 @@
                     opt => opt.MapFrom(x => x.Questions.Count))
                 .ForMember(
                     x => x.ActivationDate,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime.Value.ToString("dd/MM/yyyy")));
+                    opt => opt.MapFrom(x => x.ActivationDateAndTime == null ? string.Empty : x.ActivationDateAndTime.Value.ToString("dd/MM/yyyy")));
         }
     }
 }

@@ -9,7 +9,6 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuizService : IQuizService
     {
@@ -20,16 +19,15 @@
             this.repository = repository;
         }
 
-        public async Task<string> AddNewQuizAsync(string name, string description, string activationDate, int? duration, string creatorId, string password)
+        public async Task<string> AddNewQuizAsync(string name, string description, string activationDate, string activeFrom, string activeTo, int? timer, string creatorId, string password)
         {
-            DateTime? date = null;
-
             var quiz = new Quiz
             {
                 Name = name,
                 Description = description,
-                ActivationDateAndTime = activationDate == null ? date : DateTime.Parse(activationDate),
-                Duration = duration,
+                ActivationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom),
+                DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo),
+                Timer = timer,
                 CreatorId = creatorId,
                 Password = password,
             };
@@ -68,15 +66,15 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(string id, string name, string description, string activationDate, int? duration, string password)
+        public async Task UpdateAsync(string id, string name, string description, string activationDate, string activeFrom, string activeTo, int? timer, string password)
         {
-            DateTime? date = null;
 
             var quiz = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             quiz.Name = name;
             quiz.Description = description;
-            quiz.ActivationDateAndTime = activationDate == null ? date : DateTime.Parse(activationDate);
-            quiz.Duration = duration;
+            quiz.ActivationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            quiz.DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
+            quiz.Timer = timer;
             quiz.Password = password;
 
             this.repository.Update(quiz);
@@ -88,6 +86,21 @@
             .Where(x => x.Password == password)
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
+
+        private DateTime? GetActivationDateAndTime(string activationDate, string activeFrom)
+        {
+            DateTime? nullableDate = null;
+
+            return activationDate == null
+                ? nullableDate : DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
+        }
+
+        private TimeSpan? GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
+        {
+            TimeSpan? nulllableTimeSpan = null;
+            return activationDate == null
+                ? nulllableTimeSpan : (DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom)));
+        }
 
     }
 }

@@ -5,6 +5,11 @@
 
 <div id="side-bar" class="col-12 col-md-2 border-right">
     <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+            <form class="my-2">
+                <button class="btn btn-primary manage-account-btn" asp-area="Administration" asp-action="Index" asp-controller="Home">Home</button>
+            </form>
+        </li>
         @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
         {
             <li class="nav-item active">
@@ -13,6 +18,7 @@
                 </form>
             </li>
         }
+
         <li class="nav-item active">
             <form class="my-2">
                 <button class="btn btn-primary manage-account-btn" asp-area="Administration" asp-action="AllGroupsCreatedByUser" asp-controller="Groups">Groups</button>

@@ -40,7 +40,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             model.CreatorId = userId;
-            var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.ActivationDate, model.Duration, model.CreatorId, model.Password);
+            var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.ActivationDate, model.ActiveFrom, model.ActiveTo, model.Timer, model.CreatorId, model.Password);
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
             return this.RedirectToAction("QuestionInput", "Questions");
         }
@@ -123,9 +123,13 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditDetailsInput()
+        public async Task<IActionResult> EditDetailsInput(string id)
         {
-            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+            {
+                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
+            }
+
             var editModel = await this.quizService.GetQuizByIdAsync<EditDetailsViewModel>(id);
 
             return this.View(editModel);
@@ -134,10 +138,9 @@
         [HttpPost]
         public async Task<IActionResult> EditDetails(EditDetailsViewModel model)
         {
-            var id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            await this.quizService.UpdateAsync(id, model.Name, model.Description, model.ActivationDate, model.Duration, model.Password);
+            await this.quizService.UpdateAsync(model.Id, model.Name, model.Description, model.ActivationDate, model.ActiveFrom, model.ActiveTo, model.Timer, model.Password);
 
-            return this.RedirectToAction("Display");
+            return this.RedirectToAction("Display", new { id = model.Id });
         }
     }
 }
