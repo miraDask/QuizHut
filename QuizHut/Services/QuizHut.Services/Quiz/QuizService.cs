@@ -91,14 +91,19 @@
         {
             DateTime? nullableDate = null;
 
-            return activationDate == null
-                ? nullableDate : DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
+            if (activationDate == null)
+            {
+                return nullableDate;
+            }
+
+            return activeFrom == null
+                ? DateTime.Parse(activationDate) : DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
         }
 
         private TimeSpan? GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
         {
             TimeSpan? nulllableTimeSpan = null;
-            return activationDate == null
+            return activeFrom == null
                 ? nulllableTimeSpan : (DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom)));
         }
 

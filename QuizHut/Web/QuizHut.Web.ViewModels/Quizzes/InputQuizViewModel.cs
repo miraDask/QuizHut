@@ -44,10 +44,16 @@
                     opt => opt.MapFrom(x => x.ActivationDateAndTime != null ? x.ActivationDateAndTime.Value.ToString("dd/MM/yyyy") : string.Empty))
                .ForMember(
                     x => x.ActiveFrom,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime != null ? $"{x.ActivationDateAndTime.Value.Hour}:{x.ActivationDateAndTime.Value.Minute}" : string.Empty))
+                    opt => opt.MapFrom(
+                    x => x.DurationOfActivity != null
+                    ? $"{x.ActivationDateAndTime.Value.Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Minute.ToString("D2")}" 
+                    : string.Empty))
                .ForMember(
                     x => x.ActiveTo,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime != null ? $"{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Hour}:{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Minute}" : string.Empty));
+                    opt => opt.MapFrom(
+                    x => x.DurationOfActivity != null
+                    ? $"{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Minute.ToString("D2")}"
+                    : string.Empty));
         }
     }
 }
