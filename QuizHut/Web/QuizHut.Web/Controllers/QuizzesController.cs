@@ -125,10 +125,10 @@
         [HttpGet]
         public async Task<IActionResult> EditDetailsInput(string id)
         {
-            //if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
-            //{
-            //    id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            //}
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
 
             var editModel = await this.quizService.GetQuizByIdAsync<EditDetailsViewModel>(id);
 

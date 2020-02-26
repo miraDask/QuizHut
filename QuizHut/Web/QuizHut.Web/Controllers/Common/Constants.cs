@@ -25,5 +25,7 @@
         public const string IsRightAnswer = "IsRightAnswer";
 
         public const string AnswerForEditingId = "answerEdit";
+
+        public const string AdminLayout = "_LayoutAdmin";
     }
 }
