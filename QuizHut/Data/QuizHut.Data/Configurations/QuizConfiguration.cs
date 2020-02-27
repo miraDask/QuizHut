@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using QuizHut.Data.Models;
 
-    using static QuizHut.Data.Validations.DataValidation.Quiz;
+    using QuizHut.Data.Validations;
 
     public class QuizConfiguration : IEntityTypeConfiguration<Quiz>
     {
@@ -23,8 +23,12 @@
                .HasForeignKey(qr => qr.QuizId);
 
             quiz.Property(q => q.Name)
-                .HasMaxLength(NameMaxLength)
+                .HasMaxLength(DataValidation.Quiz.NameMaxLength)
                 .IsRequired();
+
+            quiz.Property(q => q.Password)
+               .HasMaxLength(DataValidation.Quiz.PasswordMaxLength)
+               .IsRequired();
 
             quiz.HasIndex(x => x.Password)
                 .IsUnique();

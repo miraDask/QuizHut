@@ -1,9 +1,9 @@
-﻿
+﻿@model PasswordInputViewModel
 @{
     ViewData["Title"] = "_TakeQuizPartial";
 }
 
-<form class="col-12 col-md-5 offset-md-1" asp-area="" asp-action="Start" asp-controller="Quizzes">
+<form class="col-12 col-md-5 offset-md-1" asp-action="Start" asp-controller="Quizzes">
     <div class="component">
         <div class="card">
             <div class="card-header text-warning" style="font-size: xx-large">
@@ -13,7 +13,8 @@
                 <h4 class="card-title">Take Quiz</h4>
 
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Password..." name="password">
+                    <input type="text" class="form-control" placeholder="Password..." asp-for="@Model.Password">
+                     <span asp-validation-for="@Model.Password" class="text-danger"></span>
                 </div>
             </div>
             <div class="card-footer pb-3">
@@ -22,4 +23,8 @@
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 

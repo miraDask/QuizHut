@@ -1,7 +1,7 @@
 ﻿@model EditDetailsViewModel
 @{
     ViewData["Title"] = "EditDetailsInput";
-    Layout = ViewData["Layout"] == null ? Layout : (string)ViewData["Layout"];
+   Layout = (string)ViewData["Layout"] ?? "_Layout";
 }
 
 <div class="container-fluid">

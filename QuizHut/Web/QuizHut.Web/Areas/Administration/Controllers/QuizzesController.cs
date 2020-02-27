@@ -33,5 +33,16 @@
             return this.View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Start(PasswordInputViewModel model)
+        {
+            var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
+            if (id == null)
+            {
+                return this.RedirectToAction("Index", "Home", new { password = model.Password, area = "Administration" });
+            }
+
+            return this.RedirectToAction("Start", "Quizzes", new { area = string.Empty, password = model.Password });
+        }
     }
 }

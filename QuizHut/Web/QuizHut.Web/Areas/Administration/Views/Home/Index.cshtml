@@ -1,13 +1,23 @@
-﻿@model QuizHut.Web.ViewModels.Administration.Dashboard.IndexViewModel
+﻿@model PasswordInputViewModel
 @{
     this.ViewData["Title"] = "Admin HomePage";
+}
+@if (Model != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>On no!</strong> There is no quiz with password @Model.Password. Try again !
+    </div>
 }
 <div class="col-12 col-md-9 offset-md-2">
     <div class="row">
         <partial name="_MakeQuizPartial">
         <partial name="_TakeQuizPartial">
     </div>
-    </div>
+</div>
 
 
 

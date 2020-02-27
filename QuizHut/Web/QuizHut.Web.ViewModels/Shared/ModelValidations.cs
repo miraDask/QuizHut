@@ -1,19 +1,43 @@
 ﻿namespace QuizHut.Web.ViewModels.Shared
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
 
-    public static class ModelValidations
+    internal static class ModelValidations
     {
-        public static class Quizzes
+        internal static class Quizzes
         {
-            public const int NameMinLength = 3;
+            internal const int NameMinLength = 3;
 
-            public const int NameMaxLength = 1000;
+            internal const int NameMaxLength = 1000;
 
-            public const int ActivationDateLength = 10;
+            internal const int PasswordMinLength = 6;
 
+            internal const int PasswordMaxLength = 10;
+        }
+
+        internal static class Groups
+        {
+            internal const int NameMinLength = 2;
+
+            internal const int NameMaxLength = 50;
+        }
+
+        internal static class Categories
+        {
+            internal const int NameMinLength = 2;
+
+            internal const int NameMaxLength = 50;
+        }
+
+        internal static class Answers
+        {
+            internal const int TextMinLength = 1;
+
+            internal const int TextMaxLength = 1000;
+        }
+
+        internal static class Error
+        {
+            internal const string Message = "The {0} must be at least {2} and at max {1} characters long.";
         }
     }
 }

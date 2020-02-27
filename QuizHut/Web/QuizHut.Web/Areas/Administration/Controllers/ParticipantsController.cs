@@ -26,10 +26,10 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Add(string email)
+        public async Task<IActionResult> Add(ParticipantInputViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var partisipantIsAded = await this.service.AddAsync(email, userId);
+            var partisipantIsAded = await this.service.AddAsync(model.Email, userId);
 
             // if participantIsAded == false -> display error : participant doesn't exist
 

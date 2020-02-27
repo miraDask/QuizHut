@@ -55,7 +55,7 @@
 
             if (this.userManager.GetUserId(this.User) != null)
             {
-                this.ViewData["Layout"] = "~/Views/Shared/_LayoutAdmin.cshtml";
+                this.ViewData["Layout"] = Constants.AdminLayout;
             }
 
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
@@ -69,10 +69,28 @@
             return this.View(model);
         }
 
-        [HttpPost]
+
         public async Task<IActionResult> Start(string password)
         {
             var id = await this.quizService.GetQuizIdByPasswordAsync(password);
+
+            this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
+            var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
+            this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
+            this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
+
+            return this.View(quizModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Start(PasswordInputViewModel model)
+        {
+            var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
+            if (id == null)
+            {
+                return this.RedirectToAction("Index", "Home", new { password = model.Password });
+            }
+
             this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
             var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
             this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);

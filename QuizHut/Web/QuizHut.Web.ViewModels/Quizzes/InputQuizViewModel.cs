@@ -15,17 +15,23 @@
         public string Id { get; set; }
 
         [Required]
-        [StringLength(ModelValidations.Quizzes.NameMaxLength, MinimumLength = ModelValidations.Quizzes.NameMinLength)]
+        [StringLength(
+            ModelValidations.Quizzes.NameMaxLength,
+            ErrorMessage = ModelValidations.Error.Message,
+            MinimumLength = ModelValidations.Quizzes.NameMinLength)]
         public string Name { get; set; }
 
         public string CreatorId { get; set; }
 
         public string Description { get; set; }
 
-        [StringLength(ModelValidations.Quizzes.ActivationDateLength, MinimumLength = ModelValidations.Quizzes.ActivationDateLength)]
         public string ActivationDate { get; set; }
 
         [Required]
+        [StringLength(
+            ModelValidations.Quizzes.PasswordMaxLength,
+            ErrorMessage = ModelValidations.Error.Message,
+            MinimumLength = ModelValidations.Quizzes.PasswordMinLength)]
         public string Password { get; set; }
 
         public string ActiveFrom { get; set; }

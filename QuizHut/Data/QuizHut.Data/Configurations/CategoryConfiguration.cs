@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using QuizHut.Data.Models;
 
-    using static QuizHut.Data.Validations.DataValidation.Category;
+    using QuizHut.Data.Validations;
 
     public class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
@@ -15,7 +15,7 @@
                 .HasForeignKey(q => q.CategoryId);
 
             category.Property(c => c.Name)
-                .HasMaxLength(NameMaxLength)
+                .HasMaxLength(DataValidation.Category.NameMaxLength)
                 .IsRequired();
         }
     }

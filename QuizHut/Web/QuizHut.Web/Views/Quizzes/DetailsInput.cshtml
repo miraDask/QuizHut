@@ -29,11 +29,13 @@
                         <div class="input-group">
                             <input type="text" asp-for="@Model.Name" class="form-control" placeholder="...">
                         </div>
+                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
                         <div class="mt-4"><label asp-for="@Model.Password">Password</label></div>
 
                         <div class="input-group">
                             <input type="text" asp-for="@Model.Password" class="form-control" placeholder="...">
                         </div>
+                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
                         <p class="card-text text-primary">
                             <span class=" mr-1">∗</span>
                             In order to be accessible you should set password to your quiz.
@@ -49,9 +51,9 @@
                         </div>
                         <div class="input-group">
                             <label asp-for="@Model.ActiveFrom">
-                                Active from : 
-                            <input type="time" asp-for="@Model.ActiveFrom" class="form-control">
-                                </label>
+                                Active from :
+                                <input type="time" asp-for="@Model.ActiveFrom" class="form-control">
+                            </label>
                             <label asp-for="@Model.ActiveTo">
                                 To :
                                 <input type="time" asp-for="@Model.ActiveTo" class="form-control">
@@ -87,3 +89,7 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

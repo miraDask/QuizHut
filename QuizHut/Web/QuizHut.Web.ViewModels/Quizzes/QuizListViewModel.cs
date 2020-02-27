@@ -1,9 +1,10 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
+    using System;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-    using System;
 
     public class QuizListViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {

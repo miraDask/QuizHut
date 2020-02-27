@@ -4,11 +4,17 @@
 
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Web.ViewModels;
+    using QuizHut.Web.ViewModels.Quizzes;
 
     public class HomeController : BaseController
     {
-        public IActionResult Index()
+        public IActionResult Index(string password)
         {
+            if (password != null)
+            {
+                return this.View(new PasswordInputViewModel() { Password = password });
+            }
+
             return this.View();
         }
 

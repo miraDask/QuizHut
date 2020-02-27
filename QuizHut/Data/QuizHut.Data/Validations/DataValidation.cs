@@ -14,22 +14,18 @@
 
         internal static class Category
         {
-            internal const int NameMaxLength = 100;
+            internal const int NameMaxLength = 50;
         }
 
         internal static class Group
         {
-            internal const int NameMaxLength = 100;
+            internal const int NameMaxLength = 50;
         }
 
         internal static class Quiz
         {
             internal const int NameMaxLength = 1000;
-        }
-
-        internal static class QuizPassword
-        {
-            internal const int TextMaxLength = 10;
+            internal const int PasswordMaxLength = 10;
         }
     }
 }

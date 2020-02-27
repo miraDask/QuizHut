@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using QuizHut.Data.Models;
 
-    using static QuizHut.Data.Validations.DataValidation.Group;
+    using QuizHut.Data.Validations;
 
     public class GroupConfiguration : IEntityTypeConfiguration<Group>
     {
@@ -19,8 +19,8 @@
              .HasForeignKey(q => q.GroupId);
 
             group.Property(g => g.Name)
-             .IsRequired()
-             .HasMaxLength(NameMaxLength);
+             .HasMaxLength(DataValidation.Group.NameMaxLength)
+             .IsRequired();
         }
     }
 }

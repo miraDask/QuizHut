@@ -50,7 +50,7 @@
     background-color: #1D1C1D !important
 }
 
-.filter {
+/*.filter {
     display: block;
     content: "";
     position: absolute;
@@ -100,7 +100,7 @@
 
     .filter.filter-dark {
         background-color: #0a0c0d
-    }
+    }*/
 
 .btn, .navbar .navbar-nav > a.btn {
     font-weight: 600;
