@@ -32,14 +32,36 @@
 
         public IActionResult DetailsInput()
         {
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             return this.View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddDetails(InputQuizViewModel model)
+        public async Task<IActionResult> DetailsInput(InputQuizViewModel model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            bool passwordIsValid = await this.quizService.PasswordExists(model.Password);
+            if (!passwordIsValid)
+            {
+                return this.View(model);
+            }
+
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             var userId = this.userManager.GetUserId(this.User);
             model.CreatorId = userId;
+            model.PasswordIsValid = true;
             var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.ActivationDate, model.ActiveFrom, model.ActiveTo, model.Timer, model.CreatorId, model.Password);
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
             return this.RedirectToAction("QuestionInput", "Questions");

@@ -1,12 +1,12 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Quiz;
     using QuizHut.Web.ViewModels.Quizzes;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class QuizzesController : AdministrationController
     {

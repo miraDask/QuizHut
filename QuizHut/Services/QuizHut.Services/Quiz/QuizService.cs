@@ -107,5 +107,7 @@
                 ? nulllableTimeSpan : (DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom)));
         }
 
+        public async Task<bool> PasswordExists(string password)
+        => await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Password == password) == null;
     }
 }

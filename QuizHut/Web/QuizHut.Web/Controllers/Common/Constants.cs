@@ -26,7 +26,7 @@
 
         public const string AnswerForEditingId = "answerEdit";
 
-        public const string AdminLayout = "~/Views/Shared/_LayoutAdmin.cshtml";
+        public const string AdminLayout = "_LayoutAdmin";
 
         public const string NotValidPasswordErrorText = "There is no quiz with password {0}. Try again.";
     }
