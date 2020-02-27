@@ -43,20 +43,20 @@
         [HttpPost]
         public async Task<IActionResult> DetailsInput(InputQuizViewModel model)
         {
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
             }
 
-            bool passwordIsValid = await this.quizService.PasswordExists(model.Password);
-            if (!passwordIsValid)
+            var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
+            if (quizWithSamePasswordId != null)
             {
                 return this.View(model);
-            }
-
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
             }
 
             var userId = this.userManager.GetUserId(this.User);
@@ -166,13 +166,31 @@
             }
 
             var editModel = await this.quizService.GetQuizByIdAsync<EditDetailsViewModel>(id);
+            editModel.PasswordIsValid = true;
 
             return this.View(editModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditDetails(EditDetailsViewModel model)
+        public async Task<IActionResult> EditDetailsInput(EditDetailsViewModel model)
         {
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
+            if (quizWithSamePasswordId != null && quizWithSamePasswordId != model.Id)
+            {
+                model.PasswordIsValid = false;
+                return this.View(model);
+            }
+
             await this.quizService.UpdateAsync(model.Id, model.Name, model.Description, model.ActivationDate, model.ActiveFrom, model.ActiveTo, model.Timer, model.Password);
 
             return this.RedirectToAction("Display", new { id = model.Id });

@@ -87,6 +87,13 @@
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
 
+        public async Task<string> GetIdByPassword(string password)
+       => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.Password == password)
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync();
+
         private DateTime? GetActivationDateAndTime(string activationDate, string activeFrom)
         {
             DateTime? nullableDate = null;
@@ -106,8 +113,5 @@
             return activeFrom == null
                 ? nulllableTimeSpan : (DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom)));
         }
-
-        public async Task<bool> PasswordExists(string password)
-        => await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Password == password) == null;
     }
 }

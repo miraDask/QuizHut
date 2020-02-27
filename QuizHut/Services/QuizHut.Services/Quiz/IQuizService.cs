@@ -19,6 +19,6 @@
 
         Task UpdateAsync(string id, string name, string description, string activationDate, string activeFrom, string activeTo, int? timer, string password);
 
-        Task<bool> PasswordExists(string password);
+        Task<string> GetIdByPassword(string password);
     }
 }

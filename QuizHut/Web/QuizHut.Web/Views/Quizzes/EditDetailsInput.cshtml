@@ -1,15 +1,29 @@
 ﻿@model EditDetailsViewModel
+@inject SignInManager<ApplicationUser> SignInManager
 @{
     ViewData["Title"] = "EditDetailsInput";
-   Layout = (string)ViewData["Layout"] ?? "_Layout";
+    Layout = (string)ViewData["Layout"] ?? "_Layout";
 }
 
-<div class="container-fluid">
-    <div class="flex-grow-1">
-        <partial name="_BublesAndCirclesPrtial" />
+@if (!Model.PasswordIsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>On no!</strong> There is allready quiz with password @Model.Password. Try again !
     </div>
+}
+<div class="container-fluid">
+    @if (!SignInManager.IsSignedIn(this.User))
+    {
+        <div class="flex-grow-1">
+            <partial name="_BublesAndCirclesPrtial" />
+        </div>
+    }
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form id="quizNameCard" method="post" asp-action="EditDetails" asp-controller="Quizzes" class="col-11 ml-4">
+        <form id="quizNameCard" method="post" class="col-11 ml-4">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -26,15 +40,15 @@
                         <div><label asp-for="@Model.Name">Name</label></div>
                         <div class="input-group">
                             <input type="text" asp-for="@Model.Name" class="form-control" placeholder="...">
-                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
                             <input type="hidden" asp-for="@Model.Id" value="@Model.Id">
                         </div>
+                        <span asp-validation-for="@Model.Name" class="text-danger"></span>
                         <div class="mt-4"><label asp-for="@Model.Password">Password</label></div>
 
                         <div class="input-group">
                             <input type="text" asp-for="@Model.Password" class="form-control" placeholder="...">
-                            <span asp-validation-for="@Model.Password" class="text-danger"></span>
                         </div>
+                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
                         <div class="mt-4"><label asp-for="@Model.Description">Description</label></div>
                         <textarea class="form-control" asp-for="@Model.Description">
                         </textarea>
@@ -45,21 +59,19 @@
 
                         <div class="input-group">
                             <input type="text" asp-for="@Model.ActivationDate" class="form-control" placeholder="dd/mm/yyyy">
-                            <span asp-validation-for="@Model.ActivationDate" class="text-danger"></span>
-
                         </div>
+                        <span asp-validation-for="@Model.ActivationDate" class="text-danger"></span>
                         <div class="input-group mt-2">
                             <label asp-for="@Model.ActiveFrom">
                                 <span>Active From:</span>
                                 <input type="text" asp-for="@Model.ActiveFrom" class="form-control" placeholder="hh:mm">
-                                <span asp-validation-for="@Model.ActiveFrom" class="text-danger"></span>
-
                             </label>
+                            <span asp-validation-for="@Model.ActiveFrom" class="text-danger"></span>
                             <label asp-for="@Model.ActiveTo">
                                 <span>To:</span>
                                 <input type="text" asp-for="@Model.ActiveTo" class="form-control" placeholder="hh:mm">
-                                <span asp-validation-for="@Model.ActiveTo" class="text-danger"></span>
                             </label>
+                            <span asp-validation-for="@Model.ActiveTo" class="text-danger"></span>
                         </div>
                         <p class="card-text text-primary">
                             <span class=" mr-1">∗</span>
@@ -68,7 +80,6 @@
                         <div class="mt-4"><label asp-for="@Model.Timer">Timer</label></div>
                         <div class="input-group">
                             <input type="number" asp-for="@Model.Timer" class="form-control">
-                            <span asp-validation-for="@Model.Timer" class="text-danger"></span>
                         </div>
                         <p class="card-text text-primary ">
                             <span class="mr-1">∗</span>
@@ -84,7 +95,6 @@
         </form>
     </div>
 </div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

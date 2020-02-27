@@ -2,29 +2,44 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
+    using QuizHut.Web.ViewModels.Shared;
 
     public class EditDetailsViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
+        [Required]
+        [StringLength(
+           ModelValidations.Quizzes.NameMaxLength,
+           ErrorMessage = ModelValidations.Error.RangeMessage,
+           MinimumLength = ModelValidations.Quizzes.NameMinLength)]
         public string Name { get; set; }
 
         public string Description { get; set; }
 
+        [RegularExpression(ModelValidations.RegEx.Date, ErrorMessage = ModelValidations.Error.DateFormatMessage)]
         public string ActivationDate { get; set; }
 
+        [Required]
+        [StringLength(
+           ModelValidations.Quizzes.PasswordMaxLength,
+           ErrorMessage = ModelValidations.Error.RangeMessage,
+           MinimumLength = ModelValidations.Quizzes.PasswordMinLength)]
         public string Password { get; set; }
 
-        [RegularExpression(@"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Input format should be 'HH:MM'")]
+        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
         public string ActiveFrom { get; set; }
 
-        [RegularExpression(@"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Input format should be 'HH:MM'")]
+        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
         public string ActiveTo { get; set; }
 
         public int? Timer { get; set; }
+
+        public bool PasswordIsValid { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
