@@ -1,11 +1,12 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.User;
     using QuizHut.Web.ViewModels.Participants;
-    using System.Threading.Tasks;
 
     public class ParticipantsController : AdministrationController
     {
@@ -22,16 +23,31 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var participants = await this.service.GetAllByUserIdAsync<ParticipantViewModel>(userId);
-            var model = new AllParticipantsAddedByUserViewModel() { Participants = participants };
+            var model = new AllParticipantsAddedByUserViewModel() 
+            {
+                Participants = participants,
+                NewParticipant = new ParticipantInputViewModel(),
+            };
+
             return this.View(model);
         }
 
-        public async Task<IActionResult> Add(ParticipantInputViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> AllParticipantsAddedByUser(AllParticipantsAddedByUserViewModel model)
         {
-            var userId = this.userManager.GetUserId(this.User);
-            var partisipantIsAded = await this.service.AddAsync(model.Email, userId);
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
 
-            // if participantIsAded == false -> display error : participant doesn't exist
+            var userId = this.userManager.GetUserId(this.User);
+            var partisipantIsAdded = await this.service.AddAsync(model.NewParticipant.Email, userId);
+
+            if (!partisipantIsAdded)
+            {
+                model.NewParticipant.IsNotAdded = true;
+                return this.View(model);
+            }
 
             return this.RedirectToAction("AllParticipantsAddedByUser");
         }

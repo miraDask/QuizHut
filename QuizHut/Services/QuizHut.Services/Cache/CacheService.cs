@@ -34,7 +34,7 @@
         {
             var model = await this.GetQuizModelFromCacheAsync();
             var question = model.Questions.Where(x => x.Id == id).FirstOrDefault();
-            question.IsDeleted = true;
+            //question.IsDeleted = true;
             await this.SaveQuizModelToCacheAsync(model);
         }
 

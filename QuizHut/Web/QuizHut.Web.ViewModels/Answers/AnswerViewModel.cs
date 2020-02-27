@@ -11,8 +11,10 @@
         public string Id { get; set; }
 
         [Required]
-        [MinLength(ModelValidations.Answers.TextMinLength)]
-        [MaxLength(ModelValidations.Answers.TextMaxLength)]
+        [StringLength(
+            ModelValidations.Answers.TextMaxLength,
+            ErrorMessage = ModelValidations.Error.RangeMessage,
+            MinimumLength = ModelValidations.Answers.TextMinLength)]
         public string Text { get; set; }
 
         public bool IsRightAnswer { get; set; }

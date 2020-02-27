@@ -35,6 +35,13 @@
             internal const int TextMaxLength = 1000;
         }
 
+        internal static class Question
+        {
+            internal const int TextMinLength = 3;
+
+            internal const int TextMaxLength = 1000;
+        }
+
         internal static class Error
         {
             internal const string RangeMessage = "The {0} must be at least {2} and at max {1} characters long.";

@@ -27,23 +27,17 @@
         [HttpGet]
         public IActionResult AnswerInput()
         {
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             return this.View();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddNewAnswerAjaxCall(string questionId, string answerId)
-        //{
-        //    var answer = new AnswerViewModel() { QuestionId = questionId, Id = answerId };
-        //    var quizViewModel = await this.cacheService.GetQuizModelFromCacheAsync();
-        //    quizViewModel.Questions.Where(x => x.Id == questionId).FirstOrDefault().Answers.Add(answer);
-        //    await this.cacheService.SaveQuizModelToCacheAsync(quizViewModel);
-        //    return this.PartialView("_AnswerDetailsPartial", answer);
-        //}
 
         [HttpPost]
         public async Task<IActionResult> AddNewAnswer(AnswerViewModel model)
         {
-
             var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
             await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
 
@@ -53,6 +47,11 @@
         [HttpPost]
         public IActionResult ApendAnswerInput(string id)
         {
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             var model = new AnswerViewModel() { QuestionId = id };
             return this.View(model);
         }
@@ -63,7 +62,7 @@
             await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
             if (this.userManager.GetUserId(this.User) != null)
             {
-                this.ViewData["Layout"] = "~/Views/Shared/_LayoutAdmin.cshtml";
+                this.ViewData["Layout"] = Constants.AdminLayout;
             }
 
             return this.RedirectToAction("Display", "Quizzes");
@@ -73,6 +72,11 @@
         [HttpGet]
         public async Task<IActionResult> EditAnswerInput(string id)
         {
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             var model = await this.answerService.GetAnswerModelAsync(id);
 
             return this.View(model);
@@ -92,12 +96,5 @@
 
             return this.RedirectToAction("Display", "Quizzes");
         }
-
-        //[HttpPost]
-        //public async Task<JsonResult> RemoveAnswer(string id)
-        //{
-        //    await this.cacheService.DeleteAnswerAsync(id);
-        //    return this.Json("Ok");
-        //}
     }
 }

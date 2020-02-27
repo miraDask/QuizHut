@@ -6,6 +6,8 @@
     {
         public string UserId { get; set; }
 
+        public ParticipantInputViewModel NewParticipant { get; set; }
+
         public IList<ParticipantViewModel> Participants { get; set; } = new List<ParticipantViewModel>();
     }
 }

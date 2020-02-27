@@ -33,6 +33,11 @@
                 this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
             }
 
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             return this.View();
         }
 
@@ -48,6 +53,11 @@
         [HttpPost]
         public IActionResult EditQuestionInput(QuestionViewModel model)
         {
+            if (this.userManager.GetUserId(this.User) != null)
+            {
+                this.ViewData["Layout"] = Constants.AdminLayout;
+            }
+
             return this.View(model);
         }
 
@@ -57,7 +67,7 @@
 
             if (this.userManager.GetUserId(this.User) != null)
             {
-                this.ViewData["Layout"] = "~/Views/Shared/_LayoutAdmin.cshtml";
+                this.ViewData["Layout"] = Constants.AdminLayout;
             }
 
             return this.RedirectToAction("Display", "Quizzes");

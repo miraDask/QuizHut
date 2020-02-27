@@ -1,6 +1,7 @@
 ﻿@model QuestionViewModel
 @{
     ViewData["Title"] = "EditQuestionInput";
+    Layout = (string)ViewData["Layout"] ?? "_Layout";
 }
 
 <div class="container-fluid">
@@ -26,9 +27,11 @@
                             <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
                             <input type="text" asp-for="@Model.Text" class="form-control" value="@Model.Text">
                         </div>
+                        <span asp-validation-for="@Model.Text" class="text-danger"></span>
                         <div class="row mx-1 text-white">
                             <button type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="Edit" asp-controller="Questions">Save Changes</button>
                             <div class="col-1 mr-4"></div>
+                            <a class="btn btn-primary col-md-5 mt-5" href="/Quizzes/Display">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -37,4 +40,7 @@
     </div>
 </div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 

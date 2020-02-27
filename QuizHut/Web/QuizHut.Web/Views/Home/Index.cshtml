@@ -2,16 +2,7 @@
 @{
     this.ViewData["Title"] = "Home Page";
 }
- @if (Model != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        <i class="fa fa-exclamation-circle"></i>
-        <strong>On no!</strong> There is no quiz with password @Model.Password. Try again !
-    </div>
-}
+
 <div class="container">
     <main role="main" class="pb-3">
         <div class="page-hero bg-white text-primary" id="banner">
@@ -24,9 +15,19 @@
                     </div>
                 </div>
                 <div class="col-12 col-md-7 offset-md-1">
+                    @if (Model != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                            <i class="fa fa-exclamation-circle"></i>
+                            <strong>On no!</strong> There is no quiz with password @Model.Password. Try again !
+                        </div>
+                    }
                     <div class="row">
                         <partial name="_MakeQuizPartial">
-                        <partial name="_TakeQuizPartial">
+                            <partial name="_TakeQuizPartial">
                     </div>
                 </div>
             </div>

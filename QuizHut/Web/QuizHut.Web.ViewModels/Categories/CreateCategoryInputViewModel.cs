@@ -7,8 +7,10 @@
     public class CreateCategoryInputViewModel
     {
         [Required]
-        [MinLength(ModelValidations.Categories.NameMinLength)]
-        [MaxLength(ModelValidations.Categories.NameMaxLength)]
+        [StringLength(
+            ModelValidations.Categories.NameMaxLength,
+            ErrorMessage = ModelValidations.Error.RangeMessage,
+            MinimumLength = ModelValidations.Categories.NameMinLength)]
         public string Name { get; set; }
     }
 }

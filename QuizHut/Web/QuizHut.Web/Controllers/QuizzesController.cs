@@ -78,6 +78,7 @@
             if (this.userManager.GetUserId(this.User) != null)
             {
                 this.ViewData["Layout"] = Constants.AdminLayout;
+                this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
             }
 
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);

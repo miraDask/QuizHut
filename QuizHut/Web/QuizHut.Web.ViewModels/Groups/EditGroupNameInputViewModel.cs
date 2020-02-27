@@ -11,8 +11,10 @@
         public string Id { get; set; }
 
         [Required]
-        [MinLength(ModelValidations.Groups.NameMinLength)]
-        [MaxLength(ModelValidations.Groups.NameMaxLength)]
+        [StringLength(
+            ModelValidations.Groups.NameMaxLength,
+            ErrorMessage = ModelValidations.Error.RangeMessage,
+            MinimumLength = ModelValidations.Groups.NameMinLength)]
         public string Name { get; set; }
     }
 }
