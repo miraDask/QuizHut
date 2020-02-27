@@ -91,12 +91,7 @@
                 return this.RedirectToAction("Index", "Home", new { password = model.Password });
             }
 
-            this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
-            var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
-            this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
-            this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
-
-            return this.View(quizModel);
+            return this.RedirectToAction("Start", new { password = model.Password });
         }
 
         [HttpPost]
