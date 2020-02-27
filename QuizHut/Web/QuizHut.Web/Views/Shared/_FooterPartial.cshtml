@@ -1,6 +1,10 @@
 ﻿
 @{
     ViewData["Title"] = "_FooterPartial";
+     var area = this.User.IsInRole(GlobalConstants.AdministratorRoleName)
+        || this.User.IsInRole(GlobalConstants.ModeratorRoleName)
+        ? "Administration"
+        : "";
 }
 
 <footer class="footer-1 bg-light text-dark pt-2">
@@ -11,7 +15,7 @@
             </div>
             <div class="links">
                 <ul class="footer-menu list-unstyled d-flex flex-row text-center text-md-left">
-                    <li><a  asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="@area" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
                 </ul>
             </div>
