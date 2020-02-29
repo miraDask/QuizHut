@@ -86,7 +86,7 @@
 
                     if (roles.Count > 0)
                     {
-                        returnUrl = this.Url.Content("~/Administration/Home/");
+                        returnUrl = this.Url.Content("~/Administration/Home/Index");
                     }
 
                     this._logger.LogInformation("User logged in.");

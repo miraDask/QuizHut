@@ -37,7 +37,7 @@
                 </li>
             </ul>
         </div>*@
-        <div class="col-12 offset-md-2 col-md-8 my-2 row">
+        <div class="col-12 offset-md-2 col-md-8 my-5 row">
             <form id="@(Model.Questions.Count.ToString())f" method="post" class="col-11 ml-4 mt-2 mb-5">
                 <div id="details" class="component">
                     <div class="card mb-3 mt-3">
@@ -51,7 +51,7 @@
                                 <span class="text-primary mr-1">∗</span>@Model.Description
                             </p>
                         </div>
-                        <div class="card-footer pb-5">
+                        <div class="card-footer py-3">
                             <div class="input-group">
 
                             </div>
@@ -94,7 +94,7 @@
                                     </div>
                                 }
                             </div>
-                            <div class="card-footer pb-5">
+                            <div class="card-footer pb-3">
                                 <div class="row mx-1 text-white">
                                     <a  id="prev" class="btn btn-primary col-md-5 mt-2">Previous</a>
                                     <a  id="@(question.Number.ToString())next" class="btn btn-primary col-md-5 mt-2 offset-md-2 d-inline-block">Next</a>
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 }
-                <button type="submit" id="submit" class="btn btn-primary col-md-5 mt-2 offset-md-3" asp-action="Submit" asp-controller="Quizzes" style="display:none">Submit Quiz</button>
+                <button type="submit" id="submit" class="btn btn-primary col-md-5 offset-md-3" asp-action="Submit" asp-controller="Quizzes" style="display:none">Submit Quiz</button>
             </form>
         </div>
     </div>

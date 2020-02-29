@@ -119,6 +119,7 @@
             }
             else
             {
+                app.UseStatusCodePagesWithRedirects(GlobalConstants.StatusCodePath);
                 app.UseExceptionHandler(GlobalConstants.ExceptionHandlerPath);
                 app.UseHsts();
             }

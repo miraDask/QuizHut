@@ -24,10 +24,15 @@
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(string code)
         {
             return this.View(
-                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
+                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier , StatusCode = code });
+        }
+
+        public IActionResult StatusCode(string code)
+        {
+            return this.RedirectToAction("Error", new { code });
         }
     }
 }

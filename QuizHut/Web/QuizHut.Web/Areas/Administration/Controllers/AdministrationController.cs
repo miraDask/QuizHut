@@ -5,7 +5,7 @@
     using QuizHut.Common;
     using QuizHut.Web.Controllers;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+    [Authorize(Roles = "Administrator, Moderator")]
     [Area("Administration")]
     public class AdministrationController : BaseController
     {
