@@ -26,7 +26,7 @@
             this.service = service;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string invalidEmail)
         {
             //var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
             var moderators = await this.service.GetAllByRoleAsync<ModeratorViewModel>(GlobalConstants.ModeratorRoleName);
@@ -35,6 +35,12 @@
                 Moderators = moderators,
                 NewModerator = new ParticipantInputViewModel(),
             };
+
+            if (invalidEmail != null)
+            {
+                model.NewModerator.IsNotAdded = true;
+                model.NewModerator.Email = invalidEmail;
+            }
 
             return this.View(model);
         }
@@ -51,8 +57,7 @@
 
             if (!isAdded)
             {
-                model.NewModerator.IsNotAdded = true;
-                return this.View(model);
+                return this.RedirectToAction("Index", new { invalidEmail = model.NewModerator.Email });
             }
 
             return this.RedirectToAction("Index");

@@ -19,7 +19,7 @@
             this.service = service;
         }
 
-        public async Task<IActionResult> AllParticipantsAddedByUser()
+        public async Task<IActionResult> AllParticipantsAddedByUser(string invalidEmail)
         {
             var userId = this.userManager.GetUserId(this.User);
             var participants = await this.service.GetAllByUserIdAsync<ParticipantViewModel>(userId);
@@ -28,6 +28,12 @@
                 Participants = participants,
                 NewParticipant = new ParticipantInputViewModel(),
             };
+
+            if (invalidEmail != null)
+            {
+                model.NewParticipant.IsNotAdded = true;
+                model.NewParticipant.Email = invalidEmail;
+            }
 
             return this.View(model);
         }
@@ -45,8 +51,7 @@
 
             if (!partisipantIsAdded)
             {
-                model.NewParticipant.IsNotAdded = true;
-                return this.View(model);
+                return this.RedirectToAction("AllParticipantsAddedByUser", new { invalidEmail = model.NewParticipant.Email });
             }
 
             return this.RedirectToAction("AllParticipantsAddedByUser");

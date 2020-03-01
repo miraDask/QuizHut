@@ -6,7 +6,6 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Cache;
     using QuizHut.Services.Question;
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Questions;
@@ -18,8 +17,7 @@
 
         public QuestionsController(
             UserManager<ApplicationUser> userManager,
-            IQuestionService questionService,
-            ICacheService cacheService)
+            IQuestionService questionService)
         {
             this.userManager = userManager;
             this.questionService = questionService;

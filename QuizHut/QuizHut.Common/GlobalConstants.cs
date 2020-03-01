@@ -4,9 +4,13 @@
     {
         public const string SystemName = "QuizHut";
 
+        public const string Administration = "Administration";
+
         public const string AdministratorRoleName = "Administrator";
 
         public const string ModeratorRoleName = "Moderator";
+
+        public const string AdministratorAndModeratorAuthorizationString = "Administrator, Moderator";
 
         public const string RotativaPath = "wwwroot/Rotativa";
 

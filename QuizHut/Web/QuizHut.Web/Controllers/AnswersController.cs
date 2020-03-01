@@ -7,7 +7,6 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Answer;
-    using QuizHut.Services.Cache;
     using QuizHut.Web.Controllers.Common;
     using QuizHut.Web.ViewModels.Answers;
 

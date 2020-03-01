@@ -19,7 +19,6 @@
     using QuizHut.Data.Repositories;
     using QuizHut.Data.Seeding;
     using QuizHut.Services.Answer;
-    using QuizHut.Services.Cache;
     using QuizHut.Services.Category;
     using QuizHut.Services.Data;
     using QuizHut.Services.Group;
@@ -50,7 +49,8 @@
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -83,7 +83,6 @@
             services.AddTransient<IQuizService, QuizService>();
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswerService, AnswerService>();
-            //services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IQuizResultService, QuizResultService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<IQuizGroupService, QuizGroupService>();

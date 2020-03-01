@@ -6,7 +6,6 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Cache;
     using QuizHut.Services.Quiz;
     using QuizHut.Services.QuizResult;
     using QuizHut.Web.Controllers.Common;
@@ -22,7 +21,6 @@
         public QuizzesController(
             UserManager<ApplicationUser> userManager,
             IQuizService quizService,
-            ICacheService cacheService,
             IQuizResultService quizResultService)
         {
             this.userManager = userManager;
