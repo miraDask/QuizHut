@@ -89,7 +89,7 @@
 
         public async Task<string> GetIdByPassword(string password)
        => await this.repository
-            .AllAsNoTracking()
+            .AllAsNoTrackingWithDeleted()
             .Where(x => x.Password == password)
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
