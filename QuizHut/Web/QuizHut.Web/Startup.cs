@@ -83,7 +83,7 @@
             services.AddTransient<IQuizService, QuizService>();
             services.AddTransient<IQuestionService, QuestionService>();
             services.AddTransient<IAnswerService, AnswerService>();
-            services.AddTransient<ICacheService, CacheService>();
+            //services.AddTransient<ICacheService, CacheService>();
             services.AddTransient<IQuizResultService, QuizResultService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<IQuizGroupService, QuizGroupService>();

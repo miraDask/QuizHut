@@ -23,7 +23,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var participants = await this.service.GetAllByUserIdAsync<ParticipantViewModel>(userId);
-            var model = new AllParticipantsAddedByUserViewModel() 
+            var model = new AllParticipantsAddedByUserViewModel()
             {
                 Participants = participants,
                 NewParticipant = new ParticipantInputViewModel(),

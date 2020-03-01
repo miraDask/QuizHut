@@ -1,8 +1,72 @@
-﻿
+﻿@using QuizHut.Web.ViewModels.Moderators
+@model ModeratorsAllViewModel
 @{
     ViewData["Title"] = "Index";
 
 }
 
-<h1>Dashboard</h1>
+@if (Model.NewModerator.IsNotAdded)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>On no!</strong> There is no user with email @Model.NewModerator.Email. Try again !
+    </div>
+}
+<div class="component bg-light">
+    <form method="post" class="container p-0" asp-action="Index" asp-controller="Dashboard">
+        <div class="row px-3 pb-0 pt-4">
+            <div class="input-group col-9 ml-4">
+                <input type="email" asp-for="@Model.NewModerator.Email" class="form-control" placeholder="Email">
+            </div>
+            <div class="col-2 mx-1">
+                <button type="submit" class="btn btn-primary col-12">
+                    <span>Add New</span>
+                </button>
+            </div>
+        </div>
+        <span asp-validation-for="@Model.NewModerator.Email" class="text-danger ml-5"></span>
+        <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
+            <h5 class="mb-0">Moderator Managment</h5>
+        </div>
+    </form>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active bg-white">
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Moderators.Any())
+        {
+            @foreach (var moderator in Model.Moderators)
+            {
+                <tr class="table-warning">
+                    <th scope="row">@moderator.FullName</th>
+                    <td>@moderator.Email</td>
+                    <td>
+                        <div class="component  navbar-expand-lg text-right">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item m-1">
+                                    <a class="nav-link  btn btn-white" href="/Administration/Dashboard/Delete?id=@moderator.Id">
+                                        Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 
