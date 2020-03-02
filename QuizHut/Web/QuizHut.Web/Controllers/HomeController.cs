@@ -27,7 +27,7 @@
         public IActionResult Error(string code)
         {
             return this.View(
-                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier , StatusCode = code });
+                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier, StatusCode = code });
         }
 
         public IActionResult StatusCode(string code)

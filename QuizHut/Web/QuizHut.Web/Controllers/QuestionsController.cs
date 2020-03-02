@@ -8,6 +8,7 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Question;
     using QuizHut.Web.Controllers.Common;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Questions;
 
     public class QuestionsController : Controller
@@ -24,6 +25,7 @@
         }
 
         [HttpGet]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult QuestionInput(string id)
         {
             if (!string.IsNullOrEmpty(id) || !string.IsNullOrWhiteSpace(id))
@@ -31,15 +33,11 @@
                 this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
             }
 
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             return this.View();
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AddNewQuestion(QuestionViewModel model)
         {
             var quizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
@@ -49,28 +47,23 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult EditQuestionInput(QuestionViewModel model)
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             return this.View(model);
         }
 
+        [ModelStateValidationActionFilterAttribute]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public async Task<IActionResult> Edit(QuestionViewModel model)
         {
             await this.questionService.Update(model.Id, model.Text);
 
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             return this.RedirectToAction("Display", "Quizzes");
         }
 
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Delete(QuestionViewModel model)
         {
             await this.questionService.DeleteQuestionByIdAsync(model.Id);

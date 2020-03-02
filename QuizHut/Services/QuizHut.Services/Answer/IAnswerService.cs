@@ -1,7 +1,8 @@
 ﻿namespace QuizHut.Services.Answer
 {
-    using QuizHut.Web.ViewModels.Answers;
     using System.Threading.Tasks;
+
+    using QuizHut.Web.ViewModels.Answers;
 
     public interface IAnswerService
     {

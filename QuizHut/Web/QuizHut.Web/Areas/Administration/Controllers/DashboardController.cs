@@ -9,6 +9,7 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Data;
     using QuizHut.Services.User;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Moderators;
     using QuizHut.Web.ViewModels.Participants;
 
@@ -46,13 +47,9 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Index(ModeratorsAllViewModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-
             var isAdded = await this.service.AssignRoleAsync(model.NewModerator.Email, GlobalConstants.ModeratorRoleName);
 
             if (!isAdded)

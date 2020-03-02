@@ -8,6 +8,7 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Answer;
     using QuizHut.Web.Controllers.Common;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Answers;
 
     public class AnswersController : Controller
@@ -24,17 +25,14 @@
         }
 
         [HttpGet]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult AnswerInput()
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             return this.View();
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AddNewAnswer(AnswerViewModel model)
         {
             var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
@@ -44,47 +42,40 @@
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult ApendAnswerInput(string id)
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             var model = new AnswerViewModel() { QuestionId = id };
+
             return this.View(model);
         }
 
         [HttpPost]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AppendNewAnswer(AnswerViewModel model)
         {
             await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
 
             return this.RedirectToAction("Display", "Quizzes");
         }
 
 
         [HttpGet]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public async Task<IActionResult> EditAnswerInput(string id)
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             var model = await this.answerService.GetAnswerModelAsync(id);
 
             return this.View(model);
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Update(AnswerViewModel model)
         {
             await this.answerService.UpdateAsync(model.Id, model.Text, model.IsRightAnswer);
+
             return this.RedirectToAction("Display", "Quizzes");
         }
 

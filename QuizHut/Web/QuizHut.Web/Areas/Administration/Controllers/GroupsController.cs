@@ -9,6 +9,7 @@
     using QuizHut.Services.Group;
     using QuizHut.Services.Quiz;
     using QuizHut.Services.User;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -46,6 +47,7 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Create(CreateGroupInputViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -56,7 +58,6 @@
 
         public async Task<IActionResult> AssignQuiz(string id)
         {
-
             var userId = this.userManager.GetUserId(this.User);
             var quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>();
             var model = await this.service.GetGroupModelAsync(id, userId, quizzes);
@@ -65,6 +66,7 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AssignQuiz(GroupWithQuizzesViewModel model)
         {
             var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
@@ -81,6 +83,7 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AssignParticipants(GroupWithParticipantsViewModel model)
         {
             var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
@@ -124,7 +127,6 @@
 
         public async Task<IActionResult> AddNewQuiz(string id)
         {
-
             var userId = this.userManager.GetUserId(this.User);
             var quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>();
             quizzes = await this.service.FilterQuizzesThatAreNotAssignedToThisGroup(id, quizzes);
@@ -134,6 +136,7 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AddNewQuiz(GroupWithQuizzesViewModel model)
         {
             var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
@@ -151,6 +154,7 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AddParticipants(GroupWithParticipantsViewModel model)
         {
             var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
@@ -165,10 +169,11 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> EditName(EditGroupNameInputViewModel model)
         {
             await this.service.UpdateNameAsync(model.Id, model.Name);
-            return this.RedirectToAction("GroupDetails", new { id = model.Id});
+            return this.RedirectToAction("GroupDetails", new { id = model.Id });
         }
     }
 }

@@ -22,7 +22,7 @@
         public string Password { get; set; }
 
         public TimeSpan? DurationOfActivity { get; set; }
-        
+
         public DateTime? ActivationDateAndTime { get; set; }
 
         public int? Timer { get; set; }

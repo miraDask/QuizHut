@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Quiz;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuizzesController : AdministrationController
@@ -28,12 +29,14 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public IActionResult AllQuizzesCreatedByUser(QuizzesAllListingViewModel model)
         {
             return this.View(model);
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Start(PasswordInputViewModel model)
         {
             var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);

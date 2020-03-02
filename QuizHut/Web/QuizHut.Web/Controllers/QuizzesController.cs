@@ -9,6 +9,7 @@
     using QuizHut.Services.Quiz;
     using QuizHut.Services.QuizResult;
     using QuizHut.Web.Controllers.Common;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
     using Rotativa.AspNetCore;
 
@@ -28,29 +29,16 @@
             this.quizResultService = quizResultService;
         }
 
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult DetailsInput()
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             return this.View();
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> DetailsInput(InputQuizViewModel model)
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-
             var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
             if (quizWithSamePasswordId != null)
             {
@@ -66,6 +54,7 @@
         }
 
         [HttpGet]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public async Task<IActionResult> Display(string id)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
@@ -73,11 +62,7 @@
                 id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
             }
 
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-                this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
-            }
+            this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
 
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
 
@@ -90,10 +75,13 @@
             return this.View(model);
         }
 
-
         public async Task<IActionResult> Start(string password)
         {
             var id = await this.quizService.GetQuizIdByPasswordAsync(password);
+            if (id == null)
+            {
+                return this.RedirectToAction("Index", "Home");
+            }
 
             this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
             var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
@@ -123,6 +111,7 @@
             var originalQuizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(quizId);
             var resultModel = await this.quizResultService.GetResultModel(quizId, userId, originalQuizModel.Questions, model.Questions);
             resultModel.QuizName = this.HttpContext.Session.GetString(Constants.AttemptedQuizName);
+
             return this.View(resultModel);
         }
 
@@ -157,13 +146,9 @@
         }
 
         [HttpGet]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public async Task<IActionResult> EditDetailsInput(string id)
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
             var editModel = await this.quizService.GetQuizByIdAsync<EditDetailsViewModel>(id);
             editModel.PasswordIsValid = true;
 
@@ -171,18 +156,10 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
+        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public async Task<IActionResult> EditDetailsInput(EditDetailsViewModel model)
         {
-            if (this.userManager.GetUserId(this.User) != null)
-            {
-                this.ViewData["Layout"] = Constants.AdminLayout;
-            }
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-
             var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
             if (quizWithSamePasswordId != null && quizWithSamePasswordId != model.Id)
             {

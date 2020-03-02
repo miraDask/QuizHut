@@ -80,7 +80,7 @@
             var group = await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.Id == groupId)
-                .Select(x => new GroupDetailsViewModel() 
+                .Select(x => new GroupDetailsViewModel()
                 {
                     Id = x.Id,
                     Name = x.Name,

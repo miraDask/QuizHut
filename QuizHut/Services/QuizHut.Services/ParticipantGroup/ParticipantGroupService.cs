@@ -22,7 +22,7 @@
             var participantExists = await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.GroupId == groupId && x.ParticipantId == participantId)
-                .FirstOrDefaultAsync() 
+                .FirstOrDefaultAsync()
                 != null;
 
             if (!participantExists)

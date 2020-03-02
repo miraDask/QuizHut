@@ -1,14 +1,16 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Category;
     using QuizHut.Services.Quiz;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Categories;
     using QuizHut.Web.ViewModels.Quizzes;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class CategoriesController : AdministrationController
     {
@@ -30,7 +32,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var categories = await this.service.GetAllByCreatorIdAsync<CategoryViewModel>(userId);
-            var model = new CategoriesListAllViewModel() { Categories = categories};
+            var model = new CategoriesListAllViewModel() { Categories = categories };
             return this.View(model);
         }
 
@@ -46,6 +48,7 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Create(CreateCategoryInputViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -56,7 +59,6 @@
 
         public async Task<IActionResult> AssignQuizzesToCategory(string id)
         {
-
             var userId = this.userManager.GetUserId(this.User);
             var quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>();
             quizzes = await this.service.FilterQuizzesThatAreNotAssignedToThisCategory(id, quizzes);
@@ -66,6 +68,7 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AssignQuizzesToCategory(CategoryWithQuizzesViewModel model)
         {
             var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
@@ -91,13 +94,16 @@
         public IActionResult EditName(string id, string name)
         {
             var model = new EditCategoryNameInputViewModel() { Id = id, Name = name };
+
             return this.View(model);
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> EditName(EditCategoryNameInputViewModel model)
         {
             await this.service.UpdateNameAsync(model.Id, model.Name);
+
             return this.RedirectToAction("CategoryDetails", new { id = model.Id });
         }
 

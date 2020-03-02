@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.User;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Participants;
 
     public class ParticipantsController : AdministrationController
@@ -39,13 +40,9 @@
         }
 
         [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AllParticipantsAddedByUser(AllParticipantsAddedByUserViewModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(model);
-            }
-
             var userId = this.userManager.GetUserId(this.User);
             var partisipantIsAdded = await this.service.AddAsync(model.NewParticipant.Email, userId);
 

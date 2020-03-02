@@ -57,7 +57,7 @@
                     x => x.ActiveFrom,
                     opt => opt.MapFrom(
                     x => x.DurationOfActivity != null
-                    ? $"{x.ActivationDateAndTime.Value.Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Minute.ToString("D2")}" 
+                    ? $"{x.ActivationDateAndTime.Value.Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Minute.ToString("D2")}"
                     : string.Empty))
                .ForMember(
                     x => x.ActiveTo,

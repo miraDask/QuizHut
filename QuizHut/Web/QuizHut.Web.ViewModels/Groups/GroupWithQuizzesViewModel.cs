@@ -1,7 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Groups
 {
     using System.Collections.Generic;
- 
+
     using QuizHut.Web.ViewModels.Quizzes;
 
     public class GroupWithQuizzesViewModel
