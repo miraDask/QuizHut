@@ -1,6 +1,6 @@
-﻿@model GroupWithParticipantsViewModel
+﻿@model GroupWithStudentsViewModel
 @{
-    ViewData["Title"] = "AssignParticipants";
+    ViewData["Title"] = "Assign Students";
 
 }
 
@@ -11,7 +11,7 @@
                 <i class="fas fa-folder-plus"></i>
             </div>
             <div class="card-body">
-                <h4 class="card-title">Assign Participants</h4>
+                <h4 class="card-title">Assign Students</h4>
                 <input type="hidden" asp-for="@Model.GroupId" value="@Model.GroupId" />
                 <p class="card-text" style="display: block;">
                     <span class="text-primary mr-1">∗</span>
@@ -20,16 +20,15 @@
             </div>
             <div class="card-footer">
                 <div class="component">
-                    @if (Model.Participants.Count() > 0)
+                    @if (Model.Students.Count() > 0)
                     {
-                        @for (int i = 0; i < Model.Participants.Count(); i++)
+                        @for (int i = 0; i < Model.Students.Count(); i++)
                         {
-                            var participant = Model.Participants[i];
                             <div class="form-group mb-0">
                                 <div class="mt-2">
-                                    @Html.EditorFor(x => x.Participants[i].IsAssigned)
-                                    <h6 class="d-inline-block mt-0 ml-1">@participant.FullName @participant.Email</h6>
-                                    @Html.HiddenFor(model => model.Participants[i].Id)
+                                    @Html.EditorFor(model => model.Students[i].IsAssigned)
+                                    <h6 class="d-inline-block mt-0 ml-1">@Model.Students[i].FullName <span class="ml-2">@Model.Students[i].Email</span></h6>
+                                    @Html.HiddenFor(model => model.Students[i].Id)
                                 </div>
                             </div>
                         }
@@ -37,16 +36,16 @@
                     else
                     {
                         <p>
-                            There are no unassigned participants in your list.
+                            There are no unassigned students in your list.
                         </p>
-                        <a asp-action="AllParticipantsAddedByUser" asp-controller="Participants">Add some.</a>
+                        <a asp-action="AllStudentsAddedByTeacher" asp-controller="Students">Add some.</a>
                     }
                 </div>
             </div>
             <div class="row mx-4 mb-4 text-white">
-                @if (Model.Participants.Count() > 0)
+                @if (Model.Students.Count() > 0)
                 {
-                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Assign Participants</button>
+                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Students</button>
                     <div class="col-1 mr-4"></div>
 
                 }

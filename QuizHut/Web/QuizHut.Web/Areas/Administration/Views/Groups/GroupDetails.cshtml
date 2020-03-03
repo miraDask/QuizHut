@@ -40,12 +40,12 @@
                     <td>@Model.Name</td>
                 </tr>
                 <tr class="table-active bg-light">
-                    <th scope="row">Participants</th>
-                    <td>@Model.Participants.Count()</td>
+                    <th scope="row">Students</th>
+                    <td>@Model.Students.Count()</td>
                 </tr>
                 <tr class="table-active bg-white">
                     <th scope="row">Assigned Quizzes</th>
-                    <td>@Model.Quizzes.Count</td>
+                    <td>@Model.Quizzes.Count()</td>
                 </tr>
             </tbody>
         </table>
@@ -93,11 +93,11 @@
         </table>
     </div>
 </div>
-@* participants *@
+@* students *@
 <div class="form-group flex-grow-1">
     <nav class="navbar navbar-expand-lg navbar-dark bg-warning mt-4 p-2">
         <div class="container">
-            <h5 class="mb-0">Participants</h5>
+            <h5 class="mb-0">Students</h5>
             <button class="navbar-toggler collapsed bg-primary"
                     type="button" data-toggle="collapse"
                     data-target="#navbarNavDropdown333"
@@ -109,7 +109,7 @@
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown333">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary" href="/Administration/Groups/AddParticipants?id=@Model.Id">Add New</a>
+                        <a class="nav-link  btn btn-primary" href="/Administration/Groups/AddStudents?id=@Model.Id">Add New</a>
                     </li>
                 </ul>
             </div>
@@ -118,15 +118,15 @@
     <div class="component">
         <table class="table table-hover">
             <tbody>
-                @foreach (var participant in Model.Participants)
+                @foreach (var student in Model.Students)
                 {
                     <tr class="table-active bg-white">
-                        <th scope="row">@participant.FullName</th>
-                        <th scope="row">@participant.Email</th>
+                        <th scope="row">@student.FullName</th>
+                        <th scope="row">@student.Email</th>
                         <td class="text-right">
-                            <form method="post" asp-action="DeleteParticipantFromGroup" asp-controller="Groups">
+                            <form method="post" asp-action="DeleteStudentFromGroup" asp-controller="Groups">
                                 <input type="hidden" name="groupId" value="@Model.Id" />
-                                <input type="hidden" name="participantId" value="@participant.Id" />
+                                <input type="hidden" name="studentId" value="@student.Id" />
                                 <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
                             </form>
                         </td>

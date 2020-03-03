@@ -12,7 +12,7 @@
 
         Task<QuizResultViewModel> GetResultModel(
             string quizId,
-            string participantId,
+            string studentId,
             IList<QuestionViewModel> originalQuizQuestions,
             IList<AttemtedQuizQuestionViewModel> attemptedQuizQuestions);
     }

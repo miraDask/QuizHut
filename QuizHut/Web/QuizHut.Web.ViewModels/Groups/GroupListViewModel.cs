@@ -10,7 +10,7 @@
 
         public string Name { get; set; }
 
-        public int ParticipantsCount { get; set; }
+        public int StudentsCount { get; set; }
 
         public int AssignedQuizzesCount { get; set; }
 
@@ -23,7 +23,7 @@
                     x => x.CreatedOn,
                     opt => opt.MapFrom(x => x.CreatedOn.ToString("dd/MM/yyyy")))
                 .ForMember(
-                    x => x.ParticipantsCount,
+                    x => x.StudentsCount,
                     opt => opt.MapFrom(x => x.StudentstGroups.Count))
                 .ForMember(
                     x => x.AssignedQuizzesCount,

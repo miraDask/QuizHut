@@ -1,10 +1,10 @@
-﻿namespace QuizHut.Web.ViewModels.Moderators
+﻿namespace QuizHut.Web.ViewModels.Teachers
 {
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
 
-    public class ModeratorViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
+    public class TeacherViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -14,7 +14,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<ApplicationUser, ModeratorViewModel>()
+            configuration.CreateMap<ApplicationUser, TeacherViewModel>()
                .ForMember(
                    x => x.FullName,
                    opt => opt.MapFrom(x => $"{x.FirstName} {x.LastName}"));

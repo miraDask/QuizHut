@@ -10,19 +10,19 @@
     using QuizHut.Services.Data;
     using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
-    using QuizHut.Web.ViewModels.Moderators;
-    using QuizHut.Web.ViewModels.Participants;
+    using QuizHut.Web.ViewModels.Students;
+    using QuizHut.Web.ViewModels.Teachers;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class DashboardController : AdministrationController
     {
-        private readonly ISettingsService settingsService;
+        //private readonly ISettingsService settingsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService service;
 
         public DashboardController(ISettingsService settingsService, UserManager<ApplicationUser> userManager, IUsersService service)
         {
-            this.settingsService = settingsService;
+            //this.settingsService = settingsService;
             this.userManager = userManager;
             this.service = service;
         }
@@ -30,17 +30,17 @@
         public async Task<IActionResult> Index(string invalidEmail)
         {
             //var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
-            var teachers = await this.service.GetAllByRoleAsync<ModeratorViewModel>(GlobalConstants.TeacherRoleName);
-            var model = new ModeratorsAllViewModel()
+            var teachers = await this.service.GetAllByRoleAsync<TeacherViewModel>(GlobalConstants.TeacherRoleName);
+            var model = new TeachersAllViewModel()
             {
-                Moderators = teachers,
-                NewModerator = new ParticipantInputViewModel(),
+                Teachers = teachers,
+                NewTeacher = new StudentInputViewModel(),
             };
 
             if (invalidEmail != null)
             {
-                model.NewModerator.IsNotAdded = true;
-                model.NewModerator.Email = invalidEmail;
+                model.NewTeacher.IsNotAdded = true;
+                model.NewTeacher.Email = invalidEmail;
             }
 
             return this.View(model);
@@ -48,13 +48,13 @@
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> Index(ModeratorsAllViewModel model)
+        public async Task<IActionResult> Index(TeachersAllViewModel model)
         {
-            var isAdded = await this.service.AssignRoleAsync(model.NewModerator.Email, GlobalConstants.TeacherRoleName);
+            var isAdded = await this.service.AssignRoleAsync(model.NewTeacher.Email, GlobalConstants.TeacherRoleName);
 
             if (!isAdded)
             {
-                return this.RedirectToAction("Index", new { invalidEmail = model.NewModerator.Email });
+                return this.RedirectToAction("Index", new { invalidEmail = model.NewTeacher.Email });
             }
 
             return this.RedirectToAction("Index");

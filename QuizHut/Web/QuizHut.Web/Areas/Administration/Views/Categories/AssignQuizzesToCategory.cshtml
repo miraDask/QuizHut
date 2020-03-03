@@ -39,13 +39,18 @@
                     else
                     {
                         <p>There are currently no unassigned quizzes.</p>
+                        <a asp-area="" asp-action="DetailsInput" asp-controller="Quizzes">Create new.</a>
                     }
                 </div>
             </div>
             <div class="row mx-4 mb-4 text-white">
-                <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Quizzes</button>
-                <div class="col-1 mr-4"></div>
-                <a  href="/Administration/Categories/CategoryDetails?id=@Model.Id" class="btn btn-primary col-md-5 mt-5">Skip</a>
+                @if (Model.Quizzes.Count() > 0)
+                {
+                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Quizzes</button>
+                    <div class="col-1 mr-4"></div>
+
+                }
+                <a href="/Administration/Categories/CategoryDetails?id=@Model.Id" class="btn btn-primary col-md-5 mt-5">Skip</a>
             </div>
         </div>
     </form>

@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
 
-    using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
+    using QuizHut.Web.ViewModels.Students;
 
     public class GroupDetailsViewModel
     {
@@ -11,8 +11,8 @@
 
         public string Name { get; set; }
 
-        public IList<QuizAssignViewModel> Quizzes { get; set; } = new List<QuizAssignViewModel>();
+        public IEnumerable<QuizAssignViewModel> Quizzes { get; set; } = new HashSet<QuizAssignViewModel>();
 
-        public IList<ParticipantViewModel> Participants { get; set; }
+        public IEnumerable<StudentViewModel> Students { get; set; } = new HashSet<StudentViewModel>();
     }
 }

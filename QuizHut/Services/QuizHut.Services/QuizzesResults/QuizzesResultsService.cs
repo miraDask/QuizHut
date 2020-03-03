@@ -36,12 +36,12 @@
 
         public async Task<QuizResultViewModel> GetResultModel(
             string quizId,
-            string participantId,
+            string studentId,
             IList<QuestionViewModel> originalQuizQuestions,
             IList<AttemtedQuizQuestionViewModel> attemptedQuizQuestions)
         {
             var points = this.CalculateResult(originalQuizQuestions, attemptedQuizQuestions);
-            await this.CreateQuizResultAsync(participantId, points, originalQuizQuestions.Count, quizId);
+            await this.CreateQuizResultAsync(studentId, points, originalQuizQuestions.Count, quizId);
             return new QuizResultViewModel()
             {
                 Points = points,

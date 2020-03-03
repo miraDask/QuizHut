@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Data.Models;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Filters;
@@ -20,7 +21,7 @@
             this.quizService = quizService;
         }
 
-        public async Task<IActionResult> AllQuizzesCreatedByUser()
+        public async Task<IActionResult> AllQuizzesCreatedByTeacher()
         {
             var userId = this.userManager.GetUserId(this.User);
             var quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizListViewModel>(userId);
@@ -30,7 +31,7 @@
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public IActionResult AllQuizzesCreatedByUser(QuizzesAllListingViewModel model)
+        public IActionResult AllQuizzesCreatedByTeacher(QuizzesAllListingViewModel model)
         {
             return this.View(model);
         }
@@ -42,7 +43,7 @@
             var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
             if (id == null)
             {
-                return this.RedirectToAction("Index", "Home", new { password = model.Password, area = "Administration" });
+                return this.RedirectToAction("Index", "Home", new { password = model.Password, area = GlobalConstants.Administration });
             }
 
             return this.RedirectToAction("Start", "Quizzes", new { area = string.Empty, password = model.Password });

@@ -142,7 +142,7 @@
             }
 
             await this.quizService.DeleteByIdAsync(id);
-            return this.RedirectToAction("AllQuizzesCreatedByUser", "Quizzes", new { area = "Administration" });
+            return this.RedirectToAction("AllQuizzesCreatedByTeacher", "Quizzes", new { area = "Administration" });
         }
 
         [HttpGet]

@@ -1,8 +1,8 @@
-﻿namespace QuizHut.Web.ViewModels.Participants
+﻿namespace QuizHut.Web.ViewModels.Students
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class ParticipantInputViewModel
+    public class StudentInputViewModel
     {
         [Required]
         [EmailAddress]

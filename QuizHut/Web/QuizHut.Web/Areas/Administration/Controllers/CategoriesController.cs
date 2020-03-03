@@ -28,7 +28,7 @@
             this.quizService = quizService;
         }
 
-        public async Task<IActionResult> AllCategoriesCreatedByUser()
+        public async Task<IActionResult> AllCategoriesCreatedByTeacher()
         {
             var userId = this.userManager.GetUserId(this.User);
             var categories = await this.service.GetAllByCreatorIdAsync<CategoryViewModel>(userId);
@@ -37,7 +37,7 @@
         }
 
         [HttpPost]
-        public IActionResult AllCategoriesCreatedByUser(CategoriesListAllViewModel model)
+        public IActionResult AllCategoriesCreatedByTeacher(CategoriesListAllViewModel model)
         {
             return this.View(model);
         }
@@ -87,9 +87,8 @@
         public async Task<IActionResult> Delete(string id)
         {
             await this.service.DeleteAsync(id);
-            return this.RedirectToAction("AllCategoriesCreatedByUser");
+            return this.RedirectToAction("AllCategoriesCreatedByTeacher");
         }
-
 
         public IActionResult EditName(string id, string name)
         {

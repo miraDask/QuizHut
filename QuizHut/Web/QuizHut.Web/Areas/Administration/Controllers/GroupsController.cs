@@ -11,8 +11,8 @@
     using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
+    using QuizHut.Web.ViewModels.Students;
 
     public class GroupsController : AdministrationController
     {
@@ -33,7 +33,7 @@
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> AllGroupsCreatedByUser()
+        public async Task<IActionResult> AllGroupsCreatedByTeacher()
         {
             var userId = this.userManager.GetUserId(this.User);
             var groups = await this.service.GetAllByCreatorIdAsync<GroupListViewModel>(userId);
@@ -71,23 +71,23 @@
         {
             var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
             await this.service.AssignQuizzesToGroupAsync(model.GroupId, quizzesIds);
-            return this.RedirectToAction("AssignParticipants", new { id = model.GroupId });
+            return this.RedirectToAction("AssignStudents", new { id = model.GroupId });
         }
 
-        public async Task<IActionResult> AssignParticipants(string id)
+        public async Task<IActionResult> AssignStudents(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var participants = await this.userService.GetAllByUserIdAsync<ParticipantViewModel>(userId);
-            var model = new GroupWithParticipantsViewModel() { GroupId = id, Participants = participants };
+            var students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(userId);
+            var model = new GroupWithStudentsViewModel() { GroupId = id, Students = students };
             return this.View(model);
         }
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> AssignParticipants(GroupWithParticipantsViewModel model)
+        public async Task<IActionResult> AssignStudents(GroupWithStudentsViewModel model)
         {
-            var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignStudentsToGroupAsync(model.GroupId, participantsIds);
+            var studentsIds = model.Students.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+            await this.service.AssignStudentsToGroupAsync(model.GroupId, studentsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
 
@@ -108,7 +108,7 @@
         public async Task<IActionResult> Delete(string id)
         {
             await this.service.DeleteAsync(id);
-            return this.RedirectToAction("AllGroupsCreatedByUser");
+            return this.RedirectToAction("AllGroupsCreatedByTeacher");
         }
 
         [HttpPost]
@@ -119,9 +119,9 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteParticipantFromGroup(string groupId, string participantId)
+        public async Task<IActionResult> DeleteStudentFromGroup(string groupId, string studentId)
         {
-            await this.service.DeleteStudentFromGroupAsync(groupId, participantId);
+            await this.service.DeleteStudentFromGroupAsync(groupId, studentId);
             return this.RedirectToAction("GroupDetails", new { id = groupId });
         }
 
@@ -144,21 +144,21 @@
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
 
-        public async Task<IActionResult> AddParticipants(string id)
+        public async Task<IActionResult> AddStudents(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var participants = await this.userService.GetAllByUserIdAsync<ParticipantViewModel>(userId);
-            participants = await this.service.FilterStudentsThatAreNotAssignedToThisGroup(id, participants);
-            var model = new GroupWithParticipantsViewModel() { GroupId = id, Participants = participants };
+            var students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(userId);
+            students = await this.service.FilterStudentsThatAreNotAssignedToThisGroup(id, students);
+            var model = new GroupWithStudentsViewModel() { GroupId = id, Students = students };
             return this.View(model);
         }
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> AddParticipants(GroupWithParticipantsViewModel model)
+        public async Task<IActionResult> AddStudents(GroupWithStudentsViewModel model)
         {
-            var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignStudentsToGroupAsync(model.GroupId, participantsIds);
+            var studentsIds = model.Students.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+            await this.service.AssignStudentsToGroupAsync(model.GroupId, studentsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
 

@@ -11,8 +11,8 @@
     using QuizHut.Services.QuizzesGroups;
     using QuizHut.Services.StudentsGroups;
     using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
+    using QuizHut.Web.ViewModels.Students;
 
     public class GroupsService : IGroupsService
     {
@@ -89,7 +89,7 @@
                         Name = x.Quiz.Name,
                         Id = x.QuizId,
                     }).ToList(),
-                    Participants = x.StudentstGroups.Select(x => new ParticipantViewModel()
+                    Students = x.StudentstGroups.Select(x => new StudentViewModel()
                     {
                         Id = x.StudentId,
                         FullName = $"{x.Student.FirstName} {x.Student.LastName}",
@@ -127,10 +127,10 @@
             return quizzes.Where(x => !assignedQuizzesIds.Contains(x.Id)).ToList();
         }
 
-        public async Task<IList<ParticipantViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<ParticipantViewModel> students)
+        public async Task<IList<StudentViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<StudentViewModel> students)
         {
-            var assignedparticipantsIds = await this.studentsGroupsService.GetAllStudentsIdsByGroupIdAsync(qroupId);
-            return students.Where(x => !assignedparticipantsIds.Contains(x.Id)).ToList();
+            var assignedstudentsIds = await this.studentsGroupsService.GetAllStudentsIdsByGroupIdAsync(qroupId);
+            return students.Where(x => !assignedstudentsIds.Contains(x.Id)).ToList();
         }
 
         public async Task UpdateNameAsync(string groupId, string newName)

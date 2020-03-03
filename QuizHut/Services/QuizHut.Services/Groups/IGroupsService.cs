@@ -4,8 +4,8 @@
     using System.Threading.Tasks;
 
     using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Participants;
     using QuizHut.Web.ViewModels.Quizzes;
+    using QuizHut.Web.ViewModels.Students;
 
     public interface IGroupsService
     {
@@ -31,6 +31,6 @@
 
         Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisGroup(string qroupId, IList<QuizAssignViewModel> quizzes);
 
-        Task<IList<ParticipantViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<ParticipantViewModel> students);
+        Task<IList<StudentViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<StudentViewModel> students);
     }
 }

@@ -41,7 +41,7 @@
 
         public DbSet<Result> Results { get; set; }
 
-        public DbSet<StudentGroup> ParticipantsGroups { get; set; }
+        public DbSet<StudentGroup> StudentsGroups { get; set; }
 
         public DbSet<QuizGroup> QuizzessGroups { get; set; }
 

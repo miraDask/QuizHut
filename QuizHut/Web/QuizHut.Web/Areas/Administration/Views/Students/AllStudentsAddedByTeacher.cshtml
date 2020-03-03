@@ -1,22 +1,22 @@
-﻿@model AllParticipantsAddedByUserViewModel
+﻿@model AllStudentsAddedByTeacherViewModel
 @{
-    ViewData["Title"] = "AllParticipantsAddedByUser";
+    ViewData["Title"] = "All Students Added By Teacher";
 }
-@if (Model.NewParticipant.IsNotAdded)
+@if (Model.NewStudent.IsNotAdded)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">×</span>
         </button>
         <i class="fa fa-exclamation-circle"></i>
-        <strong>On no!</strong> There is no participant with email @Model.NewParticipant.Email. Try again !
+        <strong>On no!</strong> There is no student with email @Model.NewStudent.Email. Try again !
     </div>
 }
 <div class="component bg-light">
-    <form method="post" class="container p-0" asp-action="AllParticipantsAddedByUser" asp-controller="Participants">
+    <form method="post" class="container p-0" asp-action="AllStudentsAddedByTeacher" asp-controller="Students">
     <div class="row px-3 pb-0 pt-4">
         <div class="input-group col-9 ml-4">
-            <input type="email" asp-for="@Model.NewParticipant.Email" class="form-control" placeholder="Email">
+            <input type="email" asp-for="@Model.NewStudent.Email" class="form-control" placeholder="Email">
         </div>
         <div class="col-2 mx-1">
             <button type="submit" class="btn btn-primary col-12">
@@ -24,9 +24,9 @@
             </button>
         </div>
     </div>
-    <span asp-validation-for="@Model.NewParticipant.Email" class="text-danger ml-5"></span>
+    <span asp-validation-for="@Model.NewStudent.Email" class="text-danger ml-5"></span>
     <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
-            <h5 class="mb-0">Participants Managment</h5>
+            <h5 class="mb-0">Students Managment</h5>
             </div>
         </form>
     </div>
@@ -39,18 +39,18 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model.Participants.Any())
+            @if (Model.Students.Any())
             {
-                @foreach (var participant in Model.Participants)
+                @foreach (var student in Model.Students)
                 {
                     <tr class="table-warning">
-                        <th scope="row">@participant.FullName</th>
-                        <td>@participant.Email</td>
+                        <th scope="row">@student.FullName</th>
+                        <td>@student.Email</td>
                         <td>
                             <div class="component  navbar-expand-lg text-right">
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item m-1">
-                                        <a class="nav-link  btn btn-white" href="/Administration/Participants/Delete?id=@participant.Id">
+                                        <a class="nav-link  btn btn-white" href="/Administration/Students/Delete?id=@student.Id">
                                             Delete
                                         </a>
                                     </li>

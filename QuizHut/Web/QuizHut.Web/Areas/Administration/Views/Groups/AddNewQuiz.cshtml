@@ -23,28 +23,33 @@
                 <div class="component">
                     @if (Model.Quizzes.Count() > 0)
                     {
-                    @for (int i = 0; i < Model.Quizzes.Count(); i++)
-                    {
-                        var quiz = Model.Quizzes[i];
-                        <div class="form-group mb-0">
-                            <div class="mt-2">
-                                @Html.EditorFor(x => x.Quizzes[i].IsAssigned)
-                                <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
-                                @Html.HiddenFor(model => model.Quizzes[i].Id)
+                        @for (int i = 0; i < Model.Quizzes.Count(); i++)
+                        {
+                            var quiz = Model.Quizzes[i];
+                            <div class="form-group mb-0">
+                                <div class="mt-2">
+                                    @Html.EditorFor(x => x.Quizzes[i].IsAssigned)
+                                    <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
+                                    @Html.HiddenFor(model => model.Quizzes[i].Id)
 
+                                </div>
                             </div>
-                        </div>
-                    }
+                        }
                     }
                     else
                     {
-                        <p>There are currently no unassigned quizzes</p>
+                        <p>There are currently no unassigned quizzes.</p>
+                        <a asp-area="" asp-action="DetailsInput" asp-controller="Quizzes">Create new.</a>
                     }
                 </div>
             </div>
             <div class="row mx-4 mb-4 text-white">
-                <button type="submit" class="btn btn-primary col-md-5 mt-5">Assign Quizzes</button>
-                <div class="col-1 mr-4"></div>
+                @if (Model.Quizzes.Count() > 0)
+                {
+                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Quizzes</button>
+                    <div class="col-1 mr-4"></div>
+
+                }
                 <a href="/Administration/Groups/GroupDetails?id=@Model.GroupId" class="btn btn-primary col-md-5 mt-5">Cancel</a>
             </div>
         </div>
