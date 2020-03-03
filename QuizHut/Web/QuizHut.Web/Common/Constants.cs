@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.Controllers.Common
+﻿namespace QuizHut.Web.Common
 {
     public static class Constants
     {

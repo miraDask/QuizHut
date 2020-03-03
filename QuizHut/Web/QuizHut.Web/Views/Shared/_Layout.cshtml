@@ -33,10 +33,10 @@
     <partial name="~/Views/Shared/_HeaderNavbarPartial.cshtml" />
     <div class="container">
         <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
+    </div>
+        <main role="main">
             @this.RenderBody()
         </main>
-    </div>
     <partial name="~/Views/Shared/_FooterPartial.cshtml" />
 
     <environment names="Development">

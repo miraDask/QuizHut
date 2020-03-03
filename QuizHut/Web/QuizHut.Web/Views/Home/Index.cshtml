@@ -3,134 +3,120 @@
     this.ViewData["Title"] = "Home Page";
 }
 
-<div class="container">
-    <main role="main" class="pb-3">
-        <div class="page-hero bg-white text-primary" id="banner">
-            <partial name="_BublesAndCirclesPrtial" />
-            <div class="row">
-                <div class="col-12 col-md-4 mb-5">
-                    <div class="title text-center pt-5">
-                        <h1 class="display-3 text-primary">QuizHut</h1>
-                        <h4 class="text-primary">Welcome to your simple quiz tool.</h4>
-                    </div>
-                </div>
-                <div class="col-12 col-md-7 offset-md-1">
-                    @if (Model != null)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                            <i class="fa fa-exclamation-circle"></i>
-                            <strong>On no!</strong> There is no quiz with password @Model.Password. Try again !
-                        </div>
-                    }
-                    <div class="row">
-                        <partial name="_MakeQuizPartial">
-                            <partial name="_TakeQuizPartial">
-                    </div>
+<partial name="_BublesAndCirclesPrtial" />
+<div class="page-hero bg-white text-primary" id="banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mb-5">
+                <div class="title text-center pt-5">
+                    <h1 class="display-2 text-primary">QuizHut</h1>
+                    <h4 class="text-primary">Is a simple quiz system designed especially for educational purposes.</h4>
                 </div>
             </div>
         </div>
-        <div id="about" class="intro bg-light">
-            <div class="container">
-                <div class="text-center mb-5">
-                    <h2>About</h2>
-                    <p class="lead">
-                        Depending on your needs QuizHut can be just a simple tool for making and taking quizzes online
-                        or whole quiz centered network, that can be used for educational purposes.
-                    </p>
-                </div>
-            </div>
-            <div class="blog-posts p-2">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="component">
-                                <div class="card mb-3">
-                                    <div class="card-header text-primary" style="font-size: xx-large">
-                                        <i class="fas fa-folder-plus"></i>
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title">Make Quiz</h4>
-                                        <p class="card-text" style="display:none">
-                                            Creating quiz is now easier than ever.
-                                            You don't need to be registered user to make one, but registration gives you much more.
-                                            You will be able to store all of your quizzes in one place, order them by categories and modify them.
-                                            Registering as Teacher gives you opportunity to make Groups, where you can add another users and assign them quizzes,
-                                            witch will appear directly in their accounts. This is functionality can be used for exams, because you will receive their results
-                                            right after they finish the quiz...or just for fun.
-                                        </p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <a class="btn btn-outline-primary read">Read More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="component">
-                                <div class="card mb-3">
-                                    <div class="card-header text-warning" style="font-size: xx-large">
-                                        <i class="fas fa-folder-open"></i>
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title">Take Quiz</h4>
-                                        <p class="card-text" style="display:none">
-                                            The only thing you need to take a quiz is the quiz password.
-                                            If you register as Participant you can receive invitations for taking a quiz directly in your account.You can be added to Groups
-                                            for educational purposes or just for fun.
-                                        </p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <a class="btn btn-outline-warning read">Read More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="component">
-                                <div class="card mb-3">
-                                    <div class="card-header text-danger" style="font-size: xx-large">
-                                        <i class="fas fa-file-alt"></i>
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title">Export To PDF</h4>
-                                        <p class="card-text" style="display:none">
-                                            If you only want to print your quiz, you can make it with just one click
-                                            at the end of the process of creating.
-                                        </p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <a class="btn btn-outline-danger read">Read More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="component">
-                                <div class="card mb-3">
-                                    <div class="card-header text-info" style="font-size: xx-large">
-                                        <i class="fas fa-envelope"></i>
-                                    </div>
-                                    <div class="card-body">
-                                        <h4 class="card-title">Invite People</h4>
-                                        <p class="card-text" style="display:none">
-                                            Registered as Teacher, you can invite participants in several ways.
-                                            You can create email list of participants and send them email that contains the password of the quiz.
-                                            You can assign quiz directly to group in which are added participants that you want to take the quiz.
-                                        </p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <a class="btn btn-outline-info read">Read More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+    </div>
 </div>
+<div id="about" class="intro bg-light">
+    <div class="container text-center">
+        <h2>About</h2>
+        <div class="section desc">
+            <div class="row">
+                <div class="col-12 col-md-8 offset-md-2">
+                    <p class="lead"><b>QuizHut</b> is a complete quiz system created to ...to do</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="blog-posts p-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="component">
+                        <div class="card mb-3">
+                            <div class="card-header text-primary" style="font-size: xx-large">
+                                <i class="fas fa-folder-plus"></i>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Make Quiz</h4>
+                                <p class="card-text" style="display:none">
+                                    Creating quiz is now easier than ever with our user-friendly system.
+                                    You will be able to store all of your quizzes in one place, order them by categories and modify them.
+                                    Registering as Teacher gives you the opportunity to make groups, where you can add students.
+                                    Teachers can create events and set starting time, duration and quiz for the event.
+                                    They also can choose which group to take part at that event.
+                                    This is functionality is perfect for testing the current progress of your students,
+                                    because you will receive their result as soon as they take the quiz.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-outline-primary read">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="component">
+                        <div class="card mb-3">
+                            <div class="card-header text-warning" style="font-size: xx-large">
+                                <i class="fas fa-folder-open"></i>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Take Quiz</h4>
+                                <p class="card-text" style="display:none">
+                                    In order to use the system, students must be registered users.
+                                    The shortcut for taking a quiz is if you know the quiz password.
+                                    If you don't, you can access pending quizzes and events from your account page.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-outline-warning read">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="component">
+                        <div class="card mb-3">
+                            <div class="card-header text-danger" style="font-size: xx-large">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Export To PDF</h4>
+                                <p class="card-text" style="display:none">
+                                    The teacher can print every quiz from quiz details page.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-outline-danger read">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="component">
+                        <div class="card mb-3">
+                            <div class="card-header text-info" style="font-size: xx-large">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Invite Students</h4>
+                                <p class="card-text" style="display:none">
+                                    The teacher can invite students in several ways.
+                                    You can create group of students and send them email that contains the password of the quiz. Or...
+                                    You can create event and assign it to a group. That way every student in the group will see the quiz from that
+                                    event in its own account as pending quiz and can take it when the quiz become active.
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-outline-info read">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 

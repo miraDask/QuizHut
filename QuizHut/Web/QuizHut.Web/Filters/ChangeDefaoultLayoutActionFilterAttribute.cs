@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using QuizHut.Common;
     using QuizHut.Data.Models;
-    using QuizHut.Web.Controllers.Common;
+    using QuizHut.Web.Common;
 
     public class ChangeDefaoultLayoutActionFilterAttribute : ActionFilterAttribute
     {

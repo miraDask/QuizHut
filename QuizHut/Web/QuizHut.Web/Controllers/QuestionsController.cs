@@ -3,24 +3,18 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using QuizHut.Data.Models;
     using QuizHut.Services.Question;
-    using QuizHut.Web.Controllers.Common;
+    using QuizHut.Web.Common;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Questions;
 
     public class QuestionsController : Controller
     {
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuestionService questionService;
 
-        public QuestionsController(
-            UserManager<ApplicationUser> userManager,
-            IQuestionService questionService)
+        public QuestionsController(IQuestionService questionService)
         {
-            this.userManager = userManager;
             this.questionService = questionService;
         }
 
@@ -28,7 +22,7 @@
         [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult QuestionInput(string id)
         {
-            if (!string.IsNullOrEmpty(id) || !string.IsNullOrWhiteSpace(id))
+            if (id != null)
             {
                 this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
             }
