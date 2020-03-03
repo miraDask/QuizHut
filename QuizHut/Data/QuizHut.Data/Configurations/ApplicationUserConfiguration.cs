@@ -9,50 +9,50 @@
         public void Configure(EntityTypeBuilder<ApplicationUser> user)
         {
             user
-               .HasMany(e => e.Claims)
+               .HasMany(u => u.Claims)
                .WithOne()
-               .HasForeignKey(e => e.UserId)
+               .HasForeignKey(c => c.UserId)
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
             user
-                .HasMany(e => e.Logins)
+                .HasMany(u => u.Logins)
                 .WithOne()
-                .HasForeignKey(e => e.UserId)
+                .HasForeignKey(l => l.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             user
-                .HasMany(e => e.Roles)
+                .HasMany(u => u.Roles)
                 .WithOne()
-                .HasForeignKey(e => e.UserId)
+                .HasForeignKey(r => r.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             user
-                .HasMany(e => e.ParticipantInGroups)
-                .WithOne(e => e.Participant)
-                .HasForeignKey(e => e.ParticipantId);
+                .HasMany(u => u.StudentsInGroups)
+                .WithOne(sg => sg.Student)
+                .HasForeignKey(sg => sg.StudentId);
 
             user
-                .HasMany(e => e.CreatedQuizzes)
-                .WithOne(e => e.Creator)
-                .HasForeignKey(e => e.CreatorId);
+                .HasMany(u => u.CreatedQuizzes)
+                .WithOne(q => q.Creator)
+                .HasForeignKey(q => q.CreatorId);
 
             user
-                .HasMany(e => e.CreatedGroups)
-                .WithOne(e => e.Creator)
-                .HasForeignKey(e => e.CreatorId);
+                .HasMany(u => u.CreatedGroups)
+                .WithOne(g => g.Creator)
+                .HasForeignKey(g => g.CreatorId);
 
             user
-                .HasMany(e => e.Participants)
-                .WithOne(e => e.Manager)
-                .HasForeignKey(e => e.ManagerId);
+                .HasMany(u => u.Students)
+                .WithOne(u => u.Teacher)
+                .HasForeignKey(u => u.TeacherId);
 
             user
-                .HasMany(e => e.QuizResults)
-                .WithOne(e => e.Participant)
-                .HasForeignKey(e => e.ParticipantId);
+                .HasMany(u => u.Results)
+                .WithOne(r => r.Student)
+                .HasForeignKey(r => r.StudentId);
         }
     }
 }

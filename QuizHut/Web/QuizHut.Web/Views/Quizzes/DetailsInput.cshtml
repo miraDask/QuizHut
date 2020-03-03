@@ -59,7 +59,7 @@
                         </textarea>
 
 
-                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.ModeratorRoleName))
+                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.TeacherRoleName))
                         {
                             <div class="mt-4"><label asp-for="@Model.ActivationDate">Activation Date</label></div>
                             <div class="input-group">

@@ -6,8 +6,8 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Quiz;
-    using QuizHut.Services.QuizResult;
+    using QuizHut.Services.Quizzes;
+    using QuizHut.Services.QuizzesResults;
     using QuizHut.Web.Common;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -16,13 +16,13 @@
     public class QuizzesController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IQuizService quizService;
-        private readonly IQuizResultService quizResultService;
+        private readonly IQuizzesService quizService;
+        private readonly IQuizzesResultsService quizResultService;
 
         public QuizzesController(
             UserManager<ApplicationUser> userManager,
-            IQuizService quizService,
-            IQuizResultService quizResultService)
+            IQuizzesService quizService,
+            IQuizzesResultsService quizResultService)
         {
             this.userManager = userManager;
             this.quizService = quizService;
@@ -48,7 +48,7 @@
             var userId = this.userManager.GetUserId(this.User);
             model.CreatorId = userId;
             model.PasswordIsValid = true;
-            var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.ActivationDate, model.ActiveFrom, model.ActiveTo, model.Timer, model.CreatorId, model.Password);
+            var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.Timer, model.CreatorId, model.Password);
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
             return this.RedirectToAction("QuestionInput", "Questions");
         }
@@ -167,7 +167,7 @@
                 return this.View(model);
             }
 
-            await this.quizService.UpdateAsync(model.Id, model.Name, model.Description, model.ActivationDate, model.ActiveFrom, model.ActiveTo, model.Timer, model.Password);
+            await this.quizService.UpdateAsync(model.Id, model.Name, model.Description, model.Timer, model.Password);
 
             return this.RedirectToAction("Display", new { id = model.Id });
         }

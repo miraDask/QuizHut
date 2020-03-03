@@ -5,16 +5,16 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Quiz;
+    using QuizHut.Services.Quizzes;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuizzesController : AdministrationController
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IQuizService quizService;
+        private readonly IQuizzesService quizService;
 
-        public QuizzesController(UserManager<ApplicationUser> userManager, IQuizService quizService)
+        public QuizzesController(UserManager<ApplicationUser> userManager, IQuizzesService quizService)
         {
             this.userManager = userManager;
             this.quizService = quizService;

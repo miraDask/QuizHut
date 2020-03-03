@@ -1,16 +1,14 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
-    using System;
-
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
+    using QuizHut.Web.ViewModels.Common;
 
     public class QuizListViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
         public QuizListViewModel()
         {
-
         }
 
         public string Id { get; set; }
@@ -35,39 +33,8 @@
                     x => x.QuestionsCount,
                     opt => opt.MapFrom(x => x.Questions.Count))
                 .ForMember(
-                    x => x.IsActive,
-                    opt => opt.MapFrom(x => IsTheQuizActive(x.ActivationDateAndTime, x.DurationOfActivity)))
-                .ForMember(
                     x => x.Color,
-                    opt => opt.MapFrom(x => IsTheQuizActive(x.ActivationDateAndTime, x.DurationOfActivity) == true ? "green" : "red"));
-        }
-
-        private static bool IsTheQuizActive(DateTime? activationDateAndTime, TimeSpan? duration)
-        {
-            if (activationDateAndTime == null)
-            {
-                return true;
-            }
-
-            var now = DateTime.UtcNow;
-            if (duration != null)
-            {
-                var end = activationDateAndTime.Value.Add((TimeSpan)duration);
-
-                if (now < activationDateAndTime || now > end)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (now.Date < activationDateAndTime.Value.Date || now.Date > activationDateAndTime.Value.Date)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+                    opt => opt.MapFrom(x => x.IsActive ? ModelCostants.ColorActive : ModelCostants.ColorInActive));
         }
     }
 }

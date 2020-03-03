@@ -2,7 +2,7 @@
 @{
     this.ViewData["Title"] = "Error";
     var area = this.User.IsInRole(GlobalConstants.AdministratorRoleName)
-    || this.User.IsInRole(GlobalConstants.ModeratorRoleName)
+    || this.User.IsInRole(GlobalConstants.TeacherRoleName)
     ? "Administration"
     : "";
 }

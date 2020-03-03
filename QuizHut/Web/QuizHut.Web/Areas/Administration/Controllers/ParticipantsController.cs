@@ -5,16 +5,16 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.User;
+    using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Participants;
 
     public class ParticipantsController : AdministrationController
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IUserService service;
+        private readonly IUsersService service;
 
-        public ParticipantsController(UserManager<ApplicationUser> userManager, IUserService service)
+        public ParticipantsController(UserManager<ApplicationUser> userManager, IUsersService service)
         {
             this.userManager = userManager;
             this.service = service;

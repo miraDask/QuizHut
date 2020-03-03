@@ -8,7 +8,7 @@
     using QuizHut.Common;
     using QuizHut.Data.Models;
     using QuizHut.Services.Data;
-    using QuizHut.Services.User;
+    using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Moderators;
     using QuizHut.Web.ViewModels.Participants;
@@ -18,9 +18,9 @@
     {
         private readonly ISettingsService settingsService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IUserService service;
+        private readonly IUsersService service;
 
-        public DashboardController(ISettingsService settingsService, UserManager<ApplicationUser> userManager, IUserService service)
+        public DashboardController(ISettingsService settingsService, UserManager<ApplicationUser> userManager, IUsersService service)
         {
             this.settingsService = settingsService;
             this.userManager = userManager;
@@ -30,10 +30,10 @@
         public async Task<IActionResult> Index(string invalidEmail)
         {
             //var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
-            var moderators = await this.service.GetAllByRoleAsync<ModeratorViewModel>(GlobalConstants.ModeratorRoleName);
+            var teachers = await this.service.GetAllByRoleAsync<ModeratorViewModel>(GlobalConstants.TeacherRoleName);
             var model = new ModeratorsAllViewModel()
             {
-                Moderators = moderators,
+                Moderators = teachers,
                 NewModerator = new ParticipantInputViewModel(),
             };
 
@@ -50,7 +50,7 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Index(ModeratorsAllViewModel model)
         {
-            var isAdded = await this.service.AssignRoleAsync(model.NewModerator.Email, GlobalConstants.ModeratorRoleName);
+            var isAdded = await this.service.AssignRoleAsync(model.NewModerator.Email, GlobalConstants.TeacherRoleName);
 
             if (!isAdded)
             {
@@ -62,7 +62,7 @@
 
         public async Task<IActionResult> Delete(string id)
         {
-            await this.service.RemoveFromRoleAsync(id, GlobalConstants.ModeratorRoleName);
+            await this.service.RemoveFromRoleAsync(id, GlobalConstants.TeacherRoleName);
             return this.RedirectToAction("Index");
         }
     }

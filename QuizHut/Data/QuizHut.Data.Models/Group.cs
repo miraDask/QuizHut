@@ -10,7 +10,7 @@
         public Group()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.ParticipanstGroups = new HashSet<ParticipantGroup>();
+            this.StudentstGroups = new HashSet<StudentGroup>();
             this.QuizzesGroups = new HashSet<QuizGroup>();
         }
 
@@ -20,8 +20,10 @@
 
         public virtual ApplicationUser Creator { get; set; }
 
-        public virtual ICollection<ParticipantGroup> ParticipanstGroups { get; set; }
+        public virtual ICollection<StudentGroup> StudentstGroups { get; set; }
 
         public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
+
+        public virtual ICollection<Event> Events { get; set; }
     }
 }

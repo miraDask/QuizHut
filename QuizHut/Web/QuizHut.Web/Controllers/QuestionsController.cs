@@ -4,16 +4,16 @@
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using QuizHut.Services.Question;
+    using QuizHut.Services.Questions;
     using QuizHut.Web.Common;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Questions;
 
     public class QuestionsController : Controller
     {
-        private readonly IQuestionService questionService;
+        private readonly IQuestionsService questionService;
 
-        public QuestionsController(IQuestionService questionService)
+        public QuestionsController(IQuestionsService questionService)
         {
             this.questionService = questionService;
         }

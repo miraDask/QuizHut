@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Answer;
+    using QuizHut.Services.Answers;
     using QuizHut.Web.Common;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Answers;
@@ -14,11 +14,11 @@
     public class AnswersController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IAnswerService answerService;
+        private readonly IAnswersService answerService;
 
         public AnswersController(
             UserManager<ApplicationUser> userManager,
-            IAnswerService answerService)
+            IAnswersService answerService)
         {
             this.userManager = userManager;
             this.answerService = answerService;

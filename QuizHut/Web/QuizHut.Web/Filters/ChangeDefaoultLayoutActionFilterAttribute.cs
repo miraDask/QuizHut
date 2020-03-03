@@ -20,9 +20,9 @@
         {
             var userId = this.userManager.GetUserId(context.HttpContext.User);
             var isAdministrator = context.HttpContext.User.IsInRole(GlobalConstants.AdministratorRoleName);
-            var isModerator = context.HttpContext.User.IsInRole(GlobalConstants.ModeratorRoleName);
+            var isTeacher = context.HttpContext.User.IsInRole(GlobalConstants.TeacherRoleName);
 
-            if (userId != null && (isAdministrator || isModerator))
+            if (userId != null && (isAdministrator || isTeacher))
             {
                 var controller = (Controller)context.Controller;
 

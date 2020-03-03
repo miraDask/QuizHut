@@ -11,7 +11,7 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Questions = new HashSet<Question>();
-            this.QuizResults = new HashSet<QuizResult>();
+            this.QuizzesResults = new HashSet<QuizResult>();
             this.QuizzesGroups = new HashSet<QuizGroup>();
         }
 
@@ -21,11 +21,9 @@
 
         public string Password { get; set; }
 
-        public TimeSpan? DurationOfActivity { get; set; }
-
-        public DateTime? ActivationDateAndTime { get; set; }
-
         public int? Timer { get; set; }
+
+        public bool IsActive { get; set; }
 
         public string CreatorId { get; set; }
 
@@ -39,6 +37,8 @@
 
         public virtual ICollection<Question> Questions { get; set; }
 
-        public virtual ICollection<QuizResult> QuizResults { get; set; }
+        public virtual ICollection<QuizResult> QuizzesResults { get; set; }
+
+        public virtual ICollection<Event> Events { get; set; }
     }
 }

@@ -18,18 +18,19 @@
     using QuizHut.Data.Models;
     using QuizHut.Data.Repositories;
     using QuizHut.Data.Seeding;
-    using QuizHut.Services.Answer;
-    using QuizHut.Services.Category;
+    using QuizHut.Services.Answers;
+    using QuizHut.Services.Categories;
     using QuizHut.Services.Data;
-    using QuizHut.Services.Group;
+    using QuizHut.Services.Groups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
-    using QuizHut.Services.ParticipantGroup;
-    using QuizHut.Services.Question;
-    using QuizHut.Services.Quiz;
-    using QuizHut.Services.QuizGroup;
-    using QuizHut.Services.QuizResult;
-    using QuizHut.Services.User;
+    using QuizHut.Services.Questions;
+    using QuizHut.Services.Quizzes;
+    using QuizHut.Services.QuizzesGroups;
+    using QuizHut.Services.QuizzesResults;
+    using QuizHut.Services.Results;
+    using QuizHut.Services.StudentsGroups;
+    using QuizHut.Services.Users;
     using QuizHut.Web.ViewModels;
     using Rotativa.AspNetCore;
 
@@ -80,15 +81,16 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
-            services.AddTransient<IQuizService, QuizService>();
-            services.AddTransient<IQuestionService, QuestionService>();
-            services.AddTransient<IAnswerService, AnswerService>();
-            services.AddTransient<IQuizResultService, QuizResultService>();
-            services.AddTransient<IGroupService, GroupService>();
-            services.AddTransient<IQuizGroupService, QuizGroupService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IParticipantGroupService, ParticipantGroupService>();
-            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IQuizzesService, QuizzesService>();
+            services.AddTransient<IQuestionsService, QuestionsService>();
+            services.AddTransient<IAnswersService, AnswersService>();
+            services.AddTransient<IQuizzesResultsService, QuizzesResultsService>();
+            services.AddTransient<IGroupsService, GroupsService>();
+            services.AddTransient<IResultsService, ResultsService>();
+            services.AddTransient<IQuizzesGroupsService, QuizzesGroupsService>();
+            services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IStudentsGroupsService, StudentsGroupsService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -24,7 +24,7 @@
                     opt => opt.MapFrom(x => x.CreatedOn.ToString("dd/MM/yyyy")))
                 .ForMember(
                     x => x.ParticipantsCount,
-                    opt => opt.MapFrom(x => x.ParticipanstGroups.Count))
+                    opt => opt.MapFrom(x => x.StudentstGroups.Count))
                 .ForMember(
                     x => x.AssignedQuizzesCount,
                     opt => opt.MapFrom(x => x.QuizzesGroups.Count));

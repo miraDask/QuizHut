@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Submit";
     var returnUrl = this.User.IsInRole(GlobalConstants.AdministratorRoleName)
-        || this.User.IsInRole(GlobalConstants.ModeratorRoleName)
+        || this.User.IsInRole(GlobalConstants.TeacherRoleName)
         ? "/Administration/"
         : "/";
 }

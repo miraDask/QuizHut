@@ -16,11 +16,11 @@ namespace QuizHut.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
-            this.ParticipantInGroups = new HashSet<ParticipantGroup>();
-            this.Participants = new HashSet<ApplicationUser>();
+            this.StudentsInGroups = new HashSet<StudentGroup>();
+            this.Students = new HashSet<ApplicationUser>();
             this.CreatedQuizzes = new HashSet<Quiz>();
             this.CreatedGroups = new HashSet<Group>();
-            this.QuizResults = new HashSet<QuizResult>();
+            this.Results = new HashSet<Result>();
         }
 
         public string FirstName { get; set; }
@@ -37,9 +37,9 @@ namespace QuizHut.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
-        public string ManagerId { get; set; }
+        public string TeacherId { get; set; }
 
-        public virtual ApplicationUser Manager { get; set; }
+        public virtual ApplicationUser Teacher { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
@@ -47,13 +47,13 @@ namespace QuizHut.Data.Models
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
-        public virtual ICollection<ParticipantGroup> ParticipantInGroups { get; set; }
+        public virtual ICollection<StudentGroup> StudentsInGroups { get; set; }
 
-        public virtual ICollection<ApplicationUser> Participants { get; set; }
+        public virtual ICollection<ApplicationUser> Students { get; set; }
 
         public virtual ICollection<Quiz> CreatedQuizzes { get; set; }
 
-        public virtual ICollection<QuizResult> QuizResults { get; set; }
+        public virtual ICollection<Result> Results { get; set; }
 
         public virtual ICollection<Group> CreatedGroups { get; set; }
     }

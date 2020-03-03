@@ -243,9 +243,6 @@ namespace QuizHut.Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("ManagerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -269,6 +266,9 @@ namespace QuizHut.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TeacherId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -280,8 +280,6 @@ namespace QuizHut.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("ManagerId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -289,6 +287,8 @@ namespace QuizHut.Data.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -327,6 +327,46 @@ namespace QuizHut.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("QuizHut.Data.Models.Event", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ActivationDateAndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan?>("DurationOfActivity")
+                        .HasColumnType("time");
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("QuizId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("QuizId");
+
+                    b.ToTable("Events");
+                });
+
             modelBuilder.Entity("QuizHut.Data.Models.Group", b =>
                 {
                     b.Property<string>("Id")
@@ -359,21 +399,6 @@ namespace QuizHut.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("QuizHut.Data.Models.ParticipantGroup", b =>
-                {
-                    b.Property<string>("ParticipantId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("GroupId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ParticipantId", "GroupId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("ParticipantsGroups");
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.Question", b =>
@@ -418,9 +443,6 @@ namespace QuizHut.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("ActivationDateAndTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(450)");
 
@@ -436,8 +458,8 @@ namespace QuizHut.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan?>("DurationOfActivity")
-                        .HasColumnType("time");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -489,6 +511,38 @@ namespace QuizHut.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.QuizResult", b =>
                 {
+                    b.Property<string>("QuizId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ResultId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("QuizId", "ResultId");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("QuizzesResults");
+                });
+
+            modelBuilder.Entity("QuizHut.Data.Models.Result", b =>
+                {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
@@ -507,24 +561,19 @@ namespace QuizHut.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ParticipantId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<string>("QuizId")
+                    b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("ParticipantId");
+                    b.HasIndex("StudentId");
 
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("QuizzesResults");
+                    b.ToTable("Results");
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.Setting", b =>
@@ -557,6 +606,21 @@ namespace QuizHut.Data.Migrations
                     b.HasIndex("IsDeleted");
 
                     b.ToTable("Settings");
+                });
+
+            modelBuilder.Entity("QuizHut.Data.Models.StudentGroup", b =>
+                {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("StudentId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("ParticipantsGroups");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -619,9 +683,9 @@ namespace QuizHut.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("QuizHut.Data.Models.ApplicationUser", "Manager")
-                        .WithMany("Participants")
-                        .HasForeignKey("ManagerId");
+                    b.HasOne("QuizHut.Data.Models.ApplicationUser", "Teacher")
+                        .WithMany("Students")
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.Category", b =>
@@ -631,26 +695,22 @@ namespace QuizHut.Data.Migrations
                         .HasForeignKey("CreatorId");
                 });
 
+            modelBuilder.Entity("QuizHut.Data.Models.Event", b =>
+                {
+                    b.HasOne("QuizHut.Data.Models.Group", "Group")
+                        .WithMany("Events")
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("QuizHut.Data.Models.Quiz", "Quiz")
+                        .WithMany("Events")
+                        .HasForeignKey("QuizId");
+                });
+
             modelBuilder.Entity("QuizHut.Data.Models.Group", b =>
                 {
                     b.HasOne("QuizHut.Data.Models.ApplicationUser", "Creator")
                         .WithMany("CreatedGroups")
                         .HasForeignKey("CreatorId");
-                });
-
-            modelBuilder.Entity("QuizHut.Data.Models.ParticipantGroup", b =>
-                {
-                    b.HasOne("QuizHut.Data.Models.Group", "Group")
-                        .WithMany("ParticipanstGroups")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("QuizHut.Data.Models.ApplicationUser", "Participant")
-                        .WithMany("ParticipantInGroups")
-                        .HasForeignKey("ParticipantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("QuizHut.Data.Models.Question", b =>
@@ -688,13 +748,39 @@ namespace QuizHut.Data.Migrations
 
             modelBuilder.Entity("QuizHut.Data.Models.QuizResult", b =>
                 {
-                    b.HasOne("QuizHut.Data.Models.ApplicationUser", "Participant")
-                        .WithMany("QuizResults")
-                        .HasForeignKey("ParticipantId");
-
                     b.HasOne("QuizHut.Data.Models.Quiz", "Quiz")
-                        .WithMany("QuizResults")
-                        .HasForeignKey("QuizId");
+                        .WithMany("QuizzesResults")
+                        .HasForeignKey("QuizId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizHut.Data.Models.Result", "Result")
+                        .WithMany("QuizzesResults")
+                        .HasForeignKey("ResultId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("QuizHut.Data.Models.Result", b =>
+                {
+                    b.HasOne("QuizHut.Data.Models.ApplicationUser", "Student")
+                        .WithMany("Results")
+                        .HasForeignKey("StudentId");
+                });
+
+            modelBuilder.Entity("QuizHut.Data.Models.StudentGroup", b =>
+                {
+                    b.HasOne("QuizHut.Data.Models.Group", "Group")
+                        .WithMany("StudentstGroups")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QuizHut.Data.Models.ApplicationUser", "Student")
+                        .WithMany("StudentsInGroups")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

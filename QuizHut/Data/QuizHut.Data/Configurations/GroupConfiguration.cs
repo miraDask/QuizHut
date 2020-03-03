@@ -10,13 +10,17 @@
     {
         public void Configure(EntityTypeBuilder<Group> group)
         {
-            group.HasMany(g => g.ParticipanstGroups)
+            group.HasMany(g => g.StudentstGroups)
               .WithOne(p => p.Group)
               .HasForeignKey(q => q.GroupId);
 
             group.HasMany(g => g.QuizzesGroups)
              .WithOne(p => p.Group)
              .HasForeignKey(q => q.GroupId);
+
+            group.HasMany(g => g.Events)
+                .WithOne(p => p.Group)
+                .HasForeignKey(q => q.GroupId);
 
             group.Property(g => g.Name)
              .HasMaxLength(DataValidation.Group.NameMaxLength)

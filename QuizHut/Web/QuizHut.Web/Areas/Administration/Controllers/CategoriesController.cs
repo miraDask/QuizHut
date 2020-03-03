@@ -6,8 +6,8 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Category;
-    using QuizHut.Services.Quiz;
+    using QuizHut.Services.Categories;
+    using QuizHut.Services.Quizzes;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Categories;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -15,13 +15,13 @@
     public class CategoriesController : AdministrationController
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly ICategoryService service;
-        private readonly IQuizService quizService;
+        private readonly ICategoriesService service;
+        private readonly IQuizzesService quizService;
 
         public CategoriesController(
             UserManager<ApplicationUser> userManager,
-            ICategoryService service,
-            IQuizService quizService)
+            ICategoriesService service,
+            IQuizzesService quizService)
         {
             this.userManager = userManager;
             this.service = service;

@@ -6,9 +6,9 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Group;
-    using QuizHut.Services.Quiz;
-    using QuizHut.Services.User;
+    using QuizHut.Services.Groups;
+    using QuizHut.Services.Quizzes;
+    using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Participants;
@@ -16,15 +16,15 @@
 
     public class GroupsController : AdministrationController
     {
-        private readonly IGroupService service;
-        private readonly IQuizService quizService;
-        private readonly IUserService userService;
+        private readonly IGroupsService service;
+        private readonly IQuizzesService quizService;
+        private readonly IUsersService userService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public GroupsController(
-            IGroupService service,
-            IQuizService quizService,
-            IUserService userService,
+            IGroupsService service,
+            IQuizzesService quizService,
+            IUsersService userService,
             UserManager<ApplicationUser> userManager)
         {
             this.service = service;
@@ -87,7 +87,7 @@
         public async Task<IActionResult> AssignParticipants(GroupWithParticipantsViewModel model)
         {
             var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignParticipantsToGroupAsync(model.GroupId, participantsIds);
+            await this.service.AssignStudentsToGroupAsync(model.GroupId, participantsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
 
@@ -121,7 +121,7 @@
         [HttpPost]
         public async Task<IActionResult> DeleteParticipantFromGroup(string groupId, string participantId)
         {
-            await this.service.DeleteParticipantFromGroupAsync(groupId, participantId);
+            await this.service.DeleteStudentFromGroupAsync(groupId, participantId);
             return this.RedirectToAction("GroupDetails", new { id = groupId });
         }
 
@@ -148,7 +148,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var participants = await this.userService.GetAllByUserIdAsync<ParticipantViewModel>(userId);
-            participants = await this.service.FilterParticipantsThatAreNotAssignedToThisGroup(id, participants);
+            participants = await this.service.FilterStudentsThatAreNotAssignedToThisGroup(id, participants);
             var model = new GroupWithParticipantsViewModel() { GroupId = id, Participants = participants };
             return this.View(model);
         }
@@ -158,7 +158,7 @@
         public async Task<IActionResult> AddParticipants(GroupWithParticipantsViewModel model)
         {
             var participantsIds = model.Participants.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignParticipantsToGroupAsync(model.GroupId, participantsIds);
+            await this.service.AssignStudentsToGroupAsync(model.GroupId, participantsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
 

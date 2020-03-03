@@ -8,7 +8,7 @@
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Shared;
 
-    public class EditDetailsViewModel : IMapFrom<Quiz>, IHaveCustomMappings
+    public class EditDetailsViewModel : IMapFrom<Quiz>
     {
         public string Id { get; set; }
 
@@ -40,26 +40,5 @@
         public int? Timer { get; set; }
 
         public bool PasswordIsValid { get; set; }
-
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            configuration.CreateMap<Quiz, EditDetailsViewModel>()
-                .ForMember(
-                    x => x.ActivationDate,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime != null
-                    ? x.ActivationDateAndTime.Value.ToString("dd/MM/yyyy") : string.Empty))
-               .ForMember(
-                    x => x.ActiveFrom,
-                    opt => opt.MapFrom(
-                        x => x.DurationOfActivity != null
-                        ? $"{x.ActivationDateAndTime.Value.Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Minute.ToString("D2")}"
-                        : string.Empty))
-               .ForMember(
-                    x => x.ActiveTo,
-                    opt => opt.MapFrom(
-                        x => x.DurationOfActivity != null
-                        ? $"{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Minute.ToString("D2")}"
-                        : string.Empty));
-        }
     }
 }

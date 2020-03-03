@@ -37,7 +37,11 @@
 
         public DbSet<Group> Groups { get; set; }
 
-        public DbSet<ParticipantGroup> ParticipantsGroups { get; set; }
+        public DbSet<Event> Events { get; set; }
+
+        public DbSet<Result> Results { get; set; }
+
+        public DbSet<StudentGroup> ParticipantsGroups { get; set; }
 
         public DbSet<QuizGroup> QuizzessGroups { get; set; }
 
