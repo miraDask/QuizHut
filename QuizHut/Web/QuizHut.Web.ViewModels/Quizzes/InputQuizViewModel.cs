@@ -23,8 +23,9 @@
 
         public string Description { get; set; }
 
-        [RegularExpression(ModelValidations.RegEx.Date, ErrorMessage = ModelValidations.Error.DateFormatMessage)]
-        public string ActivationDate { get; set; }
+        // this is for event
+        //[RegularExpression(ModelValidations.RegEx.Date, ErrorMessage = ModelValidations.Error.DateFormatMessage)]
+        //public string ActivationDate { get; set; }
 
         [Required]
         [StringLength(
@@ -33,11 +34,13 @@
             MinimumLength = ModelValidations.Quizzes.PasswordMinLength)]
         public string Password { get; set; }
 
-        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
-        public string ActiveFrom { get; set; }
+        public bool IsActive { get; set; }
 
-        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
-        public string ActiveTo { get; set; }
+        //[RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
+        //public string ActiveFrom { get; set; }
+
+        //[RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
+        //public string ActiveTo { get; set; }
 
         public int? Timer { get; set; }
 

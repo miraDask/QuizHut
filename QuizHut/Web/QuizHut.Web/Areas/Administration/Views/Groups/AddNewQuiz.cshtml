@@ -39,7 +39,7 @@
                     else
                     {
                         <p>There are currently no unassigned quizzes.</p>
-                        <a asp-area="" asp-action="DetailsInput" asp-controller="Quizzes">Create new.</a>
+                        <a asp-area="Administration" asp-action="DetailsInput" asp-controller="Quizzes">Create new.</a>
                     }
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     <div class="col-1 mr-4"></div>
 
                 }
-                <a href="/Administration/Groups/GroupDetails?id=@Model.GroupId" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+                <a asp-area="Administration" asp-action="GroupDetails" asp-controller="Groups" asp-route-id="@Model.GroupId" class="btn btn-primary col-md-5 mt-5">Cancel</a>
             </div>
         </div>
     </form>

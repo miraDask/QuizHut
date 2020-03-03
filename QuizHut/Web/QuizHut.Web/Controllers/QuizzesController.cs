@@ -9,9 +9,7 @@
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.QuizzesResults;
     using QuizHut.Web.Common;
-    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
-    using Rotativa.AspNetCore;
 
     public class QuizzesController : Controller
     {
@@ -27,52 +25,6 @@
             this.userManager = userManager;
             this.quizService = quizService;
             this.quizResultService = quizResultService;
-        }
-
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
-        public IActionResult DetailsInput()
-        {
-            return this.View();
-        }
-
-        [HttpPost]
-        [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> DetailsInput(InputQuizViewModel model)
-        {
-            var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
-            if (quizWithSamePasswordId != null)
-            {
-                return this.View(model);
-            }
-
-            var userId = this.userManager.GetUserId(this.User);
-            model.CreatorId = userId;
-            model.PasswordIsValid = true;
-            var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.Timer, model.CreatorId, model.Password);
-            this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
-            return this.RedirectToAction("QuestionInput", "Questions");
-        }
-
-        [HttpGet]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
-        public async Task<IActionResult> Display(string id)
-        {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
-            {
-                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            }
-
-            this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
-
-            var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
-
-            return this.View(quizModel);
-        }
-
-        [HttpGet]
-        public IActionResult Submit(QuizResultViewModel model)
-        {
-            return this.View(model);
         }
 
         public async Task<IActionResult> Start(string password)
@@ -103,6 +55,12 @@
             return this.RedirectToAction("Start", new { password = model.Password });
         }
 
+        [HttpGet]
+        public IActionResult Submit(QuizResultViewModel model)
+        {
+            return this.View(model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Submit(AttemtedQuizViewModel model)
         {
@@ -113,63 +71,6 @@
             resultModel.QuizName = this.HttpContext.Session.GetString(Constants.AttemptedQuizName);
 
             return this.View(resultModel);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> PDFExport(string id)
-        {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
-            {
-                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            }
-
-            var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
-
-            return new ViewAsPdf("PDFExport", quizModel)
-            {
-                PageSize = Rotativa.AspNetCore.Options.Size.A4,
-                PageMargins = { Left = 20, Bottom = 20, Right = 20, Top = 20 },
-            };
-        }
-
-        public async Task<IActionResult> DeleteQuiz(string id)
-        {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
-            {
-                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-                await this.quizService.DeleteByIdAsync(id);
-                return this.RedirectToAction("Index", "Home");
-            }
-
-            await this.quizService.DeleteByIdAsync(id);
-            return this.RedirectToAction("AllQuizzesCreatedByTeacher", "Quizzes", new { area = "Administration" });
-        }
-
-        [HttpGet]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
-        public async Task<IActionResult> EditDetailsInput(string id)
-        {
-            var editModel = await this.quizService.GetQuizByIdAsync<EditDetailsViewModel>(id);
-            editModel.PasswordIsValid = true;
-
-            return this.View(editModel);
-        }
-
-        [HttpPost]
-        [ModelStateValidationActionFilterAttribute]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
-        public async Task<IActionResult> EditDetailsInput(EditDetailsViewModel model)
-        {
-            var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
-            if (quizWithSamePasswordId != null && quizWithSamePasswordId != model.Id)
-            {
-                model.PasswordIsValid = false;
-                return this.View(model);
-            }
-
-            await this.quizService.UpdateAsync(model.Id, model.Name, model.Description, model.Timer, model.Password);
-
-            return this.RedirectToAction("Display", new { id = model.Id });
         }
     }
 }

@@ -1,31 +1,24 @@
-﻿namespace QuizHut.Web.Controllers
+﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using QuizHut.Data.Models;
     using QuizHut.Services.Answers;
     using QuizHut.Web.Common;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Answers;
 
-    public class AnswersController : Controller
+    public class AnswersController : AdministrationController
     {
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly IAnswersService answerService;
 
-        public AnswersController(
-            UserManager<ApplicationUser> userManager,
-            IAnswersService answerService)
+        public AnswersController(IAnswersService answerService)
         {
-            this.userManager = userManager;
             this.answerService = answerService;
         }
 
         [HttpGet]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult AnswerInput()
         {
             return this.View();
@@ -42,7 +35,6 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult ApendAnswerInput(string id)
         {
             var model = new AnswerViewModel() { QuestionId = id };
@@ -51,7 +43,6 @@
         }
 
         [HttpPost]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AppendNewAnswer(AnswerViewModel model)
         {
@@ -60,9 +51,7 @@
             return this.RedirectToAction("Display", "Quizzes");
         }
 
-
         [HttpGet]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public async Task<IActionResult> EditAnswerInput(string id)
         {
             var model = await this.answerService.GetAnswerModelAsync(id);

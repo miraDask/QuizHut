@@ -1,7 +1,6 @@
 ﻿@model AnswerViewModel
 @{
-    ViewData["Title"] = "ApendAnswerInput";
-    Layout = (string)ViewData["Layout"] ?? "_Layout";
+    ViewData["Title"] = "EditAnswerInput";
 }
 
 <div class="container-fluid">
@@ -9,14 +8,14 @@
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form method="post" class="col-11 ml-4" asp-action="AppendNewAnswer" asp-controller="Answers">
+        <form method="post" class="col-11 ml-4" asp-area="Administration" asp-action="Update" asp-controller="Answers">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
                         <i class="fas fa-folder-plus"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title">Add New Answer</h4>
+                        <h4 class="card-title">Edit Answer</h4>
                         <p class="card-text" style="display: block;">
                             <span class="text-primary mr-1">∗</span>
                             You can always edit it later.
@@ -30,14 +29,14 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input type="text" class="form-control" asp-for="Text" placeholder="...">
-                            <input type="hidden" class="form-control" asp-for="QuestionId" value="@Model.QuestionId">
+                            <input type="text" class="form-control" asp-for="Text" value="@Model.Text">
+                            <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
                         </div>
                         <span asp-validation-for="@Model.Text" class="text-danger"></span>
                         <div class="row mx-1 text-white">
-                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Answer</button>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Save Changes</button>
                             <div class="col-1 mr-4"></div>
-                            <a class="btn btn-primary col-md-5 mt-5" href="/Quizzes/Display">Cancel</a>
+                            <a class="btn btn-primary col-md-5 mt-5" asp-area="Administration" asp-action="Display" asp-controller="Quizzes">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -45,7 +44,7 @@
         </form>
     </div>
 </div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+

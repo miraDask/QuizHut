@@ -21,21 +21,12 @@
 
         public string Description { get; set; }
 
-        [RegularExpression(ModelValidations.RegEx.Date, ErrorMessage = ModelValidations.Error.DateFormatMessage)]
-        public string ActivationDate { get; set; }
-
         [Required]
         [StringLength(
            ModelValidations.Quizzes.PasswordMaxLength,
            ErrorMessage = ModelValidations.Error.RangeMessage,
            MinimumLength = ModelValidations.Quizzes.PasswordMinLength)]
         public string Password { get; set; }
-
-        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
-        public string ActiveFrom { get; set; }
-
-        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
-        public string ActiveTo { get; set; }
 
         public int? Timer { get; set; }
 

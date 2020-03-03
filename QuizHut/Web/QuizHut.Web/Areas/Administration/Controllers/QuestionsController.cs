@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.Controllers
+﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
     using System.Threading.Tasks;
 
@@ -9,7 +9,7 @@
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Questions;
 
-    public class QuestionsController : Controller
+    public class QuestionsController : AdministrationController
     {
         private readonly IQuestionsService questionService;
 
@@ -19,7 +19,6 @@
         }
 
         [HttpGet]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult QuestionInput(string id)
         {
             if (id != null)
@@ -42,14 +41,12 @@
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public IActionResult EditQuestionInput(QuestionViewModel model)
         {
             return this.View(model);
         }
 
         [ModelStateValidationActionFilterAttribute]
-        [TypeFilter(typeof(ChangeDefaoultLayoutActionFilterAttribute))]
         public async Task<IActionResult> Edit(QuestionViewModel model)
         {
             await this.questionService.Update(model.Id, model.Text);

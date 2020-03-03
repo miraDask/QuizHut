@@ -1,43 +1,34 @@
-﻿@model AnswerViewModel
+﻿@model QuestionViewModel
 @{
-    ViewData["Title"] = "EditAnswerInput";
-    Layout = (string)ViewData["Layout"] ?? "_Layout";
+    ViewData["Title"] = "QuestionInput";
 }
-
 <div class="container-fluid">
     <div class="flex-grow-1">
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 mt-4 row">
-        <form method="post" class="col-11 ml-4" asp-action="Update" asp-controller="Answers">
+        <form method="post" class="col-11 ml-4">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
                         <i class="fas fa-folder-plus"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title">Edit Answer</h4>
+                        <h4 class="card-title">Add New Question</h4>
                         <p class="card-text" style="display: block;">
                             <span class="text-primary mr-1">∗</span>
                             You can always edit it later.
                         </p>
-                        <p class="card-text" style="display: block;">
-                            <span class="text-primary mr-1">
-                                <input type="checkbox" value="true" asp-for="IsRightAnswer">
-                            </span>
-                            Check the box if the answer is right.
-                        </p>
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input type="text" class="form-control" asp-for="Text" value="@Model.Text">
-                            <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
+                            <input type="text" asp-for="@Model.Text" class="form-control" placeholder="...">
                         </div>
                         <span asp-validation-for="@Model.Text" class="text-danger"></span>
                         <div class="row mx-1 text-white">
-                            <button type="submit" class="btn btn-primary col-md-5 mt-5">Save Changes</button>
+                            <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="AddNewQuestion" asp-controller="Questions" asp-area="Administration">Add Question</button>
                             <div class="col-1 mr-4"></div>
-                            <a class="btn btn-primary col-md-5 mt-5" href="/Quizzes/Display">Cancel</a>
+                            <a class="btn btn-primary col-md-5 mt-5" asp-area="Administration" asp-action="Display" asp-controller="Quizzes">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -45,7 +36,10 @@
         </form>
     </div>
 </div>
+<div class="text-center">
+    <a id="viewQuiz" class="btn btn-primary col-md-5 mt-2" asp-action="Display" asp-controller="Quizzes">View Quiz</a>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

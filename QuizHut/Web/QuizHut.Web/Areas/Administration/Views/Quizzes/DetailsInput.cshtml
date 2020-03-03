@@ -1,0 +1,102 @@
+﻿@model InputQuizViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+@if (Model != null)
+{
+    @if (!Model.PasswordIsValid)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <i class="fa fa-exclamation-circle"></i>
+            <strong>On no!</strong> There is already quiz with password @Model.Password. Try again !
+        </div>
+    }
+}
+<div class="container-fluid">
+    <div class="col-12 offset-md-2 col-md-8 row">
+        <form id="quizNameCard" method="post" asp-action="DetailsInput" asp-controller="Quizzes"  asp-area="Administration" class="col-11 ml-4">
+            <div class="component">
+                <div class="card mb-3 mt-3">
+                    <div class="card-header text-warning" style="font-size: xx-large">
+                        <i class="fas fa-folder-plus"></i>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="card-title">Quiz Details</h4>
+                        <p class="card-text">
+                            <span class="text-primary mr-1">∗</span>
+                            You can always edit details later.
+                        </p>
+                    </div>
+                    <div class="card-footer pb-5">
+                        <div><label asp-for="@Model.Name">Name</label></div>
+                        <div class="input-group">
+                            <input type="text" asp-for="@Model.Name" class="form-control" placeholder="name">
+                        </div>
+                        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                        <div class="mt-4"><label asp-for="@Model.Password">Password</label></div>
+
+                        <div class="input-group">
+                            <input type="text" asp-for="@Model.Password" class="form-control" placeholder="password">
+                        </div>
+                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                        <p class="card-text text-primary">
+                            <span class=" mr-1">∗</span>
+                            In order to be accessible you should set password to your quiz.
+                        </p>
+                        <div class="mt-4"><label asp-for="@Model.Description">Description</label></div>
+                        <textarea class="form-control" asp-for="@Model.Description" placeholder="description">
+                        </textarea>
+
+                        @* this is for event *@
+                        @*@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.TeacherRoleName))
+                            {
+                                <div class="mt-4"><label asp-for="@Model.ActivationDate">Activation Date</label></div>
+                                <div class="input-group">
+                                    <input type="datetime" asp-for="@Model.ActivationDate" class="form-control" placeholder="dd/MM/yyyy">
+                                </div>
+                                <span asp-validation-for="@Model.ActivationDate" class="text-danger"></span>
+                                <div class="input-group mt-4">
+                                    <label asp-for="@Model.ActiveFrom">
+                                        Active from :
+                                        <input type="text" asp-for="@Model.ActiveFrom" class="form-control" placeholder="HH:mm">
+                                        <span asp-validation-for="@Model.ActiveFrom" class="text-danger"></span>
+                                    </label>
+
+                                    <label asp-for="@Model.ActiveTo">
+                                        To :
+                                        <input type="text" asp-for="@Model.ActiveTo" class="form-control" placeholder="HH:mm">
+                                        <span asp-validation-for="@Model.ActiveTo" class="text-danger"></span>
+                                    </label>
+
+                                </div>
+                                <p class="card-text text-primary">
+                                    <span class=" mr-1">∗</span>
+                                    If you want your quiz to be active leave date and time fields blank.
+                                </p>
+                            }*@
+                        <div class="mt-4"><label asp-for="@Model.Timer">Set Timer</label></div>
+                        <div class="input-group">
+                            <input type="number" asp-for="@Model.Timer" class="form-control" placeholder="minutes">
+                        </div>
+                        <p class="card-text text-primary ">
+                            <span class="mr-1">∗</span>
+                            If you don't want timer leave the field blank.
+                        </p>
+                        <div class="row mx-4 text-white">
+                            <button id="addQuiz" type="submit" class="btn btn-primary col-md-5 mt-5">Add Details</button>
+                            <div class="col-1 mr-4"></div>
+                            <a href="/Administration/Categories/AllCategoriesCreatedByTeacher" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

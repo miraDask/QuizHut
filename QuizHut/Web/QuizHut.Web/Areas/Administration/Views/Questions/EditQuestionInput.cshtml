@@ -1,8 +1,8 @@
 ﻿@model QuestionViewModel
 @{
-    ViewData["Title"] = "QuestionInput";
-    Layout = (string)ViewData["Layout"] ?? "_Layout";
+    ViewData["Title"] = "Edit Question";
 }
+
 <div class="container-fluid">
     <div class="flex-grow-1">
         <partial name="_BublesAndCirclesPrtial" />
@@ -15,7 +15,7 @@
                         <i class="fas fa-folder-plus"></i>
                     </div>
                     <div class="card-body">
-                        <h4 class="card-title">Add New Question</h4>
+                        <h4 class="card-title">Edit Question</h4>
                         <p class="card-text" style="display: block;">
                             <span class="text-primary mr-1">∗</span>
                             You can always edit it later.
@@ -23,13 +23,14 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input type="text" asp-for="@Model.Text" class="form-control" placeholder="...">
+                            <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
+                            <input type="text" asp-for="@Model.Text" class="form-control pl-3" value="@Model.Text">
                         </div>
                         <span asp-validation-for="@Model.Text" class="text-danger"></span>
                         <div class="row mx-1 text-white">
-                            <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="AddNewQuestion" asp-controller="Questions">Add Question</button>
+                            <button type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="Edit" asp-controller="Questions" asp-area="Administration">Save Changes</button>
                             <div class="col-1 mr-4"></div>
-                            <a class="btn btn-primary col-md-5 mt-5" href="/Quizzes/Display">Cancel</a>
+                            <a class="btn btn-primary col-md-5 mt-5" asp-action="Display" asp-controller="Quizzes">Cancel</a>
                         </div>
                     </div>
                 </div>
@@ -37,10 +38,8 @@
         </form>
     </div>
 </div>
-<div class="text-center">
-    <a id="viewQuiz" class="btn btn-primary col-md-5 mt-2" asp-action="Display" asp-controller="Quizzes">View Quiz</a>
-</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
