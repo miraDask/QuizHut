@@ -18,10 +18,6 @@
                 .WithOne(qr => qr.Quiz)
                 .HasForeignKey(qr => qr.QuizId);
 
-            quiz.HasMany(q => q.QuizzesGroups)
-               .WithOne(qr => qr.Quiz)
-               .HasForeignKey(qr => qr.QuizId);
-
             quiz.HasMany(q => q.Events)
               .WithOne(e => e.Quiz)
               .HasForeignKey(e => e.QuizId);

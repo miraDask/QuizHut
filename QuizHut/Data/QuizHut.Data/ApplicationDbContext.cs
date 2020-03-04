@@ -43,7 +43,7 @@
 
         public DbSet<StudentGroup> StudentsGroups { get; set; }
 
-        public DbSet<QuizGroup> QuizzessGroups { get; set; }
+        public DbSet<EventGroup> EventsGroups { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

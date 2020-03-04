@@ -1,9 +1,6 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
-
-    using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Shared;

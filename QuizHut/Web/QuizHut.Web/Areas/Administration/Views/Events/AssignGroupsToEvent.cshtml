@@ -1,0 +1,57 @@
+﻿@model EventWithGroupsViewModel
+@{
+    ViewData["Title"] = "Assign Groups To Event";
+
+}
+
+<div class="col-12 offset-md-1 col-md-8 row">
+    <form method="post" class="col-11 ml-4" asp-action="AssignGroupsToEvent" asp-controller="Events" asp-area="Administration">
+        <div class="card mb-3 mt-3">
+            <div class="card-header text-warning" style="font-size: xx-large">
+                <i class="fas fa-folder-plus"></i>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Assign Groups to @Model.Name event</h4>
+                <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+                <p class="card-text" style="display: block;">
+                    <span class="text-primary mr-1">∗</span>
+                    You can always edit it later.
+                </p>
+            </div>
+            <div class="card-footer">
+                <div class="component">
+                    @if (Model.Groups.Count() > 0)
+                    {
+                        @for (int i = 0; i < Model.Groups.Count(); i++)
+                        {
+                            var quiz = Model.Groups[i];
+                            <div class="form-group mb-0">
+                                <div class="mt-2">
+                                    @Html.EditorFor(x => x.Groups[i].IsAssigned)
+                                    <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
+                                    @Html.HiddenFor(model => model.Groups[i].Id)
+
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>There are currently no unassigned groups.</p>
+                        <a asp-area="Administration" asp-action="Create" asp-controller="Groups">Create new.</a>
+                    }
+                </div>
+            </div>
+            <div class="row mx-4 mb-4 text-white">
+                @if (Model.Groups.Count() > 0)
+                {
+                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Groups</button>
+                    <div class="col-1 mr-4"></div>
+
+                }
+                <a href="/Administration/Events/EventDetails?id=@Model.Id" class="btn btn-primary col-md-5 mt-5">Skip</a>
+            </div>
+        </div>
+    </form>
+</div>
+

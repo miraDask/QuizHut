@@ -20,6 +20,13 @@
             internal const int NameMaxLength = 50;
         }
 
+        internal static class Events
+        {
+            internal const int NameMinLength = 2;
+
+            internal const int NameMaxLength = 50;
+        }
+
         internal static class Categories
         {
             internal const int NameMinLength = 2;

@@ -11,7 +11,7 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.StudentstGroups = new HashSet<StudentGroup>();
-            this.QuizzesGroups = new HashSet<QuizGroup>();
+            this.EventsGroups = new HashSet<EventGroup>();
         }
 
         public string Name { get; set; }
@@ -22,8 +22,6 @@
 
         public virtual ICollection<StudentGroup> StudentstGroups { get; set; }
 
-        public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
-
-        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<EventGroup> EventsGroups { get; set; }
     }
 }

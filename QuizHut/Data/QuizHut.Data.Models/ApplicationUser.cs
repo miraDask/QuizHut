@@ -21,6 +21,7 @@ namespace QuizHut.Data.Models
             this.CreatedQuizzes = new HashSet<Quiz>();
             this.CreatedGroups = new HashSet<Group>();
             this.Results = new HashSet<Result>();
+            this.CreatedEvents = new HashSet<Event>();
         }
 
         public string FirstName { get; set; }
@@ -56,5 +57,7 @@ namespace QuizHut.Data.Models
         public virtual ICollection<Result> Results { get; set; }
 
         public virtual ICollection<Group> CreatedGroups { get; set; }
+
+        public virtual ICollection<Event> CreatedEvents { get; set; }
     }
 }

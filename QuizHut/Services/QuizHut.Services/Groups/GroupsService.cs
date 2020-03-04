@@ -7,35 +7,27 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
-    using QuizHut.Services.QuizzesGroups;
     using QuizHut.Services.StudentsGroups;
+    using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Students;
 
     public class GroupsService : IGroupsService
     {
         private readonly IDeletableEntityRepository<Group> repository;
-        private readonly IQuizzesGroupsService quizzesGroupsService;
+        private readonly IEventsGroupsService eventGroupsService;
         private readonly IStudentsGroupsService studentsGroupsService;
 
         public GroupsService(
             IDeletableEntityRepository<Group> repository,
-            IQuizzesGroupsService quizzesGroupsService,
+            IEventsGroupsService eventGroupsService,
             IStudentsGroupsService studentsGroupsService)
         {
             this.repository = repository;
-            this.quizzesGroupsService = quizzesGroupsService;
+            this.eventGroupsService = eventGroupsService;
             this.studentsGroupsService = studentsGroupsService;
-        }
-
-        public async Task AssignQuizzesToGroupAsync(string groupId, List<string> quizzesIds)
-        {
-            foreach (var quizId in quizzesIds)
-            {
-                await this.quizzesGroupsService.CreateAsync(groupId, quizId);
-            }
         }
 
         public async Task AssignStudentsToGroupAsync(string groupId, IList<string> studentsIds)
@@ -62,14 +54,14 @@
                 .To<T>()
                 .ToListAsync();
 
-        public async Task<GroupWithQuizzesViewModel> GetGroupModelAsync(string groupId, string creatorId, IList<QuizAssignViewModel> quizzes)
+        public async Task<GroupWithEventsViewModel> GetGroupModelAsync(string groupId, string creatorId, IList<EventsAssignViewModel> events)
         {
             var group = await this.repository.AllAsNoTracking().Where(x => x.Id == groupId).FirstOrDefaultAsync();
-            var model = new GroupWithQuizzesViewModel()
+            var model = new GroupWithEventsViewModel()
             {
                 GroupId = groupId,
                 Name = group.Name,
-                Quizzes = quizzes.Where(x => x.CreatorId == creatorId).ToList(),
+                Events = events.Where(x => x.CreatorId == creatorId).ToList(),
             };
 
             return model;
@@ -84,10 +76,10 @@
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Quizzes = x.QuizzesGroups.Select(x => new QuizAssignViewModel()
+                    Events = x.EventsGroups.Select(x => new EventsAssignViewModel()
                     {
-                        Name = x.Quiz.Name,
-                        Id = x.QuizId,
+                        Name = x.Event.Name,
+                        Id = x.EventId,
                     }).ToList(),
                     Students = x.StudentstGroups.Select(x => new StudentViewModel()
                     {
@@ -111,9 +103,9 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task DeleteQuizFromGroupAsync(string groupId, string quizId)
+        public async Task DeleteEventFromGroupAsync(string groupId, string eventId)
         {
-            await this.quizzesGroupsService.DeleteAsync(groupId, quizId);
+            await this.eventGroupsService.DeleteAsync(groupId, eventId);
         }
 
         public async Task DeleteStudentFromGroupAsync(string groupId, string studentId)
@@ -121,10 +113,10 @@
             await this.studentsGroupsService.DeleteAsync(groupId, studentId);
         }
 
-        public async Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisGroup(string qroupId, IList<QuizAssignViewModel> quizzes)
+        public async Task<IList<EventsAssignViewModel>> FilterEventsThatAreNotAssignedToThisGroup(string qroupId, IList<EventsAssignViewModel> events)
         {
-            var assignedQuizzesIds = await this.quizzesGroupsService.GetAllQizzesIdsByGroupIdAsync(qroupId);
-            return quizzes.Where(x => !assignedQuizzesIds.Contains(x.Id)).ToList();
+            var assignedEventsIds = await this.eventGroupsService.GetAllEventsIdsByGroupIdAsync(qroupId);
+            return events.Where(x => !assignedEventsIds.Contains(x.Id)).ToList();
         }
 
         public async Task<IList<StudentViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<StudentViewModel> students)
@@ -139,6 +131,14 @@
             group.Name = newName;
             this.repository.Update(group);
             await this.repository.SaveChangesAsync();
+        }
+
+        public async Task AssignEventsToGroupAsync(string groupId, List<string> eventsIds)
+        {
+            foreach (var eventId in eventsIds)
+            {
+                await this.eventGroupsService.CreateAsync(groupId, eventId);
+            }
         }
     }
 }

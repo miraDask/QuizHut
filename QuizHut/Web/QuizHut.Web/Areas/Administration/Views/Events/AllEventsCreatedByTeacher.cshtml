@@ -1,7 +1,70 @@
-﻿
+﻿@model EventsListAllViewModel
 @{
     ViewData["Title"] = "All Events Created By Teacher";
 }
 
-<h1>All Events Created By Teacher</h1>
+<nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+    <div class="container">
+        <h5 class="mb-0">Events Managment</h5>
+        <button class="navbar-toggler collapsed bg-primary"
+                type="button" data-toggle="collapse"
+                data-target="#navbarNavDropdown-3"
+                aria-controls="navbarNavDropdown-3"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item m-1">
+                    <a class="nav-link  btn btn-info" asp-action="EventInput" asp-controller="Events">
+                        <i class="fas fa-plus-circle"></i>
+                        <span class="text-white">Add New</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<table class="table table-hover">
+    <thead>
+        <tr class="table-active bg-white">
+            <th scope="col">Name</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Events.Any())
+        {
+            @for (int i = 0; i < Model.Events.Count(); i++)
+            {
+                var _event = Model.Events[i];
+
+                <tr class="table-info">
+                    <th scope="row">@_event.Name</th>
+                    <td>@_event.CreatedOn</td>
+                    <td style="color:@_event.Status["Color"]" class="status">@_event.Status["Status"]</td>
+                    <td>
+                        <div class="component  navbar-expand-lg text-right">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item m-1">
+                                    <a type="submit" class="nav-link  btn btn-white" asp-area="Administration" asp-action="Edit" asp-controller="Events" asp-route-id="@_event.Id">
+                                        <i class="far fa-edit"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item m-1">
+                                    <a class="nav-link  btn btn-white" asp-area="Administration" asp-action="Delete" asp-controller="Events" asp-route-id="@_event.Id">
+                                        <i class="far fa-times-circle"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
 

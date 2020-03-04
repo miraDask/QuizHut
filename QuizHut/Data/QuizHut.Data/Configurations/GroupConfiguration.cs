@@ -14,13 +14,9 @@
               .WithOne(p => p.Group)
               .HasForeignKey(q => q.GroupId);
 
-            group.HasMany(g => g.QuizzesGroups)
+            group.HasMany(g => g.EventsGroups)
              .WithOne(p => p.Group)
              .HasForeignKey(q => q.GroupId);
-
-            group.HasMany(g => g.Events)
-                .WithOne(p => p.Group)
-                .HasForeignKey(q => q.GroupId);
 
             group.Property(g => g.Name)
              .HasMaxLength(DataValidation.Group.NameMaxLength)

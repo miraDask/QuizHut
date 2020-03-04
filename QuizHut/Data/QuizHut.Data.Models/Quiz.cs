@@ -12,7 +12,7 @@
             this.Id = Guid.NewGuid().ToString();
             this.Questions = new HashSet<Question>();
             this.QuizzesResults = new HashSet<QuizResult>();
-            this.QuizzesGroups = new HashSet<QuizGroup>();
+            this.Events = new HashSet<Event>();
         }
 
         public string Name { get; set; }
@@ -32,8 +32,6 @@
         public string CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
-
-        public virtual ICollection<QuizGroup> QuizzesGroups { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
 

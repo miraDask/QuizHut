@@ -1,19 +1,15 @@
-﻿namespace QuizHut.Web.ViewModels.Quizzes
+﻿namespace QuizHut.Web.ViewModels.Groups
 {
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
 
-    public class QuizAssignViewModel : IMapFrom<Quiz>
+    public class GroupAssignViewModel : IMapFrom<Group>
     {
-        public QuizAssignViewModel()
-        {
-        }
-
         public string Id { get; set; }
 
-        public string Name { get; set; }
-
         public string CreatorId { get; set; }
+
+        public string Name { get; set; }
 
         public bool IsAssigned { get; set; }
     }

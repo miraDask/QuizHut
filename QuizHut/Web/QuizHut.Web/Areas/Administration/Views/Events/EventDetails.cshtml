@@ -1,0 +1,97 @@
+﻿@model EventDetailsViewModel
+@{
+    ViewData["Title"] = "EventDetails";
+}
+<div class="form-group flex-grow-1 d-inline">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+        <div class="container">
+            <h5 class="mb-0">Event Details</h5>
+            <button class="navbar-toggler collapsed bg-primary"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary" asp-action="QuestionInput" asp-controller="Questions" asp-route-id="@Model.Id">Add Question</a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary" asp-action="DeleteQuiz" asp-controller="Quizzes" asp-route-id="@Model.Id">Delete Quiz</a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary" asp-action="EditDetailsInput" asp-controller="Quizzes" asp-route-id="@Model.Id">Edit</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="component">
+        <table class="table table-hover">
+            <tbody>
+                <tr class="table-active bg-white">
+                    <th scope="row">Name:</th>
+                    <td>@Model.Name</td>
+                </tr>
+                <tr class="table-active bg-light">
+                    <th scope="row">Activation Date:</th>
+                    <td>@Model.ActivationDate</td>
+                </tr>
+                <tr class="table-active bg-white">
+                    <th scope="row">Active From:</th>
+                    <td>@Model.ActiveFrom</td>
+                </tr>
+                <tr class="table-active bg-white">
+                    <th scope="row">Active To:</th>
+                    <td>@Model.ActiveTo</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+@* groups *@
+<div class="form-group flex-grow-1">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
+        <div class="container">
+            <h5 class="mb-0">Assigned Groups</h5>
+            <button class="navbar-toggler collapsed bg-primary"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown222"
+                    aria-controls="navbarNavDropdown222"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a asp-area="Administration" asp-action="AddNewEvent" asp-controller="Groups" asp-route-id="@Model.Id" class="nav-link  btn btn-primary">Add New</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="component">
+        <table class="table table-hover">
+            <tbody>
+                @foreach (var group in Model.Groups)
+                {
+                    <tr class="table-active bg-white">
+                        <th scope="row">@group.Name</th>
+                        <td class="text-right">
+                            <form method="post" asp-action="DeleteEventFromGroup" asp-controller="Groups">
+                                <input type="hidden" name="groupId" value="@Model.Id" />
+                                <input type="hidden" name="eventId" value="@group.Id" />
+                                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

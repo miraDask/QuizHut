@@ -1,6 +1,5 @@
 ﻿namespace QuizHut.Data.Models
 {
-    using System;
 
     using QuizHut.Data.Common.Models;
 

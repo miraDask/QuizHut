@@ -53,6 +53,11 @@
                 .HasMany(u => u.Results)
                 .WithOne(r => r.Student)
                 .HasForeignKey(r => r.StudentId);
+
+            user
+                .HasMany(u => u.CreatedEvents)
+                .WithOne(e => e.Creator)
+                .HasForeignKey(e => e.CreatorId);
         }
     }
 }

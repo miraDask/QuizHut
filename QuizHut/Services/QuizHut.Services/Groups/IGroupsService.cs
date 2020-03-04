@@ -3,8 +3,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Students;
 
     public interface IGroupsService
@@ -13,11 +13,11 @@
 
         Task<string> CreateAsync(string name, string creatorId);
 
-        Task<GroupWithQuizzesViewModel> GetGroupModelAsync(string groupId, string creatorId, IList<QuizAssignViewModel> quizzes);
+        Task<GroupWithEventsViewModel> GetGroupModelAsync(string groupId, string creatorId, IList<EventsAssignViewModel> events);
 
         Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId);
 
-        Task AssignQuizzesToGroupAsync(string groupId, List<string> quizzesIds);
+        Task AssignEventsToGroupAsync(string groupId, List<string> eventsIds);
 
         Task AssignStudentsToGroupAsync(string groupId, IList<string> studentsIds);
 
@@ -25,11 +25,11 @@
 
         Task UpdateNameAsync(string groupId, string newName);
 
-        Task DeleteQuizFromGroupAsync(string groupId, string quizId);
+        Task DeleteEventFromGroupAsync(string groupId, string eventId);
 
         Task DeleteStudentFromGroupAsync(string groupId, string studentId);
 
-        Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisGroup(string qroupId, IList<QuizAssignViewModel> quizzes);
+        Task<IList<EventsAssignViewModel>> FilterEventsThatAreNotAssignedToThisGroup(string qroupId, IList<EventsAssignViewModel> events);
 
         Task<IList<StudentViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<StudentViewModel> students);
     }

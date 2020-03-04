@@ -44,8 +44,8 @@
                     <td>@Model.Students.Count()</td>
                 </tr>
                 <tr class="table-active bg-white">
-                    <th scope="row">Assigned Quizzes</th>
-                    <td>@Model.Quizzes.Count()</td>
+                    <th scope="row">Events</th>
+                    <td>@Model.Events.Count()</td>
                 </tr>
             </tbody>
         </table>
@@ -53,9 +53,9 @@
 </div>
 @* quizzes *@
 <div class="form-group flex-grow-1">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-warning mt-4 p-2">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
         <div class="container">
-            <h5 class="mb-0">Assigned Quizzes</h5>
+            <h5 class="mb-0">Assigned Events</h5>
             <button class="navbar-toggler collapsed bg-primary"
                     type="button" data-toggle="collapse"
                     data-target="#navbarNavDropdown222"
@@ -67,7 +67,7 @@
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a href="/Administration/Groups/AddNewQuiz?id=@Model.Id" class="nav-link  btn btn-primary">Add New</a>
+                        <a asp-area="Administration" asp-action="AddNewEvent"  asp-controller="Groups" asp-route-id="@Model.Id" class="nav-link  btn btn-primary">Add New</a>
                     </li>
                 </ul>
             </div>
@@ -76,14 +76,14 @@
     <div class="component">
         <table class="table table-hover">
             <tbody>
-                @foreach (var quiz in Model.Quizzes)
+                @foreach (var _event in Model.Events)
                 {
                     <tr class="table-active bg-white">
-                        <th scope="row">@quiz.Name</th>
+                        <th scope="row">@_event.Name</th>
                         <td class="text-right">
-                            <form method="post" asp-action="DeleteQuizFromGroup" asp-controller="Groups">
+                            <form method="post" asp-action="DeleteEventFromGroup" asp-controller="Groups">
                                 <input type="hidden" name="groupId" value="@Model.Id" />
-                                <input type="hidden" name="quizId" value="@quiz.Id" />
+                                <input type="hidden" name="eventId" value="@_event.Id" />
                                 <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
                             </form>
                         </td>

@@ -27,5 +27,10 @@
             internal const int NameMaxLength = 1000;
             internal const int PasswordMaxLength = 10;
         }
+
+        internal static class Event
+        {
+            internal const int NameMaxLength = 50;
+        }
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace QuizHut.Data.Models
 {
-    public class QuizGroup
+    public class EventGroup
     {
-        public string QuizId { get; set; }
-
-        public virtual Quiz Quiz { get; set; }
-
         public string GroupId { get; set; }
 
         public virtual Group Group { get; set; }
+
+        public string EventId { get; set; }
+
+        public virtual Event Event { get; set; }
     }
 }

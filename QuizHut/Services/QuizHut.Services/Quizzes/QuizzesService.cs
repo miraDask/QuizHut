@@ -1,6 +1,5 @@
 ﻿namespace QuizHut.Services.Quizzes
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -88,45 +87,5 @@
             .Where(x => x.Password == password)
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
-
-        // for events service
-        //private DateTime? GetActivationDateAndTime(string activationDate, string activeFrom)
-        //{
-        //    DateTime? nullableDate = null;
-
-        //    if (activationDate == null)
-        //    {
-        //        return nullableDate;
-        //    }
-
-        //    return activeFrom == null
-        //        ? DateTime.Parse(activationDate) : DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
-        //}
-
-        //private TimeSpan? GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
-        //{
-        //    TimeSpan? nulllableTimeSpan = null;
-        //    return activeFrom == null
-        //        ? nulllableTimeSpan : (DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom)));
-        //}
-
-        //public async Task<string> AddNewQuizAsync(string name, string description, string activationDate, string activeFrom, string activeTo, int? timer, string creatorId, string password)
-        //{
-        //    var quiz = new Quiz
-        //    {
-        //        Name = name,
-        //        Description = description,
-        //        ActivationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom),
-        //        DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo),
-        //        Timer = timer,
-        //        CreatorId = creatorId,
-        //        Password = password,
-        //    };
-
-        //    await this.repository.AddAsync(quiz);
-        //    await this.repository.SaveChangesAsync();
-
-        //    return quiz.Id;
-        //}
     }
 }

@@ -6,29 +6,29 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
-    using QuizHut.Services.Quizzes;
     using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
+    using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Students;
 
     public class GroupsController : AdministrationController
     {
         private readonly IGroupsService service;
-        private readonly IQuizzesService quizService;
+        private readonly IEventsService eventService;
         private readonly IUsersService userService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public GroupsController(
             IGroupsService service,
-            IQuizzesService quizService,
+            IEventsService eventService,
             IUsersService userService,
             UserManager<ApplicationUser> userManager)
         {
             this.service = service;
-            this.quizService = quizService;
+            this.eventService = eventService;
             this.userService = userService;
             this.userManager = userManager;
         }
@@ -53,24 +53,24 @@
             var userId = this.userManager.GetUserId(this.User);
             var groupId = await this.service.CreateAsync(model.Name, userId);
 
-            return this.RedirectToAction("AssignQuiz", new { id = groupId });
+            return this.RedirectToAction("AssignEvent", new { id = groupId });
         }
 
-        public async Task<IActionResult> AssignQuiz(string id)
+        public async Task<IActionResult> AssignEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>();
-            var model = await this.service.GetGroupModelAsync(id, userId, quizzes);
+            var events = await this.eventService.GetAllAsync<EventsAssignViewModel>();
+            var model = await this.service.GetGroupModelAsync(id, userId, events);
 
             return this.View(model);
         }
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> AssignQuiz(GroupWithQuizzesViewModel model)
+        public async Task<IActionResult> AssignEvent(GroupWithEventsViewModel model)
         {
-            var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignQuizzesToGroupAsync(model.GroupId, quizzesIds);
+            var eventsIds = model.Events.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+            await this.service.AssignEventsToGroupAsync(model.GroupId, eventsIds);
             return this.RedirectToAction("AssignStudents", new { id = model.GroupId });
         }
 
@@ -98,13 +98,11 @@
             return this.View(model);
         }
 
-        [HttpPost]
         public IActionResult Edit(string id)
         {
             return this.RedirectToAction("GroupDetails", new { id });
         }
 
-        [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
             await this.service.DeleteAsync(id);
@@ -112,9 +110,9 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteQuizFromGroup(string groupId, string quizId)
+        public async Task<IActionResult> DeleteEventFromGroup(string groupId, string eventId)
         {
-            await this.service.DeleteQuizFromGroupAsync(groupId, quizId);
+            await this.service.DeleteEventFromGroupAsync(groupId, eventId);
             return this.RedirectToAction("GroupDetails", new { id = groupId });
         }
 
@@ -125,22 +123,22 @@
             return this.RedirectToAction("GroupDetails", new { id = groupId });
         }
 
-        public async Task<IActionResult> AddNewQuiz(string id)
+        public async Task<IActionResult> AddNewEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>();
-            quizzes = await this.service.FilterQuizzesThatAreNotAssignedToThisGroup(id, quizzes);
-            var model = await this.service.GetGroupModelAsync(id, userId, quizzes);
+            var events = await this.eventService.GetAllAsync<EventsAssignViewModel>();
+            events = await this.service.FilterEventsThatAreNotAssignedToThisGroup(id, events);
+            var model = await this.service.GetGroupModelAsync(id, userId, events);
 
             return this.View(model);
         }
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> AddNewQuiz(GroupWithQuizzesViewModel model)
+        public async Task<IActionResult> AddNewEvent(GroupWithEventsViewModel model)
         {
-            var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
-            await this.service.AssignQuizzesToGroupAsync(model.GroupId, quizzesIds);
+            var eventsIds = model.Events.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+            await this.service.AssignEventsToGroupAsync(model.GroupId, eventsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
 

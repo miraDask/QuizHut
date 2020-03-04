@@ -1,17 +1,17 @@
-﻿@model GroupWithQuizzesViewModel
+﻿@model GroupWithEventsViewModel
 @{
-    ViewData["Title"] = "AssignQuiz";
+        ViewData["Title"] = "Add New Event";
 
 }
 <div class="col-12 offset-md-1 col-md-8 row">
-    <form method="post" class="col-11 ml-4">
+    <form method="post" class="col-11 ml-4" asp-action="AddNewEvent" asp-controller="Groups">
 
         <div class="card mb-3 mt-3">
             <div class="card-header text-warning" style="font-size: xx-large">
                 <i class="fas fa-folder-plus"></i>
             </div>
             <div class="card-body">
-                <h4 class="card-title">Assign Quizzes to @Model.Name</h4>
+                <h4 class="card-title">Assign Events to @Model.Name</h4>
                 <input type="hidden" asp-for="@Model.GroupId" value="@Model.GroupId" />
 
                 <p class="card-text" style="display: block;">
@@ -21,16 +21,16 @@
             </div>
             <div class="card-footer">
                 <div class="component">
-                    @if (Model.Quizzes.Count() > 0)
+                    @if (Model.Events.Count() > 0)
                     {
-                        @for (int i = 0; i < Model.Quizzes.Count(); i++)
+                        @for (int i = 0; i < Model.Events.Count(); i++)
                         {
-                            var quiz = Model.Quizzes[i];
+                            var quiz = Model.Events[i];
                             <div class="form-group mb-0">
                                 <div class="mt-2">
-                                    @Html.EditorFor(x => x.Quizzes[i].IsAssigned)
+                                    @Html.EditorFor(x => x.Events[i].IsAssigned)
                                     <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
-                                    @Html.HiddenFor(model => model.Quizzes[i].Id)
+                                    @Html.HiddenFor(model => model.Events[i].Id)
 
                                 </div>
                             </div>
@@ -38,23 +38,20 @@
                     }
                     else
                     {
-                        <p>There are currently no unassigned quizzes.</p>
-                        <a asp-area="Administration" asp-action="DetailsInput" asp-controller="Quizzes">Create new.</a>
+                        <p>There are currently no unassigned events.</p>
+                        <a asp-area="Administration" asp-action="EventInput" asp-controller="Events">Create new.</a>
                     }
                 </div>
             </div>
             <div class="row mx-4 mb-4 text-white">
-                @if (Model.Quizzes.Count() > 0)
+                @if (Model.Events.Count() > 0)
                 {
-                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Quizzes</button>
+                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Events</button>
                     <div class="col-1 mr-4"></div>
 
                 }
-                <a asp-area="Administration" asp-action="AssignStudents" asp-controller="Groups" asp-route-id="@Model.GroupId" class="btn btn-primary col-md-5 mt-5">Skip</a>
+                <a asp-area="Administration" asp-action="GroupDetails" asp-controller="Groups" asp-route-id="@Model.GroupId" class="btn btn-primary col-md-5 mt-5">Cancel</a>
             </div>
         </div>
     </form>
 </div>
-
-
-
