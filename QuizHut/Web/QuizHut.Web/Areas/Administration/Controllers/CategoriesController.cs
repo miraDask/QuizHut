@@ -72,6 +72,13 @@
         public async Task<IActionResult> AssignQuizzesToCategory(CategoryWithQuizzesViewModel model)
         {
             var quizzesIds = model.Quizzes.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+
+            if (quizzesIds.Count() == 0)
+            {
+                model.Error = true;
+                return this.View(model);
+            }
+
             await this.service.AssignQuizzesToCategoryAsync(model.Id, quizzesIds);
             return this.RedirectToAction("CategoryDetails", new { id = model.Id });
         }

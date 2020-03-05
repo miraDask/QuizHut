@@ -81,6 +81,32 @@
             return this.RedirectToAction("AssignQuizToEvent", new { id = model.Id });
         }
 
+        public async Task<IActionResult> AddGroupsToEvent(string id)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId);
+            groups = await this.service.FilterGroupsThatAreNotAssignedToThisEvent(id, groups);
+            var model = await this.service.GetEventModelAsync(id, userId, groups);
+
+            return this.View(model);
+        }
+
+        [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
+        public async Task<IActionResult> AddGroupsToEvent(EventWithGroupsViewModel model)
+        {
+            var groupIds = model.Groups.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+
+            if (groupIds.Count == 0)
+            {
+                model.Error = true;
+                return this.View(model);
+            }
+
+            await this.service.AssignGroupsToEventAsync(model.Id, groupIds);
+            return this.RedirectToAction("EventDetails", new { id = model.Id });
+        }
+
         public async Task<IActionResult> AssignQuizToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);

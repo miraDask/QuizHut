@@ -1,6 +1,6 @@
-﻿@model GroupWithEventsViewModel
+﻿@model EventWithGroupsViewModel
 @{
-    ViewData["Title"] = "Assign Event";
+    ViewData["Title"] = "Add Groups To Event";
 
 }
 @if (Model.Error)
@@ -10,20 +10,18 @@
             <span aria-hidden="true">×</span>
         </button>
         <i class="fa fa-exclamation-circle"></i>
-        <strong>On no!</strong> If you want to assign events to this group, you should choose some!
+        <strong>On no!</strong> If you want to assign groops to this event, you should choose some!
     </div>
 }
 <div class="col-12 offset-md-1 col-md-8 row">
-    <form method="post" class="col-11 ml-4">
-
+    <form method="post" class="col-11 ml-4" asp-action="AddGroupsToEvent" asp-controller="Events" asp-area="Administration">
         <div class="card mb-3 mt-3">
             <div class="card-header text-warning" style="font-size: xx-large">
                 <i class="fas fa-folder-plus"></i>
             </div>
             <div class="card-body">
-                <h4 class="card-title">Assign Quizzes to @Model.Name</h4>
-                <input type="hidden" asp-for="@Model.GroupId" value="@Model.GroupId" />
-
+                <h4 class="card-title">Assign Groups to @Model.Name event</h4>
+                <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
                 <p class="card-text" style="display: block;">
                     <span class="text-primary mr-1">∗</span>
                     You can always edit it later.
@@ -31,41 +29,38 @@
             </div>
             <div class="card-footer">
                 <div class="component">
-                    @if (Model.Events.Count() > 0)
+                    @if (Model.Groups.Count() > 0)
                     {
-                        @for (int i = 0; i < Model.Events.Count(); i++)
+                        @for (int i = 0; i < Model.Groups.Count(); i++)
                         {
-                            var quiz = Model.Events[i];
+                            var quiz = Model.Groups[i];
                             <div class="form-group mb-0">
                                 <div class="mt-2">
-                                    @Html.EditorFor(x => x.Events[i].IsAssigned)
+                                    @Html.EditorFor(x => x.Groups[i].IsAssigned)
                                     <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
-                                    @Html.HiddenFor(model => model.Events[i].Id)
-                                    @Html.HiddenFor(model => model.Events[i].Name)
-
+                                    @Html.HiddenFor(model => model.Groups[i].Id)
+                                    @Html.HiddenFor(model => model.Groups[i].Name)
                                 </div>
                             </div>
                         }
                     }
                     else
                     {
-                        <p>There are currently no unassigned quizzes.</p>
-                        <a asp-area="Administration" asp-action="EventInput" asp-controller="Event">Create new.</a>
+                        <p>There are currently no unassigned groups.</p>
+                        <a asp-area="Administration" asp-action="Create" asp-controller="Groups">Create new.</a>
                     }
                 </div>
             </div>
             <div class="row mx-4 mb-4 text-white">
-                @if (Model.Events.Count() > 0)
+                @if (Model.Groups.Count() > 0)
                 {
-                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Events</button>
+                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Groups</button>
                     <div class="col-1 mr-4"></div>
 
                 }
-                <a asp-area="Administration" asp-action="AssignStudents" asp-controller="Groups" asp-route-id="@Model.GroupId" class="btn btn-primary col-md-5 mt-5">Skip</a>
+                <a asp-area="Administration" asp-action="EventDetails" asp-controller="Events" asp-route-id="@Model.Id" class="btn btn-primary col-md-5 mt-5">Cancel</a>
             </div>
         </div>
     </form>
 </div>
-
-
 

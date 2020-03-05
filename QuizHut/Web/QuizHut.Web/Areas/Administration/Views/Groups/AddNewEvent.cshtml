@@ -1,7 +1,17 @@
 ﻿@model GroupWithEventsViewModel
 @{
-        ViewData["Title"] = "Add New Event";
+    ViewData["Title"] = "Add New Event";
 
+}
+@if (Model.Error)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>On no!</strong> If you want to assign events to this group, you should choose some!
+    </div>
 }
 <div class="col-12 offset-md-1 col-md-8 row">
     <form method="post" class="col-11 ml-4" asp-action="AddNewEvent" asp-controller="Groups">
@@ -31,7 +41,7 @@
                                     @Html.EditorFor(x => x.Events[i].IsAssigned)
                                     <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
                                     @Html.HiddenFor(model => model.Events[i].Id)
-
+                                    @Html.HiddenFor(model => model.Events[i].Name)
                                 </div>
                             </div>
                         }

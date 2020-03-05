@@ -109,6 +109,12 @@
             await this.repository.SaveChangesAsync();
         }
 
+        public async Task<IList<GroupAssignViewModel>> FilterGroupsThatAreNotAssignedToThisEvent(string eventId, IList<GroupAssignViewModel> groups)
+        {
+            var assignedGroupsIds = await this.eventGroupsService.GetAllGroupsIdsByEventIdAsync(eventId);
+            return groups.Where(x => !assignedGroupsIds.Contains(x.Id)).ToList();
+        }
+
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()

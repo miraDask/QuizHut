@@ -9,5 +9,7 @@
         Task DeleteAsync(string groupId, string eventId);
 
         Task<string[]> GetAllEventsIdsByGroupIdAsync(string groupId);
+
+        Task<string[]> GetAllGroupsIdsByEventIdAsync(string eventId);
     }
 }

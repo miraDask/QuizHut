@@ -14,6 +14,8 @@
 
         public string Name { get; set; }
 
+        public bool Error { get; set; }
+
         public IList<QuizAssignViewModel> Quizzes { get; set; } = new List<QuizAssignViewModel>();
     }
 }

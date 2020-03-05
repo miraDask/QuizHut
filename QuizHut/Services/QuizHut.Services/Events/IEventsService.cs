@@ -24,5 +24,7 @@
         Task<T> GetEventModelByIdAsync<T>(string eventId);
 
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
+
+        Task<IList<GroupAssignViewModel>> FilterGroupsThatAreNotAssignedToThisEvent(string eventId, IList<GroupAssignViewModel> groups);
     }
 }

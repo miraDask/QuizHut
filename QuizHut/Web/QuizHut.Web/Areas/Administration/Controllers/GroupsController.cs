@@ -70,6 +70,13 @@
         public async Task<IActionResult> AssignEvent(GroupWithEventsViewModel model)
         {
             var eventsIds = model.Events.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+
+            if (eventsIds.Count() == 0)
+            {
+                model.Error = true;
+                return this.View(model);
+            }
+
             await this.service.AssignEventsToGroupAsync(model.GroupId, eventsIds);
             return this.RedirectToAction("AssignStudents", new { id = model.GroupId });
         }
@@ -87,6 +94,13 @@
         public async Task<IActionResult> AssignStudents(GroupWithStudentsViewModel model)
         {
             var studentsIds = model.Students.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+
+            if (studentsIds.Count() == 0)
+            {
+                model.Error = true;
+                return this.View(model);
+            }
+
             await this.service.AssignStudentsToGroupAsync(model.GroupId, studentsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
@@ -138,6 +152,13 @@
         public async Task<IActionResult> AddNewEvent(GroupWithEventsViewModel model)
         {
             var eventsIds = model.Events.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+
+            if (eventsIds.Count() == 0)
+            {
+                model.Error = true;
+                return this.View(model);
+            }
+
             await this.service.AssignEventsToGroupAsync(model.GroupId, eventsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }
@@ -156,6 +177,13 @@
         public async Task<IActionResult> AddStudents(GroupWithStudentsViewModel model)
         {
             var studentsIds = model.Students.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+
+            if (studentsIds.Count() == 0)
+            {
+                model.Error = true;
+                return this.View(model);
+            }
+
             await this.service.AssignStudentsToGroupAsync(model.GroupId, studentsIds);
             return this.RedirectToAction("GroupDetails", new { id = model.GroupId });
         }

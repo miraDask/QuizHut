@@ -8,6 +8,8 @@
     {
         public string GroupId { get; set; }
 
+        public bool Error { get; set; }
+
         public IList<StudentViewModel> Students { get; set; } = new List<StudentViewModel>();
     }
 }
