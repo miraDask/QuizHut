@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Linq;
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -43,7 +43,13 @@
                     opt => opt.MapFrom(
                         x => x.DurationOfActivity != null
                         ? $"{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Minute.ToString("D2")}"
-                        : string.Empty));
+                        : string.Empty))
+                 .ForMember(
+                    x => x.Groups,
+                    opt => opt.MapFrom(x => x.EventsGroups.Select(x => new GroupAssignViewModel() { Id = x.GroupId, IsAssigned = true, Name = x.Group.Name })))
+                   .ForMember(
+                    x => x.Quiz,
+                    opt => opt.MapFrom(x => new QuizAssignViewModel() { Name = x.Quiz.Name, IsAssigned = true, Id = x.Quiz.Id }));
         }
     }
 }

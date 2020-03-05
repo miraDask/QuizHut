@@ -1,0 +1,67 @@
+﻿@model EventWithQuizzesViewModel
+@{
+    ViewData["Title"] = "Assign Quiz To Event";
+}
+@if (Model.Error)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>On no!</strong> If you want to assign a quiz to this event, you should choose one!
+    </div>
+}
+<div class="col-12 offset-md-1 col-md-8 row">
+    <form method="post" class="col-11 ml-4" asp-action="AssignQuizToEvent" asp-controller="Events" asp-area="Administration">
+
+        <div class="card mb-3 mt-3">
+            <div class="card-header text-warning" style="font-size: xx-large">
+                <i class="fas fa-folder-plus"></i>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">Assign Quizzes to @Model.Name event</h4>
+                <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+
+                <p class="card-text" style="display: block;">
+                    <span class="text-primary mr-1">∗</span>
+                    Choose only one quiz.
+                </p>
+            </div>
+            <div class="card-footer">
+                <div class="component">
+                    @if (Model.Quizzes.Count() > 0)
+                    {
+                        @for (int i = 0; i < Model.Quizzes.Count(); i++)
+                        {
+                            var quiz = Model.Quizzes[i];
+                            <div class="form-group mb-0">
+                                <div class="mt-2">
+                                    @Html.EditorFor(x => x.Quizzes[i].IsAssigned)
+                                    <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
+                                    @Html.HiddenFor(model => model.Quizzes[i].Id)
+                                    @Html.HiddenFor(model => model.Quizzes[i].Name)
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>There are currently no unassigned quizzes.</p>
+                        <a asp-area="Administration" asp-action="DetailsInput" asp-controller="Quizzes">Create new.</a>
+                    }
+                </div>
+            </div>
+            <div class="row mx-4 mb-4 text-white">
+                @if (Model.Quizzes.Count() > 0)
+                {
+                    <button type="submit" class="btn btn-primary col-md-5 mt-5">Add Quizz</button>
+                    <div class="col-1 mr-4"></div>
+
+                }
+                <a asp-action="AlleventsCreatedByTeacher" asp-controller="Events" asp-area="Administration" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+

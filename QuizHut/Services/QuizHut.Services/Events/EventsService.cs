@@ -25,9 +25,11 @@
             this.eventGroupsService = eventGroupsService;
         }
 
-        public Task DeleteAsync(string eventId)
+        public async Task DeleteAsync(string eventId)
         {
-            throw new System.NotImplementedException();
+            var @event = await this.GetEventById(eventId);
+            this.repository.Delete(@event);
+            await this.repository.SaveChangesAsync();
         }
 
         public async Task<IList<T>> GetAllAsync<T>()
@@ -62,7 +64,8 @@
 
         public async Task<EventWithGroupsViewModel> GetEventModelAsync(string eventId, string creatorId, IList<GroupAssignViewModel> groups)
         {
-            var @event = await this.repository.AllAsNoTracking().Where(x => x.Id == eventId).FirstOrDefaultAsync();
+            var @event = await this.GetEventById(eventId);
+
             var model = new EventWithGroupsViewModel()
             {
                 Id = eventId,
@@ -73,30 +76,13 @@
             return model;
         }
 
-        public async Task<EventDetailsViewModel> GetEventDetailsModelAsync(string eventId)
-        {
-            var @event = await this.repository
+        public async Task<T> GetEventModelByIdAsync<T>(string eventId)
+        => await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.Id == eventId)
-                .Select(x => new EventDetailsViewModel()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Groups = x.EventsGroups.Select(x => new GroupAssignViewModel()
-                    {
-                        Name = x.Group.Name,
-                        Id = x.GroupId,
-                    }).ToList(),
-                    Quiz = new QuizAssignViewModel()
-                    {
-                        Id = x.QuizId,
-                        Name = x.Quiz.Name,
-                    },
-                })
+                .To<T>()
                 .FirstOrDefaultAsync();
 
-            return @event;
-        }
 
         public async Task AssignGroupsToEventAsync(string eventId, IList<string> groupsIds)
         {
@@ -105,6 +91,29 @@
                 await this.eventGroupsService.CreateAsync(groupId, eventId);
             }
         }
+
+        public async Task AssigQuizToEventAsync(string eventId, string quizId)
+        {
+            var @event = await this.GetEventById(eventId);
+
+            @event.QuizId = quizId;
+            this.repository.Update(@event);
+            await this.repository.SaveChangesAsync();
+        }
+
+        public async Task DeleteQuizFromEventAsync(string eventId, string quizId)
+        {
+            var @event = await this.GetEventById(eventId);
+            @event.QuizId = null;
+            this.repository.Update(@event);
+            await this.repository.SaveChangesAsync();
+        }
+
+        private async Task<Event> GetEventById(string id)
+        => await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
 
         private DateTime? GetActivationDateAndTime(string activationDate, string activeFrom)
         {
