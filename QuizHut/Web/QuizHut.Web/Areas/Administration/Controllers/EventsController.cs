@@ -70,6 +70,13 @@
         public async Task<IActionResult> AssignGroupsToEvent(EventWithGroupsViewModel model)
         {
             var groupIds = model.Groups.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
+
+            if (groupIds.Count == 0)
+            {
+                model.Error = true;
+                return this.View(model);
+            }
+
             await this.service.AssignGroupsToEventAsync(model.Id, groupIds);
             return this.RedirectToAction("AssignQuizToEvent", new { id = model.Id });
         }

@@ -51,59 +51,65 @@
 </div>
 @* quiz *@
 <div class="form-group flex-grow-1">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2 mt-5">
+        <div class="container  py-2">
             <h5 class="mb-0">Quiz</h5>
-            <button class="navbar-toggler collapsed bg-primary"
-                    type="button" data-toggle="collapse"
-                    data-target="#navbarNavDropdown222"
-                    aria-controls="navbarNavDropdown222"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
-                <ul class="navbar-nav ml-auto">
-                    @if (Model.Quiz.Id == null)
-                    {
+            @if (Model.Quiz.Id == null)
+            {
+                <button class="navbar-toggler collapsed bg-primary"
+                        type="button" data-toggle="collapse"
+                        data-target="#navbarNavDropdown"
+                        aria-controls="navbarNavDropdown"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item m-1">
                             <a asp-area="Administration" asp-action="AssignQuizToEvent" asp-controller="Events" asp-route-id="@Model.Id" class="nav-link  btn btn-primary">Add New</a>
                         </li>
-                    }
-                    else
-                    {
-                <li class="nav-item m-1">
-                    <form method="post" asp-action="DeleteQuizFromEvent" asp-controller="Events">
-                        <input type="hidden" name="quizId" value="@Model.Quiz.Id" />
-                        <input type="hidden" name="eventId" value="@Model.Id" />
-                        <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
-                    </form>
-                </li>
-                    }
-                </ul>
-            </div>
+                    </ul>
+                </div>
+            }
         </div>
     </nav>
-    <div class="component">
-        <table class="table table-hover">
-            <tbody>
-                <tr class="table-active bg-white">
-                    <th scope="row">@Model.Quiz.Name</th>
-                    <td class="text-right">
-                        @*<form method="post" asp-action="DeleteQuizFromEvent" asp-controller="Events">
-                            <input type="hidden" name="quizId" value="@Model.Quiz.Id" />
-                            <input type="hidden" name="eventId" value="@Model.Id" />
-                            <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
-                        </form>*@
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    @if (Model.Quiz.Id != null)
+    {
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light p-2">
+            <div class="container">
+                <h5 class="mb-0">@Model.Quiz.Name</h5>
+                <button class="navbar-toggler collapsed bg-primary"
+                        type="button" data-toggle="collapse"
+                        data-target="#navbarNavDropdown23"
+                        aria-controls="navbarNavDropdown23"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown23">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item m-1">
+                            <a class="btn btn-primary mr-md-3 col-12" asp-action="Display" asp-controller="Quizzes" asp-route-id="@Model.Quiz.Id">
+                                View
+                            </a>
+                        </li>
+                        <li class="nav-item m-1">
+                            <form method="post" asp-action="DeleteQuizFromEvent" asp-controller="Events">
+                                <input type="hidden" name="quizId" value="@Model.Quiz.Id" />
+                                <input type="hidden" name="eventId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-primary mr-md-3 col-12">Delete</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    }
 </div>
 @* groups *@
 <div class="form-group flex-grow-1">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2 mt-5">
         <div class="container">
             <h5 class="mb-0">Assigned Groups</h5>
             <button class="navbar-toggler collapsed bg-primary"
@@ -123,24 +129,54 @@
             </div>
         </div>
     </nav>
-    <div class="component">
+    @*<div class="component">
         <table class="table table-hover">
-            <tbody>
-                @foreach (var group in Model.Groups)
-                {
-                    <tr class="table-active bg-white">
-                        <th scope="row">@group.Name</th>
-                        <td class="text-right">
+            <tbody>*@
+    @foreach (var group in Model.Groups)
+    {
+        @*<tr class="table-active bg-white">
+            <th scope="row">@group.Name</th>
+            <td class="text-right">*@
+        @*<form method="post" asp-action="DeleteEventFromGroup" asp-controller="Groups">
+                <input type="hidden" name="groupId" value="@Model.Id" />
+                <input type="hidden" name="eventId" value="@group.Id" />
+                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
+            </form>*@
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light p-2">
+            <div class="container">
+                <h5 class="mb-0">@group.Name</h5>
+                <button class="navbar-toggler collapsed bg-primary"
+                        type="button" data-toggle="collapse"
+                        data-target="#navbarNavDropdown2223"
+                        aria-controls="navbarNavDropdown2223"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown2223">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item m-1">
+                            <a class="btn btn-primary mr-md-3 col-12" asp-action="GroupDetails" asp-controller="Groups" asp-route-id="@group.Id">
+                                View
+                            </a>
+                        </li>
+                        <li class="nav-item m-1">
                             <form method="post" asp-action="DeleteEventFromGroup" asp-controller="Groups">
-                                <input type="hidden" name="groupId" value="@Model.Id" />
-                                <input type="hidden" name="eventId" value="@group.Id" />
-                                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
+                                <input type="hidden" name="groupId" value="@group.Id" />
+                                <input type="hidden" name="eventId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-primary mr-md-3 col-12">Delete</button>
                             </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        @*</td>
+            </tr>*@
+    }
+    @*</tbody>
+                </table>
+        </div>*@
 </div>
 

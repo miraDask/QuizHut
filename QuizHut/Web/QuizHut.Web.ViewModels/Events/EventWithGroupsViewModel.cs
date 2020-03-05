@@ -11,6 +11,8 @@
 
         public string Name { get; set; }
 
+        public bool Error { get; set; }
+
         public IList<GroupAssignViewModel> Groups { get; set; } = new List<GroupAssignViewModel>();
     }
 }
