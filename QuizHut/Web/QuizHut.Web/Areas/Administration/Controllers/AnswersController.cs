@@ -54,7 +54,7 @@
         [HttpGet]
         public async Task<IActionResult> EditAnswerInput(string id)
         {
-            var model = await this.answerService.GetAnswerModelAsync(id);
+            var model = await this.answerService.GetByIdAsync<AnswerViewModel>(id);
 
             return this.View(model);
         }
@@ -71,7 +71,7 @@
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            await this.answerService.Delete(id);
+            await this.answerService.DeleteAsync(id);
 
             return this.RedirectToAction("Display", "Quizzes");
         }

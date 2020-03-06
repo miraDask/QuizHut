@@ -6,7 +6,7 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using QuizHut.Web.ViewModels.Answers;
+    using QuizHut.Services.Mapping;
 
     public class AnswersService : IAnswersService
     {
@@ -30,16 +30,12 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<AnswerViewModel> GetAnswerModelAsync(string id)
+        public async Task<T> GetByIdAsync<T>(string id)
         => await this.repository
             .AllAsNoTracking()
             .Where(x => x.Id == id)
-            .Select(x => new AnswerViewModel()
-            {
-                Id = x.Id,
-                Text = x.Text,
-                IsRightAnswer = x.IsRightAnswer,
-            }).FirstOrDefaultAsync();
+            .To<T>()
+            .FirstOrDefaultAsync();
 
         public async Task UpdateAsync(string id, string text, bool isRightAnswer)
         {
@@ -51,7 +47,7 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task Delete(string id)
+        public async Task DeleteAsync(string id)
         {
             var answer = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             this.repository.Delete(answer);
