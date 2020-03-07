@@ -3,56 +3,64 @@
 @{
     ViewData["Title"] = "Register";
 }
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 col-md-4 offset-md-1">
-                <div class="mt-5">
-                    <div class="mb-4">
-                        <h1>Register</h1>
-                        <p class="lead">Create an account.</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-4 offset-md-1">
+            <div class="mt-5">
+                <div class="mb-4">
+                    <h1>Register</h1>
+                    <p class="lead">Create an account.</p>
+                </div>
+                <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label for="first-name" asp-for="Input.FirstName">First Name</label>
+                        <input type="text" class="form-control" id="first-name" aria-describedby="emailHelp" asp-for="Input.FirstName" placeholder="First Name">
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                     </div>
-                    <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="form-group">
-                            <label for="first-name" asp-for="Input.FirstName">First Name</label>
-                            <input type="text" class="form-control" id="first-name" aria-describedby="emailHelp" asp-for="Input.FirstName" placeholder="First Name">
-                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="last-name" asp-for="Input.LastName">Last Name</label>
-                            <input type="text" class="form-control" id="last-name" aria-describedby="emailHelp" asp-for="Input.LastName" placeholder="Last Name">
-                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputEmail1" asp-for="Input.Email">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" asp-for="Input.Email" placeholder="Enter email">
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                            <small id="emailHelp" class="form-text text-info">We'll never share your email with anyone else.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1" asp-for="Input.Password">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Input.Password" placeholder="Password">
-                            <span asp-validation-for="Input.Password" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1" asp-for="Input.ConfirmPassword">Password Confirmation</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Input.ConfirmPassword" placeholder="Password">
-                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                        </div>
-                        <button type="submit" class="btn btn-block btn-primary">Register</button>
-                    </form>
+                    <div class="form-group">
+                        <label for="last-name" asp-for="Input.LastName">Last Name</label>
+                        <input type="text" class="form-control" id="last-name" aria-describedby="emailHelp" asp-for="Input.LastName" placeholder="Last Name">
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1" asp-for="Input.Email">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" asp-for="Input.Email" placeholder="Enter email">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        <small id="emailHelp" class="form-text text-info">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1" asp-for="Input.Password">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Input.Password" placeholder="Password">
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1" asp-for="Input.ConfirmPassword">Password Confirmation</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Input.ConfirmPassword" placeholder="Password">
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">Register</button>
+                </form>
 
-                    <p class="small my-4 mb-5 text-center">Already have an account? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Log in</a>.</p>
-                </div>
+                <p class="small my-4 mb-5 text-center">Already have an account? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Log in</a>.</p>
             </div>
-            <div class="col-12 col-md-6 offset-md-1 d-flex">
-                <div class="flex-grow-1">
-                    <partial name="_BublesAndCirclesPrtial" />
-                </div>
+        </div>
+        <div class="col-12 col-md-6 offset-md-1 d-flex">
+            <div class="flex-grow-1">
+                <partial name="_BublesAndCirclesPrtial" />
             </div>
         </div>
     </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+}
+@section Login
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
+            Log in
+        </a>
+    </li>
 }

@@ -10,8 +10,6 @@
     <environment names="Development">
         <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/img/favicon.ico" rel="icon" type="image/png">
-
-        <link rel="stylesheet" href="~/vendor/bootstrap/bootstrap.min.css" asp-append-version="true">
         <link rel="stylesheet" href="~/css/lazy.css" asp-append-version="true">
         <link rel="stylesheet" href="~/css/demo.css" asp-append-version="true">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
@@ -21,8 +19,6 @@
     <environment names="Staging,Production">
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/img/favicon.ico" rel="icon" type="image/png">
-
-        <link rel="stylesheet" href="~/vendor/bootstrap/bootstrap.min.css" asp-append-version="true">
         <link rel="stylesheet" href="~/css/lazy.css" asp-append-version="true">
         <link rel="stylesheet" href="~/css/demo.css" asp-append-version="true">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
@@ -31,7 +27,7 @@
     </environment>
 </head>
 <body class="index">
-    <partial name="~/Views/Shared/_HeaderNavbarPartial.cshtml" />
+    <partial name="~/Views/Shared/_LoginPartial.cshtml" />
     <div id="dashboard-home" class="container p-0">
         <main role="main" class="pb-3">
             <div class="row">
@@ -51,32 +47,24 @@
         <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-        <script src="~/vendor/popper/popper.min.js" asp-append-version="true"></script>
-
         <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
-
-        <!-- optional plugins -->
-        <script src="~/vendor/nouislider/js/nouislider.min.js" asp-append-version="true"></script>
-
+        @*<script src="~/vendor/popper/popper.min.js" asp-append-version="true"></script>*@
+        @*<script src="~/vendor/nouislider/js/nouislider.min.js" asp-append-version="true"></script>*@
         @*<script src="~/js/lazy.js" asp-append-version="true"></script>*@
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/attemptQuiz.js" asp-append-version="true"></script>
+        @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
-        <script src="~/vendor/popper/popper.min.js" asp-append-version="true"></script>
-
+        @*<script src="~/vendor/popper/popper.min.js" asp-append-version="true"></script>*@
         <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
 
         <!-- optional plugins -->
-        <script src="~/vendor/nouislider/js/nouislider.min.js" asp-append-version="true"></script>
+        @*<script src="~/vendor/nouislider/js/nouislider.min.js" asp-append-version="true"></script>*@
 
         @*// <script src="~/js/lazy.js" asp-append-version="true"></script>*@
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/attemptQuiz.js" asp-append-version="true"></script>
-
+        @*<script src="~/js/site.js" asp-append-version="true"></script>*@
     </environment>
 
     @this.RenderSection("Scripts", required: false)

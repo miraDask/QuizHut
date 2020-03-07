@@ -4,7 +4,7 @@
 }
 
 <div class="page-hero bg-white text-primary" id="banner">
-<partial name="_BublesAndCirclesPrtial" />
+    <partial name="_BublesAndCirclesPrtial" />
     <div class="container">
         <div class="row">
             <div class="col-12 mb-5">
@@ -117,6 +117,30 @@
         </div>
     </div>
 </div>
+@section About
+{
+    <li class="nav-item">
+        <a class="nav-link" href="#about">
+            About
+        </a>
+    </li>
+}
+@section Register
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
+            Register
+        </a>
+    </li>
+}
+@section Login
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
+            Log in
+        </a>
+    </li>
+}
 
 
 

@@ -4,53 +4,63 @@
 @{
     ViewData["Title"] = "Log in";
 }
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 col-md-4 offset-md-1">
-                <div class="mt-5">
-                    <div class="mb-4">
-                        <h1>Log in</h1>
-                        <p class="lead">Enter your account.</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-4 offset-md-1">
+            <div class="mt-5">
+                <div class="mb-4">
+                    <h1>Log in</h1>
+                    <p class="lead">Enter your account.</p>
+                </div>
+                <form id="account" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input class="form-control" aria-describedby="emailHelp" asp-for="Input.Email" placeholder="Enter email">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        <small id="emailHelp" class="form-text text-info">We'll never share your email with anyone else.</small>
                     </div>
-                    <form id="account" method="post">
-                        <div asp-validation-summary="All" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Input.Email"></label>
-                            <input class="form-control" aria-describedby="emailHelp" asp-for="Input.Email" placeholder="Enter email">
-                            <span asp-validation-for="Input.Email" class="text-danger"></span>
-                            <small id="emailHelp" class="form-text text-info">We'll never share your email with anyone else.</small>
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Input.Password" placeholder="Password">
+                        <span class="text-danger" asp-validation-for="Input.Password"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label asp-for="Input.Password"></label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" asp-for="Input.Password" placeholder="Password">
-                            <span class="text-danger" asp-validation-for="Input.Password"></span>
-                        </div>
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <label asp-for="Input.RememberMe">
-                                    <input asp-for="Input.RememberMe" />
-                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
-                                </label>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-block btn-primary">Log in</button>
-                    </form>
-                    <p class="small mt-3 text-left">
-                        Forgot your password?
-                        <a asp-page="./ForgotPassword">Help</a>.
-                    </p>
-                    <p class="small mb-5 text-left">Don't have an account?
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>.</p>
-                </div>
+                    </div>
+                    <button type="submit" class="btn btn-block btn-primary">Log in</button>
+                </form>
+                <p class="small mt-3 text-left">
+                    Forgot your password?
+                    <a asp-page="./ForgotPassword">Help</a>.
+                </p>
+                <p class="small mb-5 text-left">
+                    Don't have an account?
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>.
+                </p>
             </div>
-            <div class="col-12 col-md-6 offset-md-1 d-flex">
-                <div class="flex-grow-1">
-                    <partial name="_BublesAndCirclesPrtial" />
-                </div>
+        </div>
+        <div class="col-12 col-md-6 offset-md-1 d-flex">
+            <div class="flex-grow-1">
+                <partial name="_BublesAndCirclesPrtial" />
             </div>
         </div>
     </div>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+}
+@section Register
+{
+    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
+            Register
+        </a>
+    </li>
 }

@@ -2,76 +2,42 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-white">
+        <div class="container">
+            <a class="navbar-brand text-primary" asp-area="Administration" asp-action="Index" asp-controller="Home">QuizHut</a>
 
-<button class="navbar-toggler collapsed"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNavDropdown-7"
-        aria-controls="navbarNavDropdown-7"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-</button>
-<div class="collapse navbar-collapse" id="navbarNavDropdown-7">
-    <ul class="navbar-nav ml-auto mx-2">
-        @if (SignInManager.IsSignedIn(User))
-        {
-            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Administration" asp-action="Index" asp-controller="Dashboard">Dashboard</a>
-                </li>
-            }
-            <li class="nav-item">
-                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                    Profile
-                </a>
-            </li>
-            <li class="nav-item">
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
-                    <button type="submit" class="nav-link btn btn-link">Logout</button>
-                </form>
-            </li>
-        }
-        else
-        {
-            @if (@Url.RouteUrl(ViewContext.RouteData.Values) == "/Identity/Account/Register")
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-                        Log in
-                    </a>
-                </li>
-            }
-            else if (@Url.RouteUrl(ViewContext.RouteData.Values) == "/Identity/Account/Login")
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
-                        Register
-                    </a>
-                </li>
-            }
-            else
-            {
-                @if (@Url.RouteUrl(ViewContext.RouteData.Values) == "/")
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">
-                            About
-                        </a>
-                    </li>
-                }
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
-                        Register
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-                        Log in
-                    </a>
-                </li>
-            }
-        }
-    </ul>
-</div>
+            <button class="navbar-toggler collapsed"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarNavDropdown-7"
+                    aria-controls="navbarNavDropdown-7"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown-7">
+                <ul class="navbar-nav ml-auto mx-2">
+                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-primary ml-2" asp-area="Administration" asp-action="Index" asp-controller="Dashboard">Dashboard</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary ml-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item text-primary">
+                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
+                                <button type="submit" class="btn btn-outline-primary ml-2">Logout</button>
+                            </form>
+                        </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+</header>
+
