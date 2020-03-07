@@ -10,9 +10,6 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Events;
-    using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Quizzes;
 
     public class EventsService : IEventsService
     {
@@ -32,19 +29,21 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IList<T>> GetAllAsync<T>()
-        => await this.repository
-               .AllAsNoTracking()
-               .To<T>()
-               .ToListAsync();
+        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null)
+        {
+            var query = this.repository.AllAsNoTracking();
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId)
-        => await this.repository
-               .AllAsNoTracking()
-               .Where(x => x.CreatorId == creatorId)
+            if (groupId != null)
+            {
+                var assignedEventsIds = await this.eventGroupsService.GetAllEventsIdsByGroupIdAsync(groupId);
+                query = query.Where(x => !assignedEventsIds.Contains(x.Id));
+            }
+
+            return await query.Where(x => x.CreatorId == creatorId)
                .OrderByDescending(x => x.CreatedOn)
                .To<T>()
                .ToListAsync();
+        }
 
         public async Task<string> AddNewEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
         {
@@ -94,12 +93,6 @@
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
         }
-
-        //public async Task<IList<GroupAssignViewModel>> FilterGroupsThatAreNotAssignedToThisEvent(string eventId, IList<GroupAssignViewModel> groups)
-        //{
-        //    var assignedGroupsIds = await this.eventGroupsService.GetAllGroupsIdsByEventIdAsync(eventId);
-        //    return groups.Where(x => !assignedGroupsIds.Contains(x.Id)).ToList();
-        //}
 
         private async Task<Event> GetEventById(string id)
         => await this.repository

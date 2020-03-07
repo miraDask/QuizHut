@@ -9,19 +9,23 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
+    using QuizHut.Services.StudentsGroups;
 
     public class UsersService : IUsersService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> repository;
+        private readonly IStudentsGroupsService studentsGroupsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<ApplicationRole> roleManager;
 
         public UsersService(
             IDeletableEntityRepository<ApplicationUser> repository,
+            IStudentsGroupsService studentsGroupsService,
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager)
         {
             this.repository = repository;
+            this.studentsGroupsService = studentsGroupsService;
             this.userManager = userManager;
             this.roleManager = roleManager;
         }
@@ -86,12 +90,20 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IList<T>> GetAllByUserIdAsync<T>(string id)
-          => await this.repository
-                .AllAsNoTracking()
-                .Where(x => x.TeacherId == id)
-                .To<T>()
-                .ToListAsync();
+        public async Task<IList<T>> GetAllByUserIdAsync<T>(string id, string groupId = null)
+        {
+            var query = this.repository.AllAsNoTracking();
+
+            if (groupId != null)
+            {
+                var assignedstudentsIds = await this.studentsGroupsService.GetAllStudentsIdsByGroupIdAsync(groupId);
+                query = query.Where(x => !assignedstudentsIds.Contains(x.Id));
+            }
+
+            return await query.Where(x => x.TeacherId == id)
+                            .To<T>()
+                            .ToListAsync();
+        }
 
         public async Task<IList<T>> GetAllByRoleAsync<T>(string roleName)
         {

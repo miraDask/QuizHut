@@ -13,7 +13,7 @@
 
         Task<string> CreateAsync(string name, string creatorId);
 
-        Task<GroupWithEventsViewModel> GetGroupModelAsync(string groupId, string creatorId, IList<EventsAssignViewModel> events);
+        Task<T> GetGroupModelAsync<T>(string groupId);
 
         Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId);
 
@@ -28,9 +28,5 @@
         Task DeleteEventFromGroupAsync(string groupId, string eventId);
 
         Task DeleteStudentFromGroupAsync(string groupId, string studentId);
-
-        Task<IList<EventsAssignViewModel>> FilterEventsThatAreNotAssignedToThisGroup(string qroupId, IList<EventsAssignViewModel> events);
-
-        Task<IList<StudentViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<StudentViewModel> students);
     }
 }

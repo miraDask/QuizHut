@@ -63,18 +63,12 @@
                               .ToListAsync();
         }
 
-    public async Task<GroupWithEventsViewModel> GetGroupModelAsync(string groupId, string creatorId, IList<EventsAssignViewModel> events)
-        {
-            var group = await this.repository.AllAsNoTracking().Where(x => x.Id == groupId).FirstOrDefaultAsync();
-            var model = new GroupWithEventsViewModel()
-            {
-                GroupId = groupId,
-                Name = group.Name,
-                Events = events.Where(x => x.CreatorId == creatorId).ToList(),
-            };
-
-            return model;
-        }
+        public async Task<T> GetGroupModelAsync<T>(string groupId)
+         => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.Id == groupId)
+            .To<T>()
+            .FirstOrDefaultAsync();
 
         public async Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId)
         {
@@ -120,18 +114,6 @@
         public async Task DeleteStudentFromGroupAsync(string groupId, string studentId)
         {
             await this.studentsGroupsService.DeleteAsync(groupId, studentId);
-        }
-
-        public async Task<IList<EventsAssignViewModel>> FilterEventsThatAreNotAssignedToThisGroup(string qroupId, IList<EventsAssignViewModel> events)
-        {
-            var assignedEventsIds = await this.eventGroupsService.GetAllEventsIdsByGroupIdAsync(qroupId);
-            return events.Where(x => !assignedEventsIds.Contains(x.Id)).ToList();
-        }
-
-        public async Task<IList<StudentViewModel>> FilterStudentsThatAreNotAssignedToThisGroup(string qroupId, IList<StudentViewModel> students)
-        {
-            var assignedstudentsIds = await this.studentsGroupsService.GetAllStudentsIdsByGroupIdAsync(qroupId);
-            return students.Where(x => !assignedstudentsIds.Contains(x.Id)).ToList();
         }
 
         public async Task UpdateNameAsync(string groupId, string newName)

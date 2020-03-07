@@ -52,7 +52,6 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var eventId = await this.service.AddNewEventAsync(model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo, userId);
-
             return this.RedirectToAction("AssignGroupsToEvent", new { id = eventId });
         }
 
@@ -62,7 +61,6 @@
             var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId);
             var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
             model.Groups = groups;
-
             return this.View(model);
         }
 
@@ -88,7 +86,6 @@
             var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId, id);
             var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
             model.Groups = groups;
-
             return this.View(model);
         }
 
