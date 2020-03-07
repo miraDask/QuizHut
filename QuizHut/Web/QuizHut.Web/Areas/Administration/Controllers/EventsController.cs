@@ -60,7 +60,8 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId);
-            var model = await this.service.GetEventModelAsync(id, userId, groups);
+            var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
+            model.Groups = groups;
 
             return this.View(model);
         }
@@ -84,9 +85,9 @@
         public async Task<IActionResult> AddGroupsToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId);
-            groups = await this.service.FilterGroupsThatAreNotAssignedToThisEvent(id, groups);
-            var model = await this.service.GetEventModelAsync(id, userId, groups);
+            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId, id);
+            var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
+            model.Groups = groups;
 
             return this.View(model);
         }
@@ -151,6 +152,21 @@
         {
             await this.service.DeleteQuizFromEventAsync(eventId, quizId);
             return this.RedirectToAction("EventDetails", new { id = eventId });
+        }
+
+        public async Task<IActionResult> ActiveEventsAll()
+        {
+            return this.View();
+        }
+
+        public async Task<IActionResult> EndedEventsAll()
+        {
+            return this.View();
+        }
+
+        public async Task<IActionResult> EventWithGroups(string id)
+        {
+            return this.View();
         }
     }
 }

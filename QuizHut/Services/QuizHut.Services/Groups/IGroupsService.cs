@@ -9,7 +9,7 @@
 
     public interface IGroupsService
     {
-        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id);
+        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId = null);
 
         Task<string> CreateAsync(string name, string creatorId);
 

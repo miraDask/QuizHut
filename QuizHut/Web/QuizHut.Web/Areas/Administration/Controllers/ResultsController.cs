@@ -26,7 +26,7 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> ActiveResultsAll()
+        public async Task<IActionResult> ActiveEventsResultsAll()
         {
             return this.View();
         }

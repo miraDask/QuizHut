@@ -3,83 +3,71 @@
     ViewData["Title"] = "Results";
 }
 
-    <div class="row">
-        <div class="col-md-5 mb-4 ml-5">
-            <div class="component">
-                <div class="card">
-                    <div class="card-header text-success">
-                        <i class="fas fa-circle"></i> Results for:
-                    </div>
-                    <div class="card-body p-0 mt-2">
-                        <h4 class="card-title pl-3">Last Active Events</h4>
-                        <table class="table table-hover col-12 mt-2">
-                            <tbody>
-                                @if (Model.Events.Any())
-                                {
-                                    @foreach (var _event in Model.Events.Where(x => x.Status["Status"] == "Active").Take(5))
-                                    {
-                                        <tr class="table-success">
-                                            <th scope="row" class="pt-3">@_event.Name</th>
-                                            <td>
-                                                <div class="component  navbar-expand-lg text-right">
-                                                    <ul class="navbar-nav ml-auto">
-                                                        <li class="nav-item m-1">
-                                                            <a type="submit" class="btn btn-outline-success py-1" asp-area="Administration" asp-action="ActiveResultsAll" asp-controller="Results" asp-route-id="@_event.Id">
-                                                                View
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer pb-3 mt-3">
-                        <a class="btn btn-outline-primary" asp-area="Administration" asp-action="DetailsInput" asp-controller="Quizzes">See All</a>
-                    </div>
+<div class="row">
+    <div class="col-md-5 mb-4 ml-5">
+        <div class="component">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-circle text-success"></i> Results for:
                 </div>
-            </div>
-        </div>
-        <div class="col-md-5 mb-4 offset-md-1">
-            <div class="component">
-                <div class="card">
-                    <div class="card-header text-danger">
-                        <i class="fas fa-circle"></i> Results for:
-                    </div>
-                    <div class="card-body p-0 mt-2">
-                        <h4 class="card-title pl-3">Last Ended Events</h4>
-                        <table class="table table-hover col-12 mt-2">
-                            <tbody>
-                                @if (Model.Events.Any())
+                <div class="card-body p-0 mt-2">
+                    <h4 class="card-title pl-3">Last Active Events</h4>
+                    <table class="table table-hover col-12 mt-2">
+                        <tbody>
+                            @if (Model.Events.Any())
+                            {
+                                @foreach (var _event in Model.Events.Where(x => x.Status["Status"] == "Active").Take(5))
                                 {
-                                    @foreach (var _event in Model.Events.Where(x => x.Status["Status"] == "Ended").Take(5))
-                                    {
-                                        <tr class="table-danger">
-                                            <th scope="row" class="pt-3">@_event.Name</th>
-                                            <td>
-                                                <div class="component  navbar-expand-lg text-right">
-                                                    <ul class="navbar-nav ml-auto">
-                                                        <li class="nav-item m-1">
-                                                            <a type="submit" class="btn btn-outline-danger py-1" asp-area="Administration" asp-action="EndedResultsAll" asp-controller="Results" asp-route-id="@_event.Id">
-                                                                View
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
+                                    <tr class="table-success">
+                                        <th scope="row" class="pt-3">@_event.Name</th>
+                                        <td class="text-right">
+                                            <a type="submit" class="btn btn-outline-success py-1" asp-area="Administration" asp-action="EventWithGroups" asp-controller="Events" asp-route-id="@_event.Id">
+                                                View
+                                            </a>
+                                        </td>
+                                    </tr>
                                 }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer pb-3 mt-3">
-                        <a class="btn btn-outline-primary" asp-area="Administration" asp-action="DetailsInput" asp-controller="Results">See All</a>
-                    </div>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-outline-primary" asp-area="Administration" asp-action="ActiveEventsAll" asp-controller="Events">See All</a>
                 </div>
             </div>
         </div>
     </div>
+    <div class="col-md-5 mb-4 offset-md-1">
+        <div class="component">
+            <div class="card">
+                <div class="card-header ">
+                    <i class="fas fa-circle text-danger"></i> Results for:
+                </div>
+                <div class="card-body p-0 mt-2">
+                    <h4 class="card-title pl-3">Last Ended Events</h4>
+                    <table class="table table-hover col-12 mt-2">
+                        <tbody>
+                            @if (Model.Events.Any())
+                            {
+                                @foreach (var _event in Model.Events.Where(x => x.Status["Status"] == "Ended").Take(5))
+                                {
+                                    <tr class="table-danger">
+                                        <th scope="row" class="pt-3">@_event.Name</th>
+                                        <td class="text-right">
+                                            <a class="btn btn-outline-danger py-1" asp-area="Administration" asp-action="EventWithGroups" asp-controller="Events" asp-route-id="@_event.Id">
+                                                View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-outline-primary" asp-area="Administration" asp-action="EndedEventsAll" asp-controller="Events">See All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

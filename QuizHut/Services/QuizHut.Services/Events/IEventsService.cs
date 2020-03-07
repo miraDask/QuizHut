@@ -1,9 +1,10 @@
 ﻿namespace QuizHut.Services.Events
 {
-    using QuizHut.Web.ViewModels.Events;
-    using QuizHut.Web.ViewModels.Groups;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
+    using QuizHut.Web.ViewModels.Events;
+    using QuizHut.Web.ViewModels.Groups;
 
     public interface IEventsService
     {
@@ -19,12 +20,10 @@
 
         Task<string> AddNewEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId);
 
-        Task<EventWithGroupsViewModel> GetEventModelAsync(string eventId, string creatorId, IList<GroupAssignViewModel> groups);
-
         Task<T> GetEventModelByIdAsync<T>(string eventId);
 
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
 
-        Task<IList<GroupAssignViewModel>> FilterGroupsThatAreNotAssignedToThisEvent(string eventId, IList<GroupAssignViewModel> groups);
+        //Task<IList<GroupAssignViewModel>> FilterGroupsThatAreNotAssignedToThisEvent(string eventId, IList<GroupAssignViewModel> groups);
     }
 }
