@@ -68,7 +68,6 @@
                 .To<T>()
                 .FirstOrDefaultAsync();
 
-
         public async Task AssignGroupsToEventAsync(string eventId, IList<string> groupsIds)
         {
             foreach (var groupId in groupsIds)

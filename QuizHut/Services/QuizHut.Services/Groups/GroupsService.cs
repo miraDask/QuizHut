@@ -10,9 +10,6 @@
     using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.StudentsGroups;
-    using QuizHut.Web.ViewModels.Events;
-    using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Students;
 
     public class GroupsService : IGroupsService
     {

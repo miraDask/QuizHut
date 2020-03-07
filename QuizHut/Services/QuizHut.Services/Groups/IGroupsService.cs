@@ -3,10 +3,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using QuizHut.Web.ViewModels.Events;
-    using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Students;
-
     public interface IGroupsService
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId = null);
