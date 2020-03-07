@@ -7,6 +7,8 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null);
 
+        Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
+
         Task DeleteAsync(string eventId);
 
         Task AssignGroupsToEventAsync(string eventId, IList<string> groupsIds);

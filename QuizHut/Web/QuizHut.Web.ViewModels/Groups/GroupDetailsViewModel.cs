@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
 
+    using QuizHut.Data.Models;
+    using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Students;
 
-    public class GroupDetailsViewModel
+    public class GroupDetailsViewModel : IMapFrom<Group>
     {
         public string Id { get; set; }
 

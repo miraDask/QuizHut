@@ -15,8 +15,6 @@
 
         Task<T> GetGroupModelAsync<T>(string groupId);
 
-        Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId);
-
         Task AssignEventsToGroupAsync(string groupId, List<string> eventsIds);
 
         Task AssignStudentsToGroupAsync(string groupId, IList<string> studentsIds);

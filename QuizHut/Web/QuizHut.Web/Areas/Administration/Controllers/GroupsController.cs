@@ -109,7 +109,11 @@
         [HttpGet]
         public async Task<IActionResult> GroupDetails(string id)
         {
-            var model = await this.service.GetGroupDetailsModelAsync(id);
+            var events = await this.eventService.GetAllByGroupIdAsync<EventsAssignViewModel>(id);
+            var students = await this.userService.GetAllByGroupIdAsync<StudentViewModel>(id);
+            var model = await this.service.GetGroupModelAsync<GroupDetailsViewModel>(id);
+            model.Students = students;
+            model.Events = events;
             return this.View(model);
         }
 

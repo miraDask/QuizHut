@@ -70,32 +70,6 @@
             .To<T>()
             .FirstOrDefaultAsync();
 
-        public async Task<GroupDetailsViewModel> GetGroupDetailsModelAsync(string groupId)
-        {
-            var group = await this.repository
-                .AllAsNoTracking()
-                .Where(x => x.Id == groupId)
-                .Select(x => new GroupDetailsViewModel()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Events = x.EventsGroups.Select(x => new EventsAssignViewModel()
-                    {
-                        Name = x.Event.Name,
-                        Id = x.EventId,
-                    }).ToList(),
-                    Students = x.StudentstGroups.Select(x => new StudentViewModel()
-                    {
-                        Id = x.StudentId,
-                        FullName = $"{x.Student.FirstName} {x.Student.LastName}",
-                        Email = x.Student.Email,
-                    }).ToList(),
-                })
-                .FirstOrDefaultAsync();
-
-            return group;
-        }
-
         public async Task DeleteAsync(string groupId)
         {
             var group = await this.repository

@@ -94,6 +94,13 @@
             await this.repository.SaveChangesAsync();
         }
 
+        public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)
+        => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.EventsGroups.Select(x => x.GroupId).Contains(groupId))
+            .To<T>()
+            .ToListAsync();
+
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()

@@ -9,6 +9,8 @@
 
         Task<IList<T>> GetAllByRoleAsync<T>(string roleName);
 
+        Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
+
         Task<bool> AddAsync(string email, string teacherId);
 
         Task DeleteAsync(string id, string teacherId);

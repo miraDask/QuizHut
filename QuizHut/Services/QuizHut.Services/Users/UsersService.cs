@@ -114,5 +114,12 @@
                    .To<T>()
                    .ToListAsync();
         }
+
+        public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)
+        => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.StudentsInGroups.Select(x => x.GroupId).Contains(groupId))
+            .To<T>()
+            .ToListAsync();
     }
 }
