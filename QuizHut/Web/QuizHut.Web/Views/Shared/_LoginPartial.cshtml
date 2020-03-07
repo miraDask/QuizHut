@@ -21,17 +21,20 @@
                         @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                         {
                             <li class="nav-item">
-                                <a class="btn btn-outline-primary ml-2" asp-area="Administration" asp-action="Index" asp-controller="Dashboard">Dashboard</a>
+                                <a class="btn btn-outline-primary ml-2" asp-area="Administration" asp-action="Index" asp-controller="Dashboard">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                                </a>
                             </li>
                         }
                         <li class="nav-item">
                             <a class="btn btn-outline-primary ml-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                Profile
+                                <i class="fas fa-address-card"></i>  Profile
                             </a>
                         </li>
                         <li class="nav-item text-primary">
                             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
-                                <button type="submit" class="btn btn-outline-primary ml-2">Logout</button>
+                                <button type="submit" class="btn btn-outline-primary ml-2">
+                                    <i class="fas fa-sign-out-alt"></i> Logout</button>
                             </form>
                         </li>
                 </ul>

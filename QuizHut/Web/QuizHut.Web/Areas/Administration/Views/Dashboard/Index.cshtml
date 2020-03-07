@@ -15,7 +15,8 @@
         <strong>On no!</strong> There is no user with email @Model.NewTeacher.Email. Try again !
     </div>
 }
-    <form method="post" class=" ml-4 mt-2 mb-5" asp-action="Index" asp-controller="Dashboard">
+<div class="row">
+    <form method="post" class="mt-2 mb-5 col-md-8" asp-action="Index" asp-controller="Dashboard">
         <div class="component">
             <div class="card">
                 <div class="card-header text-info pb-0">
@@ -44,8 +45,8 @@
                             @foreach (var teacher in Model.Teachers)
                             {
                                 <tr class="table-warning">
-                                    <th scope="row">@teacher.FullName</th>
-                                    <td>@teacher.Email</td>
+                                    <th scope="row" class="pt-4">@teacher.FullName</th>
+                                    <td class="pt-4">@teacher.Email</td>
                                     <td>
                                         <div class="component  navbar-expand-lg text-right">
                                             <ul class="navbar-nav ml-auto">
@@ -65,3 +66,10 @@
             </div>
         </div>
     </form>
+    <aside class="col-md-4">
+        <div class="headline headline-md text-center">
+            <h4>Last Updates</h4>
+            <hr>
+        </div>
+    </aside>
+</div>

@@ -2,13 +2,13 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
-    using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
