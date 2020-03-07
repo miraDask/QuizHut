@@ -33,7 +33,7 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> DetailsInput(InputQuizViewModel model)
         {
-            var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
+            var quizWithSamePasswordId = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
             if (quizWithSamePasswordId != null)
             {
                 return this.View(model);
@@ -117,7 +117,7 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> EditDetailsInput(EditDetailsViewModel model)
         {
-            var quizWithSamePasswordId = await this.quizService.GetIdByPassword(model.Password);
+            var quizWithSamePasswordId = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
             if (quizWithSamePasswordId != null && quizWithSamePasswordId != model.Id)
             {
                 model.PasswordIsValid = false;

@@ -11,32 +11,41 @@
 
     public class QuizzesService : IQuizzesService
     {
-        private readonly IDeletableEntityRepository<Quiz> repository;
+        private readonly IDeletableEntityRepository<Quiz> quizRepository;
+        private readonly IRepository<Password> passwordRepository;
 
-        public QuizzesService(IDeletableEntityRepository<Quiz> repository)
+        public QuizzesService(
+            IDeletableEntityRepository<Quiz> quizRepository,
+            IRepository<Password> passwordRepository)
         {
-            this.repository = repository;
+            this.quizRepository = quizRepository;
+            this.passwordRepository = passwordRepository;
         }
 
         public async Task<string> AddNewQuizAsync(string name, string description, int? timer, string creatorId, string password)
         {
+
             var quiz = new Quiz
             {
                 Name = name,
                 Description = description,
                 Timer = timer,
                 CreatorId = creatorId,
-                Password = password,
             };
 
-            await this.repository.AddAsync(quiz);
-            await this.repository.SaveChangesAsync();
+            var passwordEntitiy = new Password() { Content = password, QuizId = quiz.Id };
+            await this.passwordRepository.AddAsync(passwordEntitiy);
+            await this.passwordRepository.SaveChangesAsync();
+
+            quiz.PasswordId = passwordEntitiy.Id;
+            await this.quizRepository.AddAsync(quiz);
+            await this.quizRepository.SaveChangesAsync();
 
             return quiz.Id;
         }
 
         public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id)
-          => await this.repository
+          => await this.quizRepository
                  .AllAsNoTracking()
                  .Where(x => x.CreatorId == id)
                  .OrderByDescending(x => x.CreatedOn)
@@ -44,47 +53,62 @@
                  .ToListAsync();
 
         public async Task<T> GetQuizByIdAsync<T>(string id)
-       => await this.repository
+       => await this.quizRepository
                .AllAsNoTracking()
                .Where(x => x.Id == id)
                .To<T>()
                .FirstOrDefaultAsync();
 
         public async Task<IList<T>> GetAllAsync<T>()
-         => await this.repository
+         => await this.quizRepository
                 .AllAsNoTracking()
                 .To<T>()
                 .ToListAsync();
 
         public async Task DeleteByIdAsync(string id)
         {
-            var quiz = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-            this.repository.Delete(quiz);
-            await this.repository.SaveChangesAsync();
+            var quiz = await this.quizRepository
+                .AllAsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+            var password = await this.passwordRepository
+                .AllAsNoTracking()
+                .Where(x => x.QuizId == id)
+                .FirstOrDefaultAsync();
+            this.passwordRepository.Delete(password);
+            this.quizRepository.Delete(quiz);
+
+            await this.passwordRepository.SaveChangesAsync();
+            await this.quizRepository.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(string id, string name, string description, int? timer, string password)
         {
-            var quiz = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var quiz = await this.quizRepository
+               .AllAsNoTracking()
+               .FirstOrDefaultAsync(x => x.Id == id);
+            var passwordEntity = await this.passwordRepository
+                .AllAsNoTracking()
+                .Where(x => x.QuizId == id)
+                .FirstOrDefaultAsync();
+
+            if (passwordEntity.Content != password)
+            {
+                passwordEntity.Content = password;
+                this.passwordRepository.Update(passwordEntity);
+                await this.passwordRepository.SaveChangesAsync();
+            }
+
             quiz.Name = name;
             quiz.Description = description;
             quiz.Timer = timer;
-            quiz.Password = password;
 
-            this.repository.Update(quiz);
-            await this.repository.SaveChangesAsync();
+            this.quizRepository.Update(quiz);
+            await this.quizRepository.SaveChangesAsync();
         }
 
         public async Task<string> GetQuizIdByPasswordAsync(string password)
-        => await this.repository.AllAsNoTracking()
-            .Where(x => x.Password == password)
-            .Select(x => x.Id)
-            .FirstOrDefaultAsync();
-
-        public async Task<string> GetIdByPassword(string password)
-       => await this.repository
-            .AllAsNoTrackingWithDeleted()
-            .Where(x => x.Password == password)
+        => await this.quizRepository.AllAsNoTracking()
+            .Where(x => x.Password.Content == password)
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
     }

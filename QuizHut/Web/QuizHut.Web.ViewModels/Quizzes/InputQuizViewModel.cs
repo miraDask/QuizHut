@@ -2,13 +2,13 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Questions;
     using QuizHut.Web.ViewModels.Shared;
 
-    public class InputQuizViewModel : IMapFrom<Quiz>
+    public class InputQuizViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -25,9 +25,9 @@
 
         [Required]
         [StringLength(
-            ModelValidations.Quizzes.PasswordMaxLength,
+            ModelValidations.Password.PasswordMaxLength,
             ErrorMessage = ModelValidations.Error.RangeMessage,
-            MinimumLength = ModelValidations.Quizzes.PasswordMinLength)]
+            MinimumLength = ModelValidations.Password.PasswordMinLength)]
         public string Password { get; set; }
 
         public bool IsActive { get; set; }
@@ -37,5 +37,13 @@
         public bool PasswordIsValid { get; set; }
 
         public IList<QuestionViewModel> Questions { get; set; } = new List<QuestionViewModel>();
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<Quiz, InputQuizViewModel>()
+             .ForMember(
+                   x => x.Password,
+                   opt => opt.MapFrom(x => x.Password.Content));
+        }
     }
 }

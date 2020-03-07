@@ -22,16 +22,13 @@
               .WithOne(e => e.Quiz)
               .HasForeignKey(e => e.QuizId);
 
+            quiz.HasOne(q => q.Password)
+                .WithOne(p => p.Quiz)
+                .HasForeignKey<Quiz>(q => q.PasswordId);
+
             quiz.Property(q => q.Name)
                 .HasMaxLength(DataValidation.Quiz.NameMaxLength)
                 .IsRequired();
-
-            quiz.Property(q => q.Password)
-               .HasMaxLength(DataValidation.Quiz.PasswordMaxLength)
-               .IsRequired();
-
-            quiz.HasIndex(x => x.Password)
-                .IsUnique();
         }
     }
 }

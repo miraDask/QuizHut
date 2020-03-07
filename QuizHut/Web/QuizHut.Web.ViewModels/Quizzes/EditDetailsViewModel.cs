@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
     using System.ComponentModel.DataAnnotations;
+
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Shared;
@@ -20,9 +21,9 @@
 
         [Required]
         [StringLength(
-           ModelValidations.Quizzes.PasswordMaxLength,
+           ModelValidations.Password.PasswordMaxLength,
            ErrorMessage = ModelValidations.Error.RangeMessage,
-           MinimumLength = ModelValidations.Quizzes.PasswordMinLength)]
+           MinimumLength = ModelValidations.Password.PasswordMinLength)]
         public string Password { get; set; }
 
         public int? Timer { get; set; }

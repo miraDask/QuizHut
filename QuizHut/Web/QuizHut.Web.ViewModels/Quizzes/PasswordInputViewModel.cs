@@ -8,9 +8,9 @@
     {
         [Required]
         [StringLength(
-            ModelValidations.Quizzes.PasswordMaxLength,
+            ModelValidations.Password.PasswordMaxLength,
             ErrorMessage = ModelValidations.Error.RangeMessage,
-            MinimumLength = ModelValidations.Quizzes.PasswordMinLength)]
+            MinimumLength = ModelValidations.Password.PasswordMinLength)]
         public string Password { get; set; }
     }
 }

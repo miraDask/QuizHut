@@ -37,7 +37,6 @@
     <ProjectReference Include="..\..\Data\QuizHut.Data.Common\QuizHut.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\QuizHut.Data.Models\QuizHut.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\QuizHut.Data\QuizHut.Data.csproj" />
-    <ProjectReference Include="..\..\Services\QuizHut.Services.Data\QuizHut.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\QuizHut.Services.Mapping\QuizHut.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\QuizHut.Services.Messaging\QuizHut.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\QuizHut.Services\QuizHut.Services.csproj" />

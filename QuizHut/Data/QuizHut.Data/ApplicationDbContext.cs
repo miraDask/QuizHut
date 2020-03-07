@@ -23,13 +23,13 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
-
         public DbSet<Answer> Answers { get; set; }
 
         public DbSet<Question> Questions { get; set; }
 
         public DbSet<Quiz> Quizzes { get; set; }
+
+        public DbSet<Password> Passwords { get; set; }
 
         public DbSet<QuizResult> QuizzesResults { get; set; }
 

@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\QuizHut.Data\QuizHut.Data.csproj" />
-    <ProjectReference Include="..\..\Services\QuizHut.Services.Data\QuizHut.Services.Data.csproj" />
   </ItemGroup>
 
 </Project>

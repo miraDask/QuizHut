@@ -19,8 +19,6 @@
 
         public string Description { get; set; }
 
-        public string Password { get; set; }
-
         public int? Timer { get; set; }
 
         public bool IsActive { get; set; }
@@ -32,6 +30,10 @@
         public string CategoryId { get; set; }
 
         public virtual Category Category { get; set; }
+
+        public int? PasswordId { get; set; }
+
+        public virtual Password Password { get; set; }
 
         public virtual ICollection<Question> Questions { get; set; }
 

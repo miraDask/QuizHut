@@ -7,7 +7,6 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Data;
     using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Students;
@@ -16,13 +15,11 @@
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class DashboardController : AdministrationController
     {
-        //private readonly ISettingsService settingsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService service;
 
-        public DashboardController(ISettingsService settingsService, UserManager<ApplicationUser> userManager, IUsersService service)
+        public DashboardController(UserManager<ApplicationUser> userManager, IUsersService service)
         {
-            //this.settingsService = settingsService;
             this.userManager = userManager;
             this.service = service;
         }

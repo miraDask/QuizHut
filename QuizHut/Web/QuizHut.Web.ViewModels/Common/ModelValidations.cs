@@ -7,10 +7,13 @@
             internal const int NameMinLength = 3;
 
             internal const int NameMaxLength = 1000;
+        }
 
+        internal static class Password
+        {
             internal const int PasswordMinLength = 6;
 
-            internal const int PasswordMaxLength = 10;
+            internal const int PasswordMaxLength = 16;
         }
 
         internal static class Groups

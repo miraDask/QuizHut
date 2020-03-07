@@ -25,7 +25,12 @@
         internal static class Quiz
         {
             internal const int NameMaxLength = 1000;
-            internal const int PasswordMaxLength = 10;
+            internal const int PasswordMaxLength = 16;
+        }
+
+        internal static class Password
+        {
+            internal const int PasswordMaxLength = 16;
         }
 
         internal static class Event
