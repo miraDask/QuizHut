@@ -5,10 +5,6 @@
 
     public class QuizAssignViewModel : IMapFrom<Quiz>
     {
-        public QuizAssignViewModel()
-        {
-        }
-
         public string Id { get; set; }
 
         public string Name { get; set; }

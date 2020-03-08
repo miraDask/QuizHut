@@ -5,7 +5,6 @@
 
     public class EventsAssignViewModel : IMapFrom<Event>
     {
-
         public string Id { get; set; }
 
         public string CreatorId { get; set; }

@@ -7,10 +7,6 @@
 
     public class QuizListViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
-        public QuizListViewModel()
-        {
-        }
-
         public string Id { get; set; }
 
         public string Name { get; set; }

@@ -4,6 +4,11 @@
 
     public class GroupsListAllViewModel
     {
-        public IList<GroupListViewModel> Groups { get; set; } = new List<GroupListViewModel>();
+        public GroupsListAllViewModel()
+        {
+            this.Groups = new List<GroupListViewModel>();
+        }
+
+        public IEnumerable<GroupListViewModel> Groups { get; set; }
     }
 }

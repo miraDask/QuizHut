@@ -4,6 +4,11 @@
 
     public class CategoriesListAllViewModel
     {
-        public IList<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public CategoriesListAllViewModel()
+        {
+            this.Categories = new HashSet<CategoryViewModel>();
+        }
+
+        public IEnumerable<CategoryViewModel> Categories { get; set; }
     }
 }

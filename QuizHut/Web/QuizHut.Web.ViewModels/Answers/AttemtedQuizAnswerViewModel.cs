@@ -5,10 +5,6 @@
 
     public class AttemtedQuizAnswerViewModel : IMapFrom<Answer>
     {
-        public AttemtedQuizAnswerViewModel()
-        {
-        }
-
         public string Id { get; set; }
 
         public string Text { get; set; }

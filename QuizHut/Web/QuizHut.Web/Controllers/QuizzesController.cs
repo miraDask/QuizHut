@@ -65,10 +65,9 @@
         public async Task<IActionResult> Submit(AttemtedQuizViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizId = this.HttpContext.Session.GetString(Constants.AttemptedQuizId);
-            var originalQuizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(quizId);
-            var resultModel = await this.quizResultService.GetResultModel(quizId, userId, originalQuizModel.Questions, model.Questions);
-            resultModel.QuizName = this.HttpContext.Session.GetString(Constants.AttemptedQuizName);
+            var originalQuizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(model.Id);
+            var resultModel = await this.quizResultService.GetResultModel(model.Id, userId, originalQuizModel.Questions, model.Questions);
+            resultModel.QuizName = model.Name;
 
             return this.View(resultModel);
         }

@@ -4,6 +4,11 @@
 
     public class EventsListAllViewModel
     {
-        public IList<EventListViewModel> Events { get; set; } = new List<EventListViewModel>();
+        public EventsListAllViewModel()
+        {
+            this.Events = new HashSet<EventListViewModel>();
+        }
+
+        public IEnumerable<EventListViewModel> Events { get; set; }
     }
 }

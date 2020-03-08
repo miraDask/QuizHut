@@ -48,6 +48,7 @@
                     </div>
                     <div class="card-body pt-1">
                         <h4 class="card-title">@Model.Name</h4>
+                        <input type="hidden" asp-for="@Model.Name"  value="@Model.Name" />
                         <p class="card-text border-top pt-2" style="display: block;">
                             <span class="text-primary mr-1">∗</span>@Model.Description
                         </p>
@@ -72,6 +73,8 @@
                     <div class="card mb-3">
                         <div class="card-header text-warning">
                             <i class="fas fa-question-circle"></i>
+                            @*<input type="hidden" asp-for="@question.Id" value="@question.Id" />
+                            <input type="hidden" asp-for="@question.Number" value="@question.Number" />*@
                             @Html.HiddenFor(model => model.Questions[i].Id)
                             @Html.HiddenFor(model => model.Questions[i].Number)
                             <span class="text-primary ml-1">Question @question.Number</span>
@@ -104,6 +107,7 @@
                     </div>
                 </div>
             }
+        <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
             <button type="submit" id="submit" class="btn btn-primary col-md-5 offset-md-3" asp-action="Submit" asp-controller="Quizzes" style="display:none">Submit Quiz</button>
         </form>
     </div>

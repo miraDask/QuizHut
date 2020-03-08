@@ -8,6 +8,10 @@
 
     public class EventWithGroupsViewModel : IMapFrom<Event>
     {
+        public EventWithGroupsViewModel()
+        {
+            this.Groups = new List<GroupAssignViewModel>();
+        }
 
         public string Id { get; set; }
 
@@ -15,6 +19,6 @@
 
         public bool Error { get; set; }
 
-        public IList<GroupAssignViewModel> Groups { get; set; } = new List<GroupAssignViewModel>();
+        public IList<GroupAssignViewModel> Groups { get; set; }
     }
 }

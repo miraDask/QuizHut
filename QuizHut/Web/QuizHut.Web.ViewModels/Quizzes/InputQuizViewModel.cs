@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -10,6 +11,11 @@
 
     public class InputQuizViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
+        public InputQuizViewModel()
+        {
+            this.Questions = new List<QuestionViewModel>();
+        }
+
         public string Id { get; set; }
 
         [Required]
@@ -36,7 +42,7 @@
 
         public bool PasswordIsValid { get; set; }
 
-        public IList<QuestionViewModel> Questions { get; set; } = new List<QuestionViewModel>();
+        public IList<QuestionViewModel> Questions { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

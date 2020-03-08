@@ -10,10 +10,6 @@
 
     public class EventListViewModel : IMapFrom<Event>, IHaveCustomMappings
     {
-        public EventListViewModel()
-        {
-        }
-
         public string Id { get; set; }
 
         public string Name { get; set; }

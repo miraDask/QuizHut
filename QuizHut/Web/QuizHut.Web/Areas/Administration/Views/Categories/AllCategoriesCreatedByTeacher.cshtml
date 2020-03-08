@@ -39,10 +39,8 @@
     <tbody>
         @if (Model.Categories.Any())
         {
-            @for (int i = 0; i < Model.Categories.Count(); i++)
+            foreach (var category in Model.Categories)
             {
-                var category = Model.Categories[i];
-
                 <tr class="table-primary">
                     <th scope="row">@category.Name</th>
                     <td>@category.CreatedOn</td>

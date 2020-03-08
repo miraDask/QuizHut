@@ -39,10 +39,8 @@
     <tbody>
         @if (Model.Groups.Any())
         {
-            @for (int i = 0; i < Model.Groups.Count(); i++)
+            foreach (var group in Model.Groups)
             {
-                var group = Model.Groups[i];
-
                 <tr class="table-success">
                     <th scope="row">@group.Name</th>
                     <td>@group.CreatedOn</td>

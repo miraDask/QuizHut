@@ -8,12 +8,17 @@
 
     public class EventWithQuizzesViewModel : IMapFrom<Event>
     {
+        public EventWithQuizzesViewModel()
+        {
+            this.Quizzes = new List<QuizAssignViewModel>();
+        }
+
         public string Id { get; set; }
 
         public string Name { get; set; }
 
         public bool Error { get; set; }
 
-        public IList<QuizAssignViewModel> Quizzes { get; set; } = new List<QuizAssignViewModel>();
+        public IList<QuizAssignViewModel> Quizzes { get; set; }
     }
 }

@@ -1,6 +1,9 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
-    public class QuizResultViewModel
+    using QuizHut.Data.Models;
+    using QuizHut.Services.Mapping;
+
+    public class QuizResultViewModel : IMapFrom<QuizResult>
     {
         public string QuizName { get; set; }
 

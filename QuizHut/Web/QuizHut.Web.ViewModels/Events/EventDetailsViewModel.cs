@@ -12,6 +12,11 @@
 
     public class EventDetailsViewModel : IMapFrom<Event>, IHaveCustomMappings
     {
+        public EventDetailsViewModel()
+        {
+            this.Groups = new HashSet<GroupAssignViewModel>();
+        }
+
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -24,7 +29,7 @@
 
         public QuizAssignViewModel Quiz { get; set; }
 
-        public IEnumerable<GroupAssignViewModel> Groups { get; set; } = new HashSet<GroupAssignViewModel>();
+        public IEnumerable<GroupAssignViewModel> Groups { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

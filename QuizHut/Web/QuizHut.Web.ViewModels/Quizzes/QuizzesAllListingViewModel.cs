@@ -4,6 +4,11 @@
 
     public class QuizzesAllListingViewModel
     {
-        public IList<QuizListViewModel> Quizzes { get; set; } = new List<QuizListViewModel>();
+        public QuizzesAllListingViewModel()
+        {
+            this.Quizzes = new List<QuizListViewModel>();
+        }
+
+        public IEnumerable<QuizListViewModel> Quizzes { get; set; }
     }
 }

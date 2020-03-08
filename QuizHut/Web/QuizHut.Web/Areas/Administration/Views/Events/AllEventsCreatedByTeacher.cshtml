@@ -38,10 +38,8 @@
     <tbody>
         @if (Model.Events.Any())
         {
-            @for (int i = 0; i < Model.Events.Count(); i++)
+            foreach(var _event in Model.Events)
             {
-                var _event = Model.Events[i];
-
                 <tr class="table-info">
                     <th scope="row">@_event.Name</th>
                     <td>@_event.CreatedOn</td>

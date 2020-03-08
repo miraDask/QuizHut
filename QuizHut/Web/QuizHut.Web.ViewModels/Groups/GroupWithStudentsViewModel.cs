@@ -8,10 +8,15 @@
 
     public class GroupWithStudentsViewModel : IMapFrom<Group>
     {
+        public GroupWithStudentsViewModel()
+        {
+            this.Students = new List<StudentViewModel>();
+        }
+
         public string Id { get; set; }
 
         public bool Error { get; set; }
 
-        public IList<StudentViewModel> Students { get; set; } = new List<StudentViewModel>();
+        public IList<StudentViewModel> Students { get; set; }
     }
 }
