@@ -12,13 +12,13 @@
     [AllowAnonymous]
     public class LogoutModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<LogoutModel> _logger;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<LogoutModel> logger;
 
         public LogoutModel(SignInManager<ApplicationUser> signInManager, ILogger<LogoutModel> logger)
         {
-            this._signInManager = signInManager;
-            this._logger = logger;
+            this.signInManager = signInManager;
+            this.logger = logger;
         }
 
         public void OnGet()
@@ -27,8 +27,8 @@
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await this._signInManager.SignOutAsync();
-            this._logger.LogInformation("User logged out.");
+            await this.signInManager.SignOutAsync();
+            this.logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
                 return this.LocalRedirect(returnUrl);

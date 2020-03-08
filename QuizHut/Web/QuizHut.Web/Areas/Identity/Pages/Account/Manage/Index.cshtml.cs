@@ -11,15 +11,15 @@
 
     public partial class IndexModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public string Username { get; set; }
@@ -37,59 +37,59 @@
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(ApplicationUser user)
-        {
-            var userName = await _userManager.GetUserNameAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-
-            Username = userName;
-
-            Input = new InputModel
-            {
-                PhoneNumber = phoneNumber
-            };
-        }
-
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
-            await LoadAsync(user);
-            return Page();
+            await this.LoadAsync(user);
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await this.userManager.GetUserAsync(this.User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                await LoadAsync(user);
-                return Page();
+                await this.LoadAsync(user);
+                return this.Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
+            if (this.Input.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                var setPhoneResult = await this.userManager.SetPhoneNumberAsync(user, this.Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    var userId = await _userManager.GetUserIdAsync(user);
+                    var userId = await this.userManager.GetUserIdAsync(user);
                     throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
                 }
             }
 
-            await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
-            return RedirectToPage();
+            await this.signInManager.RefreshSignInAsync(user);
+            this.StatusMessage = "Your profile has been updated";
+            return this.RedirectToPage();
+        }
+
+        private async Task LoadAsync(ApplicationUser user)
+        {
+            var userName = await this.userManager.GetUserNameAsync(user);
+            var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
+
+            this.Username = userName;
+
+            this.Input = new InputModel
+            {
+                PhoneNumber = phoneNumber,
+            };
         }
     }
 }

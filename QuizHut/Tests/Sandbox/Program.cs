@@ -51,7 +51,8 @@
             var sw = Stopwatch.StartNew();
 
             var settingsService = serviceProvider.GetService<IQuizzesService>();
-            //Console.WriteLine($"Count of settings: {settingsService.GetCount()}");
+
+            // Console.WriteLine($"Count of settings: {settingsService.GetCount()}");
 
             Console.WriteLine(sw.Elapsed);
             return await Task.FromResult(0);

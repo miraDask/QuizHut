@@ -26,7 +26,7 @@
 
         public async Task<IActionResult> Index(string invalidEmail)
         {
-            //var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
+            // var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
             var teachers = await this.service.GetAllByRoleAsync<TeacherViewModel>(GlobalConstants.TeacherRoleName);
             var model = new TeachersAllViewModel()
             {

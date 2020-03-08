@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\Services\QuizHut.Services.Mapping\QuizHut.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Administration\Dashboard\" />
+  </ItemGroup>
+
 </Project>

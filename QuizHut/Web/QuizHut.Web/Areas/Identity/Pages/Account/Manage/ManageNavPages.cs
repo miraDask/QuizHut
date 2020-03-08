@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace QuizHut.Web.Areas.Identity.Pages.Account.Manage
+﻿namespace QuizHut.Web.Areas.Identity.Pages.Account.Manage
 {
+    using System;
+
+    using Microsoft.AspNetCore.Mvc.Rendering;
+
     public static class ManageNavPages
     {
         public static string Index => "Index";

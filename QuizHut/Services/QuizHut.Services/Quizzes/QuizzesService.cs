@@ -24,7 +24,6 @@
 
         public async Task<string> AddNewQuizAsync(string name, string description, int? timer, string creatorId, string password)
         {
-
             var quiz = new Quiz
             {
                 Name = name,

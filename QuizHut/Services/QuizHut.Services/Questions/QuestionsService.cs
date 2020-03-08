@@ -7,7 +7,6 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
 
-
     public class QuestionsService : IQuestionsService
     {
         private readonly IDeletableEntityRepository<Question> repository;

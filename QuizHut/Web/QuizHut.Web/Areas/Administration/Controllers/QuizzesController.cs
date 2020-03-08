@@ -90,7 +90,6 @@
             return this.RedirectToAction("Start", "Quizzes", new { area = string.Empty, password = model.Password });
         }
 
-
         public async Task<IActionResult> DeleteQuiz(string id)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
@@ -128,7 +127,6 @@
 
             return this.RedirectToAction("Display", new { id = model.Id });
         }
-
 
         [HttpGet]
         public async Task<IActionResult> PDFExport(string id)

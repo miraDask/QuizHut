@@ -1,11 +1,12 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Web.ViewModels.Events;
-    using System.Threading.Tasks;
 
     public class ResultsController : AdministrationController
     {
