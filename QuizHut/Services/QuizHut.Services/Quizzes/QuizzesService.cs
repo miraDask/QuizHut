@@ -117,5 +117,13 @@
             .Where(x => x.Events.Any(x => x.Id == eventId))
             .To<T>()
             .FirstOrDefaultAsync();
+
+        //private async Task<bool> StudentHasPermission(string quizId, string studentId)
+        //{
+        //    var quiz = await this.quizRepository.AllAsNoTracking().Where(x => x.Id == quizId).FirstOrDefaultAsync();
+        //    var x = quiz.Events.Select(x => x.Group.StudentstGroups.Select(x => x.StudentId == studentId));
+
+        //    return false;
+        //}
     }
 }

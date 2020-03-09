@@ -4,7 +4,7 @@
 }
 
 <div class="row">
-    <div class="col-md-5 mb-4 ml-5">
+    <div class="col-md-5 mb-4 ml-md-5">
         <div class="component">
             <div class="card">
                 <div class="card-header">
@@ -12,27 +12,36 @@
                 </div>
                 <div class="card-body p-0 mt-2">
                     <h4 class="card-title pl-3">Last Active Events</h4>
-                    <table class="table table-hover col-12 mt-2">
-                        <tbody>
-                            @if (Model.Events.Any())
-                            {
+                    @if (Model.Events.Any())
+                    {
+                        <table class="table table-hover col-12 mt-2">
+                            <tbody>
+
                                 @foreach (var _event in Model.Events.Where(x => x.Status["Status"] == "Active").Take(5))
                                 {
                                     <tr class="table-success">
                                         <th scope="row" class="pt-3">@_event.Name</th>
                                         <td class="text-right">
                                             <a type="submit" class="btn btn-outline-success py-1" asp-area="Administration" asp-action="EventWithGroups" asp-controller="Events" asp-route-id="@_event.Id">
-                                                View
+                                                View Results
                                             </a>
                                         </td>
                                     </tr>
                                 }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer">
-                    <a class="btn btn-outline-primary" asp-area="Administration" asp-action="ActiveEventsAll" asp-controller="Events">See All</a>
+
+                            </tbody>
+                        </table>
+
+                        <div class="card-footer">
+                            <a class="btn btn-outline-primary" asp-area="Administration" asp-action="ActiveEventsAll" asp-controller="Events">See All</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-footer text-left">
+                            <p class="ml-2 text-primary">There are no active events at the moment.</p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -45,29 +54,37 @@
                 </div>
                 <div class="card-body p-0 mt-2">
                     <h4 class="card-title pl-3">Last Ended Events</h4>
-                    <table class="table table-hover col-12 mt-2">
-                        <tbody>
-                            @if (Model.Events.Any())
-                            {
+                    @if (Model.Events.Any())
+                    {
+                        <table class="table table-hover col-12 mt-2">
+                            <tbody>
+
                                 @foreach (var _event in Model.Events.Where(x => x.Status["Status"] == "Ended").Take(5))
                                 {
                                     <tr class="table-danger">
                                         <th scope="row" class="pt-3">@_event.Name</th>
                                         <td class="text-right">
                                             <a class="btn btn-outline-danger py-1" asp-area="Administration" asp-action="EventWithGroups" asp-controller="Events" asp-route-id="@_event.Id">
-                                                View
+                                                View Results
                                             </a>
                                         </td>
                                     </tr>
                                 }
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer">
-                    <a class="btn btn-outline-primary" asp-area="Administration" asp-action="EndedEventsAll" asp-controller="Events">See All</a>
+
+                            </tbody>
+                        </table>
+
+                        <div class="card-footer">
+                            <a class="btn btn-outline-primary" asp-area="Administration" asp-action="EndedEventsAll" asp-controller="Events">See All</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card-footer text-left">
+                            <p class="ml-2 text-primary">There are no ended events at the moment.</p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-</div>

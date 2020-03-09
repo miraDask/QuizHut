@@ -29,57 +29,27 @@
                     opt => opt.MapFrom(x => GetStatus(x.ActivationDateAndTime, x.DurationOfActivity)));
         }
 
-        private static IDictionary<string, string> GetStatus(DateTime? activationDateAndTime, TimeSpan? duration)
+        private static IDictionary<string, string> GetStatus(DateTime activationDateAndTime, TimeSpan duration)
         {
-            if (activationDateAndTime == null)
+            var now = DateTime.UtcNow;
+            var end = activationDateAndTime.Add(duration);
+
+            if (now < activationDateAndTime)
             {
                 return new Dictionary<string, string>()
                 {
-                    [ModelCostants.Status] = ModelCostants.StatusActive,
-                    [ModelCostants.Color] = ModelCostants.ColorActive,
+                    [ModelCostants.Status] = ModelCostants.StatusPending,
+                    [ModelCostants.Color] = ModelCostants.ColorPending,
                 };
             }
 
-            var now = DateTime.UtcNow;
-            if (duration != null)
+            if (now > end)
             {
-                var end = activationDateAndTime.Value.Add((TimeSpan)duration);
-
-                if (now < activationDateAndTime)
+                return new Dictionary<string, string>()
                 {
-                    return new Dictionary<string, string>()
-                    {
-                        [ModelCostants.Status] = ModelCostants.StatusPending,
-                        [ModelCostants.Color] = ModelCostants.ColorPending,
-                    };
-                }
-                else if (now > end)
-                {
-                    return new Dictionary<string, string>()
-                    {
-                        [ModelCostants.Status] = ModelCostants.StatusEnded,
-                        [ModelCostants.Color] = ModelCostants.ColorInActive,
-                    };
-                }
-            }
-            else
-            {
-                if (now.Date < activationDateAndTime.Value.Date)
-                {
-                    return new Dictionary<string, string>()
-                    {
-                        [ModelCostants.Status] = ModelCostants.StatusPending,
-                        [ModelCostants.Color] = ModelCostants.ColorPending,
-                    };
-                }
-                else if (now.Date > activationDateAndTime.Value.Date)
-                {
-                    return new Dictionary<string, string>()
-                    {
-                        [ModelCostants.Status] = ModelCostants.StatusEnded,
-                        [ModelCostants.Color] = ModelCostants.ColorInActive,
-                    };
-                }
+                    [ModelCostants.Status] = ModelCostants.StatusEnded,
+                    [ModelCostants.Color] = ModelCostants.ColorEnded,
+                };
             }
 
             return new Dictionary<string, string>()

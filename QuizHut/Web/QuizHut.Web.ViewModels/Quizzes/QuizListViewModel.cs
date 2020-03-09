@@ -30,7 +30,7 @@
                     opt => opt.MapFrom(x => x.Questions.Count))
                 .ForMember(
                     x => x.Color,
-                    opt => opt.MapFrom(x => x.IsActive ? ModelCostants.ColorActive : ModelCostants.ColorInActive));
+                    opt => opt.MapFrom(x => x.IsActive ? ModelCostants.ColorActive : ModelCostants.ColorEnded));
         }
     }
 }

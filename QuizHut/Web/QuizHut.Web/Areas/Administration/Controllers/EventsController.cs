@@ -77,7 +77,7 @@
                 return this.View(model);
             }
 
-            await this.groupsService.AssignEventsToGroupAsync(model.Id, groupIds);
+            await this.groupsService.AssignEventsToGroupAsync(groupIds[0], new List<string>() { model.Id});
             return this.RedirectToAction("AssignQuizToEvent", new { id = model.Id });
         }
 

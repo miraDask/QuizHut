@@ -1,14 +1,14 @@
 ﻿namespace QuizHut.Web.ViewModels.Common
 {
-    internal class ModelCostants
+    public class ModelCostants
     {
-        internal const string ColorActive = "#0f990f";
-        internal const string ColorInActive = "#d75277";
-        internal const string ColorPending = "#f4f717";
-        internal const string StatusPending = "Pending";
-        internal const string StatusActive = "Active";
-        internal const string StatusEnded = "Ended";
-        internal const string Status = "Status";
-        internal const string Color = "Color";
+        public const string ColorActive = "#0f990f";
+        public const string ColorEnded = "#d75277";
+        public const string ColorPending = "#f4f717";
+        public const string StatusPending = "Pending";
+        public const string StatusActive = "Active";
+        public const string StatusEnded = "Ended";
+        public const string Status = "Status";
+        public const string Color = "Color";
     }
 }

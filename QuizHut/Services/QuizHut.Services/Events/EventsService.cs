@@ -8,7 +8,6 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Groups;
     using QuizHut.Services.Mapping;
 
     public class EventsService : IEventsService
@@ -95,24 +94,10 @@
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
-        private DateTime? GetActivationDateAndTime(string activationDate, string activeFrom)
-        {
-            DateTime? nullableDate = null;
+        private DateTime GetActivationDateAndTime(string activationDate, string activeFrom)
+        => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
 
-            if (activationDate == null)
-            {
-                return nullableDate;
-            }
-
-            return activeFrom == null
-                ? DateTime.Parse(activationDate) : DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
-        }
-
-        private TimeSpan? GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
-        {
-            TimeSpan? nulllableTimeSpan = null;
-            return activeFrom == null
-                ? nulllableTimeSpan : (DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom)));
-        }
+        private TimeSpan GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
+        => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
     }
 }

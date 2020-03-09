@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Web.ViewModels.Events;
+    using QuizHut.Web.ViewModels.Common;
 
     public class ResultsController : AdministrationController
     {
@@ -23,7 +25,11 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var events = await this.eventService.GetAllByCreatorIdAsync<EventListViewModel>(userId);
-            var model = new EventsListAllViewModel { Events = events };
+            var model = new EventsListAllViewModel
+            {
+                Events = events.Where(x => x.Status[ModelCostants.Status] != ModelCostants.StatusPending),
+            };
+
             return this.View(model);
         }
 

@@ -18,9 +18,9 @@
 
         public virtual ApplicationUser Creator { get; set; }
 
-        public DateTime? ActivationDateAndTime { get; set; }
+        public DateTime ActivationDateAndTime { get; set; }
 
-        public TimeSpan? DurationOfActivity { get; set; }
+        public TimeSpan DurationOfActivity { get; set; }
 
         public string QuizId { get; set; }
 
