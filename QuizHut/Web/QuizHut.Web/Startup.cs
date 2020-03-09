@@ -22,7 +22,6 @@
     using QuizHut.Services.Answers;
     using QuizHut.Services.Categories;
     using QuizHut.Services.Events;
-    using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
@@ -67,7 +66,7 @@
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
-            
+
             // services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession(options =>
             {
@@ -88,7 +87,6 @@
             services.AddTransient<IQuizzesResultsService, QuizzesResultsService>();
             services.AddTransient<IGroupsService, GroupsService>();
             services.AddTransient<IResultsService, ResultsService>();
-            services.AddTransient<IEventsGroupsService, EventsGroupsService>();
             services.AddTransient<IEventsService, EventsService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IStudentsGroupsService, StudentsGroupsService>();

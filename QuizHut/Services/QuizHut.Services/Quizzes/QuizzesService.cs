@@ -110,5 +110,12 @@
             .Where(x => x.Password.Content == password)
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
+
+        public async Task<T> GetQuizModelByEventIdAsync<T>(string eventId)
+         => await this.quizRepository
+            .AllAsNoTracking()
+            .Where(x => x.Events.Any(x => x.Id == eventId))
+            .To<T>()
+            .FirstOrDefaultAsync();
     }
 }

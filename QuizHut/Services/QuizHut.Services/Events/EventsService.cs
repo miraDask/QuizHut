@@ -8,18 +8,16 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using QuizHut.Services.EventsGroups;
+    using QuizHut.Services.Groups;
     using QuizHut.Services.Mapping;
 
     public class EventsService : IEventsService
     {
         private readonly IDeletableEntityRepository<Event> repository;
-        private readonly IEventsGroupsService eventGroupsService;
 
-        public EventsService(IDeletableEntityRepository<Event> repository, IEventsGroupsService eventGroupsService)
+        public EventsService(IDeletableEntityRepository<Event> repository)
         {
             this.repository = repository;
-            this.eventGroupsService = eventGroupsService;
         }
 
         public async Task DeleteAsync(string eventId)
@@ -35,14 +33,13 @@
 
             if (groupId != null)
             {
-                var assignedEventsIds = await this.eventGroupsService.GetAllEventsIdsByGroupIdAsync(groupId);
-                query = query.Where(x => !assignedEventsIds.Contains(x.Id));
+                query = query.Where(x => x.GroupId != groupId);
             }
 
             return await query.Where(x => x.CreatorId == creatorId)
-               .OrderByDescending(x => x.CreatedOn)
-               .To<T>()
-               .ToListAsync();
+                              .OrderByDescending(x => x.CreatedOn)
+                              .To<T>()
+                              .ToListAsync();
         }
 
         public async Task<string> AddNewEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
@@ -68,14 +65,6 @@
                 .To<T>()
                 .FirstOrDefaultAsync();
 
-        public async Task AssignGroupsToEventAsync(string eventId, IList<string> groupsIds)
-        {
-            foreach (var groupId in groupsIds)
-            {
-                await this.eventGroupsService.CreateAsync(groupId, eventId);
-            }
-        }
-
         public async Task AssigQuizToEventAsync(string eventId, string quizId)
         {
             var @event = await this.GetEventById(eventId);
@@ -96,7 +85,7 @@
         public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)
         => await this.repository
             .AllAsNoTracking()
-            .Where(x => x.EventsGroups.Select(x => x.GroupId).Contains(groupId))
+            .Where(x => x.GroupId == groupId)
             .To<T>()
             .ToListAsync();
 

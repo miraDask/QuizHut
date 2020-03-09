@@ -11,7 +11,7 @@
 
         Task DeleteAsync(string eventId);
 
-        Task AssignGroupsToEventAsync(string eventId, IList<string> groupsIds);
+        //Task AssignGroupsToEventAsync(string eventId, IList<string> groupsIds);
 
         Task AssigQuizToEventAsync(string eventId, string quizId);
 

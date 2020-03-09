@@ -12,7 +12,7 @@
 
         public int StudentsCount { get; set; }
 
-        public int AssignedEventsCount { get; set; }
+        public int EventsCount { get; set; }
 
         public string CreatedOn { get; set; }
 
@@ -26,8 +26,8 @@
                     x => x.StudentsCount,
                     opt => opt.MapFrom(x => x.StudentstGroups.Count))
                 .ForMember(
-                    x => x.AssignedEventsCount,
-                    opt => opt.MapFrom(x => x.EventsGroups.Count));
+                    x => x.EventsCount,
+                    opt => opt.MapFrom(x => x.Events.Count));
         }
     }
 }

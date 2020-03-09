@@ -54,7 +54,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2 mt-5">
         <div class="container  py-2">
             <h5 class="mb-0">Quiz</h5>
-            @if (Model.Quiz.Id == null)
+            @if (Model.Quiz == null)
             {
                 <button class="navbar-toggler collapsed bg-primary"
                         type="button" data-toggle="collapse"
@@ -74,7 +74,7 @@
             }
         </div>
     </nav>
-    @if (Model.Quiz.Id != null)
+    @if (Model.Quiz != null)
     {
         <nav class="navbar navbar-expand-lg navbar-dark bg-light p-2">
             <div class="container">
@@ -111,7 +111,9 @@
 <div class="form-group flex-grow-1">
     <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2 mt-5">
         <div class="container">
-            <h5 class="mb-0">Assigned Groups</h5>
+            <h5 class="mb-0">Group</h5>
+            @if (Model.Group == null) 
+            {
             <button class="navbar-toggler collapsed bg-primary"
                     type="button" data-toggle="collapse"
                     data-target="#navbarNavDropdown222"
@@ -127,13 +129,14 @@
                     </li>
                 </ul>
             </div>
+                        }
         </div>
     </nav>
-    @foreach (var group in Model.Groups)
+    @if (Model.Group != null)
     {
         <nav class="navbar navbar-expand-lg navbar-dark bg-light p-2">
             <div class="container">
-                <h5 class="mb-0">@group.Name</h5>
+                <h5 class="mb-0">@Model.Group.Name</h5>
                 <button class="navbar-toggler collapsed bg-primary"
                         type="button" data-toggle="collapse"
                         data-target="#navbarNavDropdown2223"
@@ -145,13 +148,13 @@
                 <div class="navbar-collapse text-center collapse" id="navbarNavDropdown2223">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item m-1">
-                            <a class="btn btn-primary mr-md-3 col-12" asp-action="GroupDetails" asp-controller="Groups" asp-route-id="@group.Id">
+                            <a class="btn btn-primary mr-md-3 col-12" asp-action="GroupDetails" asp-controller="Groups" asp-route-id="@Model.Group.Id">
                                 View
                             </a>
                         </li>
                         <li class="nav-item m-1">
-                            <form method="post" asp-action="DeleteEventFromGroup" asp-controller="Groups">
-                                <input type="hidden" name="groupId" value="@group.Id" />
+                            <form method="post" asp-action="DeleteGroupFromEvent" asp-controller="Events">
+                                <input type="hidden" name="groupId" value="@Model.Group.Id" />
                                 <input type="hidden" name="eventId" value="@Model.Id" />
                                 <button type="submit" class="btn btn-primary mr-md-3 col-12">Delete</button>
                             </form>

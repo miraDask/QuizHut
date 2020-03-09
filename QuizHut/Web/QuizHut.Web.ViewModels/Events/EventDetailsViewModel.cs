@@ -1,8 +1,6 @@
 ﻿namespace QuizHut.Web.ViewModels.Events
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using AutoMapper;
     using QuizHut.Data.Models;
@@ -12,11 +10,6 @@
 
     public class EventDetailsViewModel : IMapFrom<Event>, IHaveCustomMappings
     {
-        public EventDetailsViewModel()
-        {
-            this.Groups = new HashSet<GroupAssignViewModel>();
-        }
-
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -29,7 +22,7 @@
 
         public QuizAssignViewModel Quiz { get; set; }
 
-        public IEnumerable<GroupAssignViewModel> Groups { get; set; }
+        public GroupAssignViewModel Group { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -49,13 +42,7 @@
                     opt => opt.MapFrom(
                         x => x.DurationOfActivity != null
                         ? $"{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Value.Add((TimeSpan)x.DurationOfActivity).Minute.ToString("D2")}"
-                        : string.Empty))
-                 .ForMember(
-                    x => x.Groups,
-                    opt => opt.MapFrom(x => x.EventsGroups.Select(x => new GroupAssignViewModel() { Id = x.GroupId, IsAssigned = true, Name = x.Group.Name })))
-                   .ForMember(
-                    x => x.Quiz,
-                    opt => opt.MapFrom(x => new QuizAssignViewModel() { Name = x.Quiz.Name, IsAssigned = true, Id = x.Quiz.Id }));
+                        : string.Empty));
         }
     }
 }

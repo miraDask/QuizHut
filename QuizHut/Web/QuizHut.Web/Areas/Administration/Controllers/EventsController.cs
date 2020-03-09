@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -76,14 +77,14 @@
                 return this.View(model);
             }
 
-            await this.service.AssignGroupsToEventAsync(model.Id, groupIds);
+            await this.groupsService.AssignEventsToGroupAsync(model.Id, groupIds);
             return this.RedirectToAction("AssignQuizToEvent", new { id = model.Id });
         }
 
         public async Task<IActionResult> AddGroupsToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId, id);
+            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId);
             var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
             model.Groups = groups;
             return this.View(model);
@@ -95,13 +96,13 @@
         {
             var groupIds = model.Groups.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
 
-            if (groupIds.Count == 0)
+            if (groupIds.Count != 1)
             {
                 model.Error = true;
                 return this.View(model);
             }
 
-            await this.service.AssignGroupsToEventAsync(model.Id, groupIds);
+            await this.groupsService.AssignEventsToGroupAsync(groupIds[0], new List<string>() { model.Id });
             return this.RedirectToAction("EventDetails", new { id = model.Id });
         }
 
@@ -133,7 +134,11 @@
         [HttpGet]
         public async Task<IActionResult> EventDetails(string id)
         {
+            var group = await this.groupsService.GetGroupModelByEventIdAsync<GroupAssignViewModel>(id);
+            var quiz = await this.quizService.GetQuizModelByEventIdAsync<QuizAssignViewModel>(id);
             var model = await this.service.GetEventModelByIdAsync<EventDetailsViewModel>(id);
+            model.Group = group;
+            model.Quiz = quiz;
             return this.View(model);
         }
 
@@ -148,6 +153,13 @@
         public async Task<IActionResult> DeleteQuizFromEvent(string eventId, string quizId)
         {
             await this.service.DeleteQuizFromEventAsync(eventId, quizId);
+            return this.RedirectToAction("EventDetails", new { id = eventId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteGroupFromEvent(string groupId, string eventId)
+        {
+            await this.groupsService.DeleteEventFromGroupAsync(groupId, eventId);
             return this.RedirectToAction("EventDetails", new { id = eventId });
         }
 

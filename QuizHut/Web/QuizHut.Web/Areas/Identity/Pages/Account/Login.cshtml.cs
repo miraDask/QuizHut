@@ -82,8 +82,8 @@
                 var result = await this.signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    var user = await userManager.FindByEmailAsync(this.Input.Email);
-                    var roles = await userManager.GetRolesAsync(user);
+                    var user = await this.userManager.FindByEmailAsync(this.Input.Email);
+                    var roles = await this.userManager.GetRolesAsync(user);
 
                     if (roles.Count > 0)
                     {

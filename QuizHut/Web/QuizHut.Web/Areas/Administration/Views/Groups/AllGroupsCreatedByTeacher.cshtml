@@ -3,70 +3,70 @@
     ViewData["Title"] = "All Groups";
 }
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
-    <div class="container">
-        <h5 class="mb-0">Groups Managment</h5>
-        <button class="navbar-toggler collapsed bg-success"
-                type="button" data-toggle="collapse"
-                data-target="#navbarNavDropdown-3"
-                aria-controls="navbarNavDropdown-3"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item m-1">
-                    <a class="nav-link  btn btn-success" asp-action="Create" asp-controller="Groups">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Add New</span>
-                    </a>
-                </li>
-            </ul>
+<div class="card">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+        <div class="container">
+            <h5 class="mb-0">Groups Managment</h5>
+            <button class="navbar-toggler collapsed bg-success"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown-3"
+                    aria-controls="navbarNavDropdown-3"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-success" asp-action="Create" asp-controller="Groups">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Add New</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
-<table class="table table-hover">
-    <thead>
-        <tr class="table-active bg-white">
-            <th scope="col">Name</th>
-            <th scope="col">Created On</th>
-            <th scope="col">Students</th>
-            <th scope="col">Events</th>
-            <th scope="col">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Groups.Any())
-        {
-            foreach (var group in Model.Groups)
+    </nav>
+    <table class="table table-hover mb-0">
+        <thead>
+            <tr class="table-active bg-white">
+                <th scope="col">Name</th>
+                <th scope="col">Created On</th>
+                <th scope="col">Students</th>
+                <th scope="col">Events</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Groups.Any())
             {
-                <tr class="table-success">
-                    <th scope="row">@group.Name</th>
-                    <td>@group.CreatedOn</td>
-                    <td>@group.StudentsCount</td>
-                    <td>@group.AssignedEventsCount</td>
-                    <td>
-                        <div class="component  navbar-expand-lg text-right">
-                            <ul class="navbar-nav ml-auto">
-                                <li class="nav-item m-1">
-                                    <a type="submit" class="nav-link  btn btn-white" asp-area="Administration" asp-action="Edit" asp-controller="Groups" asp-route-id="@group.Id">
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                </li>
-                                <li class="nav-item m-1">
-                                    <a class="nav-link  btn btn-white"  asp-area="Administration" asp-action="Delete" asp-controller="Groups" asp-route-id="@group.Id">
-                                        <i class="far fa-times-circle"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+                foreach (var group in Model.Groups)
+                {
+            <tr class="table-success">
+                <th scope="row">@group.Name</th>
+                <td>@group.CreatedOn</td>
+                <td>@group.StudentsCount</td>
+                <td>@group.EventsCount</td>
+                <td>
+                    <div class="component  navbar-expand-lg text-right">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item m-1">
+                                <a type="submit" class="nav-link  btn btn-white" asp-area="Administration" asp-action="Edit" asp-controller="Groups" asp-route-id="@group.Id">
+                                    <i class="far fa-edit"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item m-1">
+                                <a class="nav-link  btn btn-white" asp-area="Administration" asp-action="Delete" asp-controller="Groups" asp-route-id="@group.Id">
+                                    <i class="far fa-times-circle"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                }
             }
-        }
-    </tbody>
-</table>
-
-
+        </tbody>
+    </table>
+</div>
 

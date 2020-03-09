@@ -12,25 +12,26 @@
         <strong>On no!</strong> There is no student with email @Model.NewStudent.Email. Try again !
     </div>
 }
-<div class="component bg-light">
-    <form method="post" class="container p-0" asp-action="AllStudentsAddedByTeacher" asp-controller="Students">
-    <div class="row px-3 pb-0 pt-4">
-        <div class="input-group col-9 ml-4">
-            <input type="email" asp-for="@Model.NewStudent.Email" class="form-control" placeholder="Email">
-        </div>
-        <div class="col-2 mx-1">
-            <button type="submit" class="btn btn-primary col-12">
-                <span>Add New</span>
-            </button>
-        </div>
-    </div>
-    <span asp-validation-for="@Model.NewStudent.Email" class="text-danger ml-5"></span>
-    <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
-            <h5 class="mb-0">Students Managment</h5>
+<div class="card">
+    <div class="component bg-light">
+        <form method="post" class="container p-0" asp-action="AllStudentsAddedByTeacher" asp-controller="Students">
+            <div class="row px-3 pb-0 pt-4">
+                <div class="input-group col-9 ml-4">
+                    <input type="email" asp-for="@Model.NewStudent.Email" class="form-control" placeholder="Email">
+                </div>
+                <div class="col-2 mx-1">
+                    <button type="submit" class="btn btn-primary col-12">
+                        <span>Add New</span>
+                    </button>
+                </div>
+            </div>
+            <span asp-validation-for="@Model.NewStudent.Email" class="text-danger ml-5"></span>
+            <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
+                <h5 class="mb-0">Students Managment</h5>
             </div>
         </form>
     </div>
-    <table class="table table-hover">
+    <table class="table table-hover mb-0">
         <thead>
             <tr class="table-active bg-white">
                 <th scope="col">Name</th>
@@ -62,7 +63,7 @@
             }
         </tbody>
     </table>
-
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

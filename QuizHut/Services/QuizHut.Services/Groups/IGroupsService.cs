@@ -5,13 +5,15 @@
 
     public interface IGroupsService
     {
-        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId = null);
+        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id);
 
         Task<string> CreateAsync(string name, string creatorId);
 
         Task<T> GetGroupModelAsync<T>(string groupId);
 
-        Task AssignEventsToGroupAsync(string groupId, List<string> eventsIds);
+        Task<T> GetGroupModelByEventIdAsync<T>(string eventId);
+
+        Task AssignEventsToGroupAsync(string groupId, IList<string> eventsIds);
 
         Task AssignStudentsToGroupAsync(string groupId, IList<string> studentsIds);
 

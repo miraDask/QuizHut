@@ -7,23 +7,22 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.StudentsGroups;
 
     public class GroupsService : IGroupsService
     {
         private readonly IDeletableEntityRepository<Group> repository;
-        private readonly IEventsGroupsService eventGroupsService;
+        private readonly IDeletableEntityRepository<Event> eventRepository;
         private readonly IStudentsGroupsService studentsGroupsService;
 
         public GroupsService(
             IDeletableEntityRepository<Group> repository,
-            IEventsGroupsService eventGroupsService,
+            IDeletableEntityRepository<Event> eventRepository,
             IStudentsGroupsService studentsGroupsService)
         {
             this.repository = repository;
-            this.eventGroupsService = eventGroupsService;
+            this.eventRepository = eventRepository;
             this.studentsGroupsService = studentsGroupsService;
         }
 
@@ -43,22 +42,13 @@
             return group.Id;
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId)
-        {
-            var query = this.repository
-                    .AllAsNoTracking();
-
-            if (eventId != null)
-            {
-                var assignedGroupsIds = await this.eventGroupsService.GetAllGroupsIdsByEventIdAsync(eventId);
-                query = query.Where(x => !assignedGroupsIds.Contains(x.Id));
-            }
-
-            return await query.Where(x => x.CreatorId == id)
-                              .OrderByDescending(x => x.CreatedOn)
-                              .To<T>()
-                              .ToListAsync();
-        }
+        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id)
+        => await this.repository
+                    .AllAsNoTracking()
+                    .OrderByDescending(x => x.CreatedOn)
+                    .Where(x => x.CreatorId == id)
+                    .To<T>()
+                    .ToListAsync();
 
         public async Task<T> GetGroupModelAsync<T>(string groupId)
          => await this.repository
@@ -79,7 +69,22 @@
 
         public async Task DeleteEventFromGroupAsync(string groupId, string eventId)
         {
-            await this.eventGroupsService.DeleteAsync(groupId, eventId);
+            var group = await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.Id == groupId)
+                .FirstOrDefaultAsync();
+            group.Events = group.Events.Where(x => x.Id != eventId).ToList();
+            var @event = await this.eventRepository.
+                AllAsNoTracking()
+                .Where(x => x.Id == eventId)
+                .FirstOrDefaultAsync();
+            @event.GroupId = null;
+
+            this.eventRepository.Update(@event);
+            this.repository.Update(group);
+
+            await this.eventRepository.SaveChangesAsync();
+            await this.repository.SaveChangesAsync();
         }
 
         public async Task DeleteStudentFromGroupAsync(string groupId, string studentId)
@@ -95,12 +100,35 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task AssignEventsToGroupAsync(string groupId, List<string> eventsIds)
+        public async Task AssignEventsToGroupAsync(string groupId, IList<string> evenstIds)
         {
-            foreach (var eventId in eventsIds)
+            var group = await this.repository
+                 .AllAsNoTracking()
+                 .Where(x => x.Id == groupId)
+                 .FirstOrDefaultAsync();
+
+            foreach (var eventId in evenstIds)
             {
-                await this.eventGroupsService.CreateAsync(groupId, eventId);
+                var @event = await this.eventRepository
+                    .AllAsNoTracking()
+                    .Where(x => x.Id == eventId)
+                    .FirstOrDefaultAsync();
+
+                group.Events.Add(@event);
+                @event.Group = group;
+                this.repository.Update(group);
+                this.eventRepository.Update(@event);
             }
+
+            await this.repository.SaveChangesAsync();
+            await this.eventRepository.SaveChangesAsync();
         }
+
+        public async Task<T> GetGroupModelByEventIdAsync<T>(string eventId)
+        => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.Events.Any(x => x.Id == eventId))
+            .To<T>()
+            .FirstOrDefaultAsync();
     }
 }
