@@ -104,6 +104,16 @@
             return await quizResultQuery.Select(x => x.Result).To<T>().ToListAsync();
         }
 
+        public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)
+        {
+            var @event = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            @event.Name = name;
+            @event.ActivationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            @event.DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
+            this.repository.Update(@event);
+            await this.repository.SaveChangesAsync();
+        }
+
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()

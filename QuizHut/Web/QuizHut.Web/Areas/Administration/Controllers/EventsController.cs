@@ -187,5 +187,22 @@
 
             return this.View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditEventDetails(string id)
+        {
+            var editModel = await this.service.GetEventModelByIdAsync<EditEventDetailsInputViewModel>(id);
+
+            return this.View(editModel);
+        }
+
+        [HttpPost]
+        [ModelStateValidationActionFilterAttribute]
+        public async Task<IActionResult> EditEventDetails(EditEventDetailsInputViewModel model)
+        {
+            await this.service.UpdateAsync(model.Id, model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo);
+
+            return this.RedirectToAction("EventDetails", new { id = model.Id });
+        }
     }
 }

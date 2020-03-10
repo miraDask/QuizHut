@@ -2369,3 +2369,7 @@ body {
 .status{
     font-weight : 900;
 }
+
+.navbar-brand {
+    font-size: 1.75rem!important;
+}

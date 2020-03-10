@@ -28,19 +28,19 @@
 </head>
 <body class="index">
     <partial name="~/Views/Shared/_LoginPartial.cshtml" />
-    <div id="dashboard-home" class="container p-0">
-        <main role="main" class="pb-3">
-            <div class="row">
-                <partial name="_BublesAndCirclesPrtial" />
-                <partial name="_AdminSideNavBarPartial" />
-                <div class="col-12 col-md-9 ml-md-5">
+    <main role="main" class="pt-5">
+        <div class="row">
 
-                    @this.RenderBody()
+            <partial name="_AdminSideNavBarPartial" />
+            <div class="col-12 col-md-9 ml-md-5">
+    <partial name="_BublesAndCirclesPrtial" />
 
-                </div>
+                @this.RenderBody()
+
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+
     <partial name="~/Views/Shared/_FooterPartial.cshtml" />
 
     <environment names="Development">

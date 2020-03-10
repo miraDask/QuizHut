@@ -4,10 +4,9 @@
 @inject UserManager<ApplicationUser> UserManager
 <header>
     <nav class="navbar navbar-expand-sm navbar-dark bg-white">
-        <div class="container">
-            <a class="navbar-brand text-primary" asp-area="Administration" asp-action="Index" asp-controller="Home">QuizHut</a>
-
-            <button class="navbar-toggler collapsed"
+        <a class="navbar-brand text-primary ml-4" asp-area="Administration" asp-action="Index" asp-controller="Home">QuizHut</a>
+        @*<div class="container"></div>*@
+            <button class="navbar-toggler collapsed bg-primary"
                     type="button"
                     data-toggle="collapse"
                     data-target="#navbarNavDropdown-7"
@@ -39,8 +38,6 @@
                         </li>
                 </ul>
             </div>
-
-        </div>
     </nav>
 </header>
 
