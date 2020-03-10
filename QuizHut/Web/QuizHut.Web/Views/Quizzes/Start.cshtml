@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Take Quiz";
     Layout = (string)ViewData["Layout"] ?? "_Layout";
+    var area = (string)ViewData["Area"] ?? "";
+
 }
 <div class="container-fluid">
     <div class="flex-grow-1">
@@ -59,7 +61,7 @@
                         </div>
                         <div class="row mx-1 text-white">
                             <a id="start" class="btn btn-danger col-md-4 mt-5 offset-md-1">Start</a>
-                            <a class="btn btn-success col-md-4 mt-md-5 mt-2 offset-md-2" asp-action="Index" asp-controller="Home">Cancel</a>
+                            <a class="btn btn-success col-md-4 mt-md-5 mt-2 offset-md-2" asp-area="@area" asp-action="Index" asp-controller="Home">Cancel</a>
                         </div>
                     </div>
                 </div>

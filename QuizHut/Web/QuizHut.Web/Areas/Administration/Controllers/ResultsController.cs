@@ -7,8 +7,9 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
-    using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Common;
+    using QuizHut.Web.ViewModels.Events;
+    using QuizHut.Web.ViewModels.Results;
 
     public class ResultsController : AdministrationController
     {
@@ -33,14 +34,12 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> ActiveEventsResultsAll()
+        public async Task<IActionResult> EventResultsDetails(string id)
         {
-            return this.View();
-        }
-
-        public async Task<IActionResult> EndedResultsAll()
-        {
-            return this.View();
+            var resultsModel = await this.eventService.GetAllresultsByEventIdAsync<ResultViewModel>(id);
+            var eventModel = await this.eventService.GetEventModelByIdAsync<EventWithResultsDetailsViewModel>(id);
+            eventModel.Results = resultsModel;
+            return this.View(eventModel);
         }
     }
 }

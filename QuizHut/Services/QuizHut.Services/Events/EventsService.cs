@@ -88,6 +88,22 @@
             .To<T>()
             .ToListAsync();
 
+        public async Task<IEnumerable<T>> GetAllresultsByEventIdAsync<T>(string eventId)
+        {
+            var eventQuery = this.repository
+                .AllAsNoTracking()
+                .Where(x => x.Id == eventId);
+            var studentsIds = await eventQuery
+                .SelectMany(x => x.Group.StudentstGroups.Select(x => x.StudentId))
+                .ToListAsync();
+
+            var quizResultQuery = eventQuery
+                .SelectMany(x => x.Quiz.QuizzesResults
+                .Where(x => studentsIds.Contains(x.Result.StudentId)));
+
+            return await quizResultQuery.Select(x => x.Result).To<T>().ToListAsync();
+        }
+
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()

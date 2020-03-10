@@ -1,0 +1,43 @@
+﻿@model EventsListAllViewModel
+@{
+    ViewData["Title"] = "All Ended Events";
+}
+
+<div class="col-md-10 mb-4 ml-md-5">
+    <div class="component">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-circle text-danger"></i> Results for:
+            </div>
+            <div class="card-body p-0 mt-2">
+                <h4 class="card-title pl-3">All Ended Events</h4>
+                <table class="table table-hover col-12 mt-2 mb-0">
+                    <thead>
+                        <tr class="table-active bg-white">
+                            <th scope="col">Name</th>
+                            <th scope="col" class="text-center">Results/Students</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var _event in Model.Events)
+                        {
+                            <tr class="table-danger">
+                                <th scope="row" class="pt-3">@_event.Name</th>
+                                <th scope="row" class="pt-3 text-center">@_event.ResultStatistic</th>
+                                <td class="text-right">
+                                    <a type="submit" class="btn btn-outline-danger py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
+                                        View Results
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

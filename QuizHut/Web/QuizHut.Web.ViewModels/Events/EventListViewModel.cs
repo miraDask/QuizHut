@@ -16,6 +16,8 @@
 
         public string CreatedOn { get; set; }
 
+        public string ResultStatistic { get; set; }
+
         public IDictionary<string, string> Status { get; set; }/* = new Dictionary<string, string>();*/
 
         public void CreateMappings(IProfileExpression configuration)
@@ -24,6 +26,9 @@
                 .ForMember(
                     x => x.CreatedOn,
                     opt => opt.MapFrom(x => x.CreatedOn.ToString("dd/MM/yyyy")))
+                .ForMember(
+                    x => x.ResultStatistic,
+                    opt => opt.MapFrom(x => $"{x.Quiz.QuizzesResults.Count}/{x.Group.StudentstGroups.Count}"))
                 .ForMember(
                     x => x.Status,
                     opt => opt.MapFrom(x => GetStatus(x.ActivationDateAndTime, x.DurationOfActivity)));

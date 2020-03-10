@@ -29,10 +29,20 @@
 
         public async Task<IActionResult> Start(string password)
         {
+            var userId = this.userManager.GetUserId(this.User);
+            // todo proper validation who can access the quiz
             var id = await this.quizService.GetQuizIdByPasswordAsync(password);
             if (id == null)
             {
                 return this.RedirectToAction("Index", "Home");
+            }
+
+            var user = await this.userManager.FindByIdAsync(userId);
+            var roles = await this.userManager.GetRolesAsync(user);
+
+            if (roles.Count > 0)
+            {
+                this.ViewData["Area"] = Constants.AdminArea;
             }
 
             this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);

@@ -18,5 +18,7 @@
         Task<T> GetEventModelByIdAsync<T>(string eventId);
 
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
+
+        Task<IEnumerable<T>> GetAllresultsByEventIdAsync<T>(string eventId);
     }
 }

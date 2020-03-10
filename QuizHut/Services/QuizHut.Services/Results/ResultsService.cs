@@ -1,7 +1,9 @@
 ﻿namespace QuizHut.Services.Results
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
 

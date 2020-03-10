@@ -61,5 +61,5 @@
     }
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="QuestionInput" asp-controller="Questions" asp-route-id="@Model.Id">Add Question</a>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes" asp-route-id="@Model.Id">Export To PDF</a>
-    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" href="##"onClick="history.go(-1); return false;">Go Back</a>
+    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">Go Back</a>
 </form>

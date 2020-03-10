@@ -11,6 +11,7 @@
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Filters;
+    using QuizHut.Web.ViewModels.Common;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -165,17 +166,26 @@
 
         public async Task<IActionResult> ActiveEventsAll()
         {
-            return this.View();
+            var userId = this.userManager.GetUserId(this.User);
+            var events = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId);
+            var model = new EventsListAllViewModel
+            {
+                Events = events.Where(x => x.Status[ModelCostants.Status] == ModelCostants.StatusActive),
+            };
+
+            return this.View(model);
         }
 
         public async Task<IActionResult> EndedEventsAll()
         {
-            return this.View();
-        }
+            var userId = this.userManager.GetUserId(this.User);
+            var events = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId);
+            var model = new EventsListAllViewModel
+            {
+                Events = events.Where(x => x.Status[ModelCostants.Status] == ModelCostants.StatusEnded),
+            };
 
-        public async Task<IActionResult> EventWithGroups(string id)
-        {
-            return this.View();
+            return this.View(model);
         }
     }
 }
