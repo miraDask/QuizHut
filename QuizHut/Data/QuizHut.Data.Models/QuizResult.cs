@@ -12,5 +12,9 @@
         public string ResultId { get; set; }
 
         public Result Result { get; set; }
+
+        public string EventId { get; set; }
+
+        public virtual Event Event { get; set; }
     }
 }

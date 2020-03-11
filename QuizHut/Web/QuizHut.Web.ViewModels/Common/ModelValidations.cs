@@ -1,70 +1,72 @@
 ﻿namespace QuizHut.Web.ViewModels.Shared
 {
-    internal static class ModelValidations
+    public static class ModelValidations
     {
-        internal static class Quizzes
+        public static class Quizzes
         {
-            internal const int NameMinLength = 3;
+            public const int NameMinLength = 3;
 
-            internal const int NameMaxLength = 1000;
+            public const int NameMaxLength = 1000;
         }
 
-        internal static class Password
+        public static class Password
         {
-            internal const int PasswordMinLength = 6;
+            public const int PasswordMinLength = 6;
 
-            internal const int PasswordMaxLength = 16;
+            public const int PasswordMaxLength = 16;
         }
 
-        internal static class Groups
+        public static class Groups
         {
-            internal const int NameMinLength = 2;
+            public const int NameMinLength = 2;
 
-            internal const int NameMaxLength = 50;
+            public const int NameMaxLength = 50;
         }
 
-        internal static class Events
+        public static class Events
         {
-            internal const int NameMinLength = 2;
+            public const int NameMinLength = 2;
 
-            internal const int NameMaxLength = 50;
+            public const int NameMaxLength = 50;
         }
 
-        internal static class Categories
+        public static class Categories
         {
-            internal const int NameMinLength = 2;
+            public const int NameMinLength = 2;
 
-            internal const int NameMaxLength = 50;
+            public const int NameMaxLength = 50;
         }
 
-        internal static class Answers
+        public static class Answers
         {
-            internal const int TextMinLength = 1;
+            public const int TextMinLength = 1;
 
-            internal const int TextMaxLength = 1000;
+            public const int TextMaxLength = 1000;
         }
 
-        internal static class Question
+        public static class Question
         {
-            internal const int TextMinLength = 3;
+            public const int TextMinLength = 3;
 
-            internal const int TextMaxLength = 1000;
+            public const int TextMaxLength = 1000;
         }
 
-        internal static class Error
+        public static class Error
         {
-            internal const string RangeMessage = "The {0} must be at least {2} and at max {1} characters long.";
+            public const string RangeMessage = "The {0} must be at least {2} and at max {1} characters long.";
 
-            internal const string DateFormatMessage = @"Input format should be ""dd/MM/yyyy"".";
+            public const string DateFormatMessage = @"Input format should be ""dd/MM/yyyy"".";
 
-            internal const string TimeFormatMessage = @"Input format should be ""HH:mm"".";
+            public const string TimeActiveFromFormatMessage = @"Input format should be ""HH:mm"".";
+
+            public const string TimeActiveToMessage = @"Input format should be ""HH:mm"" and with value up to 23:59.";
         }
 
         internal static class RegEx
         {
-            internal const string Date = @"^((0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/[12]\d{3})$";
-
-            internal const string Time = @"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
+            public const string Date = @"^((0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/[12]\d{3})$";
+            public const string TimeActiveFrom = @"^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
+            public const string TimeActiveTo = @"^(?!00)(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$";
         }
     }
 }

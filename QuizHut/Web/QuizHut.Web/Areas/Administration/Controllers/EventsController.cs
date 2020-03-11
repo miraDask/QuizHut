@@ -52,6 +52,13 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> EventInput(CreateEventInputViewModel model)
         {
+            var timeErrorMessage = this.service.GetTimeErrorMessage(model.ActiveFrom, model.ActiveTo, model.ActivationDate);
+            if (timeErrorMessage != null)
+            {
+                model.Error = timeErrorMessage;
+                return this.View(model);
+            }
+
             var userId = this.userManager.GetUserId(this.User);
             var eventId = await this.service.AddNewEventAsync(model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo, userId);
             return this.RedirectToAction("AssignGroupsToEvent", new { id = eventId });
@@ -200,6 +207,13 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> EditEventDetails(EditEventDetailsInputViewModel model)
         {
+            var timeErrorMessage = this.service.GetTimeErrorMessage(model.ActiveFrom, model.ActiveTo, model.ActivationDate);
+            if (timeErrorMessage != null)
+            {
+                model.Error = timeErrorMessage;
+                return this.View(model);
+            }
+
             await this.service.UpdateAsync(model.Id, model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo);
 
             return this.RedirectToAction("EventDetails", new { id = model.Id });

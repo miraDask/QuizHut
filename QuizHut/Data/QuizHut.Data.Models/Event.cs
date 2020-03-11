@@ -10,6 +10,7 @@
         public Event()
         {
             this.Id = Guid.NewGuid().ToString();
+            this.QuizResults = new HashSet<QuizResult>();
         }
 
         public string Name { get; set; }
@@ -29,5 +30,7 @@
         public string GroupId { get; set; }
 
         public virtual Group Group { get; set; }
+
+        public ICollection<QuizResult> QuizResults { get; set; }
     }
 }

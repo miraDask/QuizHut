@@ -22,5 +22,7 @@
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
 
         Task<IEnumerable<T>> GetAllresultsByEventIdAsync<T>(string eventId);
+
+        string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate);
     }
 }

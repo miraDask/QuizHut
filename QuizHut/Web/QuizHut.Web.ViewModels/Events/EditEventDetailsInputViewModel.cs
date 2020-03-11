@@ -23,12 +23,14 @@
         public string ActivationDate { get; set; }
 
         [Required]
-        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
+        [RegularExpression(ModelValidations.RegEx.TimeActiveFrom, ErrorMessage = ModelValidations.Error.TimeActiveFromFormatMessage)]
         public string ActiveFrom { get; set; }
 
         [Required]
-        [RegularExpression(ModelValidations.RegEx.Time, ErrorMessage = ModelValidations.Error.TimeFormatMessage)]
+        [RegularExpression(ModelValidations.RegEx.TimeActiveTo, ErrorMessage = ModelValidations.Error.TimeActiveToMessage)]
         public string ActiveTo { get; set; }
+
+        public string Error { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

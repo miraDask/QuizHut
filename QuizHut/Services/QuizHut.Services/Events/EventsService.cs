@@ -8,6 +8,7 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
 
     public class EventsService : IEventsService
@@ -112,6 +113,24 @@
             @event.DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
+        }
+
+        public string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate)
+        {
+            var now = DateTime.UtcNow;
+            var activationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            if (now.Date > activationDateAndTime.Date)
+            {
+                return ServicesConstants.InvalidActivationDate;
+            }
+
+            var duration = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
+            if (duration.Hours <= 0)
+            {
+                return ServicesConstants.InvalidDurationOfActivity;
+            }
+
+            return null;
         }
 
         private async Task<Event> GetEventById(string id)
