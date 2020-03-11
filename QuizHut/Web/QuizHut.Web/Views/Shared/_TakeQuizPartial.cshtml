@@ -3,7 +3,7 @@
     ViewData["Title"] = "_TakeQuizPartial";
 }
 
-<form class="col-12 col-md-5 offset-md-1" asp-action="Start" asp-controller="Quizzes">
+<form method="post" class="col-12 col-md-5 offset-md-1" asp-action="Start" asp-controller="Quizzes">
     <div class="component">
         <div class="card">
             <div class="card-header text-warning" style="font-size: xx-large">
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="card-footer pb-3">
-                <button type="submit" class="btn btn-outline-primary">Enter</button>
+                <button class="btn btn-outline-primary">Enter</button>
             </div>
         </div>
     </div>
