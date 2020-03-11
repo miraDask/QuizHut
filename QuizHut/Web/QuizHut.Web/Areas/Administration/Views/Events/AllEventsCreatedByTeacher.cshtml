@@ -31,6 +31,7 @@
                 <tr class="table-active bg-white">
                     <th scope="col">Name</th>
                     <th scope="col">Start</th>
+                    <th scope="col">Duration</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </tr>
@@ -40,27 +41,28 @@
                 {
                     foreach (var _event in Model.Events)
                     {
-                        <tr class="table-info">
-                            <th scope="row">@_event.Name</th>
-                            <td>@_event.StartsOn</td>
-                            <td style="color:@_event.Status["Color"]" class="status">@_event.Status["Status"]</td>
-                            <td>
-                                <div class="component  navbar-expand-lg text-right">
-                                    <ul class="navbar-nav ml-auto">
-                                        <li class="nav-item m-1">
-                                            <a type="submit" class="nav-link  btn btn-white" asp-area="Administration" asp-action="EventDetails" asp-controller="Events" asp-route-id="@_event.Id">
-                                                <i class="far fa-edit"></i>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item m-1">
-                                            <a class="nav-link  btn btn-white" asp-area="Administration" asp-action="Delete" asp-controller="Events" asp-route-id="@_event.Id">
-                                                <i class="far fa-times-circle"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
+                <tr class="table-info">
+                    <th scope="row">@_event.Name</th>
+                    <td>@_event.StartDate</td>
+                    <td>@_event.Duration</td>
+                    <td style="color:@_event.Status["Color"]" class="status">@_event.Status["Status"]</td>
+                    <td>
+                        <div class="component  navbar-expand-lg text-right">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item m-1">
+                                    <a type="submit" class="nav-link  btn btn-white" asp-area="Administration" asp-action="EventDetails" asp-controller="Events" asp-route-id="@_event.Id">
+                                        <i class="far fa-edit"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item m-1">
+                                    <a class="nav-link  btn btn-white" asp-area="Administration" asp-action="Delete" asp-controller="Events" asp-route-id="@_event.Id">
+                                        <i class="far fa-times-circle"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
                     }
                 }
             </tbody>

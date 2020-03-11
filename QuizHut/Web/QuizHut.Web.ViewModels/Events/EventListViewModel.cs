@@ -14,7 +14,9 @@
 
         public string Name { get; set; }
 
-        public string StartsOn { get; set; }
+        public string StartDate { get; set; }
+
+        public string Duration { get; set; }
 
         public string ResultStatistic { get; set; }
 
@@ -24,8 +26,14 @@
         {
             configuration.CreateMap<Event, EventListViewModel>()
                 .ForMember(
-                    x => x.StartsOn,
-                    opt => opt.MapFrom(x => $"{x.ActivationDateAndTime.Date.ToString("dd/MM/yyyy")} - {x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}"))
+                    x => x.StartDate,
+                    opt => opt.MapFrom(
+                        x => $"{x.ActivationDateAndTime.Date.ToString("dd/MM/yyyy")}"))
+                .ForMember(
+                    x => x.Duration,
+                    opt => opt.MapFrom(
+                        x => $"{x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}" +
+                        $" - {x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"))
                 .ForMember(
                     x => x.ResultStatistic,
                     opt => opt.MapFrom(x => $"{x.Quiz.QuizzesResults.Count}/{x.Group.StudentstGroups.Count}"))
