@@ -142,10 +142,10 @@
         [HttpGet]
         public async Task<IActionResult> EventDetails(string id)
         {
-            var group = await this.groupsService.GetGroupModelByEventIdAsync<GroupAssignViewModel>(id);
+            var groups = await this.groupsService.GetGroupModelsAllByEventIdAsync<GroupAssignViewModel>(id);
             var quiz = await this.quizService.GetQuizModelByEventIdAsync<QuizAssignViewModel>(id);
             var model = await this.service.GetEventModelByIdAsync<EventDetailsViewModel>(id);
-            model.Group = group;
+            model.Groups = groups;
             model.Quiz = quiz;
             return this.View(model);
         }

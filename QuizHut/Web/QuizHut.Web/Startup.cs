@@ -22,12 +22,13 @@
     using QuizHut.Services.Answers;
     using QuizHut.Services.Categories;
     using QuizHut.Services.Events;
+    using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
     using QuizHut.Services.Questions;
     using QuizHut.Services.Quizzes;
-    using QuizHut.Services.QuizzesResults;
+    using QuizHut.Services.EventsResults;
     using QuizHut.Services.Results;
     using QuizHut.Services.StudentsGroups;
     using QuizHut.Services.Users;
@@ -84,7 +85,8 @@
             services.AddTransient<IQuizzesService, QuizzesService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IAnswersService, AnswersService>();
-            services.AddTransient<IQuizzesResultsService, QuizzesResultsService>();
+            services.AddTransient<IEventsGroupsService, EventsGroupsService>();
+            services.AddTransient<IEventsResultsService, EventsResultsService>();
             services.AddTransient<IGroupsService, GroupsService>();
             services.AddTransient<IResultsService, ResultsService>();
             services.AddTransient<IEventsService, EventsService>();

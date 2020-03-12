@@ -1,7 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Events
 {
-    using System;
-
+    using System.Collections.Generic;
+    
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -10,6 +10,11 @@
 
     public class EventDetailsViewModel : IMapFrom<Event>, IHaveCustomMappings
     {
+        public EventDetailsViewModel()
+        {
+            this.Groups = new HashSet<GroupAssignViewModel>();
+        }
+
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -22,7 +27,7 @@
 
         public QuizAssignViewModel Quiz { get; set; }
 
-        public GroupAssignViewModel Group { get; set; }
+        public IEnumerable<GroupAssignViewModel> Groups { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

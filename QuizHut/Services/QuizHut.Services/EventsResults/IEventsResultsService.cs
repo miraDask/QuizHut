@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Services.QuizzesResults
+﻿namespace QuizHut.Services.EventsResults
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -6,9 +6,9 @@
     using QuizHut.Web.ViewModels.Questions;
     using QuizHut.Web.ViewModels.Quizzes;
 
-    public interface IQuizzesResultsService
+    public interface IEventsResultsService
     {
-        Task CreateQuizResultAsync(string studentId, int points, int maxPoints, string quizId);
+        Task CreateEventResultAsync(string studentId, int points, int maxPoints, string quizId);
 
         Task<QuizResultViewModel> GetResultModel(
             string quizId,

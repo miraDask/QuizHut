@@ -10,14 +10,17 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
+    using QuizHut.Services.Quizzes;
 
     public class EventsService : IEventsService
     {
         private readonly IDeletableEntityRepository<Event> repository;
+        private readonly IQuizzesService quizService;
 
-        public EventsService(IDeletableEntityRepository<Event> repository)
+        public EventsService(IDeletableEntityRepository<Event> repository, IQuizzesService quizService)
         {
             this.repository = repository;
+            this.quizService = quizService;
         }
 
         public async Task DeleteAsync(string eventId)
@@ -33,7 +36,7 @@
 
             if (groupId != null)
             {
-                query = query.Where(x => x.GroupId != groupId);
+                query = query.Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
             }
 
             return await query.Where(x => x.CreatorId == creatorId)
@@ -68,10 +71,10 @@
         public async Task AssigQuizToEventAsync(string eventId, string quizId)
         {
             var @event = await this.GetEventById(eventId);
-
             @event.QuizId = quizId;
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
+            await this.quizService.AssignEventToQuiz(eventId, quizId);
         }
 
         public async Task DeleteQuizFromEventAsync(string eventId, string quizId)
@@ -85,24 +88,26 @@
         public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)
         => await this.repository
             .AllAsNoTracking()
-            .Where(x => x.GroupId == groupId)
+            .Where(x => x.EventsGroups.Any(x => x.GroupId == groupId))
             .To<T>()
             .ToListAsync();
 
         public async Task<IEnumerable<T>> GetAllresultsByEventIdAsync<T>(string eventId)
         {
-            var eventQuery = this.repository
+         return await this.repository
                 .AllAsNoTracking()
-                .Where(x => x.Id == eventId);
-            var studentsIds = await eventQuery
-                .SelectMany(x => x.Group.StudentstGroups.Select(x => x.StudentId))
-                .ToListAsync();
+                .Where(x => x.Id == eventId)
+                .SelectMany(x => x.EventsResults.Select(x => x.Result))
+                .To<T>().ToListAsync();
+            //var studentsIds = await eventQuery
+            //    .SelectMany(x => x.Group.StudentstGroups.Select(x => x.StudentId))
+            //    .ToListAsync();
 
-            var quizResultQuery = eventQuery
-                .SelectMany(x => x.Quiz.QuizzesResults
-                .Where(x => studentsIds.Contains(x.Result.StudentId)));
+            //var quizResultQuery = eventQuery
+            //    .SelectMany(x => x.Quiz.QuizzesResults
+            //    .Where(x => studentsIds.Contains(x.Result.StudentId)));
 
-            return await quizResultQuery.Select(x => x.Result).To<T>().ToListAsync();
+            //return await quizResultQuery.Select(x => x.Result).To<T>().ToListAsync();
         }
 
         public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)

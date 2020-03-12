@@ -3,7 +3,7 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
 
-    public class QuizResultViewModel : IMapFrom<QuizResult>
+    public class QuizResultViewModel : IMapFrom<EventResult>
     {
         public string QuizName { get; set; }
 

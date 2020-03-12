@@ -36,5 +36,14 @@
 
             public const string StudentEmail = "student@student.com";
         }
+
+        public static class ErrorMessages
+        {
+            public const string EmptyPasswordField = "You should enter password if you want to use this shortcut! Try again!";
+
+            public const string QuizNotFound = "There is no quiz with password {0}! Try again!";
+
+            public const string PermissionDenied = "You do not have a permission to participate in this quiz!";
+        }
     }
 }

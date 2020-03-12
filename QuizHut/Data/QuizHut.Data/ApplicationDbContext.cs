@@ -31,7 +31,7 @@
 
         public DbSet<Password> Passwords { get; set; }
 
-        public DbSet<QuizResult> QuizzesResults { get; set; }
+        public DbSet<EventResult> EventsResults { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
@@ -42,6 +42,8 @@
         public DbSet<Result> Results { get; set; }
 
         public DbSet<StudentGroup> StudentsGroups { get; set; }
+
+        public DbSet<EventGroup> EventsGroups { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 

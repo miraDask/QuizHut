@@ -11,7 +11,7 @@
 
         Task<T> GetGroupModelAsync<T>(string groupId);
 
-        Task<T> GetGroupModelByEventIdAsync<T>(string eventId);
+        Task<IEnumerable<T>> GetGroupModelsAllByEventIdAsync<T>(string eventId);
 
         Task AssignEventsToGroupAsync(string groupId, IList<string> eventsIds);
 

@@ -14,7 +14,7 @@
               .WithOne(p => p.Group)
               .HasForeignKey(q => q.GroupId);
 
-            group.HasMany(g => g.Events)
+            group.HasMany(g => g.EventsGroups)
              .WithOne(p => p.Group)
              .HasForeignKey(q => q.GroupId);
 

@@ -22,5 +22,7 @@
         Task UpdateAsync(string id, string name, string description, int? timer, string password);
 
         Task<bool> HasUserPermition(string userId, string quizId);
+
+        Task AssignEventToQuiz(string eventId, string quizId);
     }
 }

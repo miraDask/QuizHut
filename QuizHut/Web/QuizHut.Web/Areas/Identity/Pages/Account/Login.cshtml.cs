@@ -89,6 +89,10 @@
                     {
                         returnUrl = this.Url.Content("~/Administration/Home/Index");
                     }
+                    else
+                    {
+                        returnUrl = this.Url.Content("~/Students/Index");
+                    }
 
                     this.logger.LogInformation("User logged in.");
                     return this.LocalRedirect(returnUrl);

@@ -2,12 +2,12 @@
 {
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Data.Models;
+    using QuizHut.Services.EventsResults;
     using QuizHut.Services.Quizzes;
-    using QuizHut.Services.QuizzesResults;
     using QuizHut.Web.Common;
     using QuizHut.Web.ViewModels.Quizzes;
 
@@ -15,12 +15,12 @@
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
-        private readonly IQuizzesResultsService quizResultService;
+        private readonly IEventsResultsService quizResultService;
 
         public QuizzesController(
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
-            IQuizzesResultsService quizResultService)
+            IEventsResultsService quizResultService)
         {
             this.userManager = userManager;
             this.quizService = quizService;
@@ -30,31 +30,42 @@
         public async Task<IActionResult> Start(string password)
         {
             var id = await this.quizService.GetQuizIdByPasswordAsync(password);
-            if (id == null)
-            {
-                return this.RedirectToAction("Index", "Home");
-            }
-
             var userId = this.userManager.GetUserId(this.User);
             var userHasPermitionToTakeTheQuiz = await this.quizService.HasUserPermition(userId, id);
+            var user = await this.userManager.FindByIdAsync(userId);
+            var roles = await this.userManager.GetRolesAsync(user);
 
             if (!userHasPermitionToTakeTheQuiz)
             {
-                return this.RedirectToAction("Index", "Home", new { password });
+                if (roles.Count > 0)
+                {
+                    return this.RedirectToAction("Index", "Home", new
+                    {
+                        password,
+                        area = GlobalConstants.Administration,
+                        errorText = GlobalConstants.ErrorMessages.PermissionDenied,
+                    });
+                }
+                else
+                {
+                    return this.RedirectToAction("Index", "Students", new
+                    {
+                        password,
+                        area = string.Empty,
+                        errorText = GlobalConstants.ErrorMessages.PermissionDenied,
+                    });
+                }
             }
-
-            var user = await this.userManager.FindByIdAsync(userId);
-            var roles = await this.userManager.GetRolesAsync(user);
 
             if (roles.Count > 0)
             {
                 this.ViewData["Area"] = Constants.AdminArea;
             }
 
-           // this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
+            // this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
             var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
-           // this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
-           // this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
+            // this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
+            // this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
 
             return this.View(quizModel);
         }

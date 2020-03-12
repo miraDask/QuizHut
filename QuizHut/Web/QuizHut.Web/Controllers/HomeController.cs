@@ -8,13 +8,8 @@
 
     public class HomeController : BaseController
     {
-        public IActionResult Index(string password)
+        public IActionResult Index()
         {
-            if (password != null)
-            {
-                return this.View(new PasswordInputViewModel() { Password = password });
-            }
-
             return this.View();
         }
 

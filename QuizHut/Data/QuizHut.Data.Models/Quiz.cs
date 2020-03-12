@@ -11,8 +11,6 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Questions = new HashSet<Question>();
-            this.QuizzesResults = new HashSet<QuizResult>();
-            this.Events = new HashSet<Event>();
         }
 
         public string Name { get; set; }
@@ -35,10 +33,10 @@
 
         public virtual Password Password { get; set; }
 
+        public string EventId { get; set; }
+
+        public virtual Event Event { get; set; }
+
         public virtual ICollection<Question> Questions { get; set; }
-
-        public virtual ICollection<QuizResult> QuizzesResults { get; set; }
-
-        public virtual ICollection<Event> Events { get; set; }
     }
 }

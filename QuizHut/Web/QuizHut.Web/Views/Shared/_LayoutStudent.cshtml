@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿
+@{
+    ViewData["Title"] = "_LayoutStudent";
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -31,7 +36,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" asp-action="Index" asp-controller="Home">QuizHut</a>
+                <a class="navbar-brand" asp-action="Index" asp-controller="Students" asp-area="">QuizHut</a>
 
                 <button class="navbar-toggler collapsed"
                         type="button"
@@ -44,19 +49,24 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown-7">
                     <ul class="navbar-nav ml-auto mx-2">
-                        @RenderSection("About", required: false)
-                        @RenderSection("Register", required: false)
-                        @RenderSection("Login", required: false)
+                        @RenderSection("Profile", required: false)
+                        @RenderSection("Logout", required: false)
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-    </div>
-    <main role="main">
-        @this.RenderBody()
+    <main role="main" class="pt-5">
+        <div class="row">
+
+            <partial name="_SideNavBarPartial" />
+            <div class="col-12 col-md-9 ml-md-5">
+                <partial name="_BublesAndCirclesPrtial" />
+
+                @this.RenderBody()
+
+            </div>
+        </div>
     </main>
     <partial name="~/Views/Shared/_FooterPartial.cshtml" />
 
@@ -73,3 +83,5 @@
     @this.RenderSection("Scripts", required: false)
 </body>
 </html>
+
+

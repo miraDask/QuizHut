@@ -18,8 +18,6 @@
 
         public string Duration { get; set; }
 
-        public string ResultStatistic { get; set; }
-
         public IDictionary<string, string> Status { get; set; }/* = new Dictionary<string, string>();*/
 
         public void CreateMappings(IProfileExpression configuration)
@@ -34,9 +32,6 @@
                     opt => opt.MapFrom(
                         x => $"{x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}" +
                         $" - {x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"))
-                .ForMember(
-                    x => x.ResultStatistic,
-                    opt => opt.MapFrom(x => $"{x.Quiz.QuizzesResults.Count}/{x.Group.StudentstGroups.Count}"))
                 .ForMember(
                     x => x.Status,
                     opt => opt.MapFrom(x => GetStatus(x.ActivationDateAndTime, x.DurationOfActivity)));

@@ -12,5 +12,7 @@
             ErrorMessage = ModelValidations.Error.RangeMessage,
             MinimumLength = ModelValidations.Password.PasswordMinLength)]
         public string Password { get; set; }
+
+        public string Error { get; set; }
     }
 }

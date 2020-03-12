@@ -10,6 +10,18 @@
     {
         public void Configure(EntityTypeBuilder<Event> eventEntity)
         {
+            eventEntity.HasOne(e => e.Quiz)
+                .WithOne(q => q.Event)
+                .HasForeignKey<Event>(e => e.QuizId);
+
+            eventEntity.HasMany(e => e.EventsGroups)
+                .WithOne(eg => eg.Event)
+                .HasForeignKey(eg => eg.EventId);
+
+            eventEntity.HasMany(e => e.EventsResults)
+                .WithOne(eg => eg.Event)
+                .HasForeignKey(eg => eg.EventId);
+
             eventEntity.Property(g => g.Name)
            .HasMaxLength(DataValidation.Event.NameMaxLength)
            .IsRequired();

@@ -14,17 +14,13 @@
                 .WithOne(q => q.Quiz)
                 .HasForeignKey(q => q.QuizId);
 
-            quiz.HasMany(q => q.QuizzesResults)
-                .WithOne(qr => qr.Quiz)
-                .HasForeignKey(qr => qr.QuizId);
-
-            quiz.HasMany(q => q.Events)
-              .WithOne(e => e.Quiz)
-              .HasForeignKey(e => e.QuizId);
-
             quiz.HasOne(q => q.Password)
                 .WithOne(p => p.Quiz)
                 .HasForeignKey<Quiz>(q => q.PasswordId);
+
+            quiz.HasOne(q => q.Event)
+                .WithOne(p => p.Quiz)
+                .HasForeignKey<Quiz>(q => q.EventId);
 
             quiz.Property(q => q.Name)
                 .HasMaxLength(DataValidation.Quiz.NameMaxLength)

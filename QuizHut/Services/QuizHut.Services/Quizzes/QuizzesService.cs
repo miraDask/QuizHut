@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
@@ -117,28 +118,46 @@
         public async Task<T> GetQuizModelByEventIdAsync<T>(string eventId)
          => await this.quizRepository
             .AllAsNoTracking()
-            .Where(x => x.Events.Any(x => x.Id == eventId))
+            .Where(x => x.Event.Id == eventId)
             .To<T>()
             .FirstOrDefaultAsync();
 
         public async Task<bool> HasUserPermition(string userId, string quizId)
         {
-            var quiz = await this.quizRepository
+            var quizQuery = this.quizRepository
                 .AllAsNoTracking()
-                .Where(x => x.Id == quizId)
-                .FirstOrDefaultAsync();
-            if (quiz.CreatorId == userId)
+                .Where(x => x.Id == quizId);
+            var creatorId = await quizQuery.Select(x => x.CreatorId).FirstOrDefaultAsync();
+            if (creatorId == userId)
             {
                 return true;
             }
 
-            var events = await this.quizRepository
+            var results = await quizQuery
+                .SelectMany(x => x.Event.EventsResults.Where(x => x.Result.StudentId == userId))
+                .ToListAsync();
+            if (results.Count() > 0)
+            {
+                return false;
+            }
+            //To fix
+            var eventGroups = await quizQuery
+                .SelectMany(x => x.Event.EventsGroups.Where(x => x.Group.StudentstGroups.Any(x => x.StudentId == userId)))
+                .ToListAsync();
+
+            return eventGroups.Count > 0;
+        }
+
+        public async Task AssignEventToQuiz(string eventId, string quizId)
+        {
+            var quiz = await this.quizRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == quizId)
-                .SelectMany(x => x.Events.Where(x => x.Group.StudentstGroups.Any(x => x.StudentId == userId)))
-                .ToListAsync();
-            //var eventsCount = quiz.Events.Where(x => x.Group.StudentstGroups.Any(x => x.StudentId == userId)).Count();
-            return events.Count > 0;
+                .FirstOrDefaultAsync();
+
+            quiz.EventId = eventId;
+            this.quizRepository.Update(quiz);
+            await this.quizRepository.SaveChangesAsync();
         }
     }
 }

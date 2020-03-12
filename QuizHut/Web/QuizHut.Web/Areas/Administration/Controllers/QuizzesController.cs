@@ -84,7 +84,12 @@
             var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
             if (id == null)
             {
-                return this.RedirectToAction("Index", "Home", new { password = model.Password, area = GlobalConstants.Administration });
+                return this.RedirectToAction("Index", "Home", new
+                {
+                    password = model.Password,
+                    area = GlobalConstants.Administration,
+                    errorText = string.Format(GlobalConstants.ErrorMessages.QuizNotFound, model.Password),
+                });
             }
 
             return this.RedirectToAction("Start", "Quizzes", new { area = string.Empty, password = model.Password });

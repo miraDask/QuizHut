@@ -2,60 +2,32 @@
 @{
     ViewData["Title"] = "_SideNavBarPartial";
 }
-    <!-- Sidebar  -->
-    <nav id="sidebar">
-        <div class="sidebar-header">
-            <h3>QuizHut</h3>
-            <strong>QH</strong>
-            <button type="button" id="sidebarCollapse" class="btn btn-info">
-                <i class="fas fa-align-left"></i>
-            </button>
-        </div>
 
-        <ul class="list-unstyled components">
-            <li>
-                <a asp-area="Administration" asp-action="Index" asp-controller="Home">
-                    <i class="fas fa-home"></i>
-                    Home
-                </a>
-            </li>
-            <li>
-                <a asp-area="Administration" asp-action="Index" asp-controller="Results">
-                    <i class="fas fa-clipboard-list"></i>
-                    Results
-                </a>
-            </li>
-            <li>
-                <a asp-area="Administration" asp-action="Events" asp-controller="AllEventsCreatedByTeacher">
-                    <i class="fas fa-calendar-alt"></i>
-                    Events
-                </a>
-            </li>
-            <li>
-                <a asp-area="Administration" asp-action="AllGroupsCreatedByTeacher" asp-controller="Groups">
-                    <i class="fas fa-users"></i>
-                    Groups
-                </a>
-            </li>
-            <li>
-                <a asp-area="Administration" asp-action="AllCategoriesCreatedByTeacher" asp-controller="Categories">
-                    <i class="fas fa-archive"></i>
-                    Categories
-                </a>
-            </li>
-            <li>
-                <a asp-area="Administration" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">
-                    <i class="fas fa-poll-h"></i>
-                    <i class="fas fa-question-circle"></i>
-                    Quizzes
-                </a>
-            </li>
-            <li>
-                <a asp-area="Administration" asp-action="AllStudentsAddedByTeacher" asp-controller="Students">
-                    <i class="fas fa-user-graduate"></i>
-                    Students
-                </a>
-            </li>
-        </ul>
-    </nav>
-
+<div id="side-bar" class="col-12 col-md-2 border-right pl-2 mb-5 pb-5">
+    <ul class="navbar-nav text-center">
+        <li class="nav-item active">
+            <form class="my-2">
+                <button class="btn btn-primary manage-account-btn" asp-area="" asp-action="Index" asp-controller="Students">Home</button>
+            </form>
+        </li>
+        <li class="nav-item active">
+            <form class="my-2">
+                <button class="btn btn-primary manage-account-btn" asp-area="" asp-action="Index" asp-controller="Results">My Results</button>
+            </form>
+        </li>
+        <li class="nav-item">
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle btn btn-primary manage-account-btn">Events</a>
+            <ul class="list-unstyled collapse show" id="pageSubmenu" style="">
+                <li class="dropdown-item nav-item">
+                    <a class="nav-link text-primary">Pending</a>
+                </li>
+                <li class="dropdown-item nav-item">
+                    <a class="nav-link text-primary">Active</a>
+                </li>
+                <li class="dropdown-item nav-item">
+                    <a class="nav-link text-primary">Ended</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

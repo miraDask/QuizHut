@@ -27,7 +27,7 @@
                     opt => opt.MapFrom(x => x.StudentstGroups.Count))
                 .ForMember(
                     x => x.EventsCount,
-                    opt => opt.MapFrom(x => x.Events.Count));
+                    opt => opt.MapFrom(x => x.EventsGroups.Count));
         }
     }
 }

@@ -1,36 +1,48 @@
-﻿namespace QuizHut.Services.QuizzesResults
+﻿namespace QuizHut.Services.EventsResults
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Results;
     using QuizHut.Web.ViewModels.Questions;
     using QuizHut.Web.ViewModels.Quizzes;
 
-    public class QuizzesResultsService : IQuizzesResultsService
+    public class EventsResultsService : IEventsResultsService
     {
-        private readonly IDeletableEntityRepository<QuizResult> repository;
+        private readonly IDeletableEntityRepository<EventResult> repository;
         private readonly IResultsService resultsService;
+        private readonly IDeletableEntityRepository<Quiz> quizRepository;
 
-        public QuizzesResultsService(IDeletableEntityRepository<QuizResult> repository, IResultsService resultsService)
+        public EventsResultsService(
+            IDeletableEntityRepository<EventResult> repository,
+            IResultsService resultsService,
+            IDeletableEntityRepository<Quiz> quizRepository)
         {
             this.repository = repository;
             this.resultsService = resultsService;
+            this.quizRepository = quizRepository;
         }
 
-        public async Task CreateQuizResultAsync(string studentId, int points, int maxPoints, string quizId)
+        public async Task CreateEventResultAsync(string studentId, int points, int maxPoints, string quizId)
         {
             var resultId = await this.resultsService.CreateResultAsync(studentId, points, maxPoints);
-            var quizResult = new QuizResult()
+            var eventId = await this.quizRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == quizId)
+                .Select(x => x.EventId)
+                .FirstOrDefaultAsync();
+
+            var eventResult = new EventResult()
             {
-                QuizId = quizId,
+                EventId = eventId,
                 ResultId = resultId,
             };
 
-            await this.repository.AddAsync(quizResult);
+            await this.repository.AddAsync(eventResult);
             await this.repository.SaveChangesAsync();
         }
 
@@ -41,7 +53,17 @@
             IList<AttemtedQuizQuestionViewModel> attemptedQuizQuestions)
         {
             var points = this.CalculateResult(originalQuizQuestions, attemptedQuizQuestions);
-            await this.CreateQuizResultAsync(studentId, points, originalQuizQuestions.Count, quizId);
+
+            var quizCreatorId = await this.quizRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == quizId)
+                .Select(x => x.CreatorId)
+                .FirstOrDefaultAsync();
+            if (quizCreatorId != studentId)
+            {
+                await this.CreateEventResultAsync(studentId, points, originalQuizQuestions.Count, quizId);
+            }
+
             return new QuizResultViewModel()
             {
                 Points = points,
