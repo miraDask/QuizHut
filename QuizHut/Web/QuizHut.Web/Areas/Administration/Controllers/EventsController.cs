@@ -92,7 +92,7 @@
         public async Task<IActionResult> AddGroupsToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId);
+            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId, id);
             var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
             model.Groups = groups;
             return this.View(model);
@@ -104,13 +104,13 @@
         {
             var groupIds = model.Groups.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
 
-            if (groupIds.Count != 1)
+            if (groupIds.Count == 0)
             {
                 model.Error = true;
                 return this.View(model);
             }
 
-            await this.groupsService.AssignEventsToGroupAsync(groupIds[0], new List<string>() { model.Id });
+            await this.service.AssignGroupsToEventAsync(groupIds, model.Id);
             return this.RedirectToAction("EventDetails", new { id = model.Id });
         }
 

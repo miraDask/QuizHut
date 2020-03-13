@@ -15,13 +15,15 @@
 
         Task AssigQuizToEventAsync(string eventId, string quizId);
 
+        Task AssignGroupsToEventAsync(IList<string> groupIds, string eventId);
+
         Task<string> AddNewEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId);
 
         Task<T> GetEventModelByIdAsync<T>(string eventId);
 
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
 
-        Task<IEnumerable<T>> GetAllresultsByEventIdAsync<T>(string eventId);
+        Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName);
 
         string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate);
     }

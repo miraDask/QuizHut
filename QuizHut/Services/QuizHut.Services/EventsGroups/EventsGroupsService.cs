@@ -18,20 +18,40 @@
 
         public async Task CreateAsync(string eventId, string groupId)
         {
-            var eventGroup = new EventGroup() { EventId = eventId, GroupId = groupId };
-            await this.repository.AddAsync(eventGroup);
+            var deletedEventGroup = await this.repository
+                .AllAsNoTrackingWithDeleted()
+                .Where(x => x.GroupId == groupId && x.EventId == eventId)
+                .FirstOrDefaultAsync();
+
+            if (deletedEventGroup != null)
+            {
+                this.repository.Undelete(deletedEventGroup);
+            }
+            else
+            {
+                var eventGroup = new EventGroup() { EventId = eventId, GroupId = groupId };
+                await this.repository.AddAsync(eventGroup);
+            }
+
             await this.repository.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(string eventId, string groupId)
         {
             var eventGroup = await this.repository
-                . AllAsNoTracking()
+                .AllAsNoTracking()
                 .Where(x => x.EventId == eventId && x.GroupId == groupId)
                 .FirstOrDefaultAsync();
 
             this.repository.Delete(eventGroup);
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task<string[]> GetAllGroupsIdsByEventIdAsync(string eventId)
+         => await this.repository
+             .AllAsNoTracking()
+             .Where(x => x.EventId == eventId)
+             .Select(x => x.GroupId)
+             .ToArrayAsync();
     }
 }

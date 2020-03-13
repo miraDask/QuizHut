@@ -9,6 +9,7 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Common;
+    using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Quizzes;
 
@@ -16,11 +17,16 @@
     {
         private readonly IDeletableEntityRepository<Event> repository;
         private readonly IQuizzesService quizService;
+        private readonly IEventsGroupsService eventsGroupsService;
 
-        public EventsService(IDeletableEntityRepository<Event> repository, IQuizzesService quizService)
+        public EventsService(
+            IDeletableEntityRepository<Event> repository,
+            IQuizzesService quizService,
+            IEventsGroupsService eventsGroupsService)
         {
             this.repository = repository;
             this.quizService = quizService;
+            this.eventsGroupsService = eventsGroupsService;
         }
 
         public async Task DeleteAsync(string eventId)
@@ -92,23 +98,14 @@
             .To<T>()
             .ToListAsync();
 
-        public async Task<IEnumerable<T>> GetAllresultsByEventIdAsync<T>(string eventId)
-        {
-         return await this.repository
+        public async Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName)
+        => await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.Id == eventId)
-                .SelectMany(x => x.EventsResults.Select(x => x.Result))
+                .SelectMany(x => x.EventsResults
+                .Where(x => x.Result.Student.StudentsInGroups.Any(x => x.Group.Name == groupName))
+                .Select(x => x.Result))
                 .To<T>().ToListAsync();
-            //var studentsIds = await eventQuery
-            //    .SelectMany(x => x.Group.StudentstGroups.Select(x => x.StudentId))
-            //    .ToListAsync();
-
-            //var quizResultQuery = eventQuery
-            //    .SelectMany(x => x.Quiz.QuizzesResults
-            //    .Where(x => studentsIds.Contains(x.Result.StudentId)));
-
-            //return await quizResultQuery.Select(x => x.Result).To<T>().ToListAsync();
-        }
 
         public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)
         {
@@ -136,6 +133,14 @@
             }
 
             return null;
+        }
+
+        public async Task AssignGroupsToEventAsync(IList<string> groupIds, string eventId)
+        {
+            foreach (var groupId in groupIds)
+            {
+                await this.eventsGroupsService.CreateAsync(eventId, groupId);
+            }
         }
 
         private async Task<Event> GetEventById(string id)

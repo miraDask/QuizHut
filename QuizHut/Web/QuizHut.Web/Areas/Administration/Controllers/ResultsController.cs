@@ -9,7 +9,6 @@
     using QuizHut.Services.Events;
     using QuizHut.Web.ViewModels.Common;
     using QuizHut.Web.ViewModels.Events;
-    using QuizHut.Web.ViewModels.Results;
 
     public class ResultsController : AdministrationController
     {
@@ -36,9 +35,8 @@
 
         public async Task<IActionResult> EventResultsDetails(string id)
         {
-            var resultsModel = await this.eventService.GetAllresultsByEventIdAsync<ResultViewModel>(id);
-            var eventModel = await this.eventService.GetEventModelByIdAsync<EventWithResultsDetailsViewModel>(id);
-            eventModel.Results = resultsModel;
+            var eventModel = await this.eventService.GetEventModelByIdAsync<EventWithGroupAndQuizNamesViewModel>(id);
+
             return this.View(eventModel);
         }
     }
