@@ -89,6 +89,7 @@
             @event.QuizId = null;
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
+            await this.quizService.DeleteEventFromQuiz(eventId, quizId);
         }
 
         public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)
@@ -109,7 +110,7 @@
 
         public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)
         {
-            var @event = await this.repository.AllAsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var @event = await this.GetEventById(id);
             @event.Name = name;
             @event.ActivationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
             @event.DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);

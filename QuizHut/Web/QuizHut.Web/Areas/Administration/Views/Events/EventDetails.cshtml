@@ -17,10 +17,10 @@
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary" asp-action="Delete" asp-controller="Events" asp-route-id="@Model.Id">Delete</a>
+                        <a class="btn btn-primary" asp-action="EditEventDetails" asp-controller="Events" asp-route-id="@Model.Id">Edit</a>
                     </li>
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary" asp-action="EditEventDetails" asp-controller="Events" asp-route-id="@Model.Id">Edit</a>
+                        <a class="btn btn-primary" asp-action="Delete" asp-controller="Events" asp-route-id="@Model.Id">Delete</a>
                     </li>
                 </ul>
             </div>
@@ -54,7 +54,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
         <div class="container">
             <h5 class="mb-0">Quiz</h5>
-            @if (Model.Quiz == null)
+            @if (Model.QuizId == null)
             {
                 <button class="navbar-toggler collapsed bg-primary"
                         type="button" data-toggle="collapse"
@@ -74,11 +74,11 @@
             }
         </div>
     </nav>
-    @if (Model.Quiz != null)
+    @if (Model.QuizId != null)
     {
         <nav class="navbar navbar-expand-lg navbar-dark bg-light p-2">
             <div class="container">
-                <h5 class="mb-0">@Model.Quiz.Name</h5>
+                <h5 class="mb-0">@Model.QuizName</h5>
                 <button class="navbar-toggler collapsed bg-primary"
                         type="button" data-toggle="collapse"
                         data-target="#navbarNavDropdown23"
@@ -90,13 +90,13 @@
                 <div class="navbar-collapse text-center collapse" id="navbarNavDropdown23">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item m-1">
-                            <a class="btn btn-primary mr-md-3 col-12" asp-action="Display" asp-controller="Quizzes" asp-route-id="@Model.Quiz.Id">
+                            <a class="btn btn-primary mr-md-3 col-12" asp-action="Display" asp-controller="Quizzes" asp-route-id="@Model.QuizId">
                                 View
                             </a>
                         </li>
                         <li class="nav-item m-1">
                             <form method="post" asp-action="DeleteQuizFromEvent" asp-controller="Events">
-                                <input type="hidden" name="quizId" value="@Model.Quiz.Id" />
+                                <input type="hidden" name="quizId" value="@Model.QuizId" />
                                 <input type="hidden" name="eventId" value="@Model.Id" />
                                 <button type="submit" class="btn btn-primary mr-md-3 col-12">Delete</button>
                             </form>

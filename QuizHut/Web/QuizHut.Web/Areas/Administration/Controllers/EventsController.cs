@@ -143,10 +143,10 @@
         public async Task<IActionResult> EventDetails(string id)
         {
             var groups = await this.groupsService.GetGroupModelsAllByEventIdAsync<GroupAssignViewModel>(id);
-            var quiz = await this.quizService.GetQuizModelByEventIdAsync<QuizAssignViewModel>(id);
+           //var quiz = await this.quizService.GetQuizModelByEventIdAsync<QuizAssignViewModel>(id);
             var model = await this.service.GetEventModelByIdAsync<EventDetailsViewModel>(id);
             model.Groups = groups;
-            model.Quiz = quiz;
+           // model.Quiz = quiz;
             return this.View(model);
         }
 

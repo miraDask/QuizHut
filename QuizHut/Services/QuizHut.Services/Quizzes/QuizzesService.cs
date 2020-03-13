@@ -115,12 +115,12 @@
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
 
-        public async Task<T> GetQuizModelByEventIdAsync<T>(string eventId)
-         => await this.quizRepository
-            .AllAsNoTracking()
-            .Where(x => x.Event.Id == eventId)
-            .To<T>()
-            .FirstOrDefaultAsync();
+        //public async Task<T> GetQuizModelByEventIdAsync<T>(string eventId)
+        // => await this.quizRepository
+        //    .AllAsNoTracking()
+        //    .Where(x => x.Event.Id == eventId)
+        //    .To<T>()
+        //    .FirstOrDefaultAsync();
 
         public async Task<bool> HasUserPermition(string userId, string quizId)
         {
@@ -140,7 +140,7 @@
             {
                 return false;
             }
-            //To fix
+
             var eventGroups = await quizQuery
                 .SelectMany(x => x.Event.EventsGroups.Where(x => x.Group.StudentstGroups.Any(x => x.StudentId == userId)))
                 .ToListAsync();
@@ -156,6 +156,18 @@
                 .FirstOrDefaultAsync();
 
             quiz.EventId = eventId;
+            this.quizRepository.Update(quiz);
+            await this.quizRepository.SaveChangesAsync();
+        }
+
+        public async Task DeleteEventFromQuiz(string eventId, string quizId)
+        {
+            var quiz = await this.quizRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == quizId)
+                .FirstOrDefaultAsync();
+
+            quiz.EventId = null;
             this.quizRepository.Update(quiz);
             await this.quizRepository.SaveChangesAsync();
         }

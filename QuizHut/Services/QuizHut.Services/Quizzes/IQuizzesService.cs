@@ -13,11 +13,13 @@
 
         Task<T> GetQuizByIdAsync<T>(string id);
 
-        Task<T> GetQuizModelByEventIdAsync<T>(string eventId);
+        //Task<T> GetQuizModelByEventIdAsync<T>(string eventId);
 
         Task<string> GetQuizIdByPasswordAsync(string password);
 
         Task DeleteByIdAsync(string id);
+
+        Task DeleteEventFromQuiz(string eventId, string quizId);
 
         Task UpdateAsync(string id, string name, string description, int? timer, string password);
 

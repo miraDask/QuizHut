@@ -25,7 +25,9 @@
 
         public string ActiveTo { get; set; }
 
-        public QuizAssignViewModel Quiz { get; set; }
+        public string QuizName { get; set; }
+
+        public string QuizId { get; set; }
 
         public IEnumerable<GroupAssignViewModel> Groups { get; set; }
 
@@ -33,6 +35,12 @@
         {
               configuration.CreateMap<Event, EventDetailsViewModel>()
               .ForMember(
+                    x => x.QuizId,
+                    opt => opt.MapFrom(x => x.QuizId))
+              .ForMember(
+                    x => x.QuizName,
+                    opt => opt.MapFrom(x => x.Quiz.Name))
+                .ForMember(
                     x => x.ActivationDate,
                     opt => opt.MapFrom(x => x.ActivationDateAndTime.ToString("dd/MM/yyyy")))
                .ForMember(
