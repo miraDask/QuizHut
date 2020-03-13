@@ -46,7 +46,7 @@
             {
                 return new Dictionary<string, string>()
                 {
-                    [ModelCostants.Status] = ModelCostants.StatusPending,
+                    [ModelCostants.Name] = ModelCostants.StatusPending,
                     [ModelCostants.Color] = ModelCostants.ColorPending,
                 };
             }
@@ -55,14 +55,14 @@
             {
                 return new Dictionary<string, string>()
                 {
-                    [ModelCostants.Status] = ModelCostants.StatusEnded,
+                    [ModelCostants.Name] = ModelCostants.StatusEnded,
                     [ModelCostants.Color] = ModelCostants.ColorEnded,
                 };
             }
 
             return new Dictionary<string, string>()
             {
-                [ModelCostants.Status] = ModelCostants.StatusActive,
+                [ModelCostants.Name] = ModelCostants.StatusActive,
                 [ModelCostants.Color] = ModelCostants.ColorActive,
             };
         }

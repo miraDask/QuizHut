@@ -1,8 +1,9 @@
-﻿@model EventsListAllViewModel
+﻿@using Microsoft.AspNetCore.Identity;
+@using QuizHut.Data.Models;
+@inject UserManager<ApplicationUser> userManager
+@model EventsListAllViewModel
 @{
     ViewData["Title"] = "Results";
-    var activeEvents = @Model.Events.Where(x => x.Status["Status"] == "Active");
-    var endenEvents = @Model.Events.Where(x => x.Status["Status"] == "Ended");
 }
 
 <div class="row">
@@ -14,43 +15,7 @@
                 </div>
                 <div class="card-body p-0 mt-2">
                     <h4 class="card-title pl-3 mb-4">Last Active Events</h4>
-                    @if (activeEvents.Any())
-                    {
-                        <table class="table table-hover col-12 mt-2">
-                            <thead>
-                                <tr class="table-active bg-white">
-                                    <th scope="col" class="p-2">Name</th>
-                                    <th scope="col" class="p-2"></th>
-                                    <th scope="col" class="p-2"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var _event in activeEvents.Take(5))
-                                {
-                                    <tr class="table-success">
-                                        <th scope="row" class="pt-3">@_event.Name</th>
-                                        @*<th scope="row" class="pt-3 text-center">@_event.ResultStatistic</th>*@
-                                        <td class="text-right">
-                                            <a type="submit" class="btn btn-outline-success py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
-                                                View
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-
-                            </tbody>
-                        </table>
-
-                        <div class="card-footer">
-                            <a class="btn btn-outline-primary" asp-area="Administration" asp-action="ActiveEventsAll" asp-controller="Events">See All</a>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="card-footer text-left">
-                            <p class="ml-2 text-primary">There are no active events at the moment.</p>
-                        </div>
-                    }
+                    @await Component.InvokeAsync("Results", new { status = ModelCostants.StatusActive, principal = this.User})
                 </div>
             </div>
         </div>
@@ -63,45 +28,7 @@
                 </div>
                 <div class="card-body p-0 mt-2">
                     <h4 class="card-title pl-3 mb-4">Last Ended Events</h4>
-
-                    @if (endenEvents.Any())
-                    {
-                        <table class="table table-hover col-12 mt-2">
-                            <thead>
-                                <tr class="table-active bg-white">
-                                    <th scope="col" class="p-2">Name</th>
-                                    @*<th scope="col" class="p-2">Results</th>*@
-                                    <th scope="col" class="p-2"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach (var _event in endenEvents.Take(5))
-                                {
-                                    <tr class="table-danger">
-                                        <th scope="row" class="pt-3">@_event.Name</th>
-                                        @*<th scope="row" class="pt-3 text-center">@_event.ResultStatistic</th>*@
-                                        <td class="text-right">
-                                            <a class="btn btn-outline-danger py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
-                                                View
-                                            </a>
-                                        </td>
-                                    </tr>
-                                }
-
-                            </tbody>
-                        </table>
-
-                        <div class="card-footer">
-                            <a class="btn btn-outline-primary" asp-area="Administration" asp-action="EndedEventsAll" asp-controller="Events">See All</a>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="card-footer text-left">
-                            <p class="ml-2 text-primary">There are no ended events at the moment.</p>
-                        </div>
-                    }
+                    @await Component.InvokeAsync("Results", new { status = ModelCostants.StatusEnded, principal = this.User })
                 </div>
             </div>
         </div>

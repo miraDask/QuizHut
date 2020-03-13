@@ -8,7 +8,7 @@
         public const string StatusPending = "Pending";
         public const string StatusActive = "Active";
         public const string StatusEnded = "Ended";
-        public const string Status = "Status";
+        public const string Name = "Name";
         public const string Color = "Color";
     }
 }

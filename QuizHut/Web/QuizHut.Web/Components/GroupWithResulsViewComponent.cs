@@ -1,12 +1,10 @@
 ﻿namespace QuizHut.Web.ViewComponents
 {
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Events;
     using QuizHut.Web.ViewModels.Results;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading.Tasks;
 
     [ViewComponent(Name="ResultsByGroup")]
     public class GroupWithResulsViewComponent : ViewComponent

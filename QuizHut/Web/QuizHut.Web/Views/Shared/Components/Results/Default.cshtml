@@ -1,0 +1,44 @@
+﻿@model IEnumerable<EventListViewModel>
+@{
+    ViewData["Title"] = "Default";
+}
+
+@if (Model.Any())
+{
+    var colorClass = Model.First().Status[ModelCostants.Name] == ModelCostants.StatusActive ? "success" : "danger";
+    <table class="table table-hover col-12 mt-2">
+        <thead>
+            <tr class="table-active bg-white">
+                <th scope="col" class="p-2">Name</th>
+                <th scope="col" class="p-2"></th>
+                <th scope="col" class="p-2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var _event in Model.Take(5))
+            {
+                <tr class="table-@colorClass">
+                    <th scope="row" class="pt-3">@_event.Name</th>
+                    <th scope="row" class="pt-3 text-center"></th>
+                    <td class="text-right">
+                        <a type="submit" class="btn btn-outline-@colorClass py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <div class="card-footer">
+        <a class="btn btn-outline-primary" asp-area="Administration" asp-action="ActiveEventsAll" asp-controller="Events">See All</a>
+    </div>
+}
+else
+{
+    <div class="card-footer text-left">
+        <p class="ml-2 text-primary">There are no active events at the moment.</p>
+    </div>
+}
+

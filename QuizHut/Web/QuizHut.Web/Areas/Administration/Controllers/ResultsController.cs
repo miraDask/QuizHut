@@ -23,14 +23,7 @@
 
         public async Task<IActionResult> Index()
         {
-            var userId = this.userManager.GetUserId(this.User);
-            var events = await this.eventService.GetAllByCreatorIdAsync<EventListViewModel>(userId);
-            var model = new EventsListAllViewModel
-            {
-                Events = events.Where(x => x.Status[ModelCostants.Status] != ModelCostants.StatusPending),
-            };
-
-            return this.View(model);
+            return this.View();
         }
 
         public async Task<IActionResult> EventResultsDetails(string id)
