@@ -65,7 +65,7 @@
         public async Task<IActionResult> AllQuizzesCreatedByTeacher()
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizListViewModel>(userId);
+            var quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizListViewModel>(userId, false);
             var model = new QuizzesAllListingViewModel() { Quizzes = quizzes };
             return this.View(model);
         }

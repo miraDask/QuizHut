@@ -117,7 +117,7 @@
         public async Task<IActionResult> AssignQuizToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizAssignViewModel>(userId);
+            var quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizAssignViewModel>(userId, true);
             var model = await this.service.GetEventModelByIdAsync<EventWithQuizzesViewModel>(id);
             model.Quizzes = quizzes;
             return this.View(model);
@@ -143,10 +143,9 @@
         public async Task<IActionResult> EventDetails(string id)
         {
             var groups = await this.groupsService.GetGroupModelsAllByEventIdAsync<GroupAssignViewModel>(id);
-           //var quiz = await this.quizService.GetQuizModelByEventIdAsync<QuizAssignViewModel>(id);
             var model = await this.service.GetEventModelByIdAsync<EventDetailsViewModel>(id);
             model.Groups = groups;
-           // model.Quiz = quiz;
+
             return this.View(model);
         }
 

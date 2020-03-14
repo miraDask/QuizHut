@@ -1,7 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Events
 {
     using System.Collections.Generic;
-    
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;

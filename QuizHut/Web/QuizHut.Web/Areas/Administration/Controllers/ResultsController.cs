@@ -21,7 +21,7 @@
             this.eventService = eventService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return this.View();
         }

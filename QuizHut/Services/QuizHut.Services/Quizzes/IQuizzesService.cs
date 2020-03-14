@@ -9,7 +9,7 @@
 
         Task<IList<T>> GetAllAsync<T>();
 
-        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id);
+        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, bool isAssignedToEventFilter);
 
         Task<T> GetQuizByIdAsync<T>(string id);
 

@@ -47,13 +47,21 @@
             return quiz.Id;
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id)
-          => await this.quizRepository
-                 .AllAsNoTracking()
-                 .Where(x => x.CreatorId == id)
-                 .OrderByDescending(x => x.CreatedOn)
-                 .To<T>()
-                 .ToListAsync();
+        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, bool isAssignedToEventFilter)
+        {
+            var query = this.quizRepository
+                   .AllAsNoTracking()
+                   .Where(x => x.CreatorId == id);
+
+            if (isAssignedToEventFilter)
+            {
+                query = query.Where(x => x.EventId == null);
+            }
+
+            return await query.OrderByDescending(x => x.CreatedOn)
+                .To<T>()
+                .ToListAsync();
+        }
 
         public async Task<T> GetQuizByIdAsync<T>(string id)
        => await this.quizRepository
