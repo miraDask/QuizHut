@@ -78,9 +78,18 @@
         }
 
         [HttpPost]
-        [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> Start(PasswordInputViewModel model)
         {
+            if (model.Password == null)
+            {
+                return this.RedirectToAction("Index", "Home", new
+                {
+                    password = model.Password,
+                    area = GlobalConstants.Administration,
+                    errorText = GlobalConstants.ErrorMessages.EmptyPasswordField,
+                });
+            }
+
             var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
             if (id == null)
             {

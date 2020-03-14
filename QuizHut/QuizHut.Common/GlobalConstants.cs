@@ -44,6 +44,8 @@
             public const string QuizNotFound = "There is no quiz with password {0}! Try again!";
 
             public const string PermissionDenied = "You do not have a permission to participate in this quiz!";
+
+            public const string EmptyPassword = "emptyField";
         }
     }
 }

@@ -9,13 +9,11 @@
         public IActionResult Index(string password, string errorText)
         {
             var model = new PasswordInputViewModel();
-            if (password != null)
+            if (errorText != null)
             {
-                model.Error = GlobalConstants.ErrorMessages.EmptyPasswordField;
+                model.Password = password;
+                model.Error = errorText;
             }
-
-            model.Password = password;
-            model.Error = errorText;
 
             return this.View(model);
         }

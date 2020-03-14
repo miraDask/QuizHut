@@ -9,6 +9,7 @@
     using QuizHut.Services.EventsResults;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Common;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuizzesController : Controller
@@ -70,18 +71,33 @@
             return this.View(quizModel);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Start(PasswordInputViewModel model)
-        //{
-        //    var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
+        [HttpPost]
+        public async Task<IActionResult> Start(PasswordInputViewModel model)
+        {
+            if (model.Password == null)
+            {
+                return this.RedirectToAction("Index", "Students", new
+                {
+                    password = model.Password,
+                    area = string.Empty,
+                    errorText = GlobalConstants.ErrorMessages.EmptyPasswordField,
+                });
+            }
 
-        //    if (id == null)
-        //    {
-        //        return this.RedirectToAction("Index", "Home", new { password = model.Password });
-        //    }
+            var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
 
-        //    return this.RedirectToAction("Start", new { password = model.Password });
-        //}
+            if (id == null)
+            {
+                return this.RedirectToAction("Index", "Students", new
+                {
+                    password = model.Password,
+                    area = string.Empty,
+                    errorText = string.Format(GlobalConstants.ErrorMessages.QuizNotFound, model.Password),
+                });
+            }
+
+            return this.RedirectToAction("Start", new { password = model.Password });
+        }
 
         [HttpGet]
         public IActionResult Submit(QuizResultViewModel model)

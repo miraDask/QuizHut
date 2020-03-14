@@ -1,4 +1,4 @@
-﻿
+﻿@model PasswordInputViewModel
 @{
     ViewData["Title"] = "Student Page";
     Layout = "_LayoutStudent";
@@ -15,60 +15,14 @@
     </div>
 }
 
-    <div class="row mt-5">
-
-        @*<div class="col-md-6">
-            <div class="component">
-                <div class="card mb-5">
-                    <div class="card-header">
-                        <i class="fas fa-circle text-success"></i> Results for:
-                    </div>
-                    <div class="card-body p-0 mt-2">
-                        <h4 class="card-title pl-3 mb-4">Last Active Events</h4>
-
-                        <table class="table table-hover mt-2">
-                            <thead>
-                                <tr class="table-active bg-white">
-                                    <th scope="col" class="p-2">Name</th>
-                                    <th scope="col" class="p-2">Results</th>
-                                    <th scope="col" class="p-2"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr class="table-success">
-                                    <th scope="row" class="pt-3">Name</th>
-                                    <th scope="row" class="pt-3 text-center">ResultStatistic</th>
-                                    <td class="text-right">
-                                        <a type="submit" class="btn btn-outline-success py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="">
-                                            View
-                                        </a>
-                                    </td>
-                                </tr>
-
-
-                            </tbody>
-                        </table>
-
-                        <div class="card-footer">
-                            <a class="btn btn-outline-primary" asp-area="Administration" asp-action="ActiveEventsAll" asp-controller="Events">See All</a>
-                        </div>
-
-                        <div class="card-footer text-left">
-                            <p class="ml-2 text-primary">There are no active events at the moment.</p>
-                        </div>
-
-                    </div>
-                </div>
+<div class="row mt-5">
+    <partial name="_TakeQuizPartial">
+        <aside class="col-md-4 offset-1">
+            <div class="headline headline-md text-center">
+                <h4>Active Events</h4>
+                <hr>
             </div>
-        </div>*@
-        <partial name="_TakeQuizPartial">
-            <aside class="col-md-4 offset-1">
-                <div class="headline headline-md text-center">
-                    <h4>Active Events</h4>
-                    <hr>
-                </div>
-            </aside>
+        </aside>
 </div>
 
 @section Profile
@@ -89,5 +43,8 @@
             </button>
         </form>
     </li>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
 

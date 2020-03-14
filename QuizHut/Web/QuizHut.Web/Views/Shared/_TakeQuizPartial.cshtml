@@ -14,8 +14,9 @@
 
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Password..." asp-for="@Model.Password">
-                     <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                    <input type="hidden" asp-for="@Model.Error" value="emptyField">
                 </div>
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
             </div>
             <div class="card-footer pb-3">
                 <button class="btn btn-outline-primary">Enter</button>

@@ -123,13 +123,6 @@
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
 
-        //public async Task<T> GetQuizModelByEventIdAsync<T>(string eventId)
-        // => await this.quizRepository
-        //    .AllAsNoTracking()
-        //    .Where(x => x.Event.Id == eventId)
-        //    .To<T>()
-        //    .FirstOrDefaultAsync();
-
         public async Task<bool> HasUserPermition(string userId, string quizId)
         {
             var quizQuery = this.quizRepository
