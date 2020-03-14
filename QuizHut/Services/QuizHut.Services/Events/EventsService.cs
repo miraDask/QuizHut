@@ -99,15 +99,6 @@
             .To<T>()
             .ToListAsync();
 
-        public async Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName)
-        => await this.repository
-                .AllAsNoTracking()
-                .Where(x => x.Id == eventId)
-                .SelectMany(x => x.EventsResults
-                .Where(x => x.Result.Student.StudentsInGroups.Any(x => x.Group.Name == groupName))
-                .Select(x => x.Result))
-                .To<T>().ToListAsync();
-
         public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)
         {
             var @event = await this.GetEventById(id);

@@ -23,8 +23,6 @@
 
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
 
-        Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName);
-
         string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate);
     }
 }

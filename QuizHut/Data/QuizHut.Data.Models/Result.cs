@@ -1,7 +1,6 @@
 ﻿namespace QuizHut.Data.Models
 {
     using System;
-    using System.Collections.Generic;
 
     using QuizHut.Data.Common.Models;
 
@@ -10,7 +9,6 @@
         public Result()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.EventsResults = new HashSet<EventResult>();
         }
 
         public int Points { get; set; }
@@ -21,6 +19,8 @@
 
         public virtual ApplicationUser Student { get; set; }
 
-        public virtual ICollection<EventResult> EventsResults { get; set; }
+        public string EventId { get; set; }
+
+        public virtual Event Event { get; set; }
     }
 }

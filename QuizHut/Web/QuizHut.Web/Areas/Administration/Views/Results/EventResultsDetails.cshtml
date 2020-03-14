@@ -9,20 +9,6 @@
             <h5 class="mb-0 p-2">Event: <span class="text-primary">@Model.Name</span></h5>
         </div>
     </nav>
-    @*<div class="component">
-            <table class="table table-hover mb-0">
-                <tbody>
-                    <tr class="table-active bg-white">
-                        <th scope="row">Group</th>
-                        <td>@Model.GroupName</td>
-                    </tr>
-                    <tr class="table-active bg-light">
-                        <th scope="row">Students Count</th>
-                        <td>@Model.StudentsCount</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>*@
     @if (Model.GroupsNames.Any())
     {
         @foreach (var name in Model.GroupsNames)
@@ -48,10 +34,4 @@
         }
     }
 </div>
-@*@if (!Model.Results.Any())
-    {
-        <div class="text-center text-primary mt-4">
-        <p>There are no results at the moment</p>
-        </div>
-    }*@
 

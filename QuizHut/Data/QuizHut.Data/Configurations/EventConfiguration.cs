@@ -18,9 +18,9 @@
                 .WithOne(eg => eg.Event)
                 .HasForeignKey(eg => eg.EventId);
 
-            eventEntity.HasMany(e => e.EventsResults)
-                .WithOne(eg => eg.Event)
-                .HasForeignKey(eg => eg.EventId);
+            eventEntity.HasMany(e => e.Results)
+                .WithOne(r => r.Event)
+                .HasForeignKey(r => r.EventId);
 
             eventEntity.Property(g => g.Name)
            .HasMaxLength(DataValidation.Event.NameMaxLength)

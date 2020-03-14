@@ -22,7 +22,6 @@
     using QuizHut.Services.Categories;
     using QuizHut.Services.Events;
     using QuizHut.Services.EventsGroups;
-    using QuizHut.Services.EventsResults;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
@@ -85,7 +84,6 @@
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IAnswersService, AnswersService>();
             services.AddTransient<IEventsGroupsService, EventsGroupsService>();
-            services.AddTransient<IEventsResultsService, EventsResultsService>();
             services.AddTransient<IGroupsService, GroupsService>();
             services.AddTransient<IResultsService, ResultsService>();
             services.AddTransient<IEventsService, EventsService>();

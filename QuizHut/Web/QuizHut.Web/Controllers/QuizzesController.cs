@@ -6,26 +6,25 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
     using QuizHut.Data.Models;
-    using QuizHut.Services.EventsResults;
     using QuizHut.Services.Quizzes;
+    using QuizHut.Services.Results;
     using QuizHut.Web.Common;
-    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
 
     public class QuizzesController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
-        private readonly IEventsResultsService quizResultService;
+        private readonly IResultsService resultService;
 
         public QuizzesController(
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
-            IEventsResultsService quizResultService)
+            IResultsService resultService)
         {
             this.userManager = userManager;
             this.quizService = quizService;
-            this.quizResultService = quizResultService;
+            this.resultService = resultService;
         }
 
         public async Task<IActionResult> Start(string password)
@@ -110,7 +109,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var originalQuizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(model.Id);
-            var resultModel = await this.quizResultService.GetResultModel(model.Id, userId, originalQuizModel.Questions, model.Questions);
+            var resultModel = await this.resultService.GetResultModel(model.Id, userId, originalQuizModel.Questions, model.Questions);
             resultModel.QuizName = model.Name;
 
             return this.View(resultModel);

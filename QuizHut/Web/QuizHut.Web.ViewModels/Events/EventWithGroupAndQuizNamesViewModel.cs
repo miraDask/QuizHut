@@ -6,7 +6,6 @@
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Results;
 
     public class EventWithGroupAndQuizNamesViewModel : IMapFrom<Event>, IHaveCustomMappings
     {

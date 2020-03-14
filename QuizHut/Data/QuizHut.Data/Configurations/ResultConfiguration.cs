@@ -8,9 +8,9 @@
     {
         public void Configure(EntityTypeBuilder<Result> result)
         {
-            result.HasMany(r => r.EventsResults)
-              .WithOne(er => er.Result)
-              .HasForeignKey(er => er.ResultId);
+            //result.HasMany(r => r.EventsResults)
+            //  .WithOne(er => er.Result)
+            //  .HasForeignKey(er => er.ResultId);
         }
     }
 }

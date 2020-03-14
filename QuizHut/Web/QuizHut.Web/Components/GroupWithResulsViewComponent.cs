@@ -4,21 +4,22 @@
 
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Events;
+    using QuizHut.Services.Results;
     using QuizHut.Web.ViewModels.Results;
 
     [ViewComponent(Name="ResultsByGroup")]
     public class GroupWithResulsViewComponent : ViewComponent
     {
-        private readonly IEventsService eventService;
+        private readonly IResultsService service;
 
-        public GroupWithResulsViewComponent(IEventsService eventService)
+        public GroupWithResulsViewComponent(IResultsService service)
         {
-            this.eventService = eventService;
+            this.service = service;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(string groupName, string eventId)
         {
-            var resultsModel = await this.eventService.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
+            var resultsModel = await this.service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
             return this.View(resultsModel);
         }
     }

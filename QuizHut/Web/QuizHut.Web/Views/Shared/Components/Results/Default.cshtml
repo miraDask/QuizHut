@@ -5,7 +5,9 @@
 
 @if (Model.Any())
 {
-    var colorClass = Model.First().Status[ModelCostants.Name] == ModelCostants.StatusActive ? "success" : "danger";
+    var eventIsActive = Model.First().Status[ModelCostants.Name] == ModelCostants.StatusActive;
+    var colorClass = eventIsActive ? "success" : "danger";
+    var action = eventIsActive ? "ActiveEventsAll" : "EndedEventsAll";
     <table class="table table-hover col-12 mt-2">
         <thead>
             <tr class="table-active bg-white">
@@ -32,7 +34,7 @@
     </table>
 
     <div class="card-footer">
-        <a class="btn btn-outline-primary" asp-area="Administration" asp-action="ActiveEventsAll" asp-controller="Events">See All</a>
+        <a class="btn btn-outline-primary" asp-area="Administration" asp-action="@action" asp-controller="Events">See All</a>
     </div>
 }
 else

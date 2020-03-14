@@ -31,8 +31,6 @@
 
         public DbSet<Password> Passwords { get; set; }
 
-        public DbSet<EventResult> EventsResults { get; set; }
-
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Group> Groups { get; set; }

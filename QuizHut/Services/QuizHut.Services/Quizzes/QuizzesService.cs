@@ -135,7 +135,7 @@
             }
 
             var results = await quizQuery
-                .SelectMany(x => x.Event.EventsResults.Where(x => x.Result.StudentId == userId))
+                .SelectMany(x => x.Event.Results.Where(x => x.StudentId == userId))
                 .ToListAsync();
             if (results.Count() > 0)
             {
@@ -146,7 +146,7 @@
                 .SelectMany(x => x.Event.EventsGroups.Where(x => x.Group.StudentstGroups.Any(x => x.StudentId == userId)))
                 .ToListAsync();
 
-            return eventGroups.Count > 0;
+            return eventGroups.Count() > 0;
         }
 
         public async Task AssignEventToQuiz(string eventId, string quizId)
