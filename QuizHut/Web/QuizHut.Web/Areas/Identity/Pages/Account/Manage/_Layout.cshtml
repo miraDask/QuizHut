@@ -20,6 +20,9 @@
 @section Scripts {
     @RenderSection("Scripts", required: false)
 }
+@if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName)
+                               && !this.User.IsInRole(GlobalConstants.TeacherRoleName))
+{
 @section Profile
 {
 
@@ -38,4 +41,5 @@
             </button>
         </form>
     </li>
+}
 }

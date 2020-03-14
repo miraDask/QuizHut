@@ -1,6 +1,58 @@
 ﻿@{
     this.ViewData["Title"] = "Privacy Policy";
+    Layout = (string)ViewData["Layout"] ?? "/Views/Shared/_Layout.cshtml";
 }
 <h1>@this.ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+@if (!User.Identity.IsAuthenticated)
+{
+
+    @section About
+    {
+        <li class="nav-item">
+            <a class="nav-link" href="#about">
+                About
+            </a>
+        </li>
+    }
+    @section Register
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
+                Register
+            </a>
+        </li>
+    }
+    @section Login
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
+                Log in
+            </a>
+        </li>
+    }
+}
+else if (!this.User.IsInRole(GlobalConstants.AdministratorRoleName)
+                               && !this.User.IsInRole(GlobalConstants.TeacherRoleName))
+{
+    @section Profile
+{
+
+        <li class="nav-item">
+            <a class="btn btn-outline-white ml-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <i class="fas fa-address-card"></i>  Profile
+            </a>
+        </li>
+    }
+    @section Logout
+{
+        <li class="nav-item text-primary">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
+                <button type="submit" class="btn btn-outline-white ml-2">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </li>
+    }
+}

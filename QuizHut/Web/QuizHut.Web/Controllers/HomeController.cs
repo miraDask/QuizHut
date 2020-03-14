@@ -3,16 +3,32 @@
     using System.Diagnostics;
 
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels;
-    using QuizHut.Web.ViewModels.Quizzes;
+
 
     public class HomeController : BaseController
     {
         public IActionResult Index()
         {
+            if (this.User.Identity.IsAuthenticated)
+            {
+                if (this.User.IsInRole(GlobalConstants.AdministratorRoleName)
+                               || this.User.IsInRole(GlobalConstants.TeacherRoleName))
+                {
+                   return this.Redirect("/Administration/Home/Index");
+                }
+                else
+                {
+                   return this.Redirect("/Students/Index");
+                }
+            }
+
             return this.View();
         }
 
+        [ChangeDefaoultLayoutActionFilterAttribute]
         public IActionResult Privacy()
         {
             return this.View();

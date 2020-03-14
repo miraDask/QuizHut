@@ -7,7 +7,9 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
     using QuizHut.Data.Models;
+    using QuizHut.Web.Filters;
 
+    [OverrideDefoultLayoutPageFilter]
     public class PersonalDataModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
