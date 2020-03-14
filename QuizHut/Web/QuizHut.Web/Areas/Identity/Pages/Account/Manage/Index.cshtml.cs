@@ -47,13 +47,6 @@
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
-            //var roles = await this.userManager.GetRolesAsync(user);
-
-            //if (roles.Count > 0)
-            //{
-            //    this.ViewData["Layout"] = Constants.AdminLayout;
-            //}
-
             await this.LoadAsync(user);
             return this.Page();
         }

@@ -7,7 +7,6 @@
     using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels;
 
-
     public class HomeController : BaseController
     {
         public IActionResult Index()
