@@ -6,7 +6,14 @@
 <div class="card">
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
         <div class="container pl-0">
-            <h5 class="mb-0 p-2">Event: <span class="text-primary">@Model.Name</span></h5>
+            @if (Model.IsDeleted)
+            {
+                <h5 class="mb-0 p-2">Event: <span class="text-primary">@Model.Name</span> (deleted)</h5>
+            }
+            else
+            {
+                <h5 class="mb-0 p-2">Event: <span class="text-primary">@Model.Name</span></h5>
+            }
         </div>
     </nav>
     @if (Model.GroupsNames.Any())

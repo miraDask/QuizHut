@@ -14,6 +14,8 @@
 
         public string Name { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public string StartDate { get; set; }
 
         public string Duration { get; set; }

@@ -32,13 +32,15 @@
         public async Task DeleteAsync(string eventId)
         {
             var @event = await this.GetEventById(eventId);
+            var quizId = @event.QuizId;
+            await this.quizService.DeleteEventFromQuiz(eventId, quizId);
             this.repository.Delete(@event);
             await this.repository.SaveChangesAsync();
         }
 
         public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null)
         {
-            var query = this.repository.AllAsNoTracking();
+            var query = this.repository.AllAsNoTrackingWithDeleted();
 
             if (groupId != null)
             {
@@ -69,7 +71,7 @@
 
         public async Task<T> GetEventModelByIdAsync<T>(string eventId)
         => await this.repository
-                .AllAsNoTracking()
+                .AllAsNoTrackingWithDeleted()
                 .Where(x => x.Id == eventId)
                 .To<T>()
                 .FirstOrDefaultAsync();

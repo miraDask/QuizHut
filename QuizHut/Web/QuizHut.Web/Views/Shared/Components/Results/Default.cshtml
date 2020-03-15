@@ -19,15 +19,22 @@
         <tbody>
             @foreach (var _event in Model.Take(5))
             {
-                <tr class="table-@colorClass">
+            <tr class="table-@colorClass">
+                @if (_event.IsDeleted)
+                {
+                    <th scope="row" class="pt-3">@_event.Name (deleted)</th>
+                }
+                else
+                {
                     <th scope="row" class="pt-3">@_event.Name</th>
-                    <th scope="row" class="pt-3 text-center"></th>
-                    <td class="text-right">
-                        <a type="submit" class="btn btn-outline-@colorClass py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
-                            View
-                        </a>
-                    </td>
-                </tr>
+                }
+                <th scope="row" class="pt-3 text-center"></th>
+                <td class="text-right">
+                    <a type="submit" class="btn btn-outline-@colorClass py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
+                        View
+                    </a>
+                </td>
+            </tr>
             }
 
         </tbody>

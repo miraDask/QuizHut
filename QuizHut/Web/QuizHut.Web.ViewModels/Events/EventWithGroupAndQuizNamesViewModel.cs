@@ -18,6 +18,8 @@
 
         public string Name { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public string QuizName { get; set; }
 
         public IEnumerable<string> GroupsNames { get; set; }
