@@ -2,11 +2,12 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Shared;
 
-    public class EditDetailsViewModel : IMapFrom<Quiz>
+    public class EditDetailsViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -29,5 +30,14 @@
         public int? Timer { get; set; }
 
         public bool PasswordIsValid { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration) 
+        {
+
+            configuration.CreateMap<Quiz, EditDetailsViewModel>()
+                .ForMember(
+                    x => x.Password,
+                    opt => opt.MapFrom(x => x.Password.Content));
+        }
     }
 }

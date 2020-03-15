@@ -25,7 +25,10 @@
                     <li class="nav-item m-1">
                         <form method="post" asp-action="Delete" asp-controller="Groups">
                             <input type="hidden" name="id" value="@Model.Id" />
-                            <button type="submit" class="nav-link  btn btn-primary col-12">Delete Group</button>
+                            <button type="submit"
+                                    class="nav-link  btn btn-primary col-12"
+                                    onclick="return confirm('Are you sure you want to delete group @Model.Name')"
+                                    >Delete Group</button>
                         </form>
                     </li>
                 </ul>
