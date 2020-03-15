@@ -176,7 +176,7 @@
             var events = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId);
             var model = new EventsListAllViewModel
             {
-                Events = events.Where(x => x.Status[ModelCostants.Name] == ModelCostants.StatusActive),
+                Events = events.Where(x => x.Status == ModelCostants.StatusActive),
             };
 
             return this.View(model);
@@ -188,7 +188,7 @@
             var events = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId);
             var model = new EventsListAllViewModel
             {
-                Events = events.Where(x => x.Status[ModelCostants.Name] == ModelCostants.StatusEnded),
+                Events = events.Where(x => x.Status == ModelCostants.StatusEnded),
             };
 
             return this.View(model);

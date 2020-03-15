@@ -20,7 +20,7 @@
 
         public string Duration { get; set; }
 
-        public IDictionary<string, string> Status { get; set; }/* = new Dictionary<string, string>();*/
+        public string Status { get; set; }/* = new Dictionary<string, string>();*/
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -36,37 +36,37 @@
                         $" - {x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"))
                 .ForMember(
                     x => x.Status,
-                    opt => opt.MapFrom(x => GetStatus(x.ActivationDateAndTime, x.DurationOfActivity)));
+                    opt => opt.MapFrom(x => x.Status.ToString()));
         }
 
-        private static IDictionary<string, string> GetStatus(DateTime activationDateAndTime, TimeSpan duration)
-        {
-            var now = DateTime.UtcNow;
-            var end = activationDateAndTime.Add(duration);
+        //private static IDictionary<string, string> GetStatus(DateTime activationDateAndTime, TimeSpan duration)
+        //{
+        //    var now = DateTime.UtcNow;
+        //    var end = activationDateAndTime.Add(duration);
 
-            if (now < activationDateAndTime)
-            {
-                return new Dictionary<string, string>()
-                {
-                    [ModelCostants.Name] = ModelCostants.StatusPending,
-                    [ModelCostants.Color] = ModelCostants.ColorPending,
-                };
-            }
+        //    if (now < activationDateAndTime)
+        //    {
+        //        return new Dictionary<string, string>()
+        //        {
+        //            [ModelCostants.Name] = ModelCostants.StatusPending,
+        //            [ModelCostants.Color] = ModelCostants.ColorPending,
+        //        };
+        //    }
 
-            if (now > end)
-            {
-                return new Dictionary<string, string>()
-                {
-                    [ModelCostants.Name] = ModelCostants.StatusEnded,
-                    [ModelCostants.Color] = ModelCostants.ColorEnded,
-                };
-            }
+        //    if (now > end)
+        //    {
+        //        return new Dictionary<string, string>()
+        //        {
+        //            [ModelCostants.Name] = ModelCostants.StatusEnded,
+        //            [ModelCostants.Color] = ModelCostants.ColorEnded,
+        //        };
+        //    }
 
-            return new Dictionary<string, string>()
-            {
-                [ModelCostants.Name] = ModelCostants.StatusActive,
-                [ModelCostants.Color] = ModelCostants.ColorActive,
-            };
-        }
+        //    return new Dictionary<string, string>()
+        //    {
+        //        [ModelCostants.Name] = ModelCostants.StatusActive,
+        //        [ModelCostants.Color] = ModelCostants.ColorActive,
+        //    };
+        //}
     }
 }

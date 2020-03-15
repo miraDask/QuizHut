@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Models;
 
     public class Event : BaseDeletableModel<string>
@@ -17,6 +17,8 @@
         public string Name { get; set; }
 
         public string CreatorId { get; set; }
+
+        public Status Status { get; set; }
 
         public virtual ApplicationUser Creator { get; set; }
 

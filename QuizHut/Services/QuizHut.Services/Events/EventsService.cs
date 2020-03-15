@@ -5,7 +5,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Hangfire;
     using Microsoft.EntityFrameworkCore;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Common;
@@ -33,41 +35,56 @@
         {
             var @event = await this.GetEventById(eventId);
             var quizId = @event.QuizId;
-            await this.quizService.DeleteEventFromQuiz(eventId, quizId);
+            if (quizId != null)
+            {
+                await this.quizService.DeleteEventFromQuiz(eventId, quizId);
+            }
+
             this.repository.Delete(@event);
             await this.repository.SaveChangesAsync();
         }
 
         public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null)
         {
-            var query = this.repository.AllAsNoTrackingWithDeleted();
-
             if (groupId != null)
             {
-                query = query.Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
+               return await this.repository
+                      .AllAsNoTrackingWithDeleted()
+                      .Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId))
+                      .Where(x => x.CreatorId == creatorId)
+                      .OrderByDescending(x => x.CreatedOn)
+                      .To<T>()
+                      .ToListAsync();
             }
 
-            return await query.Where(x => x.CreatorId == creatorId)
-                              .OrderByDescending(x => x.CreatedOn)
-                              .To<T>()
-                              .ToListAsync();
+            return await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.CreatorId == creatorId)
+                .OrderByDescending(x => x.CreatedOn)
+                .To<T>()
+                .ToListAsync();
         }
 
         public async Task<string> AddNewEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
         {
+            var activationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
             var @event = new Event
             {
                 Name = name,
-                ActivationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom),
-                DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo),
+                Status = Status.Pending,
+                ActivationDateAndTime = activationDateAndTime,
+                DurationOfActivity = durationOfActivity,
                 CreatorId = creatorId,
             };
 
             await this.repository.AddAsync(@event);
             await this.repository.SaveChangesAsync();
 
+            this.SheduleStatudChange(activationDateAndTime, durationOfActivity, @event.Id);
             return @event.Id;
         }
+
 
         public async Task<T> GetEventModelByIdAsync<T>(string eventId)
         => await this.repository
@@ -104,11 +121,14 @@
         public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)
         {
             var @event = await this.GetEventById(id);
+            var activationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
             @event.Name = name;
-            @event.ActivationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
-            @event.DurationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
+            @event.ActivationDateAndTime = activationDateAndTime;
+            @event.DurationOfActivity = durationOfActivity;
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
+            this.SheduleStatudChange(activationDateAndTime, durationOfActivity, id);
         }
 
         public string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate)
@@ -121,7 +141,7 @@
             }
 
             var duration = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
-            if (duration.Hours <= 0)
+            if (duration.Hours <= 0 && duration.Minutes <= 0)
             {
                 return ServicesConstants.InvalidDurationOfActivity;
             }
@@ -135,6 +155,23 @@
             {
                 await this.eventsGroupsService.CreateAsync(eventId, groupId);
             }
+        }
+
+        public void SheduleStatudChange(DateTime activationDateAndTime, TimeSpan durationOfActivity, string eventId)
+        {
+            var now = DateTime.UtcNow;
+            var activationDelay = activationDateAndTime - now;
+            var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;
+            BackgroundJob.Schedule(() => this.SetStatusChangeJob(eventId, Status.Active), activationDelay);
+            BackgroundJob.Schedule(() => this.SetStatusChangeJob(eventId, Status.Ended), endingDelay);
+        }
+
+        public async Task SetStatusChangeJob(string eventId, Status status)
+        {
+            var @event = await this.GetEventById(eventId);
+            @event.Status = status;
+            this.repository.Update(@event);
+            await this.repository.SaveChangesAsync();
         }
 
         private async Task<Event> GetEventById(string id)

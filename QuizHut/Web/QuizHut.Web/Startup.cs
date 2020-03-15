@@ -4,6 +4,7 @@
     using System.Reflection;
 
     using AutoMapper;
+    using Hangfire;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -48,6 +49,9 @@
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddHangfire(
+                options => options.UseSqlServerStorage(this.configuration.GetConnectionString("Hangfire")));
+            services.AddHangfireServer();
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -116,6 +120,7 @@
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseHangfireDashboard();
             }
             else
             {

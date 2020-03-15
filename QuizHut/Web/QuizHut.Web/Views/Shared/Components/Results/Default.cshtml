@@ -5,7 +5,7 @@
 
 @if (Model.Any())
 {
-    var eventIsActive = Model.First().Status[ModelCostants.Name] == ModelCostants.StatusActive;
+    var eventIsActive = Model.First().Status == ModelCostants.StatusActive;
     var colorClass = eventIsActive ? "success" : "danger";
     var action = eventIsActive ? "ActiveEventsAll" : "EndedEventsAll";
     <table class="table table-hover col-12 mt-2">

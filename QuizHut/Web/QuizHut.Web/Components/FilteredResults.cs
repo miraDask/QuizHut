@@ -27,7 +27,7 @@
         {
             var userId = this.userManager.GetUserId(principal);
             var eventsModel = await this.eventService.GetAllByCreatorIdAsync<EventListViewModel>(userId);
-            eventsModel = eventsModel.Where(x => x.Status[ModelCostants.Name] == status).ToList();
+            eventsModel = eventsModel.Where(x => x.Status == status).ToList();
             return this.View(eventsModel);
         }
     }

@@ -4,6 +4,6 @@
     {
         Active = 0,
         Pending = 1,
-        Ending = 2,
+        Ended = 2,
     }
 }
