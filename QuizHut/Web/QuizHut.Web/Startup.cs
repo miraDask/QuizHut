@@ -31,6 +31,7 @@
     using QuizHut.Services.Results;
     using QuizHut.Services.StudentsGroups;
     using QuizHut.Services.Users;
+    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels;
     using Rotativa.AspNetCore;
 
@@ -119,7 +120,7 @@
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                app.UseHangfireDashboard();
+
             }
             else
             {
@@ -135,6 +136,10 @@
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() },
+            });
 
             app.UseEndpoints(
                 endpoints =>
