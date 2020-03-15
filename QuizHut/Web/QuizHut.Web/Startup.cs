@@ -70,7 +70,6 @@
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
 
-            // services.AddMvc().AddSessionStateTempDataProvider();
             services.AddSession(options =>
             {
                 options.Cookie.HttpOnly = true;

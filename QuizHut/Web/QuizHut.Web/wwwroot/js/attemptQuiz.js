@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
     var startBtn = document.getElementById('start');
+
     var questionsCount = 0;
     var counter = 1;
 
@@ -104,8 +105,8 @@
                 secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
 
                 if (t.total <= 0) {
-                    //todo redirect to ...
                     clearInterval(timeinterval);
+                    $('#submit').click();
                 }
             }
 

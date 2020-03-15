@@ -1,12 +1,8 @@
 ﻿namespace QuizHut.Web.ViewModels.Events
 {
-    using System;
-    using System.Collections.Generic;
-
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Common;
 
     public class EventListViewModel : IMapFrom<Event>, IHaveCustomMappings
     {
@@ -20,7 +16,7 @@
 
         public string Duration { get; set; }
 
-        public string Status { get; set; }/* = new Dictionary<string, string>();*/
+        public string Status { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
@@ -38,35 +34,5 @@
                     x => x.Status,
                     opt => opt.MapFrom(x => x.Status.ToString()));
         }
-
-        //private static IDictionary<string, string> GetStatus(DateTime activationDateAndTime, TimeSpan duration)
-        //{
-        //    var now = DateTime.UtcNow;
-        //    var end = activationDateAndTime.Add(duration);
-
-        //    if (now < activationDateAndTime)
-        //    {
-        //        return new Dictionary<string, string>()
-        //        {
-        //            [ModelCostants.Name] = ModelCostants.StatusPending,
-        //            [ModelCostants.Color] = ModelCostants.ColorPending,
-        //        };
-        //    }
-
-        //    if (now > end)
-        //    {
-        //        return new Dictionary<string, string>()
-        //        {
-        //            [ModelCostants.Name] = ModelCostants.StatusEnded,
-        //            [ModelCostants.Color] = ModelCostants.ColorEnded,
-        //        };
-        //    }
-
-        //    return new Dictionary<string, string>()
-        //    {
-        //        [ModelCostants.Name] = ModelCostants.StatusActive,
-        //        [ModelCostants.Color] = ModelCostants.ColorActive,
-        //    };
-        //}
     }
 }
