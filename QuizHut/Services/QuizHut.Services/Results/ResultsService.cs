@@ -32,6 +32,7 @@
         .AllAsNoTracking()
         .Where(x => x.EventId == eventId)
         .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Name == groupName))
+        .OrderBy(x => x.Event.ActivationDateAndTime.Add(x.Event.DurationOfActivity).TimeOfDay)
         .To<T>()
         .ToListAsync();
 
