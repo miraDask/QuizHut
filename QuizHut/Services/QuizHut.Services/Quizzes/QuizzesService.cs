@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -128,10 +129,17 @@
             var quizQuery = this.quizRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == quizId);
+
             var creatorId = await quizQuery.Select(x => x.CreatorId).FirstOrDefaultAsync();
             if (creatorId == userId)
             {
                 return true;
+            }
+
+            var eventIsActive = await quizQuery.Select(x => x.Event.Status == Status.Active).FirstOrDefaultAsync();
+            if (!eventIsActive)
+            {
+                return false;
             }
 
             var results = await quizQuery

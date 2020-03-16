@@ -56,7 +56,6 @@
             }
 
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
-
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
 
             return this.View(quizModel);
@@ -106,13 +105,6 @@
 
         public async Task<IActionResult> DeleteQuiz(string id)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
-            {
-                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-                await this.quizService.DeleteByIdAsync(id);
-                return this.RedirectToAction("Index", "Home");
-            }
-
             await this.quizService.DeleteByIdAsync(id);
             return this.RedirectToAction("AllQuizzesCreatedByTeacher", "Quizzes", new { area = "Administration" });
         }
@@ -145,11 +137,6 @@
         [HttpGet]
         public async Task<IActionResult> PDFExport(string id)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
-            {
-                id = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            }
-
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
 
             return new ViewAsPdf("PDFExport", quizModel)
