@@ -3,10 +3,10 @@
     using System.Collections.Generic;
 
     using AutoMapper;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Groups;
-    using QuizHut.Web.ViewModels.Quizzes;
 
     public class EventDetailsViewModel : IMapFrom<Event>, IHaveCustomMappings
     {
@@ -18,6 +18,8 @@
         public string Id { get; set; }
 
         public string Name { get; set; }
+
+        public Status Status { get; set; }
 
         public string ActivationDate { get; set; }
 

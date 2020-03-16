@@ -40,13 +40,13 @@
                         </div>
                         <span asp-validation-for="@Model.ActivationDate" class="text-danger"></span>
                         <div class="input-group mt-4">
-                            <label asp-for="@Model.ActiveFrom">
+                            <label asp-for="@Model.ActiveFrom" class="ml-md-1">
                                 Active from : "00:00"
                                 <input type="text" asp-for="@Model.ActiveFrom" class="form-control" placeholder="HH:mm">
                                 <span asp-validation-for="@Model.ActiveFrom" class="text-danger"></span>
                             </label>
 
-                            <label asp-for="@Model.ActiveTo">
+                            <label asp-for="@Model.ActiveTo" class="ml-md-1">
                                 To : "23:59"
                                 <input type="text" asp-for="@Model.ActiveTo" class="form-control" placeholder="HH:mm">
                                 <span asp-validation-for="@Model.ActiveTo" class="text-danger"></span>

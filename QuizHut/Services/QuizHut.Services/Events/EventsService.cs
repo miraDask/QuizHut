@@ -63,13 +63,18 @@
                 .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null)
+        public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null, string groupId = null)
         {
             var query = this.repository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            if (groupId != null)
+            {
+                query = query.Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
             }
 
             if (studentId != null)
@@ -159,6 +164,13 @@
                 return ServicesConstants.InvalidActivationDate;
             }
 
+            var timeToStart = TimeSpan.Parse(activeFrom);
+            var timeNow = now.TimeOfDay;
+            if (now.Date == activationDateAndTime.Date && timeToStart < timeNow)
+            {
+                return ServicesConstants.InvalidStartingTime;
+            }
+
             var duration = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
             if (duration.Hours <= 0 && duration.Minutes <= 0)
             {
@@ -188,6 +200,11 @@
         public async Task SetStatusChangeJob(string eventId, Status status)
         {
             var @event = await this.GetEventById(eventId);
+            if (@event.QuizId == null)
+            {
+                return;
+            }
+
             @event.Status = status;
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();

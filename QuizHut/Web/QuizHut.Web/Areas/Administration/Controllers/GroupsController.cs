@@ -5,6 +5,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
@@ -59,7 +60,7 @@
         public async Task<IActionResult> AssignEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var events = await this.eventService.GetAllByCreatorIdAsync<EventsAssignViewModel>(userId);
+            var events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, userId, null, id);
             var model = await this.service.GetGroupModelAsync<GroupWithEventsViewModel>(id);
             model.Events = events;
 
@@ -145,7 +146,7 @@
         public async Task<IActionResult> AddNewEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var events = await this.eventService.GetAllByCreatorIdAsync<EventsAssignViewModel>(userId, id);
+            var events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, userId, null, id);
             var model = await this.service.GetGroupModelAsync<GroupWithEventsViewModel>(id);
             model.Events = events;
             return this.View(model);
