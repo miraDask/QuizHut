@@ -18,7 +18,7 @@
             this.quizRepository = quizRepository;
         }
 
-        public async Task<string> AddNewQuestionAsync(string quizId, string quizText)
+        public async Task<string> CreateQuestionAsync(string quizId, string quizText)
         {
             var quiz = await this.quizRepository.AllAsNoTracking().Select(x => new
             {

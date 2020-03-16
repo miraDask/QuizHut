@@ -4,7 +4,7 @@
 
     public interface IStudentsGroupsService
     {
-        Task CreateAsync(string groupId, string studentId);
+        Task CreateStudentGroupAsync(string groupId, string studentId);
 
         Task DeleteAsync(string groupId, string studentId);
 

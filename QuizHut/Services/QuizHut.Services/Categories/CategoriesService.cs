@@ -24,7 +24,7 @@
             this.quizRepository = quizRepository;
         }
 
-        public async Task<string> CreateAsync(string name, string creatorId)
+        public async Task<string> CreateCategoryAsync(string name, string creatorId)
         {
             var category = new Category() { Name = name, CreatorId = creatorId };
             await this.repository.AddAsync(category);

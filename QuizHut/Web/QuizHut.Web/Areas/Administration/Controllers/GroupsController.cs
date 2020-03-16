@@ -51,7 +51,7 @@
         public async Task<IActionResult> Create(CreateGroupInputViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var groupId = await this.service.CreateAsync(model.Name, userId);
+            var groupId = await this.service.CreateGroupAsync(model.Name, userId);
 
             return this.RedirectToAction("AssignEvent", new { id = groupId });
         }

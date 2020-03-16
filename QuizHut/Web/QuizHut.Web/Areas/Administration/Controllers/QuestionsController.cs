@@ -34,7 +34,7 @@
         public async Task<IActionResult> AddNewQuestion(QuestionViewModel model)
         {
             var quizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
-            var questionId = await this.questionService.AddNewQuestionAsync(quizId, model.Text);
+            var questionId = await this.questionService.CreateQuestionAsync(quizId, model.Text);
             this.HttpContext.Session.SetString(Constants.CurrentQuestionId, questionId);
             return this.RedirectToAction("AnswerInput", "Answers");
         }

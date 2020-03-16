@@ -5,7 +5,7 @@
 
     public interface IQuizzesService
     {
-        Task<string> AddNewQuizAsync(string name, string description, int? timer, string creatorId, string password);
+        Task<string> CreateQuizAsync(string name, string description, int? timer, string creatorId, string password);
 
         Task<IList<T>> GetAllAsync<T>();
 

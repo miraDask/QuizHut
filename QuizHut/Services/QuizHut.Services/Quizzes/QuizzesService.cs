@@ -26,7 +26,7 @@
             this.userManager = userManager;
         }
 
-        public async Task<string> AddNewQuizAsync(string name, string description, int? timer, string creatorId, string password)
+        public async Task<string> CreateQuizAsync(string name, string description, int? timer, string creatorId, string password)
         {
             var quiz = new Quiz
             {

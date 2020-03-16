@@ -30,7 +30,7 @@
             this.roleManager = roleManager;
         }
 
-        public async Task<bool> AddAsync(string email, string teacherId)
+        public async Task<bool> AddStudentAsync(string email, string teacherId)
         {
             var user = await this.repository
                 .AllAsNoTracking()

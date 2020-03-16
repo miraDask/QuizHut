@@ -7,7 +7,7 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId = null);
 
-        Task<string> CreateAsync(string name, string creatorId);
+        Task<string> CreateGroupAsync(string name, string creatorId);
 
         Task<T> GetGroupModelAsync<T>(string groupId);
 

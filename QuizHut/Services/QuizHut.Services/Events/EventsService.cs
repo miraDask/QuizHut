@@ -14,6 +14,7 @@
     using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Quizzes;
+    using QuizHut.Web.ViewModels.Common;
 
     public class EventsService : IEventsService
     {
@@ -44,28 +45,30 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null)
+        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null, string statusFilterString = null)
         {
+            var query = this.repository.AllAsNoTracking();
+
             if (groupId != null)
             {
-               return await this.repository
-                      .AllAsNoTrackingWithDeleted()
-                      .Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId))
-                      .Where(x => x.CreatorId == creatorId)
-                      .OrderByDescending(x => x.CreatedOn)
-                      .To<T>()
-                      .ToListAsync();
+                query = this.repository
+                .AllAsNoTrackingWithDeleted()
+                .Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
             }
 
-            return await this.repository
-                .AllAsNoTracking()
+            if (statusFilterString != null)
+            {
+                query = query.Where(x => x.Status.ToString() == statusFilterString);
+            }
+
+            return await query
                 .Where(x => x.CreatorId == creatorId)
                 .OrderByDescending(x => x.CreatedOn)
                 .To<T>()
                 .ToListAsync();
         }
 
-        public async Task<string> AddNewEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
+        public async Task<string> CreateEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
         {
             var activationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
             var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
@@ -153,7 +156,7 @@
         {
             foreach (var groupId in groupIds)
             {
-                await this.eventsGroupsService.CreateAsync(eventId, groupId);
+                await this.eventsGroupsService.CreateEventGroupAsync(eventId, groupId);
             }
         }
 

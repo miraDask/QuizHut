@@ -17,7 +17,7 @@
             this.repository = repository;
         }
 
-        public async Task AddNewAnswerAsync(string answerText, bool isRightAnswer, string questionId)
+        public async Task CreateAnswerAsync(string answerText, bool isRightAnswer, string questionId)
         {
             var answer = new Answer
             {

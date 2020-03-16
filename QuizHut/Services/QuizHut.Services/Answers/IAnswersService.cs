@@ -4,7 +4,7 @@
 
     public interface IAnswersService
     {
-        Task AddNewAnswerAsync(string answerText, bool isRightAnswer, string questionId);
+        Task CreateAnswerAsync(string answerText, bool isRightAnswer, string questionId);
 
         Task UpdateAsync(string id, string text, bool isRightAnswer);
 

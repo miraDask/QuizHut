@@ -42,7 +42,7 @@
             var userId = this.userManager.GetUserId(this.User);
             model.CreatorId = userId;
             model.PasswordIsValid = true;
-            var quizId = await this.quizService.AddNewQuizAsync(model.Name, model.Description, model.Timer, model.CreatorId, model.Password);
+            var quizId = await this.quizService.CreateQuizAsync(model.Name, model.Description, model.Timer, model.CreatorId, model.Password);
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
             return this.RedirectToAction("QuestionInput", "Questions");
         }

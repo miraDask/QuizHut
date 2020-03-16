@@ -29,7 +29,7 @@
         public async Task<IActionResult> AddNewAnswer(AnswerViewModel model)
         {
             var currentQuestionId = this.HttpContext.Session.GetString(Constants.CurrentQuestionId);
-            await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
+            await this.answerService.CreateAnswerAsync(model.Text, model.IsRightAnswer, currentQuestionId);
 
             return this.RedirectToAction("AnswerInput");
         }
@@ -46,7 +46,7 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> AppendNewAnswer(AnswerViewModel model)
         {
-            await this.answerService.AddNewAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
+            await this.answerService.CreateAnswerAsync(model.Text, model.IsRightAnswer, model.QuestionId);
 
             return this.RedirectToAction("Display", "Quizzes");
         }

@@ -52,7 +52,7 @@
         public async Task<IActionResult> Create(CreateCategoryInputViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var categoryId = await this.service.CreateAsync(model.Name, userId);
+            var categoryId = await this.service.CreateCategoryAsync(model.Name, userId);
 
             return this.RedirectToAction("AssignQuizzesToCategory", new { id = categoryId });
         }

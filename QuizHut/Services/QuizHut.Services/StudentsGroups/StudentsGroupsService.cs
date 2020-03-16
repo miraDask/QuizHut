@@ -16,7 +16,7 @@
             this.repository = repository;
         }
 
-        public async Task CreateAsync(string groupId, string studentId)
+        public async Task CreateStudentGroupAsync(string groupId, string studentId)
         {
             var studentGroup = new StudentGroup() { GroupId = groupId, StudentId = studentId };
             var studentExists = await this.repository

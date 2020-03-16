@@ -11,7 +11,7 @@
 
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
 
-        Task<bool> AddAsync(string email, string teacherId);
+        Task<bool> AddStudentAsync(string email, string teacherId);
 
         Task DeleteAsync(string id, string teacherId);
 

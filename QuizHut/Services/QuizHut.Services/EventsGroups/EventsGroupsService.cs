@@ -16,7 +16,7 @@
             this.repository = repository;
         }
 
-        public async Task CreateAsync(string eventId, string groupId)
+        public async Task CreateEventGroupAsync(string eventId, string groupId)
         {
             var deletedEventGroup = await this.repository
                 .AllAsNoTrackingWithDeleted()

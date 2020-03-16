@@ -60,7 +60,7 @@
             }
 
             var userId = this.userManager.GetUserId(this.User);
-            var eventId = await this.service.AddNewEventAsync(model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo, userId);
+            var eventId = await this.service.CreateEventAsync(model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo, userId);
             return this.RedirectToAction("AssignGroupsToEvent", new { id = eventId });
         }
 
@@ -173,10 +173,10 @@
         public async Task<IActionResult> ActiveEventsAll()
         {
             var userId = this.userManager.GetUserId(this.User);
-            var events = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId);
+            var activEvents = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId, null, ModelCostants.StatusActive);
             var model = new EventsListAllViewModel
             {
-                Events = events.Where(x => x.Status == ModelCostants.StatusActive),
+                Events = activEvents,
             };
 
             return this.View(model);
@@ -185,10 +185,10 @@
         public async Task<IActionResult> EndedEventsAll()
         {
             var userId = this.userManager.GetUserId(this.User);
-            var events = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId);
+            var endedEvents = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId, null, ModelCostants.StatusEnded);
             var model = new EventsListAllViewModel
             {
-                Events = events.Where(x => x.Status == ModelCostants.StatusEnded),
+                Events = endedEvents,
             };
 
             return this.View(model);

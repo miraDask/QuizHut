@@ -34,11 +34,11 @@
         {
             foreach (var studentId in studentsIds)
             {
-                await this.studentsGroupsService.CreateAsync(groupId, studentId);
+                await this.studentsGroupsService.CreateStudentGroupAsync(groupId, studentId);
             }
         }
 
-        public async Task<string> CreateAsync(string name, string creatorId)
+        public async Task<string> CreateGroupAsync(string name, string creatorId)
         {
             var group = new Group() { Name = name, CreatorId = creatorId };
             await this.repository.AddAsync(group);
@@ -100,7 +100,7 @@
         {
             foreach (var eventId in evenstIds)
             {
-                await this.eventsGroupsService.CreateAsync(eventId, groupId);
+                await this.eventsGroupsService.CreateEventGroupAsync(eventId, groupId);
             }
         }
 

@@ -4,7 +4,7 @@
 
     public interface IEventsGroupsService
     {
-        Task CreateAsync(string eventId, string groupId);
+        Task CreateEventGroupAsync(string eventId, string groupId);
 
         Task DeleteAsync(string eventId, string groupId);
 

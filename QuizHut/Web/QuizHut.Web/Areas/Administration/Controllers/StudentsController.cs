@@ -44,7 +44,7 @@
         public async Task<IActionResult> AllStudentsAddedByTeacher(AllStudentsAddedByTeacherViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var partisipantIsAdded = await this.service.AddAsync(model.NewStudent.Email, userId);
+            var partisipantIsAdded = await this.service.AddStudentAsync(model.NewStudent.Email, userId);
 
             if (!partisipantIsAdded)
             {

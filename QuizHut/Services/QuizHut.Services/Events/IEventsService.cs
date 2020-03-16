@@ -5,7 +5,7 @@
 
     public interface IEventsService
     {
-        Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null);
+        Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null, string statusFilterString = null);
 
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
 
@@ -17,7 +17,7 @@
 
         Task AssignGroupsToEventAsync(IList<string> groupIds, string eventId);
 
-        Task<string> AddNewEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId);
+        Task<string> CreateEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId);
 
         Task<T> GetEventModelByIdAsync<T>(string eventId);
 

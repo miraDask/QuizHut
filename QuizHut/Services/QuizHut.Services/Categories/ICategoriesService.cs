@@ -10,7 +10,7 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string id);
 
-        Task<string> CreateAsync(string name, string creatorId);
+        Task<string> CreateCategoryAsync(string name, string creatorId);
 
         Task<CategoryWithQuizzesViewModel> CreateCategoryModelAsync(string id, string creatorId, IList<QuizAssignViewModel> quizzes);
 
