@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
@@ -57,6 +58,20 @@
                 .GetAllFiteredByStatusAsync<StudentActiveEventViewModel>(Status.Active, null, studentId);
 
             return this.View(activeEvents);
+        }
+
+        public async Task<IActionResult> StudentEndedEventsAll()
+        {
+            var studentId = this.userManager.GetUserId(this.User);
+            var endedEvents = await this.eventsService
+                .GetAllFiteredByStatusAsync<StudentEndedEventViewModel>(Status.Ended, null, studentId);
+            var scores = await this.resultService.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
+            foreach (var endenEvent in endedEvents)
+            {
+                endenEvent.Score = scores.FirstOrDefault(x => x.EventId == endenEvent.Id);
+            }
+
+            return this.View(endedEvents);
         }
     }
 }

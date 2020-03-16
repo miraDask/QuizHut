@@ -1,7 +1,5 @@
 ﻿namespace QuizHut.Web.ViewModels.Results
 {
-    using System.Linq;
-
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
