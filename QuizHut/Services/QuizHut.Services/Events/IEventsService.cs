@@ -3,9 +3,13 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using QuizHut.Data.Common.Enumerations;
+
     public interface IEventsService
     {
-        Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null, string statusFilterString = null);
+        Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null);
+
+        Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null);
 
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
 

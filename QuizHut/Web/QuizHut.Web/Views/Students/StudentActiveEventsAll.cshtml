@@ -1,0 +1,67 @@
+﻿@model IEnumerable<StudentActiveEventViewModel>
+@{
+    ViewData["Title"] = "StudentActiveEventsAll";
+     Layout = "_LayoutStudent";
+}
+
+<div class="col-md-12 mb-4">
+        <div class="card">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-success p-2">
+                <div class="container pl-0">
+                    <h5 class="mb-0 p-2 text-white">All Active Events</h5>
+                </div>
+            </nav>
+            <div class="card-body p-0">
+                <table class="table table-hover col-12 mb-0">
+                    <thead>
+                        <tr class="table-active bg-white">
+                            <th scope="col">Name</th>
+                            <th scope="col">Quiz Name</th>
+                            <th scope="col">Questions/Time</th>
+                            <th scope="col">Activity</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var _event in Model)
+                        {
+                            <tr class="table-success">
+                                <th scope="row" class="pt-3">@_event.Name</th>
+                                <th scope="row" class="pt-3">@_event.QuizName</th>
+                                <th scope="row" class="pt-3">@_event.QuestionsCount/@_event.TimeToTake</th>
+                                <th scope="row" class="pt-3">@_event.Duration</th>
+                                <td class="text-right">
+                                    <a type="submit" class="btn btn-outline-success py-1" asp-area="" asp-action="Start" asp-controller="Quizzes" asp-route-id="@_event.QuizId">
+                                        Enter
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="Index" asp-controller="Results">Go Back</a>
+
+
+@section Profile
+{
+
+    <li class="nav-item">
+        <a class="btn btn-outline-white ml-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <i class="fas fa-address-card"></i>  Profile
+        </a>
+    </li>
+}
+@section Logout
+{
+    <li class="nav-item text-primary">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
+            <button type="submit" class="btn btn-outline-white ml-2">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </li>
+}

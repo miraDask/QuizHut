@@ -6,12 +6,12 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Filters;
-    using QuizHut.Web.ViewModels.Common;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -173,10 +173,10 @@
         public async Task<IActionResult> ActiveEventsAll()
         {
             var userId = this.userManager.GetUserId(this.User);
-            var activEvents = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId, null, ModelCostants.StatusActive);
+            var activeEvents = await this.service.GetAllFiteredByStatusAsync<EventListViewModel>(Status.Active, userId);
             var model = new EventsListAllViewModel
             {
-                Events = activEvents,
+                Events = activeEvents,
             };
 
             return this.View(model);
@@ -185,7 +185,7 @@
         public async Task<IActionResult> EndedEventsAll()
         {
             var userId = this.userManager.GetUserId(this.User);
-            var endedEvents = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId, null, ModelCostants.StatusEnded);
+            var endedEvents = await this.service.GetAllFiteredByStatusAsync<EventListViewModel>(Status.Ended, userId);
             var model = new EventsListAllViewModel
             {
                 Events = endedEvents,

@@ -5,9 +5,12 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Events;
     using QuizHut.Services.Results;
     using QuizHut.Web.Filters;
+    using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Results;
 
@@ -16,13 +19,16 @@
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IResultsService resultService;
+        private readonly IEventsService eventsService;
 
         public StudentsController(
             UserManager<ApplicationUser> userManager,
-            IResultsService resultService)
+            IResultsService resultService,
+            IEventsService eventsService)
         {
             this.userManager = userManager;
             this.resultService = resultService;
+            this.eventsService = eventsService;
         }
 
         public IActionResult Index(string password, string errorText)
@@ -42,6 +48,15 @@
             var studentId = this.userManager.GetUserId(this.User);
             var resultsModel = await this.resultService.GetAllByStudentIdAsync<StudentResultViewModel>(studentId);
             return this.View(resultsModel);
+        }
+
+        public async Task<IActionResult> StudentActiveEventsAll()
+        {
+            var studentId = this.userManager.GetUserId(this.User);
+            var activeEvents = await this.eventsService
+                .GetAllFiteredByStatusAsync<StudentActiveEventViewModel>(Status.Active, null, studentId);
+
+            return this.View(activeEvents);
         }
     }
 }

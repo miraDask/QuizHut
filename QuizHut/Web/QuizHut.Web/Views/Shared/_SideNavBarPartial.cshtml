@@ -19,13 +19,28 @@
             <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle btn btn-primary manage-account-btn">Events</a>
             <ul class="list-unstyled collapse show" id="pageSubmenu" style="">
                 <li class="dropdown-item nav-item">
-                    <a class="nav-link text-primary">Active</a>
+                    <a class="nav-link text-primary"
+                       asp-area=""
+                       asp-controller="Students"
+                       asp-action="StudentActiveEventsAll">
+                       Active
+                    </a>
                 </li>
                 <li class="dropdown-item nav-item">
-                    <a class="nav-link text-primary">Pending</a>
+                    <a class="nav-link text-primary"
+                       asp-area=""
+                       asp-controller="Students"
+                       asp-action="StudentPendingEventsAll">
+                       Pending
+                    </a>
                 </li>
                 <li class="dropdown-item nav-item">
-                    <a class="nav-link text-primary">Ended</a>
+                    <a class="nav-link text-primary"
+                       asp-area=""
+                       asp-controller="Students"
+                       asp-action="StudentEndedEventsAll">
+                       Ended
+                    </a>
                 </li>
             </ul>
         </li>

@@ -45,7 +45,7 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null, string statusFilterString = null)
+        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -56,16 +56,32 @@
                 .Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
             }
 
-            if (statusFilterString != null)
-            {
-                query = query.Where(x => x.Status.ToString() == statusFilterString);
-            }
-
             return await query
                 .Where(x => x.CreatorId == creatorId)
                 .OrderByDescending(x => x.CreatedOn)
                 .To<T>()
                 .ToListAsync();
+        }
+
+        public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null)
+        {
+            var query = this.repository.AllAsNoTracking();
+
+            if (creatorId != null)
+            {
+                query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            if (studentId != null)
+            {
+                query = query.Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
+            }
+
+            return await query
+              .Where(x => x.Status == status)
+              .OrderByDescending(x => x.CreatedOn)
+              .To<T>()
+              .ToListAsync();
         }
 
         public async Task<string> CreateEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
