@@ -27,9 +27,13 @@
             this.resultService = resultService;
         }
 
-        public async Task<IActionResult> Start(string password)
+        public async Task<IActionResult> Start(string password, string id)
         {
-            var id = await this.quizService.GetQuizIdByPasswordAsync(password);
+            if (id == null)
+            {
+                id = await this.quizService.GetQuizIdByPasswordAsync(password);
+            }
+
             var userId = this.userManager.GetUserId(this.User);
             var userHasPermitionToTakeTheQuiz = await this.quizService.HasUserPermition(userId, id);
             var user = await this.userManager.FindByIdAsync(userId);

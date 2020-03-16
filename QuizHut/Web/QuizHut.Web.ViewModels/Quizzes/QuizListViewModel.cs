@@ -15,8 +15,6 @@
 
         public string CreatedOn { get; set; }
 
-        public bool IsActive { get; set; }
-
         public string Color { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
@@ -30,7 +28,7 @@
                     opt => opt.MapFrom(x => x.Questions.Count))
                 .ForMember(
                     x => x.Color,
-                    opt => opt.MapFrom(x => x.IsActive ? ModelCostants.ColorActive : ModelCostants.ColorEnded));
+                    opt => opt.MapFrom(x => x.EventId != null ? ModelCostants.ColorActive : ModelCostants.ColorEnded));
         }
     }
 }

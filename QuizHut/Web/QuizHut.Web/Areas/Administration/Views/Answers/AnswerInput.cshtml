@@ -1,16 +1,16 @@
 ﻿@model AnswerViewModel
 @{
-    ViewData["Title"] = "AnswerInput";
+    ViewData["Title"] = "Answer Input";
 }
 
 <div class="container-fluid">
     <div class="flex-grow-1">
         <partial name="_BublesAndCirclesPrtial" />
     </div>
-    <div class="col-12 offset-md-2 col-md-8 mt-4 row">
+    <div class="col-12 offset-md-2 col-md-8 row">
         <form method="post" class="col-11 ml-4" asp-area="Administration" asp-action="AddNewAnswer" asp-controller="Answers">
             <div class="component">
-                <div class="card mb-3 mt-3">
+                <div class="card mb-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
                         <i class="fas fa-folder-plus"></i>
                     </div>

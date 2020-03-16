@@ -19,8 +19,6 @@
 
         public int? Timer { get; set; }
 
-        public bool IsActive { get; set; }
-
         public string CreatorId { get; set; }
 
         public virtual ApplicationUser Creator { get; set; }

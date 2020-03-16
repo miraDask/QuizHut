@@ -1,7 +1,64 @@
-﻿
+﻿@model IEnumerable<StudentPendingEventViewModel>
 @{
-    ViewData["Title"] = "StudentPendingEventsAll";
+    ViewData["Title"] = "Student Pending Events All";
+    Layout = "_LayoutStudent";
 }
 
-<h1>StudentPendingEventsAll</h1>
+<div class="col-md-12 mb-4">
+    <div class="card">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-info p-2">
+            <div class="container pl-0">
+                <h5 class="mb-0 p-2 text-white">All Pending Events</h5>
+            </div>
+        </nav>
+        <div class="card-body p-0">
+            <table class="table table-hover col-12 mb-0">
+                <thead>
+                    <tr class="table-active bg-white">
+                        <th scope="col">Event</th>
+                        <th scope="col">Quiz</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">From/To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var _event in Model)
+                    {
+                        <tr class="table-info">
+                            <th scope="row" class="pt-3">@_event.Name</th>
+                            <th scope="row" class="pt-3">@_event.QuizName</th>
+                            <th scope="row" class="pt-3">@_event.Date</th>
+                            <th scope="row" class="pt-3">@_event.Duration</th>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="Index" asp-controller="Students">Go Back</a>
+
+
+@section Profile
+{
+
+    <li class="nav-item">
+        <a class="btn btn-outline-white ml-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <i class="fas fa-address-card"></i>  Profile
+        </a>
+    </li>
+}
+@section Logout
+{
+    <li class="nav-item text-primary">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
+            <button type="submit" class="btn btn-outline-white ml-2">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </li>
+}
+
+
 

@@ -10,6 +10,8 @@
 
         public string Quiz { get; set; }
 
+        public string Date { get; set; }
+
         public string Score { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
@@ -18,6 +20,9 @@
               .ForMember(
                   x => x.Event,
                   opt => opt.MapFrom(x => x.Event.Name))
+              .ForMember(
+                  x => x.Date,
+                  opt => opt.MapFrom(x => x.Event.ActivationDateAndTime.Date.ToString("dd/MM/yyyy")))
               .ForMember(
                   x => x.Quiz,
                   opt => opt.MapFrom(x => x.Event.Quiz.Name))

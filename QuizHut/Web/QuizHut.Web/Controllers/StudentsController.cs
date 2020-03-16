@@ -73,5 +73,14 @@
 
             return this.View(endedEvents);
         }
+
+        public async Task<IActionResult> StudentPendingEventsAll()
+        {
+            var studentId = this.userManager.GetUserId(this.User);
+            var activeEvents = await this.eventsService
+                .GetAllFiteredByStatusAsync<StudentPendingEventViewModel>(Status.Pending, null, studentId);
+
+            return this.View(activeEvents);
+        }
     }
 }
