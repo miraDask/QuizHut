@@ -10,11 +10,9 @@
         <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
         <link href="~/img/favicon.ico" rel="icon" type="image/png">
 
-        <link rel="stylesheet" href="~/css/lazy.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/demo.css" asp-append-version="true">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-              integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h"
-              crossorigin="anonymous" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/lazy.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/css/demo.css" asp-append-version="true"/>
+        <link rel="stylesheet" href="~/lib/fontawesome"/>
     </environment>
     <environment names="Staging,Production">
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
@@ -22,9 +20,7 @@
 
         <link rel="stylesheet" href="~/css/lazy.css" asp-append-version="true">
         <link rel="stylesheet" href="~/css/demo.css" asp-append-version="true">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-              integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h"
-              crossorigin="anonymous" asp-append-version="true">
+        <link rel="stylesheet" href="~/lib/fontawesome" />
     </environment>
 </head>
 <body class="index">
@@ -55,8 +51,10 @@
     <div class="container">
         <partial name="_CookieConsentPartial" />
     </div>
-    <main role="main">
-        @this.RenderBody()
+    <main role="main" id="page-container">
+        <div id="content-wrap">
+            @this.RenderBody()
+        </div>
     </main>
     <partial name="~/Views/Shared/_FooterPartial.cshtml" />
 

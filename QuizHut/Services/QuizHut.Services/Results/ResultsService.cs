@@ -32,7 +32,6 @@
         .AllAsNoTracking()
         .Where(x => x.EventId == eventId)
         .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Name == groupName))
-        .OrderBy(x => x.Event.ActivationDateAndTime.Add(x.Event.DurationOfActivity).TimeOfDay)
         .To<T>()
         .ToListAsync();
 
@@ -90,7 +89,9 @@
             .To<T>()
             .ToListAsync();
 
-        private int CalculateResult(IList<QuestionViewModel> originalQuizQuestions, IList<AttemtedQuizQuestionViewModel> attemptedQuizQuestions)
+        private int CalculateResult(
+            IList<QuestionViewModel> originalQuizQuestions,
+            IList<AttemtedQuizQuestionViewModel> attemptedQuizQuestions)
         {
             var totalPoints = 0;
             foreach (var question in originalQuizQuestions)

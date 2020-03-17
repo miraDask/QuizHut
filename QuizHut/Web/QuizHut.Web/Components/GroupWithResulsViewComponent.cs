@@ -3,7 +3,6 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
-    using QuizHut.Services.Events;
     using QuizHut.Services.Results;
     using QuizHut.Web.ViewModels.Results;
 

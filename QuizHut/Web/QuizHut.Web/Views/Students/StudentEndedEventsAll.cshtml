@@ -22,16 +22,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var _event in Model)
+                    @if (Model != null)
                     {
-                        <tr class="table-danger">
-                            <th scope="row" class="pt-3">@_event.Name</th>
-                            <th scope="row" class="pt-3">@_event.QuizName</th>
-                            <th scope="row" class="pt-3">@_event.Date</th>
-                            <th scope="row" class="pt-3">@_event.Score.Score</th>
-                        </tr>
+                        @foreach (var _event in Model)
+                        {
+                            <tr class="table-danger">
+                                <th scope="row" class="pt-3">@_event.Name</th>
+                                <th scope="row" class="pt-3">@_event.QuizName</th>
+                                <th scope="row" class="pt-3">@_event.Date</th>
+                                <th scope="row" class="pt-3">@(_event.Score != null ? _event.Score.Score : "")</th>
+                     
+                            </tr>
+                        }
                     }
-
                 </tbody>
             </table>
         </div>

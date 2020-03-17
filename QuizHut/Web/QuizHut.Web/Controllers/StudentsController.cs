@@ -2,7 +2,7 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Common.Enumerations;
@@ -14,6 +14,7 @@
     using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Results;
 
+    [Authorize]
     [ChangeDefaoultLayoutActionFilterAttribute]
     public class StudentsController : Controller
     {

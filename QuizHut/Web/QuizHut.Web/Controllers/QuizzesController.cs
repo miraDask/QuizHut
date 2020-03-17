@@ -2,6 +2,7 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
@@ -11,6 +12,7 @@
     using QuizHut.Web.Common;
     using QuizHut.Web.ViewModels.Quizzes;
 
+    [Authorize]
     public class QuizzesController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -66,10 +68,7 @@
                 this.ViewData["Area"] = Constants.AdminArea;
             }
 
-            // this.HttpContext.Session.SetString(Constants.AttemptedQuizId, id);
             var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
-            // this.HttpContext.Session.SetInt32(Constants.QuestionsCount, quizModel.Questions.Count);
-            // this.HttpContext.Session.SetString(Constants.AttemptedQuizName, quizModel.Name);
 
             return this.View(quizModel);
         }
