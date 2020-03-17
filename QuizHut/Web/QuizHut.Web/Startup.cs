@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -53,6 +54,7 @@
             services.AddHangfire(
                 options => options.UseSqlServerStorage(this.configuration.GetConnectionString("Hangfire")));
             services.AddHangfireServer();
+
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -61,12 +63,13 @@
                 options =>
                     {
                         options.CheckConsentNeeded = context => true;
-                        options.MinimumSameSitePolicy = SameSiteMode.None;
+                        options.MinimumSameSitePolicy = SameSiteMode.Strict;
                     });
 
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddAutoMapper(typeof(Startup));
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(configure =>
+                configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
             services.AddRazorPages();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);

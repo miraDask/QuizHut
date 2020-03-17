@@ -73,7 +73,7 @@
         {
             var eventsIds = model.Events.Where(x => x.IsAssigned).Select(x => x.Id).ToList();
 
-            if (eventsIds.Count() != 1)
+            if (eventsIds.Count() == 0)
             {
                 model.Error = true;
                 return this.View(model);

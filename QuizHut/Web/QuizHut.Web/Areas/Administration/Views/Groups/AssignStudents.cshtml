@@ -34,13 +34,15 @@
                     {
                         @for (int i = 0; i < Model.Students.Count(); i++)
                         {
-                            <div class="form-group mb-0">
-                                <div class="mt-2">
-                                    @Html.EditorFor(model => model.Students[i].IsAssigned)
-                                    <h6 class="d-inline-block mt-0 ml-1">@Model.Students[i].FullName <span class="ml-2">@Model.Students[i].Email</span></h6>
-                                    @Html.HiddenFor(model => model.Students[i].Id)
-                                </div>
-                            </div>
+                    <div class="form-group mb-0">
+                        <div class="mt-2">
+                            @Html.EditorFor(model => model.Students[i].IsAssigned)
+                            <h6 class="d-inline-block mt-0 ml-1">@Model.Students[i].FullName <span class="ml-2">@Model.Students[i].Email</span></h6>
+                            @Html.HiddenFor(model => model.Students[i].Id)
+                            @Html.HiddenFor(model => model.Students[i].FullName)
+                            @Html.HiddenFor(model => model.Students[i].Email)
+                        </div>
+                    </div>
                         }
                     }
                     else

@@ -61,7 +61,7 @@
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a href="/Administration/Categories/AssignQuizzesToCategory?id=@Model.Id" class="nav-link  btn btn-primary">Add New</a>
+                        <a class="nav-link  btn btn-primary" asp-action="AssignQuizzesToCategory" asp-controller="Categories" asp-route-id="@Model.Id">Add New</a>
                     </li>
                 </ul>
             </div>
@@ -74,12 +74,21 @@
                 {
                     <tr class="table-active bg-white">
                         <th scope="row">@quiz.Name</th>
-                        <td class="text-right">
-                            <form method="post" asp-action="DeleteQuizFromCategory" asp-controller="Categories">
-                                <input type="hidden" name="categoryId" value="@Model.Id" />
-                                <input type="hidden" name="quizId" value="@quiz.Id" />
-                                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
-                            </form>
+                        <td  class="text-right ">
+                            <ul class="navbar-nav ml-auto d-inline-block">
+                                <li class="nav-item m-1  d-inline-block">
+                                    <a class="btn btn-primary mr-md-2" asp-area="Administration" asp-action="Display" asp-controller="Quizzes" asp-route-id="@quiz.Id">
+                                        View
+                                    </a>
+                                </li>
+                                <li class="nav-item m-1 d-inline-block">
+                                    <form method="post" asp-action="DeleteQuizFromCategory" asp-controller="Categories">
+                                        <input type="hidden" name="categoryId" value="@Model.Id" />
+                                        <input type="hidden" name="quizId" value="@quiz.Id" />
+                                        <button type="submit" class="btn btn-primary mr-md-2">Delete</button>
+                                    </form>
+                                </li>
+                            </ul>    
                         </td>
                     </tr>
                 }
