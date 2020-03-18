@@ -66,13 +66,23 @@
                     </li>
                     <li class="nav-item m-1">
                         <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Text" value="@Model.Text">
-                        <button type="submit" asp-area="Administration" asp-action="EditQuestionInput" asp-controller="Questions" class="nav-link  btn btn-primary col-lg-12">Edit</button>
+                        <button type="submit"
+                                asp-area="Administration"
+                                asp-action="EditQuestionInput"
+                                asp-controller="Questions"
+                                class="nav-link  btn btn-primary col-lg-12">
+                            Edit
+                        </button>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled name="@Model.Text" value="@Model.Text">
+    <input type="text"
+           class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate"
+           disabled 
+           name="@Model.Text"
+           value="@Model.Text">
     <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Id" value="@Model.Id">
 
     @*answers*@
@@ -126,7 +136,8 @@
                                                    asp-action="Delete"
                                                    asp-controller="Answers"
                                                    asp-route-id="@answer.Id">
-                                                Delete</a>
+                                                    Delete
+                                                </a>
                                                 <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
                                             </div>
                                         </div>
@@ -134,13 +145,22 @@
                                 </div>
                             </li>
                             <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary" asp-action="EditAnswerInput" asp-controller="Answers" asp-route-id="@answer.Id">Edit</a>
+                                <a class="nav-link  btn btn-primary"
+                                   asp-action="EditAnswerInput" 
+                                   asp-controller="Answers" 
+                                   asp-route-id="@answer.Id">
+                                Edit
+                                </a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-            <input type="text" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" disabled asp-for="@answer.Text" value="@answer.Text">
+            <input type="text"
+                   class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" 
+                   disabled
+                   asp-for="@answer.Text"
+                   value="@answer.Text">
         </div>
     }
 </form>

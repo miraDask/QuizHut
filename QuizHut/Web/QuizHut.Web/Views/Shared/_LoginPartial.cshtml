@@ -4,40 +4,56 @@
 @inject UserManager<ApplicationUser> UserManager
 <header>
     <nav class="navbar navbar-expand-sm navbar-dark bg-white">
-        <a class="navbar-brand text-primary ml-4" asp-area="Administration" asp-action="Index" asp-controller="Home">QuizHut</a>
-        @*<div class="container"></div>*@
-            <button class="navbar-toggler collapsed bg-primary"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#navbarNavDropdown-7"
-                    aria-controls="navbarNavDropdown-7"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown-7">
-                <ul class="navbar-nav ml-auto mx-2">
-                        @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-                        {
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary ml-2" asp-area="Administration" asp-action="Index" asp-controller="Dashboard">
-                                <i class="fas fa-chart-line"></i> Dashboard
-                                </a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a class="btn btn-outline-primary ml-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                <i class="fas fa-address-card"></i>  Profile
-                            </a>
-                        </li>
-                        <li class="nav-item text-primary">
-                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
-                                <button type="submit" class="btn btn-outline-primary ml-2">
-                                    <i class="fas fa-sign-out-alt"></i> Logout</button>
-                            </form>
-                        </li>
-                </ul>
-            </div>
+        <a class="navbar-brand text-primary ml-4"
+           asp-area="Administration"
+           asp-action="Index"
+           asp-controller="Home">
+            QuizHut
+        </a>
+        <button class="navbar-toggler collapsed bg-primary"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarNavDropdown-7"
+                aria-controls="navbarNavDropdown-7"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown-7">
+            <ul class="navbar-nav ml-auto mx-2">
+                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <li class="nav-item">
+                        <a class="btn btn-outline-primary ml-2"
+                           asp-area="Administration"
+                           asp-action="Index"
+                           asp-controller="Dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                }
+                <li class="nav-item">
+                    <a class="btn btn-outline-primary ml-2"
+                       asp-area="Identity"
+                       asp-page="/Account/Manage/Index"
+                       title="Manage">
+                        <i class="fas fa-address-card"></i>
+                        Profile
+                    </a>
+                </li>
+                <li class="nav-item text-primary">
+                    <form class="form-inline"
+                          asp-area="Identity"
+                          asp-page="/Account/Logout"
+                          asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
+                        <button type="submit" class="btn btn-outline-primary ml-2">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </nav>
 </header>
 

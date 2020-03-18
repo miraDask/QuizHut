@@ -21,25 +21,6 @@
             </div>
         </div>
     }
-    @*<div id="pagging" style="display:none">
-            <ul class="pagination pagination-lg mt-2">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#a"><i class="fas fa-long-arrow-alt-left"></i></a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link">1</a>
-                </li>
-                @for (int i = 1; i < Model.Questions.Count; i++)
-                {
-                    <li class="page-item">
-                        <a class="page-link">@(i + 1)</a>
-                    </li>
-                }
-                <li class="page-item">
-                    <a class="page-link"><i class="fas fa-long-arrow-alt-right"></i></a>
-                </li>
-            </ul>
-        </div>*@
     <div class="col-12 offset-md-2 col-md-8 my-5 row">
         <form id="@(Model.Questions.Count.ToString())f" method="post" class="col-11 ml-4 mt-2 mb-5">
             <div id="details" class="component">
@@ -75,8 +56,6 @@
                     <div class="card mb-3">
                         <div class="card-header text-warning">
                             <i class="fas fa-question-circle"></i>
-                            @*<input type="hidden" asp-for="@question.Id" value="@question.Id" />
-                            <input type="hidden" asp-for="@question.Number" value="@question.Number" />*@
                             @Html.HiddenFor(model => model.Questions[i].Id)
                             @Html.HiddenFor(model => model.Questions[i].Number)
                             <span class="text-primary ml-1">Question @question.Number</span>

@@ -39,7 +39,8 @@
         </div>
     </div>
 </div>
-<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="Index" asp-controller="Students">Go Back</a>
+<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block"
+   asp-action="Index" asp-controller="Students">Go Back</a>
 
 
 @section Profile
@@ -54,7 +55,8 @@
 @section Logout
 {
     <li class="nav-item text-primary">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
+              asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty } ))">
             <button type="submit" class="btn btn-outline-white ml-2">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </button>

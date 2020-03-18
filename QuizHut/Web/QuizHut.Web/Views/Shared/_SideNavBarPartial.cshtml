@@ -7,23 +7,34 @@
     <ul class="navbar-nav text-center">
         <li class="nav-item active">
             <form class="my-2">
-                <button class="btn btn-primary manage-account-btn" asp-area="" asp-action="Index" asp-controller="Students">Home</button>
+                <button class="btn btn-primary manage-account-btn"
+                        asp-area=""
+                        asp-action="Index"
+                        asp-controller="Students">
+                    Home
+                </button>
             </form>
         </li>
         <li class="nav-item active">
             <form class="my-2">
-                <button class="btn btn-primary manage-account-btn" asp-area="" asp-action="Results" asp-controller="Students">My Results</button>
+                <button class="btn btn-primary manage-account-btn"
+                        asp-area=""
+                        asp-action="Results"
+                        asp-controller="Students">
+                    My Results
+                </button>
             </form>
         </li>
         <li class="nav-item">
-            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle btn btn-primary manage-account-btn">Events</a>
+            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="true"
+               class="dropdown-toggle btn btn-primary manage-account-btn">Events</a>
             <ul class="list-unstyled collapse show" id="pageSubmenu" style="">
                 <li class="dropdown-item nav-item">
                     <a class="nav-link text-primary"
                        asp-area=""
                        asp-controller="Students"
                        asp-action="StudentActiveEventsAll">
-                       Active
+                        Active
                     </a>
                 </li>
                 <li class="dropdown-item nav-item">
@@ -31,7 +42,7 @@
                        asp-area=""
                        asp-controller="Students"
                        asp-action="StudentPendingEventsAll">
-                       Pending
+                        Pending
                     </a>
                 </li>
                 <li class="dropdown-item nav-item">
@@ -39,7 +50,7 @@
                        asp-area=""
                        asp-controller="Students"
                        asp-action="StudentEndedEventsAll">
-                       Ended
+                        Ended
                     </a>
                 </li>
             </ul>

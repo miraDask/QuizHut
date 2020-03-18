@@ -20,7 +20,13 @@
                         if (this.User.IsInRole(GlobalConstants.AdministratorRoleName)
                                || this.User.IsInRole(GlobalConstants.TeacherRoleName))
                         {
-                            <li><a asp-area="Administration" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li>
+                                <a asp-area="Administration"
+                                   asp-controller="Home"
+                                   asp-action="Index">
+                                    Home
+                                </a>
+                            </li>
                         }
                         else
                         {
