@@ -3,7 +3,7 @@
     ViewData["Title"] = "Categories";
 }
 
-<div class="card mb-5">
+<div class="container">
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
         <div class="container">
             <h5 class="mb-0">Categories Managment</h5>
@@ -39,14 +39,18 @@
         <tbody>
             @if (Model.Categories.Any())
             {
+                var count = 0;
                 foreach (var category in Model.Categories)
                 {
-                    <tr class="table-primary">
+                    count++;
+                    var targetId = "category" + count.ToString();
+                     var target = "#" + targetId;
+                    <tr class="table-primary table-hover">
                         <th scope="row">@category.Name</th>
                         <td>@category.CreatedOn</td>
                         <td>@category.QuizzesCount</td>
                         <td>
-                            <form method="post" class="component  navbar-expand-lg text-right">
+                            <form method="post" class="component navbar-expand-lg text-right">
                                 <input type="hidden" name="id" value="@category.Id" />
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item m-1">
@@ -55,13 +59,35 @@
                                         </a>
                                     </li>
                                     <li class="nav-item m-1">
-                                        <a class="nav-link  btn btn-white"
-                                            asp-action="Delete"
-                                           asp-controller="Categories"
-                                           asp-route-id="@category.Id"
-                                           onclick="return confirm('Are you sure you want to delete category @category.Name')">
+                                        <!-- button that opens the modal -->
+                                        <button type="button" class="nav-link  btn btn-white" data-toggle="modal" data-target="@target">
                                             <i class="far fa-times-circle"></i>
-                                        </a>
+                                        </button>
+                                        <!-- the modal -->
+                                        <div class="modal fade" id="@targetId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                        <h5>Are you sure you want to delete this category?</h5>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-success"
+                                                           asp-action="Delete"
+                                                           asp-controller="Categories"
+                                                           asp-route-id="@category.Id">
+                                                            Delete
+                                                        </a>
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
                             </form>
