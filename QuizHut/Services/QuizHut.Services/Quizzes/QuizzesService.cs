@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
@@ -148,7 +147,9 @@
             }
 
             var eventGroups = await quizQuery
-                .SelectMany(x => x.Event.EventsGroups.Where(x => x.Group.StudentstGroups.Any(x => x.StudentId == userId)))
+                .SelectMany(x => x.Event.EventsGroups
+                .Where(x => x.Group.StudentstGroups
+                .Any(x => x.StudentId == userId)))
                 .ToListAsync();
 
             return eventGroups.Count() > 0;
@@ -177,5 +178,19 @@
             this.quizRepository.Update(quiz);
             await this.quizRepository.SaveChangesAsync();
         }
+
+        public async Task<IList<T>> GetUnAssignedToCategoryByCreatorIdAsync<T>(string categoryId, string creatorId)
+        => await this.quizRepository
+            .AllAsNoTracking()
+            .Where(x => x.CreatorId == creatorId && x.CategoryId != categoryId)
+            .To<T>()
+            .ToListAsync();
+
+        public async Task<IList<T>> GetAllByCategoryIdAsync<T>(string id)
+        => await this.quizRepository
+            .AllAsNoTracking()
+            .Where(x => x.CategoryId == id)
+            .To<T>()
+            .ToListAsync();
     }
 }

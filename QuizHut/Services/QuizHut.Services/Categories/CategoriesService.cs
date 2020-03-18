@@ -8,8 +8,6 @@
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
-    using QuizHut.Web.ViewModels.Categories;
-    using QuizHut.Web.ViewModels.Quizzes;
 
     public class CategoriesService : ICategoriesService
     {
@@ -40,19 +38,6 @@
                 .To<T>()
                 .ToListAsync();
 
-        public async Task<CategoryWithQuizzesViewModel> CreateCategoryModelAsync(string id, string creatorId, IList<QuizAssignViewModel> quizzes)
-        {
-            var category = await this.repository.AllAsNoTracking().Where(x => x.Id == id).FirstOrDefaultAsync();
-            var model = new CategoryWithQuizzesViewModel()
-            {
-                Id = id,
-                Name = category.Name,
-                Quizzes = quizzes.Where(x => x.CreatorId == creatorId).ToList(),
-            };
-
-            return model;
-        }
-
         public async Task AssignQuizzesToCategoryAsync(string id, List<string> quizzesIds)
         {
             var category = await this.repository
@@ -75,26 +60,6 @@
             await this.quizRepository.SaveChangesAsync();
         }
 
-        public async Task<CategoryWithQuizzesViewModel> GetCategoryModelAsync(string id)
-        {
-            var category = await this.repository
-                .AllAsNoTracking()
-                .Where(x => x.Id == id)
-                .Select(x => new CategoryWithQuizzesViewModel()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Quizzes = x.Quizzes.Select(x => new QuizAssignViewModel()
-                    {
-                        Name = x.Name,
-                        Id = x.Id,
-                    }).ToList(),
-                })
-                .FirstOrDefaultAsync();
-
-            return category;
-        }
-
         public async Task DeleteAsync(string id)
         {
             var category = await this.repository
@@ -103,12 +68,6 @@
                 .FirstOrDefaultAsync();
             this.repository.Delete(category);
             await this.repository.SaveChangesAsync();
-        }
-
-        public async Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisCategory(string id, IList<QuizAssignViewModel> quizzes)
-        {
-            var assignedQuizzesIds = await this.quizRepository.AllAsNoTracking().Where(x => x.CategoryId == id).Select(x => x.Id).ToListAsync();
-            return quizzes.Where(x => !assignedQuizzesIds.Contains(x.Id)).ToList();
         }
 
         public async Task UpdateNameAsync(string id, string newName)
@@ -138,5 +97,12 @@
             await this.repository.SaveChangesAsync();
             await this.quizRepository.SaveChangesAsync();
         }
+
+        public async Task<T> GetByIdAsync<T>(string id)
+        => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.Id == id)
+            .To<T>()
+            .FirstOrDefaultAsync();
     }
 }

@@ -10,11 +10,9 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string id);
 
+        Task<T> GetByIdAsync<T>(string id);
+
         Task<string> CreateCategoryAsync(string name, string creatorId);
-
-        Task<CategoryWithQuizzesViewModel> CreateCategoryModelAsync(string id, string creatorId, IList<QuizAssignViewModel> quizzes);
-
-        Task<CategoryWithQuizzesViewModel> GetCategoryModelAsync(string id);
 
         Task AssignQuizzesToCategoryAsync(string id, List<string> quizzesIds);
 
@@ -23,7 +21,5 @@
         Task UpdateNameAsync(string id, string newName);
 
         Task DeleteQuizFromCategoryAsync(string categoryId, string quizId);
-
-        Task<IList<QuizAssignViewModel>> FilterQuizzesThatAreNotAssignedToThisCategory(string id, IList<QuizAssignViewModel> quizzes);
     }
 }

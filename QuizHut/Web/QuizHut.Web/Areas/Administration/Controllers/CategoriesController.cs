@@ -60,9 +60,9 @@
         public async Task<IActionResult> AssignQuizzesToCategory(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>();
-            quizzes = await this.service.FilterQuizzesThatAreNotAssignedToThisCategory(id, quizzes);
-            var model = await this.service.CreateCategoryModelAsync(id, userId, quizzes);
+            var quizzes = await this.quizService.GetUnAssignedToCategoryByCreatorIdAsync<QuizAssignViewModel>(id, userId);
+            var model = await this.service.GetByIdAsync<CategoryWithQuizzesViewModel>(id);
+            model.Quizzes = quizzes;
 
             return this.View(model);
         }
@@ -86,7 +86,10 @@
         [HttpGet]
         public async Task<IActionResult> CategoryDetails(string id)
         {
-            var model = await this.service.GetCategoryModelAsync(id);
+            var quizzes = await this.quizService.GetAllByCategoryIdAsync<QuizAssignViewModel>(id);
+            var model = await this.service.GetByIdAsync<CategoryWithQuizzesViewModel>(id);
+            model.Quizzes = quizzes;
+
             return this.View(model);
         }
 
