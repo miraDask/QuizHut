@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -9,13 +10,11 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Results;
-    using QuizHut.Web.Filters;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Results;
 
     [Authorize]
-    [ChangeDefaoultLayoutActionFilterAttribute]
     public class StudentsController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;

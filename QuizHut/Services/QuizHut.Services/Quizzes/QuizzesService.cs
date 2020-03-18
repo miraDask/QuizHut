@@ -15,16 +15,13 @@
     {
         private readonly IDeletableEntityRepository<Quiz> quizRepository;
         private readonly IRepository<Password> passwordRepository;
-        private readonly UserManager<ApplicationUser> userManager;
 
         public QuizzesService(
             IDeletableEntityRepository<Quiz> quizRepository,
-            IRepository<Password> passwordRepository,
-            UserManager<ApplicationUser> userManager)
+            IRepository<Password> passwordRepository)
         {
             this.quizRepository = quizRepository;
             this.passwordRepository = passwordRepository;
-            this.userManager = userManager;
         }
 
         public async Task<string> CreateQuizAsync(string name, string description, int? timer, string creatorId, string password)
