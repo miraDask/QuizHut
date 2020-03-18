@@ -22,9 +22,36 @@
                         <a class="nav-link  btn btn-primary" href="/Administration/Categories/EditName?id=@Model.Id&name=@Model.Name">Edit Name</a>
                     </li>
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary col-12"
-                           href="/Administration/Categories/Delete?id=@Model.Id"
-                           onclick="return confirm('Are you sure you want to delete category @Model.Name')">Delete Category</a>
+                        <!-- button that opens the modal -->
+                        <button type="button" class="nav-link  btn btn-primary" data-toggle="modal" data-target="#category">
+                            Delete
+                        </button>
+                        <!-- the modal -->
+                        <div class="modal fade" id="category" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h5>Are you sure you want to delete this category?</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a class="btn btn-success"
+                                           asp-area="Administration"
+                                           asp-controller="Categories"
+                                           asp-action="Delete"
+                                           asp-route-id="@Model.Id">
+                                         Delete
+                                        </a>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -61,7 +88,12 @@
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary" asp-action="AssignQuizzesToCategory" asp-controller="Categories" asp-route-id="@Model.Id">Add New</a>
+                        <a class="nav-link  btn btn-primary"
+                           asp-action="AssignQuizzesToCategory"
+                           asp-controller="Categories"
+                           asp-route-id="@Model.Id">
+                        Add New
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -77,16 +109,43 @@
                         <td  class="text-right ">
                             <ul class="navbar-nav ml-auto d-inline-block">
                                 <li class="nav-item m-1  d-inline-block">
-                                    <a class="btn btn-primary mr-md-2" asp-area="Administration" asp-action="Display" asp-controller="Quizzes" asp-route-id="@quiz.Id">
+                                    <a class="btn btn-primary mr-md-2"
+                                       asp-area="Administration" 
+                                       asp-action="Display" 
+                                       asp-controller="Quizzes"
+                                       asp-route-id="@quiz.Id">
                                         View
                                     </a>
                                 </li>
                                 <li class="nav-item m-1 d-inline-block">
-                                    <form method="post" asp-action="DeleteQuizFromCategory" asp-controller="Categories">
-                                        <input type="hidden" name="categoryId" value="@Model.Id" />
-                                        <input type="hidden" name="quizId" value="@quiz.Id" />
-                                        <button type="submit" class="btn btn-primary mr-md-2">Delete</button>
-                                    </form>
+                                    <!-- button that opens the modal -->
+                                    <button type="button" class="btn btn-primary mr-md-3" data-toggle="modal" data-target="#quiz">
+                                        Delete
+                                    </button>
+                                    <!-- the modal -->
+                                    <div class="modal fade" id="quiz" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <h5>Are you sure you want to remove this quiz from this group?</h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <form method="post" asp-action="DeleteQuizFromCategory" asp-controller="Categories">
+                                                        <input type="hidden" name="categoryId" value="@Model.Id" />
+                                                        <input type="hidden" name="quizId" value="@quiz.Id" />
+                                                        <button type="submit" class="btn btn-success">Delete</button>
+                                                    </form>
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>    
                         </td>

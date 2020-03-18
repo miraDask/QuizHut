@@ -41,7 +41,7 @@
                                     @Html.EditorFor(x => x.Quizzes[i].IsAssigned)
                                     <h6 class="d-inline-block mt-0 ml-1">@quiz.Name</h6>
                                     @Html.HiddenFor(model => model.Quizzes[i].Id)
-
+                                    @Html.HiddenFor(model => model.Quizzes[i].Name)
                                 </div>
                             </div>
                         }
