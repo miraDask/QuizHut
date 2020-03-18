@@ -23,13 +23,37 @@
                         <a class="nav-link  btn btn-primary" href="/Administration/Groups/EditName?id=@Model.Id&name=@Model.Name">Edit Name</a>
                     </li>
                     <li class="nav-item m-1">
-                        <form method="post" asp-action="Delete" asp-controller="Groups">
-                            <input type="hidden" name="id" value="@Model.Id" />
-                            <button type="submit"
-                                    class="nav-link  btn btn-primary col-12"
-                                    onclick="return confirm('Are you sure you want to delete group @Model.Name')"
-                                    >Delete Group</button>
-                        </form>
+                        <!-- button that opens the modal -->
+                        <button type="button" class="nav-link  btn btn-primary" data-toggle="modal" data-target="#group">
+                            Delete Group
+                        </button>
+                        <!-- the modal -->
+                        <div class="modal fade" id="group" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h5>Are you sure you want to delete this group?</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form method="post" asp-action="Delete" asp-controller="Groups">
+                                            <input type="hidden" name="id" value="@Model.Id" />
+                                            <button type="submit"
+                                                    class="nav-link btn btn-success">
+                                                Delete
+                                            </button>
+                                        </form>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
                     </li>
                 </ul>
             </div>
@@ -70,7 +94,13 @@
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <a asp-area="Administration" asp-action="AddNewEvent"  asp-controller="Groups" asp-route-id="@Model.Id" class="nav-link  btn btn-primary">Add New</a>
+                        <a asp-area="Administration"
+                           asp-action="AddNewEvent" 
+                           asp-controller="Groups" 
+                           asp-route-id="@Model.Id" 
+                           class="nav-link  btn btn-primary">
+                           Add New
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -84,11 +114,34 @@
                     <tr class="table-active bg-white">
                         <th scope="row">@_event.Name</th>
                         <td class="text-right">
-                            <form method="post" asp-action="DeleteEventFromGroup" asp-controller="Groups">
-                                <input type="hidden" name="groupId" value="@Model.Id" />
-                                <input type="hidden" name="eventId" value="@_event.Id" />
-                                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
-                            </form>
+                            <!-- button that opens the modal -->
+                            <button type="button" class="btn btn-primary mr-md-3" data-toggle="modal" data-target="#event">
+                                Delete
+                            </button>
+                            <!-- the modal -->
+                            <div class="modal fade" id="event" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <h5>Are you sure you want to remove event  @_event.Name from this group?</h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="post" asp-action="DeleteEventFromGroup" asp-controller="Groups">
+                                                <input type="hidden" name="groupId" value="@Model.Id" />
+                                                <input type="hidden" name="eventId" value="@_event.Id" />
+                                                <button type="submit" class="btn btn-success">Delete</button>
+                                            </form>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
@@ -127,11 +180,34 @@
                         <th scope="row">@student.FullName</th>
                         <th scope="row">@student.Email</th>
                         <td class="text-right">
-                            <form method="post" asp-action="DeleteStudentFromGroup" asp-controller="Groups">
-                                <input type="hidden" name="groupId" value="@Model.Id" />
-                                <input type="hidden" name="studentId" value="@student.Id" />
-                                <button type="submit" class="btn btn-primary mr-md-3">Delete</button>
-                            </form>
+                            <!-- button that opens the modal -->
+                            <button type="button" class="btn btn-primary mr-md-3" data-toggle="modal" data-target="#student">
+                                Delete
+                            </button>
+                            <!-- the modal -->
+                            <div class="modal fade" id="student" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <h5>Are you sure you want to remove student @student.FullName from this group?</h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form method="post" asp-action="DeleteStudentFromGroup" asp-controller="Groups">
+                                                <input type="hidden" name="groupId" value="@Model.Id" />
+                                                <input type="hidden" name="studentId" value="@student.Id" />
+                                                <button type="submit" class="btn btn-success">Delete</button>
+                                            </form>
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
