@@ -10,20 +10,24 @@
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.Results;
     using QuizHut.Web.Common;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Quizzes;
 
     [Authorize]
     public class QuizzesController : Controller
     {
+        private readonly IResultHelper resultHelper;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
         private readonly IResultsService resultService;
 
         public QuizzesController(
+            IResultHelper resultHelper,
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
             IResultsService resultService)
         {
+            this.resultHelper = resultHelper;
             this.userManager = userManager;
             this.quizService = quizService;
             this.resultService = resultService;
@@ -112,8 +116,19 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var originalQuizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(model.Id);
-            var resultModel = await this.resultService.GetResultModel(model.Id, userId, originalQuizModel.Questions, model.Questions);
-            resultModel.QuizName = model.Name;
+            var points = this.resultHelper.CalculateResult(originalQuizModel.Questions, model.Questions);
+            var creatorId = await this.quizService.GetCreatorIdByQuizIdAsync(model.Id);
+            if (creatorId != userId)
+            {
+                await this.resultService.CreateResultAsync(creatorId, points, originalQuizModel.Questions.Count, model.Id);
+            }
+
+            var resultModel = new QuizResultViewModel()
+            {
+                QuizName = model.Name,
+                MaxPoints = originalQuizModel.Questions.Count,
+                Points = points,
+            };
 
             return this.View(resultModel);
         }

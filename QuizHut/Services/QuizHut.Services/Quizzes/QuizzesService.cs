@@ -192,5 +192,12 @@
             .Where(x => x.CategoryId == id)
             .To<T>()
             .ToListAsync();
+
+        public async Task<string> GetCreatorIdByQuizIdAsync(string id)
+        => await this.quizRepository
+                .AllAsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => x.CreatorId)
+                .FirstOrDefaultAsync();
     }
 }

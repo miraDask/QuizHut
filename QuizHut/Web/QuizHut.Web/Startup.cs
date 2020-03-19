@@ -33,6 +33,7 @@
     using QuizHut.Services.StudentsGroups;
     using QuizHut.Services.Users;
     using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels;
     using Rotativa.AspNetCore;
 
@@ -87,6 +88,7 @@
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddTransient<IResultHelper, ResultHelper>();
             services.AddTransient<IQuizzesService, QuizzesService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IAnswersService, AnswersService>();

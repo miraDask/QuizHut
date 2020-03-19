@@ -15,6 +15,8 @@
 
         Task<T> GetQuizByIdAsync<T>(string id);
 
+        Task<string> GetCreatorIdByQuizIdAsync(string id);
+
         Task<string> GetQuizIdByPasswordAsync(string password);
 
         Task DeleteByIdAsync(string id);
