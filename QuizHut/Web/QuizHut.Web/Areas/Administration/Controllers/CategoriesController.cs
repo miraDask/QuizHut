@@ -8,7 +8,7 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Categories;
     using QuizHut.Services.Quizzes;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Categories;
     using QuizHut.Web.ViewModels.Quizzes;
 

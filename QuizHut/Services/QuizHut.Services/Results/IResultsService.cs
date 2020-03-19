@@ -10,5 +10,7 @@
         Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id);
 
         Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName);
+
+       // Task<bool> ResultExists(string eventId, string studentId);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.Components
+﻿namespace QuizHut.Web.Infrastructure.Components
 {
     using System.Linq;
     using System.Security.Claims;
@@ -8,7 +8,6 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
-    using QuizHut.Web.ViewModels.Common;
     using QuizHut.Web.ViewModels.Events;
 
     [ViewComponent(Name ="Results")]

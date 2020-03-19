@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Services.Answers;
     using QuizHut.Web.Common;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Answers;
 
     public class AnswersController : AdministrationController

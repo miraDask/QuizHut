@@ -4,7 +4,7 @@
 
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels;
 
     public class HomeController : BaseController

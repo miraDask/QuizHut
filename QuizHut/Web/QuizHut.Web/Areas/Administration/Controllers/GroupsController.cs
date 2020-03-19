@@ -10,7 +10,7 @@
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Users;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Students;

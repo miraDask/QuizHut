@@ -9,7 +9,7 @@
     using QuizHut.Data.Models;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Common;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Quizzes;
     using Rotativa.AspNetCore;
 

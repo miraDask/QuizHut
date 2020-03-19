@@ -14,7 +14,7 @@ namespace QuizHut.Web.Areas.Identity.Pages.Account.Manage
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using QuizHut.Data.Models;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
 
     [OverrideDefoultLayoutPageFilter]
     public partial class EmailModel : PageModel

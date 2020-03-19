@@ -32,7 +32,7 @@
     using QuizHut.Services.Results;
     using QuizHut.Services.StudentsGroups;
     using QuizHut.Services.Users;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels;
     using Rotativa.AspNetCore;

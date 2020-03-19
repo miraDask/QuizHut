@@ -6,9 +6,9 @@
 
         public const string CurrentQuestionId = "currentQuestionId";
 
-        public const string AdminLayout = "_LayoutAdmin";
+        //public const string AdminLayout = "_LayoutAdmin";
 
-        public const string StudentLayout = "_LayoutStudent";
+        //public const string StudentLayout = "_LayoutStudent";
 
         public const string AdminArea = "Administration";
 

@@ -6,7 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Users;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Students;
 
     public class StudentsController : AdministrationController

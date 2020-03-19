@@ -63,7 +63,11 @@
                 .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null, string groupId = null)
+        public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(
+            Status status,
+            string creatorId = null,
+            string studentId = null,
+            string groupId = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -79,7 +83,9 @@
 
             if (studentId != null)
             {
-                query = query.Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
+                query = query.Where(
+                    x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId))
+                    && !x.Results.Any(x => x.StudentId == studentId));
             }
 
             return await query
@@ -108,7 +114,6 @@
             this.SheduleStatudChange(activationDateAndTime, durationOfActivity, @event.Id);
             return @event.Id;
         }
-
 
         public async Task<T> GetEventModelByIdAsync<T>(string eventId)
         => await this.repository

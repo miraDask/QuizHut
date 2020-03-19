@@ -8,7 +8,7 @@
     using QuizHut.Common;
     using QuizHut.Data.Models;
     using QuizHut.Services.Users;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Students;
     using QuizHut.Web.ViewModels.Teachers;
 

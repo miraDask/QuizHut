@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.ViewComponents
+﻿namespace QuizHut.Web.Infrastructure.ViewComponents
 {
     using System.Threading.Tasks;
 

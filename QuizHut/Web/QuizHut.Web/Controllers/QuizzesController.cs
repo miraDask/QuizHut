@@ -40,9 +40,8 @@
                 id = await this.quizService.GetQuizIdByPasswordAsync(password);
             }
 
-            var userId = this.userManager.GetUserId(this.User);
-            var userHasPermitionToTakeTheQuiz = await this.quizService.HasUserPermition(userId, id);
-            var user = await this.userManager.FindByIdAsync(userId);
+            var user = await this.userManager.GetUserAsync(this.User);
+            var userHasPermitionToTakeTheQuiz = await this.quizService.HasUserPermition(user.Id, id);
             var roles = await this.userManager.GetRolesAsync(user);
 
             if (!userHasPermitionToTakeTheQuiz)
@@ -120,7 +119,7 @@
             var creatorId = await this.quizService.GetCreatorIdByQuizIdAsync(model.Id);
             if (creatorId != userId)
             {
-                await this.resultService.CreateResultAsync(creatorId, points, originalQuizModel.Questions.Count, model.Id);
+                await this.resultService.CreateResultAsync(userId, points, originalQuizModel.Questions.Count, model.Id);
             }
 
             var resultModel = new QuizResultViewModel()

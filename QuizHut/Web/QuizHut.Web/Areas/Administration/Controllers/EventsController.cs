@@ -11,7 +11,7 @@
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -85,7 +85,7 @@
                 return this.View(model);
             }
 
-            await this.groupsService.AssignEventsToGroupAsync(groupIds[0], new List<string>() { model.Id});
+            await this.groupsService.AssignEventsToGroupAsync(groupIds[0], new List<string>() { model.Id });
             return this.RedirectToAction("AssignQuizToEvent", new { id = model.Id });
         }
 

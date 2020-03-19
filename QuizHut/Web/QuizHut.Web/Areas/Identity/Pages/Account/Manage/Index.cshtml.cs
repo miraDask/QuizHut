@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using QuizHut.Data.Models;
-    using QuizHut.Web.Filters;
+    using QuizHut.Web.Infrastructure.Filters;
 
     [OverrideDefoultLayoutPageFilter]
     public partial class IndexModel : PageModel

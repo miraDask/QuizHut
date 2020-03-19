@@ -8,6 +8,10 @@
 
         public const string AdministratorRoleName = "Administrator";
 
+        public const string AdminLayout = "_LayoutAdmin";
+
+        public const string StudentLayout = "_LayoutStudent";
+
         public const string TeacherRoleName = "Teacher";
 
         public const string AdministratorAndTeacherAuthorizationString = "Administrator, Teacher";

@@ -1,28 +1,27 @@
-﻿namespace QuizHut.Web.Filters
+﻿namespace QuizHut.Web.Infrastructure.Filters
 {
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
-    using Microsoft.AspNetCore.Mvc.RazorPages;
     using QuizHut.Common;
-    using QuizHut.Web.Common;
 
-    public class OverrideDefoultLayoutPageFilter : ResultFilterAttribute
+    public class ChangeDefaoultLayoutActionFilterAttribute : ActionFilterAttribute
     {
-        public override void OnResultExecuting(ResultExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (context.HttpContext.User.Identity.IsAuthenticated)
             {
                 var isAdministrator = context.HttpContext.User.IsInRole(GlobalConstants.AdministratorRoleName);
                 var isTeacher = context.HttpContext.User.IsInRole(GlobalConstants.TeacherRoleName);
 
-                var result = context.Result as PageResult;
+                var controller = (Controller)context.Controller;
 
                 if (isAdministrator || isTeacher)
                 {
-                    result.ViewData["Layout"] = Constants.AdminLayout;
+                    controller.ViewData["Layout"] = GlobalConstants.AdminLayout;
                 }
                 else
                 {
-                    result.ViewData["Layout"] = Constants.StudentLayout;
+                    controller.ViewData["Layout"] = GlobalConstants.StudentLayout;
                 }
             }
         }

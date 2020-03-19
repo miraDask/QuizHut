@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.Filters
+﻿namespace QuizHut.Web.Infrastructure.Filters
 {
     using Hangfire.Dashboard;
     using QuizHut.Common;
