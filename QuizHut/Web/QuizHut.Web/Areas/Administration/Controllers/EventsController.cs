@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
@@ -140,11 +141,16 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> EventDetails(string id)
+        public async Task<IActionResult> EventDetails(string id, string messagesAreSend)
         {
             var groups = await this.groupsService.GetGroupModelsAllByEventIdAsync<GroupAssignViewModel>(id);
             var model = await this.service.GetEventModelByIdAsync<EventDetailsViewModel>(id);
             model.Groups = groups;
+
+            if (messagesAreSend != null)
+            {
+                model.ConfirmationMessage = messagesAreSend;
+            }
 
             return this.View(model);
         }
@@ -216,6 +222,14 @@
             await this.service.UpdateAsync(model.Id, model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo);
 
             return this.RedirectToAction("EventDetails", new { id = model.Id });
+        }
+
+        public async Task<IActionResult> SendMessageToGroupMembers(string id)
+        {
+            string path = "./wwwroot/html/email.html";
+            string emailHtmlContent = System.IO.File.ReadAllText(path);
+            await this.service.SendEmailsToEventGroups(id, emailHtmlContent);
+            return this.RedirectToAction("EventDetails", new { id, messagesAreSend = GlobalConstants.ErrorMessages.MessagesAreSend});
         }
     }
 }

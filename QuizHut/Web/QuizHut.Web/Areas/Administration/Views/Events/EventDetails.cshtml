@@ -108,6 +108,7 @@
             }
         </div>
     </nav>
+
     @if (Model.QuizId != null)
     {
         <nav class="navbar navbar-expand-lg navbar-dark bg-light p-2">
@@ -165,7 +166,16 @@
     }
 </div>
 @* groups*@
-
+@if (Model.ConfirmationMessage != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <i class="fa fa-check"></i>
+        <strong>Yay!</strong>@Model.ConfirmationMessage
+    </div>
+}
 <div class="form-group flex-grow-1">
     <nav class="navbar navbar-expand-lg navbar-dark bg-warning p-2">
         <div class="container">
@@ -182,6 +192,18 @@
                 </button>
                 <div class="navbar-collapse text-center collapse" id="navbarNavDropdown222">
                     <ul class="navbar-nav ml-auto">
+                        @if (Model.Groups.Any())
+                        {
+                            <li class="nav-item m-1">
+                                    <a  asp-area="Administration"
+                                      asp-action="SendMessageToGroupMembers"
+                                      asp-controller="Events"
+                                       asp-route-id="@Model.Id"
+                                            class="nav-link btn btn-primary">
+                                        Send Password
+                                    </a>
+                            </li>
+                        }
                         <li class="nav-item m-1">
                             <a asp-area="Administration"
                                asp-action="AddGroupsToEvent"

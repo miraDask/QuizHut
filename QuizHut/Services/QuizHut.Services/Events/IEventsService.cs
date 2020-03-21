@@ -28,5 +28,7 @@
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
 
         string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate);
+
+        Task SendEmailsToEventGroups(string eventId, string emailHtmlContent);
     }
 }

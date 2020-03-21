@@ -11,7 +11,7 @@
             this.Teachers = new HashSet<TeacherViewModel>();
         }
 
-        public StudentInputViewModel NewTeacher { get; set; }
+        public UserInputViewModel NewTeacher { get; set; }
 
         public IEnumerable<TeacherViewModel> Teachers { get; set; }
     }

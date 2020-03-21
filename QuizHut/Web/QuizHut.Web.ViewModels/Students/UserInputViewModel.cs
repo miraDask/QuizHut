@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class StudentInputViewModel
+    public class UserInputViewModel
     {
         [Required]
         [EmailAddress]

@@ -30,7 +30,7 @@
             var model = new TeachersAllViewModel()
             {
                 Teachers = teachers,
-                NewTeacher = new StudentInputViewModel(),
+                NewTeacher = new UserInputViewModel(),
             };
 
             if (invalidEmail != null)

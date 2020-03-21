@@ -27,7 +27,7 @@
             var model = new AllStudentsAddedByTeacherViewModel()
             {
                 Students = students,
-                NewStudent = new StudentInputViewModel(),
+                NewStudent = new UserInputViewModel(),
             };
 
             if (invalidEmail != null)

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -13,23 +14,26 @@
     using QuizHut.Services.Common;
     using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
+    using QuizHut.Services.Messaging;
     using QuizHut.Services.Quizzes;
-    using QuizHut.Web.ViewModels.Common;
 
     public class EventsService : IEventsService
     {
         private readonly IDeletableEntityRepository<Event> repository;
         private readonly IQuizzesService quizService;
         private readonly IEventsGroupsService eventsGroupsService;
+        private readonly IEmailSender emailSender;
 
         public EventsService(
             IDeletableEntityRepository<Event> repository,
             IQuizzesService quizService,
-            IEventsGroupsService eventsGroupsService)
+            IEventsGroupsService eventsGroupsService,
+            IEmailSender emailSender)
         {
             this.repository = repository;
             this.quizService = quizService;
             this.eventsGroupsService = eventsGroupsService;
+            this.emailSender = emailSender;
         }
 
         public async Task DeleteAsync(string eventId)
@@ -215,6 +219,29 @@
             await this.repository.SaveChangesAsync();
         }
 
+        public async Task SendEmailsToEventGroups(string eventId, string emailHtmlContent)
+        {
+            var eventInfo = await this.repository
+                .AllAsNoTracking()
+                .Where(x => x.Id == eventId)
+                .Select(x => new {
+                    Password = x.Quiz.Password.Content,
+                    Emails = x.EventsGroups.SelectMany(x => x.Group.StudentstGroups.Select(x => x.Student.Email)),
+                }).FirstOrDefaultAsync();
+
+            emailHtmlContent = emailHtmlContent.Replace(ServicesConstants.StringToReplace, eventInfo.Password);
+
+            foreach (var email in eventInfo.Emails)
+            {
+                await this.emailSender.SendEmailAsync(
+                    ServicesConstants.SenderEmail,
+                    ServicesConstants.SenderName,
+                    email,
+                    ServicesConstants.EventInvitationSubject,
+                    emailHtmlContent);
+            }
+        }
+
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()
@@ -226,5 +253,6 @@
 
         private TimeSpan GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
         => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
+
     }
 }

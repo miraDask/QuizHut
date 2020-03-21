@@ -31,6 +31,8 @@
 
         public string QuizId { get; set; }
 
+        public string ConfirmationMessage { get; set; }
+
         public IEnumerable<GroupAssignViewModel> Groups { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

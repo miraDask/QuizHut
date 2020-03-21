@@ -50,6 +50,8 @@
             public const string PermissionDenied = "You do not have a permission to participate in this quiz!";
 
             public const string EmptyPassword = "emptyField";
+
+            public const string MessagesAreSend = "You successfully send quiz password to all members of the event groups!";
         }
     }
 }
