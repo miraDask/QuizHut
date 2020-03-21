@@ -87,7 +87,7 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration.GetConnectionString("Sendgrid")));
+            services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration["Sendgrid"]));
             services.AddTransient<IResultHelper, ResultHelper>();
             services.AddTransient<IQuizzesService, QuizzesService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
