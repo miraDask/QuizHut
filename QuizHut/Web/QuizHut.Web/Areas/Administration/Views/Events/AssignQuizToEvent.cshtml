@@ -59,9 +59,16 @@
                     <div class="col-1 mr-4"></div>
 
                 }
-                <a asp-action="AlleventsCreatedByTeacher" asp-controller="Events" asp-area="Administration" class="btn btn-primary col-md-5 mt-5">Cancel</a>
+                <a @*asp-action="AlleventsCreatedByTeacher" asp-controller="Events" asp-area="Administration"*@  onClick="history.go(-1); return false;" class="btn btn-primary col-md-5 mt-5">Cancel</a>
             </div>
         </div>
     </form>
 </div>
-
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+}

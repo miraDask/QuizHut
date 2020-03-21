@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewData["Title"] = "_DashboardNavBarPartial";
+}
+
+<ul class="nav nav-tabs d-flex flex-column flex-md-row text-center mb-5">
+    <li class="nav-item">
+        <a id="main" class="nav-link nav-to-change" asp-action="Index" asp-controller="Dashboard">Managment</a>
+    </li>
+    <li class="nav-item">
+        <a id="results" class="nav-link nav-to-change" asp-action="ResultsAll" asp-controller="Dashboard">Results All</a>
+    </li>
+    <li class="nav-item">
+        <a id="events" class="nav-link nav-to-change" asp-action="EventsAll" asp-controller="Dashboard">Events All</a>
+    </li>
+    <li class="nav-item">
+        <a id="groups" class="nav-link nav-to-change" asp-action="GroupsAll" asp-controller="Dashboard">Groups All</a>
+    </li>
+    <li class="nav-item">
+        <a id="quizzes" class="nav-link nav-to-change" asp-action="QuizzesAll" asp-controller="Dashboard">Quizzes All</a>
+    </li>
+    <li class="nav-item">
+        <a id="students" class="nav-link nav-to-change" asp-action="StudentsAll" asp-controller="Dashboard">Students All</a>
+    </li>
+</ul>
+
+

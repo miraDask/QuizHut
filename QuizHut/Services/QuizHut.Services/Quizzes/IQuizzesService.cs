@@ -7,7 +7,7 @@
     {
         Task<string> CreateQuizAsync(string name, string description, int? timer, string creatorId, string password);
 
-        Task<IList<T>> GetAllAsync<T>();
+        Task<IList<T>> GetAllAsync<T>(bool isAssignedToEventFilter);
 
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, bool isAssignedToEventFilter);
 

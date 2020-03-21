@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -242,6 +241,12 @@
             }
         }
 
+        public async Task<IList<T>> GetAllAsync<T>()
+        => await this.repository
+                .AllAsNoTracking()
+                .To<T>()
+                .ToListAsync();
+
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()
@@ -253,6 +258,5 @@
 
         private TimeSpan GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
         => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
-
     }
 }

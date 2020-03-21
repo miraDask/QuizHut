@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
 
 }
-
 @if (Model.NewTeacher.IsNotAdded)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -68,8 +67,9 @@
     </form>
     <aside class="col-md-4 offset-1">
         <div>
-            <a href="/hangfire" target="_blank" class="btn btn-primary manage-account-btn ml-4 mb-5">Event Status Scheduler
-                 <i class="far fa-arrow-alt-circle-right ml-1"></i>
+            <a href="/hangfire" target="_blank" class="btn btn-primary manage-account-btn ml-4 mb-5">
+                Event Status Scheduler
+                <i class="far fa-arrow-alt-circle-right ml-1"></i>
             </a>
         </div>
         <div class="headline headline-md text-center">
@@ -78,3 +78,11 @@
         </div>
     </aside>
 </div>
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+}

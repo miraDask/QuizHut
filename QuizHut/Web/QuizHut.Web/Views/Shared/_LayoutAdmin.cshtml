@@ -29,10 +29,8 @@
             <partial name="_BublesAndCirclesPrtial" />
             <partial name="_AdminSideNavBarPartial" />
             <div class="col-12 col-md-9 ml-md-5">
-
-
+                @RenderSection("InnerNav", required: false)
                 @this.RenderBody()
-
             </div>
         </div>
     </main>

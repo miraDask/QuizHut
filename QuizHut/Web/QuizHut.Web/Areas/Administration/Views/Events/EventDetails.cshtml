@@ -195,13 +195,13 @@
                         @if (Model.Groups.Any())
                         {
                             <li class="nav-item m-1">
-                                    <a  asp-area="Administration"
-                                      asp-action="SendMessageToGroupMembers"
-                                      asp-controller="Events"
-                                       asp-route-id="@Model.Id"
-                                            class="nav-link btn btn-primary">
-                                        Send Password
-                                    </a>
+                                <a asp-area="Administration"
+                                   asp-action="SendMessageToGroupMembers"
+                                   asp-controller="Events"
+                                   asp-route-id="@Model.Id"
+                                   class="nav-link btn btn-primary">
+                                    Send Password
+                                </a>
                             </li>
                         }
                         <li class="nav-item m-1">
@@ -280,5 +280,13 @@
         Go Back
     </a>
 </div>
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+}
 
 

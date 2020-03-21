@@ -67,11 +67,20 @@
                .To<T>()
                .FirstOrDefaultAsync();
 
-        public async Task<IList<T>> GetAllAsync<T>()
-         => await this.quizRepository
-                .AllAsNoTracking()
+        public async Task<IList<T>> GetAllAsync<T>(bool isAssignedToEventFilter)
+        {
+            var query = this.quizRepository
+                   .AllAsNoTracking();
+
+            if (isAssignedToEventFilter)
+            {
+                query = query.Where(x => x.EventId == null);
+            }
+
+            return await query.OrderByDescending(x => x.CreatedOn)
                 .To<T>()
                 .ToListAsync();
+        }
 
         public async Task DeleteByIdAsync(string id)
         {

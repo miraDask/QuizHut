@@ -9,6 +9,8 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null);
 
+        Task<IList<T>> GetAllAsync<T>();
+
         Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null, string groupId = null);
 
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);

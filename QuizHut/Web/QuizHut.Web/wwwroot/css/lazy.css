@@ -1262,7 +1262,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 .nav-tabs {
-    border-bottom: 1px solid #611F6A;
+    border-bottom: 1px solid #e9ecef;
 }
 
 
@@ -1275,9 +1275,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
         padding-right: .5rem
     }
 
-    .nav.nav-tabs .nav-item .nav-link
-    {
-        color: whitesmoke;
+    .nav.nav-tabs .nav-item .nav-link {
+        color: #495057;
         padding: 0.7rem 1.3rem;
         font-size: 1.1rem
     }
@@ -1300,8 +1299,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
                 }
 
             .nav.nav-tabs .nav-item .nav-link:hover {
-                border-bottom: 1px solid white;
-                color: white
+                border-bottom: 1px solid #611F6A;
+                color: #611F6A
             }
 
                 .nav.nav-tabs .nav-item .nav-link:hover i {

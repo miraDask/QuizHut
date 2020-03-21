@@ -1,0 +1,42 @@
+﻿@model EventsListAllViewModel
+@{
+    ViewData["Title"] = "ResultsAll";
+}
+
+<div class="col-md-10 mb-4 ml-md-5">
+    <div class="component">
+        <div class="card">
+            <div class="card-body p-0 mt-2">
+                <h4 class="card-title pl-3">All Results</h4>
+                <table class="table table-hover col-12 mt-2 mb-0">
+                    <tbody>
+                        @foreach (var _event in Model.Events)
+                        {
+                            <tr class="table-info">
+                                <th scope="row" class="pt-3">@_event.Name</th>
+                                <th scope="row" class="pt-3 text-center"></th>
+                                <td class="text-right">
+                                    <a type="submit" class="btn btn-outline-info py-1"
+                                       asp-area="Administration"
+                                       asp-action="EventResultsDetails"
+                                       asp-controller="Results" asp-route-id="@_event.Id">
+                                        View Results
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-4 d-inline-block" asp-action="Index" asp-controller="Dashboard">Go Back</a>
+</div>
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+}

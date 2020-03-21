@@ -64,3 +64,11 @@
     </form>
 </div>
 
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+}

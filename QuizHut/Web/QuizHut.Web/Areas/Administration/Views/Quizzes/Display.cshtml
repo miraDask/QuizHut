@@ -49,7 +49,7 @@
                                                asp-action="DeleteQuiz"
                                                asp-controller="Quizzes"
                                                asp-route-id="@Model.Id">
-                                            Delete
+                                                Delete
                                             </a>
                                             <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
                                         </div>
@@ -101,3 +101,11 @@
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes" asp-route-id="@Model.Id">Export To PDF</a>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">Go Back</a>
 </form>
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+}

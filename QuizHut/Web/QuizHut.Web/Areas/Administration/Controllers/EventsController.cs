@@ -93,7 +93,17 @@
         public async Task<IActionResult> AddGroupsToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId, id);
+
+            IList<GroupAssignViewModel> groups;
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                groups = await this.groupsService.GetAllAsync<GroupAssignViewModel>(id);
+            }
+            else
+            {
+                groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId, id);
+            }
+
             var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
             model.Groups = groups;
             return this.View(model);
@@ -118,7 +128,17 @@
         public async Task<IActionResult> AssignQuizToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizAssignViewModel>(userId, true);
+            IList<QuizAssignViewModel> quizzes;
+
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>(true);
+            }
+            else
+            {
+                quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizAssignViewModel>(userId, true);
+            }
+
             var model = await this.service.GetEventModelByIdAsync<EventWithQuizzesViewModel>(id);
             model.Quizzes = quizzes;
             return this.View(model);
@@ -229,7 +249,7 @@
             string path = "./wwwroot/html/email.html";
             string emailHtmlContent = System.IO.File.ReadAllText(path);
             await this.service.SendEmailsToEventGroups(id, emailHtmlContent);
-            return this.RedirectToAction("EventDetails", new { id, messagesAreSend = GlobalConstants.ErrorMessages.MessagesAreSend});
+            return this.RedirectToAction("EventDetails", new { id, messagesAreSend = GlobalConstants.ErrorMessages.MessagesAreSend });
         }
     }
 }

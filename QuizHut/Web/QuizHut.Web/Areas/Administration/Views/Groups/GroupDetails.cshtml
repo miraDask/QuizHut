@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </div>
-                       
+
                     </li>
                 </ul>
             </div>
@@ -95,11 +95,11 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
                         <a asp-area="Administration"
-                           asp-action="AddNewEvent" 
-                           asp-controller="Groups" 
-                           asp-route-id="@Model.Id" 
+                           asp-action="AddNewEvent"
+                           asp-controller="Groups"
+                           asp-route-id="@Model.Id"
                            class="nav-link  btn btn-primary">
-                           Add New
+                            Add New
                         </a>
                     </li>
                 </ul>
@@ -216,4 +216,12 @@
     </div>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllGroupsCreatedByTeacher" asp-controller="Groups">Go Back</a>
 </div>
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+}
 

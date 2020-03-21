@@ -7,8 +7,10 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Events;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
+    using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Students;
     using QuizHut.Web.ViewModels.Teachers;
 
@@ -17,11 +19,16 @@
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService service;
+        private readonly IEventsService eventService;
 
-        public DashboardController(UserManager<ApplicationUser> userManager, IUsersService service)
+        public DashboardController(
+            UserManager<ApplicationUser> userManager,
+            IUsersService service,
+            IEventsService eventService)
         {
             this.userManager = userManager;
             this.service = service;
+            this.eventService = eventService;
         }
 
         public async Task<IActionResult> Index(string invalidEmail)
@@ -60,6 +67,37 @@
         {
             await this.service.RemoveFromRoleAsync(id, GlobalConstants.TeacherRoleName);
             return this.RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> ResultsAll()
+        {
+            var events = await this.eventService.GetAllAsync<EventListViewModel>();
+            var model = new EventsListAllViewModel
+            {
+                Events = events,
+            };
+
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> EventsAll()
+        {
+            var events = await this.eventService.GetAllAsync<EventListViewModel>();
+            var model = new EventsListAllViewModel { Events = events };
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> GroupsAll()
+        {
+            return this.View();
+        }
+        public async Task<IActionResult> QuizzesAll()
+        {
+            return this.View();
+        }
+        public async Task<IActionResult> StudentsAll()
+        {
+            return this.View();
         }
     }
 }
