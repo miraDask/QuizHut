@@ -8,9 +8,13 @@
     using QuizHut.Common;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
+    using QuizHut.Services.Groups;
+    using QuizHut.Services.Quizzes;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Events;
+    using QuizHut.Web.ViewModels.Groups;
+    using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Students;
     using QuizHut.Web.ViewModels.Teachers;
 
@@ -20,15 +24,21 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService service;
         private readonly IEventsService eventService;
+        private readonly IGroupsService groupsService;
+        private readonly IQuizzesService quizzesService;
 
         public DashboardController(
             UserManager<ApplicationUser> userManager,
             IUsersService service,
-            IEventsService eventService)
+            IEventsService eventService,
+            IGroupsService groupsService,
+            IQuizzesService quizzesService)
         {
             this.userManager = userManager;
             this.service = service;
             this.eventService = eventService;
+            this.groupsService = groupsService;
+            this.quizzesService = quizzesService;
         }
 
         public async Task<IActionResult> Index(string invalidEmail)
@@ -89,15 +99,22 @@
 
         public async Task<IActionResult> GroupsAll()
         {
-            return this.View();
+            var groups = await this.groupsService.GetAllAsync<GroupListViewModel>();
+            var model = new GroupsListAllViewModel() { Groups = groups };
+            return this.View(model);
         }
+
         public async Task<IActionResult> QuizzesAll()
         {
-            return this.View();
+            var quizzes = await this.quizzesService.GetAllAsync<QuizListViewModel>(false);
+            var model = new QuizzesAllListingViewModel() { Quizzes = quizzes };
+            return this.View(model);
         }
+
         public async Task<IActionResult> StudentsAll()
         {
-            return this.View();
+            var students = await this.service.GetAllByUserIdAsync<StudentViewModel>();
+            return this.View(students);
         }
     }
 }
