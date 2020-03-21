@@ -90,7 +90,7 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IList<T>> GetAllByUserIdAsync<T>(string id, string groupId = null)
+        public async Task<IList<T>> GetAllByUserIdAsync<T>(string id = null, string groupId = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -100,9 +100,12 @@
                 query = query.Where(x => !assignedstudentsIds.Contains(x.Id));
             }
 
-            return await query.Where(x => x.TeacherId == id)
-                            .To<T>()
-                            .ToListAsync();
+            if (id != null)
+            {
+                query = query.Where(x => x.TeacherId == id);
+            }
+
+            return await query.To<T>().ToListAsync();
         }
 
         public async Task<IList<T>> GetAllByRoleAsync<T>(string roleName)

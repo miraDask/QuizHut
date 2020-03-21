@@ -3,38 +3,42 @@
     ViewData["Title"] = "Edit Question";
 }
 
-    <div class="col-12 offset-md-2 col-md-8 row">
-        <form method="post" class="col-11 ml-4">
-            <div class="component">
-                <div class="card mb-3">
-                    <div class="card-header text-warning" style="font-size: xx-large">
-                        <i class="fas fa-folder-plus"></i>
+<div class="col-12 offset-md-2 col-md-8 row">
+    <form method="post" class="col-11 ml-4">
+        <div class="component">
+            <div class="card mb-3">
+                <div class="card-header text-warning" style="font-size: xx-large">
+                    <i class="fas fa-folder-plus"></i>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">Edit Question</h4>
+                    <p class="card-text" style="display: block;">
+                        <span class="text-primary mr-1">∗</span>
+                        You can always edit it later.
+                    </p>
+                </div>
+                <div class="card-footer pb-5">
+                    <div class="input-group">
+                        <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
+                        <input type="text" asp-for="@Model.Text" class="form-control pl-3" value="@Model.Text">
                     </div>
-                    <div class="card-body">
-                        <h4 class="card-title">Edit Question</h4>
-                        <p class="card-text" style="display: block;">
-                            <span class="text-primary mr-1">∗</span>
-                            You can always edit it later.
-                        </p>
-                    </div>
-                    <div class="card-footer pb-5">
-                        <div class="input-group">
-                            <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
-                            <input type="text" asp-for="@Model.Text" class="form-control pl-3" value="@Model.Text">
-                        </div>
-                        <span asp-validation-for="@Model.Text" class="text-danger"></span>
-                        <div class="row mx-1 text-white">
-                            <button type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="Edit" asp-controller="Questions" asp-area="Administration">Save Changes</button>
-                            <div class="col-1 mr-4"></div>
-                            <a class="btn btn-primary col-md-5 mt-5" asp-action="Display" asp-controller="Quizzes">Cancel</a>
-                        </div>
+                    <span asp-validation-for="@Model.Text" class="text-danger"></span>
+                    <div class="row mx-1 text-white">
+                        <button type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="Edit" asp-controller="Questions" asp-area="Administration">Save Changes</button>
+                        <div class="col-1 mr-4"></div>
+                        <a class="btn btn-primary col-md-5 mt-5" asp-action="Display" asp-controller="Quizzes">Cancel</a>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-
+        </div>
+    </form>
+</div>
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
 @section Scripts {
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
 }
 

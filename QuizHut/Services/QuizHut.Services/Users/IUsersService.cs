@@ -5,7 +5,7 @@
 
     public interface IUsersService
     {
-        Task<IList<T>> GetAllByUserIdAsync<T>(string id, string groupId = null);
+        Task<IList<T>> GetAllByUserIdAsync<T>(string id = null, string groupId = null);
 
         Task<IList<T>> GetAllByRoleAsync<T>(string roleName);
 

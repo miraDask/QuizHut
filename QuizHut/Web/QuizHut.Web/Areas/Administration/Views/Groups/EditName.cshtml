@@ -22,7 +22,7 @@
                         <input type="text" asp-for="Name" class="form-control">
                         <input type="hidden" asp-for="@Model.Id" class="form-control" value="@Model.Id">
                     </div>
-                        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
                     <div class="row mx-1 text-white">
                         <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="EditName" asp-controller="Groups">Save Changes</button>
                         <div class="col-1 mr-4"></div>
@@ -33,8 +33,12 @@
         </div>
     </form>
 </div>
-
+@section InnerNav
+{
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
 @section Scripts {
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
 }
 

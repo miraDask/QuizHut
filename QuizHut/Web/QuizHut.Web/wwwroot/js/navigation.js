@@ -1,10 +1,11 @@
 ﻿$(function () {
     const URL_PARTS = {
-        STUDENTS: "Students",
-        GROUPS: "Groups",
-        RESULTS: "Results",
-        QUIZZES: "Quizzes",
-        EVENTS: "Events"
+        STUDENTS: "StudentsAll",
+        GROUPS: "GroupsAll",
+        RESULTS: "ResultsAll",
+        QUIZZES: "QuizzesAll",
+        EVENTS: "EventsAll",
+        MAIN: "Dashboard"
     }
 
     var url = window.location.href;
@@ -24,7 +25,7 @@
         $('#groups').addClass('active');
     } else if (url.indexOf(URL_PARTS.STUDENTS) >= 0) {
         $('#students').addClass('active');
-    } else {
+    } else if (url.indexOf(URL_PARTS.MAIN) >= 0) {
         $('#main').addClass('active');
     }
 })

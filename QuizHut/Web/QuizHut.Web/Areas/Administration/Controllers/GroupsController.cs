@@ -1,10 +1,12 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
@@ -146,7 +148,16 @@
         public async Task<IActionResult> AddNewEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, userId, null, id);
+            IList<EventsAssignViewModel> events;
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, null, null, id);
+            }
+            else
+            {
+                events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, userId, null, id);
+            }
+
             var model = await this.service.GetGroupModelAsync<GroupWithEventsViewModel>(id);
             model.Events = events;
             return this.View(model);
@@ -170,8 +181,17 @@
 
         public async Task<IActionResult> AddStudents(string id)
         {
-            var userId = this.userManager.GetUserId(this.User);
-            var students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(userId, id);
+            IList<StudentViewModel> students;
+            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+               students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(null, id);
+            }
+            else
+            {
+                var userId = this.userManager.GetUserId(this.User);
+                students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(userId, id);
+            }
+
             var model = new GroupWithStudentsViewModel() { Id = id, Students = students };
             model.Students = students;
             return this.View(model);
