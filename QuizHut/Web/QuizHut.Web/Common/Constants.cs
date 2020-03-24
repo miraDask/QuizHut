@@ -6,10 +6,6 @@
 
         public const string CurrentQuestionId = "currentQuestionId";
 
-        //public const string AdminLayout = "_LayoutAdmin";
-
-        //public const string StudentLayout = "_LayoutStudent";
-
         public const string AdminArea = "Administration";
 
         public const string NotValidPasswordErrorText = "There is no quiz with password {0}. Try again.";

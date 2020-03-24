@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace QuizHut.Data.Migrations
+﻿namespace QuizHut.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class CreateEventAndResultEntitiesAndMakeQuizResultMappingTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -86,7 +87,7 @@ namespace QuizHut.Data.Migrations
                 name: "ResultId",
                 table: "QuizzesResults",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsActive",
@@ -98,7 +99,7 @@ namespace QuizHut.Data.Migrations
                 name: "StudentId",
                 table: "ParticipantsGroups",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
 
             migrationBuilder.AddColumn<string>(
                 name: "TeacherId",
@@ -127,7 +128,7 @@ namespace QuizHut.Data.Migrations
                     ActivationDateAndTime = table.Column<DateTime>(nullable: true),
                     DurationOfActivity = table.Column<TimeSpan>(nullable: true),
                     GroupId = table.Column<string>(nullable: true),
-                    QuizId = table.Column<string>(nullable: true)
+                    QuizId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -157,7 +158,7 @@ namespace QuizHut.Data.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Points = table.Column<int>(nullable: false),
                     MaxPoints = table.Column<int>(nullable: false),
-                    StudentId = table.Column<string>(nullable: true)
+                    StudentId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -334,7 +335,7 @@ namespace QuizHut.Data.Migrations
                 table: "ParticipantsGroups",
                 type: "nvarchar(450)",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
 
             migrationBuilder.AddColumn<string>(
                 name: "ManagerId",

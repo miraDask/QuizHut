@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace QuizHut.Data.Migrations
+﻿namespace QuizHut.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class ChangesToDataModelsValidation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace QuizHut.Data.Migrations
+﻿namespace QuizHut.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class RemoveQuizzesFromgroupsAndAddEvents : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,14 +31,14 @@ namespace QuizHut.Data.Migrations
                 table: "Events",
                 maxLength: 50,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
 
             migrationBuilder.CreateTable(
                 name: "EventsGroups",
                 columns: table => new
                 {
                     GroupId = table.Column<string>(nullable: false),
-                    EventId = table.Column<string>(nullable: false)
+                    EventId = table.Column<string>(nullable: false),
                 },
                 constraints: table =>
                 {
@@ -108,7 +108,7 @@ namespace QuizHut.Data.Migrations
                 columns: table => new
                 {
                     QuizId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 },
                 constraints: table =>
                 {

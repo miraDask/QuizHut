@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace QuizHut.Data.Migrations
+﻿namespace QuizHut.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class AddPasswordAsNewEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,7 +30,7 @@ namespace QuizHut.Data.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     Content = table.Column<string>(maxLength: 16, nullable: false),
-                    QuizId = table.Column<string>(nullable: true)
+                    QuizId = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
@@ -81,7 +82,7 @@ namespace QuizHut.Data.Migrations
                 type: "nvarchar(10)",
                 maxLength: 10,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: string.Empty);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Quizzes_Password",

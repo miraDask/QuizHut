@@ -31,9 +31,8 @@
 
         public bool PasswordIsValid { get; set; }
 
-        public void CreateMappings(IProfileExpression configuration) 
+        public void CreateMappings(IProfileExpression configuration)
         {
-
             configuration.CreateMap<Quiz, EditDetailsViewModel>()
                 .ForMember(
                     x => x.Password,

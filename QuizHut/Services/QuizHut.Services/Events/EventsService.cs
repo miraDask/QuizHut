@@ -223,7 +223,8 @@
             var eventInfo = await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.Id == eventId)
-                .Select(x => new {
+                .Select(x => new
+                {
                     Password = x.Quiz.Password.Content,
                     Emails = x.EventsGroups.SelectMany(x => x.Group.StudentstGroups.Select(x => x.Student.Email)),
                 }).FirstOrDefaultAsync();

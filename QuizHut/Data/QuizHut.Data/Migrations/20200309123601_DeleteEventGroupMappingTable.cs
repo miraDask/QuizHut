@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace QuizHut.Data.Migrations
+﻿namespace QuizHut.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class DeleteEventGroupMappingTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,7 +47,7 @@ namespace QuizHut.Data.Migrations
                 columns: table => new
                 {
                     EventId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    GroupId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                 },
                 constraints: table =>
                 {

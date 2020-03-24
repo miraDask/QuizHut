@@ -1,8 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace QuizHut.Data.Migrations
+﻿namespace QuizHut.Data.Migrations
 {
+    using System;
+
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class MakeActivationDateAndTimeNotNullableAlsoDirationOfActivityNotNullable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

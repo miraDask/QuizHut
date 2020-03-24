@@ -125,7 +125,6 @@
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-
             }
             else
             {
