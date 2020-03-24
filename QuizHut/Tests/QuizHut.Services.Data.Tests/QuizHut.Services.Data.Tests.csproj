@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
@@ -28,6 +28,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\QuizHut.Data\QuizHut.Data.csproj" />
+    <ProjectReference Include="..\..\Services\QuizHut.Services.Mapping\QuizHut.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\QuizHut.Services\QuizHut.Services.csproj" />
+    <ProjectReference Include="..\..\Web\QuizHut.Web.Infrastructure\QuizHut.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Web\QuizHut.Web\QuizHut.Web.csproj" />
   </ItemGroup>
 
 </Project>
