@@ -1,5 +1,11 @@
 ﻿namespace QuizHut.Services.Data.Tests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data;
     using QuizHut.Data.Models;
@@ -7,12 +13,7 @@
     using QuizHut.Services.Categories;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Categories;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
-    using System.Threading.Tasks;
+    using QuizHut.Web.ViewModels.Quizzes;
     using Xunit;
 
     public class CategoriesServiceTests
@@ -33,6 +34,7 @@
             this.quizzesRepository = new EfDeletableEntityRepository<Quiz>(this.dbContext);
             this.service = new CategoriesService(this.categoriesRepository, this.quizzesRepository);
             AutoMapperConfig.RegisterMappings(typeof(CategoryViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(CategoryWithQuizzesViewModel).GetTypeInfo().Assembly);
             this.firstCategoryId = this.CreateFirstCategory();
         }
 
@@ -84,14 +86,14 @@
             };
 
             var resultModelCollection = await this.service.GetAllByCreatorIdAsync<CategoryViewModel>(creatorId);
-            Assert.Equal(firstModel.Id, resultModelCollection[1].Id);
-            Assert.Equal(firstModel.Name, resultModelCollection[1].Name);
-            Assert.Equal(firstModel.QuizzesCount, resultModelCollection[1].QuizzesCount);
-            Assert.Equal(firstModel.CreatedOn, resultModelCollection[1].CreatedOn);
-            Assert.Equal(secondModel.Id, resultModelCollection[0].Id);
-            Assert.Equal(secondModel.Name, resultModelCollection[0].Name);
-            Assert.Equal(secondModel.QuizzesCount, resultModelCollection[0].QuizzesCount);
-            Assert.Equal(secondModel.CreatedOn, resultModelCollection[0].CreatedOn);
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.QuizzesCount, resultModelCollection.Last().QuizzesCount);
+            Assert.Equal(firstModel.CreatedOn, resultModelCollection.Last().CreatedOn);
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.QuizzesCount, resultModelCollection.First().QuizzesCount);
+            Assert.Equal(secondModel.CreatedOn, resultModelCollection.First().CreatedOn);
             Assert.Equal(2, resultModelCollection.Count());
         }
 
@@ -99,7 +101,7 @@
         public async Task UpdateNameAsyncShouldUpdateCorrectly()
         {
             await this.service.UpdateNameAsync(this.firstCategoryId, "First test category");
-            var updatedCategory = await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == this.firstCategoryId);
+            var updatedCategory = await this.GetFirstCategory();
 
             Assert.Equal("First test category", updatedCategory.Name);
         }
@@ -115,6 +117,73 @@
             Assert.True(category.IsDeleted);
         }
 
+        [Fact]
+        public async Task GetByIdAsyncShouldReturnCorrectModel()
+        {
+            var category = await this.GetFirstCategory();
+            var model = new CategoryWithQuizzesViewModel()
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Error = false,
+                Quizzes = new List<QuizAssignViewModel>(),
+            };
+
+            var resultModel = await this.service.GetByIdAsync<CategoryWithQuizzesViewModel>(this.firstCategoryId);
+            Assert.Equal(model.Id, resultModel.Id);
+            Assert.Equal(model.Name, resultModel.Name);
+            Assert.Equal(model.Error, resultModel.Error);
+            Assert.Equal(model.Quizzes, resultModel.Quizzes);
+        }
+
+        [Fact]
+        public async Task AssignQuizzesToCategoryAsyncShouldAssignQuizzesCorrectly()
+        {
+            var firstQuizId = this.CreateQuiz(name: "First quiz");
+            var secondQuizId = this.CreateQuiz(name: "Second quiz");
+
+            var quizzesIdList = new List<string>() { firstQuizId, secondQuizId };
+            await this.service.AssignQuizzesToCategoryAsync(this.firstCategoryId, quizzesIdList);
+            var categoryQuizzesIds = await this.dbContext
+                .Categories
+                .Where(x => x.Id == this.firstCategoryId)
+                .Select(x => x.Quizzes.Select(x => x.Id))
+                .FirstOrDefaultAsync();
+
+            Assert.Equal(2, categoryQuizzesIds.Count());
+            Assert.Contains(firstQuizId, categoryQuizzesIds);
+            Assert.Contains(secondQuizId, categoryQuizzesIds);
+        }
+
+        [Fact]
+        public async Task DeleteQuizFromCategoryAsyncShouldUnAssignQuizCorrectly()
+        {
+            var quizId = this.CreateQuiz(name: "quiz");
+            await this.AssignQuizToFirstCategoryAsync(quizId);
+            await this.service.DeleteQuizFromCategoryAsync(this.firstCategoryId, quizId);
+            var categoryQuizzesIds = await this.dbContext
+                .Categories
+                .Where(x => x.Id == this.firstCategoryId)
+                .Select(x => x.Quizzes.Select(x => x.Id))
+                .FirstOrDefaultAsync();
+
+            Assert.Empty(categoryQuizzesIds);
+            Assert.DoesNotContain(quizId, categoryQuizzesIds);
+        }
+
+        private async Task AssignQuizToFirstCategoryAsync(string quizId)
+        {
+            var category = await this.GetFirstCategory();
+            var quiz = await this.dbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+            category.Quizzes.Add(quiz);
+            await this.dbContext.SaveChangesAsync();
+            this.dbContext.Entry<Category>(category).State = EntityState.Detached;
+            this.dbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+        }
+
+        private async Task<Category> GetFirstCategory()
+        => await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == this.firstCategoryId);
+
         private string CreateFirstCategory()
         {
             var creatorId = Guid.NewGuid().ToString();
@@ -128,6 +197,21 @@
             this.dbContext.SaveChanges();
             this.dbContext.Entry<Category>(category).State = EntityState.Detached;
             return category.Id;
+        }
+
+        private string CreateQuiz(string name)
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var quiz = new Quiz()
+            {
+                Name = name,
+                CreatorId = creatorId,
+            };
+
+            this.dbContext.Quizzes.Add(quiz);
+            this.dbContext.SaveChanges();
+            this.dbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+            return quiz.Id;
         }
     }
 }

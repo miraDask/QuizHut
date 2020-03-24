@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Categories
 {
     using System.Collections.Generic;
+
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Quizzes;

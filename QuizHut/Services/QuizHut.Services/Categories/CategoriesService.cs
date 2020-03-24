@@ -30,7 +30,7 @@
             return category.Id;
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id)
+        public async Task<IEnumerable<T>> GetAllByCreatorIdAsync<T>(string id)
          => await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.CreatorId == id)
@@ -38,12 +38,13 @@
                 .To<T>()
                 .ToListAsync();
 
-        public async Task AssignQuizzesToCategoryAsync(string id, List<string> quizzesIds)
+        public async Task AssignQuizzesToCategoryAsync(string id, IEnumerable<string> quizzesIds)
         {
             var category = await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
+
             foreach (var quizId in quizzesIds)
             {
                 var quiz = await this.quizRepository
