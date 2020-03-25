@@ -12,16 +12,13 @@
     public class ResultsService : IResultsService
     {
         private readonly IDeletableEntityRepository<Result> repository;
-        private readonly IDeletableEntityRepository<Quiz> quizRepository;
         private readonly IDeletableEntityRepository<Event> eventRepository;
 
         public ResultsService(
             IDeletableEntityRepository<Result> repository,
-            IDeletableEntityRepository<Quiz> quizRepository,
             IDeletableEntityRepository<Event> eventRepository)
         {
             this.repository = repository;
-            this.quizRepository = quizRepository;
             this.eventRepository = eventRepository;
         }
 
