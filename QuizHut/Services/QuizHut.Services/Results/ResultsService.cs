@@ -27,10 +27,11 @@
         .AllAsNoTracking()
         .Where(x => x.EventId == eventId)
         .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Name == groupName))
+        .OrderBy(x => x.CreatedOn)
         .To<T>()
         .ToListAsync();
 
-        public async Task CreateResultAsync(string studentId, int points, int maxPoints, string quizId)
+        public async Task<string> CreateResultAsync(string studentId, int points, int maxPoints, string quizId)
         {
             var @event = await this.eventRepository
                 .AllAsNoTracking()
@@ -48,6 +49,7 @@
             await this.repository.AddAsync(result);
             await this.eventRepository.SaveChangesAsync();
             await this.repository.SaveChangesAsync();
+            return result.Id;
         }
 
         public async Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id)

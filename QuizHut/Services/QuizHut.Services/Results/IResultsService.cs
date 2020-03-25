@@ -5,7 +5,7 @@
 
     public interface IResultsService
     {
-        Task CreateResultAsync(string studentId, int points, int maxPoints, string quizId);
+        Task<string> CreateResultAsync(string studentId, int points, int maxPoints, string quizId);
 
         Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id);
 
