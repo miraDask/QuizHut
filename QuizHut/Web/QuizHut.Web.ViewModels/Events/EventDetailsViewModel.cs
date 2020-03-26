@@ -37,24 +37,24 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-              configuration.CreateMap<Event, EventDetailsViewModel>()
+            configuration.CreateMap<Event, EventDetailsViewModel>()
+            .ForMember(
+                  x => x.QuizId,
+                  opt => opt.MapFrom(x => x.QuizId))
+            .ForMember(
+                  x => x.QuizName,
+                  opt => opt.MapFrom(x => x.Quiz.Name))
               .ForMember(
-                    x => x.QuizId,
-                    opt => opt.MapFrom(x => x.QuizId))
-              .ForMember(
-                    x => x.QuizName,
-                    opt => opt.MapFrom(x => x.Quiz.Name))
-                .ForMember(
-                    x => x.ActivationDate,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime.ToString("dd/MM/yyyy")))
-               .ForMember(
-                    x => x.ActiveFrom,
-                    opt => opt.MapFrom(
-                        x => $"{x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}"))
-               .ForMember(
-                    x => x.ActiveTo,
-                    opt => opt.MapFrom(
-                        x => $"{x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"));
+                  x => x.ActivationDate,
+                  opt => opt.MapFrom(x => x.ActivationDateAndTime.ToString("dd/MM/yyyy")))
+             .ForMember(
+                  x => x.ActiveFrom,
+                  opt => opt.MapFrom(
+                      x => $"{x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}"))
+             .ForMember(
+                  x => x.ActiveTo,
+                  opt => opt.MapFrom(
+                      x => $"{x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"));
         }
     }
 }

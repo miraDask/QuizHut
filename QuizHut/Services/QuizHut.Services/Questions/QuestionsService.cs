@@ -18,7 +18,7 @@
             this.quizRepository = quizRepository;
         }
 
-        public async Task<string> CreateQuestionAsync(string quizId, string quizText)
+        public async Task<string> CreateQuestionAsync(string quizId, string questionText)
         {
             var quiz = await this.quizRepository.AllAsNoTracking().Select(x => new
             {
@@ -29,7 +29,7 @@
             var question = new Question
             {
                 Number = quiz.Questions.Count() + 1,
-                Text = quizText,
+                Text = questionText,
                 QuizId = quizId,
             };
 

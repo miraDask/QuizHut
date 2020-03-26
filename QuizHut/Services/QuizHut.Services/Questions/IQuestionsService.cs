@@ -4,7 +4,7 @@
 
     public interface IQuestionsService
     {
-        Task<string> CreateQuestionAsync(string quizId, string quizText);
+        Task<string> CreateQuestionAsync(string quizId, string questionText);
 
         Task DeleteQuestionByIdAsync(string id);
 

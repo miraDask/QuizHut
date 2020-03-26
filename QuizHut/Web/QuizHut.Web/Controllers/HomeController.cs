@@ -16,11 +16,11 @@
                 if (this.User.IsInRole(GlobalConstants.AdministratorRoleName)
                                || this.User.IsInRole(GlobalConstants.TeacherRoleName))
                 {
-                   return this.Redirect("/Administration/Home/Index");
+                    return this.Redirect("/Administration/Home/Index");
                 }
                 else
                 {
-                   return this.Redirect("/Students/Index");
+                    return this.Redirect("/Students/Index");
                 }
             }
 

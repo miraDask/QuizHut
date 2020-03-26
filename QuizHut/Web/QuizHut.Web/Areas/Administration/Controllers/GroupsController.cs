@@ -184,7 +184,7 @@
             IList<StudentViewModel> students;
             if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-               students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(null, id);
+                students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(null, id);
             }
             else
             {

@@ -6,7 +6,7 @@
     using QuizHut.Services.Results;
     using QuizHut.Web.ViewModels.Results;
 
-    [ViewComponent(Name="ResultsByGroup")]
+    [ViewComponent(Name = "ResultsByGroup")]
     public class GroupWithResulsViewComponent : ViewComponent
     {
         private readonly IResultsService service;

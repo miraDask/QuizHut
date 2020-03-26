@@ -10,7 +10,7 @@
     using QuizHut.Services.Events;
     using QuizHut.Web.ViewModels.Events;
 
-    [ViewComponent(Name ="Results")]
+    [ViewComponent(Name = "Results")]
     public class FilteredResults : ViewComponent
     {
         private readonly UserManager<ApplicationUser> userManager;
