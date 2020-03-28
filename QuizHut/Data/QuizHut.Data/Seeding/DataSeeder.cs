@@ -25,7 +25,7 @@
                 GlobalConstants.AdministratorRoleName);
 
             // creating teacher user;
-            await CreateUser(
+            var teacherId = await CreateUser(
                 userManager,
                 roleManager,
                 GlobalConstants.DataSeeding.TeacherName,
@@ -38,9 +38,54 @@
                 roleManager,
                 GlobalConstants.DataSeeding.StudentName,
                 GlobalConstants.DataSeeding.StudentEmail);
+
+            await CreateQuizzes(teacherId, userManager, dbContext);
         }
 
-        private static async Task CreateUser(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, string name, string email, string roleName = null)
+        private static async Task CreateQuizzes(string teacherId, UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
+        {
+            var teacher = await userManager.FindByIdAsync(teacherId);
+            for (int i = 1; i <= 5; i++)
+            {
+                var quiz = new Quiz()
+                {
+                    Name = $"Test quiz {i}",
+                    Password = new Password() { Content = $"password{i}" },
+                };
+
+                await dbContext.Quizzes.AddAsync(quiz);
+
+                for (int j = 1; j <= 10; j++)
+                {
+                    var question = new Question()
+                    {
+                        Text = $"Question {j}",
+                        Number = j,
+                    };
+
+                    for (int l = 1; l <= 3; l++)
+                    {
+                        var answer = new Answer
+                        {
+                            Text = l % 2 == 0 ? "True answer" : "False answer",
+                            IsRightAnswer = l % 2 == 0 ? true : false,
+                        };
+
+                        await dbContext.Answers.AddAsync(answer);
+                        question.Answers.Add(answer);
+                    }
+
+                    await dbContext.Questions.AddAsync(question);
+                    quiz.Questions.Add(question);
+                }
+
+                teacher.CreatedQuizzes.Add(quiz);
+                await userManager.UpdateAsync(teacher);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        private static async Task<string> CreateUser(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, string name, string email, string roleName = null)
         {
             var user = new ApplicationUser
             {
@@ -73,6 +118,8 @@
                     var result = await userManager.CreateAsync(user, password);
                 }
             }
+
+            return user.Id;
         }
     }
 }
