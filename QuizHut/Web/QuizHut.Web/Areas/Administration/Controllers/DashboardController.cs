@@ -3,10 +3,8 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
-    using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
@@ -21,20 +19,17 @@
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class DashboardController : AdministrationController
     {
-        private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService service;
         private readonly IEventsService eventService;
         private readonly IGroupsService groupsService;
         private readonly IQuizzesService quizzesService;
 
         public DashboardController(
-            UserManager<ApplicationUser> userManager,
             IUsersService service,
             IEventsService eventService,
             IGroupsService groupsService,
             IQuizzesService quizzesService)
         {
-            this.userManager = userManager;
             this.service = service;
             this.eventService = eventService;
             this.groupsService = groupsService;

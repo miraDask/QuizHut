@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using QuizHut.Common;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
