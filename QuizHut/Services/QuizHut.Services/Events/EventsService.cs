@@ -114,7 +114,7 @@
             await this.repository.AddAsync(@event);
             await this.repository.SaveChangesAsync();
 
-            this.SheduleStatudChange(activationDateAndTime, durationOfActivity, @event.Id);
+            await this.SheduleStatusChange(activationDateAndTime, durationOfActivity, @event.Id);
             return @event.Id;
         }
 
@@ -127,8 +127,16 @@
 
         public async Task AssigQuizToEventAsync(string eventId, string quizId)
         {
+            var now = DateTime.UtcNow;
             var @event = await this.GetEventById(eventId);
             @event.QuizId = quizId;
+            if (@event.ActivationDateAndTime <= now
+                && @event.ActivationDateAndTime.Add(@event.DurationOfActivity) > now
+                && @event.Status != Status.Ended)
+            {
+                @event.Status = Status.Active;
+            }
+
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
             await this.quizService.AssignEventToQuiz(eventId, quizId);
@@ -138,6 +146,11 @@
         {
             var @event = await this.GetEventById(eventId);
             @event.QuizId = null;
+            if (@event.Status != Status.Ended)
+            {
+                @event.Status = Status.Pending;
+            }
+
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
             await this.quizService.DeleteEventFromQuiz(eventId, quizId);
@@ -158,9 +171,16 @@
             @event.Name = name;
             @event.ActivationDateAndTime = activationDateAndTime;
             @event.DurationOfActivity = durationOfActivity;
+            @event.Status = Status.Pending;
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
-            this.SheduleStatudChange(activationDateAndTime, durationOfActivity, id);
+
+            if (@event.QuizId == null)
+            {
+                return;
+            }
+
+            await this.SheduleStatusChange(activationDateAndTime, durationOfActivity, id);
         }
 
         public string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate)
@@ -196,8 +216,14 @@
             }
         }
 
-        public void SheduleStatudChange(DateTime activationDateAndTime, TimeSpan durationOfActivity, string eventId)
+        public async Task SheduleStatusChange(DateTime activationDateAndTime, TimeSpan durationOfActivity, string eventId)
         {
+            var @event = await this.GetEventById(eventId);
+            if (@event.QuizId == null)
+            {
+                return;
+            }
+
             var now = DateTime.UtcNow;
             var activationDelay = activationDateAndTime - now;
             var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;
