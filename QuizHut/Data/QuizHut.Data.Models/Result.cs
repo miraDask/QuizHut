@@ -22,5 +22,11 @@
         public string EventId { get; set; }
 
         public virtual Event Event { get; set; }
+
+        public string EventName { get; set; }
+
+        public string QuizName { get; set; }
+
+        public DateTime EventActivationDateAndTime { get; set; }
     }
 }

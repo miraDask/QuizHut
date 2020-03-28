@@ -139,6 +139,10 @@
                 var endingDelay = @event.ActivationDateAndTime.Add(@event.DurationOfActivity) - now;
                 BackgroundJob.Schedule(() => this.SetStatusChangeJob(eventId, Status.Ended), endingDelay);
             }
+            else if (@event.ActivationDateAndTime > now)
+            {
+                await this.SheduleStatusChange(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id);
+            }
 
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
@@ -222,11 +226,6 @@
         public async Task SheduleStatusChange(DateTime activationDateAndTime, TimeSpan durationOfActivity, string eventId)
         {
             var @event = await this.GetEventById(eventId);
-            if (@event.QuizId == null)
-            {
-                return;
-            }
-
             var now = DateTime.UtcNow;
             var activationDelay = activationDateAndTime - now;
             var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;

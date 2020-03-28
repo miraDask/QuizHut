@@ -1,7 +1,7 @@
 ﻿@model UsersInRoleAllViewModel
 @{
     ViewData["Title"] = "Default";
-    var errorMessage = @Model.NewUser.Email == GlobalConstants.Empty 
+    var errorMessage = @Model.NewUser.Email == GlobalConstants.Empty
         ? GlobalConstants.ErrorMessages.EmptyEmailField : $"There is no user with email {@Model.NewUser.Email}";
 }
 @if (Model.NewUser.IsNotAdded)
@@ -15,60 +15,62 @@
     </div>
 }
 
-    <form method="post" class="mb-4" asp-action="AddRole" asp-controller="Dashboard">
-        <div class="component">
-            <div class="card">
-                <div class="card-header text-info pb-0">
-                    <div class="input-group">
-                        <input type="email" asp-for="@Model.NewUser.Email" class="form-control" placeholder="Email">
-                        <input type="hidden" asp-for="@Model.RoleName" value="@Model.RoleName">
-                        <button type="submit" class="btn btn-primary mx-3">
-                            <span>Add New</span>
-                        </button>
-                    </div>
-                    <span asp-validation-for="@Model.NewUser.Email" class="text-danger ml-5"></span>
+<form method="post" class="mb-4" asp-action="AddRole" asp-controller="Dashboard">
+    <div class="component">
+        <div class="card">
+            <div class="card-header text-info pb-0">
+                <div class="input-group">
+                    <input type="email" asp-for="@Model.NewUser.Email" class="form-control" placeholder="Email">
+                    <input type="hidden" asp-for="@Model.RoleName" value="@Model.RoleName">
+                    <button type="submit" class="btn btn-primary mx-3">
+                        <span>Add New</span>
+                    </button>
                 </div>
-                <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
-                    <h5 class="mb-0">@(Model.RoleName)s Managment</h5>
-                </div>
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr class="table-active bg-white">
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Users.Any())
-                        {
-                            @foreach (var user in Model.Users)
-                            {
-                                <tr class="table-warning">
-                                    <th scope="row" class="pt-4">@user.FullName</th>
-                                    <td class="pt-4">@user.Email</td>
-                                    <td>
-                                        <div class="component  navbar-expand-lg text-right">
-                                            <ul class="navbar-nav ml-auto">
-                                                <li class="nav-item m-1">
-                                                    <a class="nav-link btn btn-white"
-                                                       asp-action="Delete",
-                                                       asp-controller="Dashboard"
-                                                       asp-area="Administration"
-                                                       asp-route-id="@user.Id"
-                                                       asp-route-roleName="@Model.RoleName">
-                                                        Delete
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+                <span asp-validation-for="@Model.NewUser.Email" class="text-danger ml-5"></span>
             </div>
+            <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
+                <h5 class="mb-0">@(Model.RoleName)s Managment</h5>
+            </div>
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr class="table-active bg-white">
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Users.Any())
+                    {
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr class="table-warning">
+                                <th scope="row" class="pt-4">@user.FullName</th>
+                                <td class="pt-4">@user.Email</td>
+                                <td>
+                                    <div class="component  navbar-expand-lg text-right">
+                                        <ul class="navbar-nav ml-auto">
+                                            <li class="nav-item m-1">
+                                                <a class="nav-link btn btn-white"
+                                                   asp-action="Delete" ,
+                                                   asp-controller="Dashboard"
+                                                   asp-area="Administration"
+                                                   asp-route-id="@user.Id"
+                                                   asp-route-roleName="@Model.RoleName">
+                                                    Delete
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
         </div>
-    </form>
-
+    </div>
+</form>
+@*@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}*@

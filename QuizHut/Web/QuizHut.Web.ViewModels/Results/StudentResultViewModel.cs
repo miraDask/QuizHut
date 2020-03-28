@@ -19,13 +19,13 @@
             configuration.CreateMap<Result, StudentResultViewModel>()
               .ForMember(
                   x => x.Event,
-                  opt => opt.MapFrom(x => x.Event.Name))
+                  opt => opt.MapFrom(x => x.EventName))
               .ForMember(
                   x => x.Date,
-                  opt => opt.MapFrom(x => x.Event.ActivationDateAndTime.Date.ToString("dd/MM/yyyy")))
+                  opt => opt.MapFrom(x => x.EventActivationDateAndTime.Date.ToString("dd/MM/yyyy")))
               .ForMember(
                   x => x.Quiz,
-                  opt => opt.MapFrom(x => x.Event.Quiz.Name))
+                  opt => opt.MapFrom(x => x.QuizName))
               .ForMember(
                   x => x.Score,
                   opt => opt.MapFrom(x => $"{x.Points}/{x.MaxPoints}"));

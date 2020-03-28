@@ -36,6 +36,7 @@
             var @event = await this.eventRepository
                 .AllAsNoTracking()
                 .Where(x => x.QuizId == quizId)
+                .Include(x => x.Quiz)
                 .FirstOrDefaultAsync();
             var result = new Result()
             {
@@ -43,6 +44,9 @@
                 StudentId = studentId,
                 MaxPoints = maxPoints,
                 EventId = @event.Id,
+                EventName = @event.Name,
+                QuizName = @event.Quiz.Name,
+                EventActivationDateAndTime = @event.ActivationDateAndTime,
             };
 
             @event.Results.Add(result);
