@@ -90,18 +90,18 @@
     }
 
     .index .bubbles .bubble-6 {
-        top: -8rem;
+        top: -6rem;
         left: 43rem
     }
 
     .index .bubbles .bubble-7 {
         top: -5rem;
-        right: 20rem
+        right: 25rem
     }
 
     .index .bubbles .bubble-8 {
-        top: 47rem;
-        right: 5rem
+        top: 20rem;
+        right: 35rem
     }
 
     .index .bubbles .bubble-9 {
@@ -110,13 +110,13 @@
     }
 
     .index .bubbles .bubble-10 {
-        top: 40rem;
-        right: 10rem
+        top: 25rem;
+        right: 50rem
     }
 
     .index .bubbles .bubble-11 {
-        top: 45rem;
-        left: 7rem
+        top: 5rem;
+        right: 20rem
     }
 
     .index .bubbles .bubble-12 {
@@ -175,7 +175,7 @@
     }
 
     .index .bubbles .circle-10 {
-        top: -3rem;
+        top: rem;
         right: 7rem
     }
 
