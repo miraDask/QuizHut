@@ -1,71 +1,27 @@
-﻿@using QuizHut.Web.ViewModels.Teachers
-@model TeachersAllViewModel
+﻿@model InvalidUserEmailViewModel
 @{
     ViewData["Title"] = "Index";
-
-}
-@if (Model.NewTeacher.IsNotAdded)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">×</span>
-        </button>
-        <i class="fa fa-exclamation-circle"></i>
-        <strong>On no!</strong> There is no user with email @Model.NewTeacher.Email. Try again !
-    </div>
+    var invalidEmail = Model != null ? Model.Email : null;
 }
 <div class="row">
-    <form method="post" class="mt-2 mb-5 col-md-7" asp-action="Index" asp-controller="Dashboard">
-        <div class="component">
-            <div class="card">
-                <div class="card-header text-info pb-0">
-                    <div class="input-group">
-                        <input type="email" asp-for="@Model.NewTeacher.Email" class="form-control" placeholder="Email">
-                        <button type="submit" class="btn btn-primary mx-3">
-                            <span>Add New</span>
-                        </button>
-                    </div>
-                    <span asp-validation-for="@Model.NewTeacher.Email" class="text-danger ml-5"></span>
-                </div>
-                <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
-                    <h5 class="mb-0">Teachers Managment</h5>
-                </div>
-                <table class="table table-hover mb-0">
-                    <thead>
-                        <tr class="table-active bg-white">
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Teachers.Any())
-                        {
-                            @foreach (var teacher in Model.Teachers)
-                            {
-                                <tr class="table-warning">
-                                    <th scope="row" class="pt-4">@teacher.FullName</th>
-                                    <td class="pt-4">@teacher.Email</td>
-                                    <td>
-                                        <div class="component  navbar-expand-lg text-right">
-                                            <ul class="navbar-nav ml-auto">
-                                                <li class="nav-item m-1">
-                                                    <a class="nav-link  btn btn-white" href="/Administration/Dashboard/Delete?id=@teacher.Id">
-                                                        Delete
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </form>
-    <aside class="col-md-4 offset-1">
+    <div class="mt-2 mb-5 col-md-8">
+        @if (Model != null && Model.RoleName == GlobalConstants.AdministratorRoleName)
+        {
+            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.AdministratorRoleName, invalidEmail = invalidEmail })
+            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.TeacherRoleName })
+        }
+        else if (Model != null && Model.RoleName == GlobalConstants.TeacherRoleName)
+        {
+            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.AdministratorRoleName })
+            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.TeacherRoleName, invalidEmail = invalidEmail })
+        }
+        else
+        {
+            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.AdministratorRoleName })
+            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.TeacherRoleName })
+        }
+    </div>
+    <aside class="col-md-4">
         <div>
             <a href="/hangfire" target="_blank" class="btn btn-primary manage-account-btn ml-4 mb-5">
                 Event Status Scheduler
@@ -85,4 +41,5 @@
 @section Scripts
 {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
+    <partial name="_ValidationScriptsPartial" />
 }

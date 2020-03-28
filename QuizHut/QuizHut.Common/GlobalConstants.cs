@@ -24,6 +24,8 @@
 
         public const int CookieTimeOut = 4;
 
+        public const string Empty = "empty";
+
         public static class DataSeeding
         {
             public const string Password = "123456";
@@ -52,6 +54,8 @@
             public const string EmptyPassword = "emptyField";
 
             public const string MessagesAreSend = "You successfully send quiz password to all members of the event groups!";
+
+            public const string EmptyEmailField = "You should enter email if you want to add somebody to role.";
         }
     }
 }

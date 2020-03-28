@@ -1,4 +1,4 @@
-﻿namespace QuizHut.Web.ViewModels.Students
+﻿namespace QuizHut.Web.ViewModels.UsersInRole
 {
     using System.ComponentModel.DataAnnotations;
 
@@ -9,5 +9,7 @@
         public string Email { get; set; }
 
         public bool IsNotAdded { get; set; }
+
+        public string RoleName { get; set; }
     }
 }

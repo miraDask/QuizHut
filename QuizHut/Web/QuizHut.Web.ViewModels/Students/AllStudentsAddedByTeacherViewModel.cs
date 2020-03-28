@@ -11,7 +11,7 @@
 
         public string UserId { get; set; }
 
-        public UserInputViewModel NewStudent { get; set; }
+        public StudentInputViewModel NewStudent { get; set; }
 
         public IEnumerable<StudentViewModel> Students { get; set; }
     }

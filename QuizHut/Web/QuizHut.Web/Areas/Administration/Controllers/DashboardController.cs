@@ -14,7 +14,7 @@
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Students;
-    using QuizHut.Web.ViewModels.Teachers;
+    using QuizHut.Web.ViewModels.UsersInRole;
 
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class DashboardController : AdministrationController
@@ -36,42 +36,38 @@
             this.quizzesService = quizzesService;
         }
 
-        public async Task<IActionResult> Index(string invalidEmail)
+        [ClearDashboardRequestInSessionActionFilterAttribute]
+        public IActionResult Index(string invalidEmail, string roleName)
         {
-            var teachers = await this.service.GetAllByRoleAsync<TeacherViewModel>(GlobalConstants.TeacherRoleName);
-            var model = new TeachersAllViewModel()
-            {
-                Teachers = teachers,
-                NewTeacher = new UserInputViewModel(),
-            };
-
             if (invalidEmail != null)
             {
-                model.NewTeacher.IsNotAdded = true;
-                model.NewTeacher.Email = invalidEmail;
+                return this.View(new InvalidUserEmailViewModel() { Email = invalidEmail, RoleName = roleName });
             }
 
-            return this.View(model);
+            return this.View();
         }
 
         [HttpPost]
-        [ModelStateValidationActionFilterAttribute]
-        [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> Index(TeachersAllViewModel model)
+        public async Task<IActionResult> AddRole(UsersInRoleAllViewModel model)
         {
-            var isAdded = await this.service.AssignRoleAsync(model.NewTeacher.Email, GlobalConstants.TeacherRoleName);
+            if (!this.ModelState.IsValid)
+            {
+                return this.RedirectToAction("Index", new { invalidEmail = GlobalConstants.Empty, roleName = model.RoleName });
+            }
+
+            var isAdded = await this.service.AssignRoleAsync(model.NewUser.Email, model.RoleName);
 
             if (!isAdded)
             {
-                return this.RedirectToAction("Index", new { invalidEmail = model.NewTeacher.Email });
+                return this.RedirectToAction("Index", new { invalidEmail = model.NewUser.Email, roleName = model.RoleName });
             }
 
             return this.RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string id, string roleName)
         {
-            await this.service.RemoveFromRoleAsync(id, GlobalConstants.TeacherRoleName);
+            await this.service.RemoveFromRoleAsync(id, roleName);
             return this.RedirectToAction("Index");
         }
 
