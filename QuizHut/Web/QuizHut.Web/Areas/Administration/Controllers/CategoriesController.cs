@@ -28,6 +28,7 @@
             this.quizService = quizService;
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> AllCategoriesCreatedByTeacher()
         {
             var userId = this.userManager.GetUserId(this.User);

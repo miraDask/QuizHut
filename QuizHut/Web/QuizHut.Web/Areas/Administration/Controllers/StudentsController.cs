@@ -20,6 +20,7 @@
             this.service = service;
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> AllStudentsAddedByTeacher(string invalidEmail)
         {
             var userId = this.userManager.GetUserId(this.User);

@@ -106,7 +106,7 @@
                         <li class="nav-item m-1">
                             <a asp-area="Administration"
                                asp-action="AssignQuizToEvent"
-                               asp-controller="Events"
+                               asp-controller=@(this.ViewData["DashboardRequest"] != null ? "Dashboard" : "Events")
                                asp-route-id="@Model.Id"
                                class="nav-link btn btn-primary mr-3">
                                 Add New

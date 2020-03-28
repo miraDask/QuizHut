@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
@@ -36,6 +36,7 @@
             this.userManager = userManager;
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> AllGroupsCreatedByTeacher()
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -149,7 +150,8 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             IList<EventsAssignViewModel> events;
-            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            var isDashboardRequest = this.HttpContext.Session.GetString("DashboardRequest") != null;
+            if (isDashboardRequest)
             {
                 events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, null, null, id);
             }
@@ -182,7 +184,8 @@
         public async Task<IActionResult> AddStudents(string id)
         {
             IList<StudentViewModel> students;
-            if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            var isDashboardRequest = this.HttpContext.Session.GetString("DashboardRequest") != null;
+            if (isDashboardRequest)
             {
                 students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(null, id);
             }

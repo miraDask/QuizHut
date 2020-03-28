@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.ViewModels.Events;
 
     public class ResultsController : AdministrationController
@@ -19,6 +20,7 @@
             this.eventService = eventService;
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public IActionResult Index()
         {
             return this.View();

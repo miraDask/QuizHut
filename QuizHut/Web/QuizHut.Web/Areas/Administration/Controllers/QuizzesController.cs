@@ -61,6 +61,7 @@
             return this.View(quizModel);
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> AllQuizzesCreatedByTeacher()
         {
             var userId = this.userManager.GetUserId(this.User);

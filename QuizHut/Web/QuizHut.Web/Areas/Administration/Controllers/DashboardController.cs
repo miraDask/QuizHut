@@ -61,6 +61,7 @@
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> Index(TeachersAllViewModel model)
         {
             var isAdded = await this.service.AssignRoleAsync(model.NewTeacher.Email, GlobalConstants.TeacherRoleName);
@@ -79,6 +80,7 @@
             return this.RedirectToAction("Index");
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> ResultsAll()
         {
             var events = await this.eventService.GetAllAsync<EventListViewModel>();
@@ -90,6 +92,7 @@
             return this.View(model);
         }
 
+        [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> EventsAll()
         {
             var events = await this.eventService.GetAllAsync<EventListViewModel>();
@@ -97,6 +100,7 @@
             return this.View(model);
         }
 
+        [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> GroupsAll()
         {
             var groups = await this.groupsService.GetAllAsync<GroupListViewModel>();
@@ -104,6 +108,7 @@
             return this.View(model);
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> QuizzesAll()
         {
             var quizzes = await this.quizzesService.GetAllAsync<QuizListViewModel>(false);
@@ -111,6 +116,7 @@
             return this.View(model);
         }
 
+        [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> StudentsAll()
         {
             var students = await this.service.GetAllByUserIdAsync<StudentViewModel>();
