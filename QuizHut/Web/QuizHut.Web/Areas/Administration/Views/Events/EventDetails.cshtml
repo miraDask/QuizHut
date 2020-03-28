@@ -1,6 +1,11 @@
 ﻿@model EventDetailsViewModel
 @{
     ViewData["Title"] = "EventDetails";
+     var color = Model.Status.ToString() == ModelCostants.StatusActive
+                        ? ModelCostants.ColorActive :
+                        Model.Status.ToString() == ModelCostants.StatusEnded
+                        ? ModelCostants.ColorEnded
+                        : ModelCostants.ColorPendingSecond;
 }
 <div class="form-group flex-grow-1 d-inline">
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
@@ -62,10 +67,14 @@
                     <td>@Model.Name</td>
                 </tr>
                 <tr class="table-active bg-light">
+                    <th scope="row">Status:</th>
+                    <td style="color:@color">@Model.Status</td>
+                </tr>
+                <tr class="table-active bg-white">
                     <th scope="row">Activation Date:</th>
                     <td>@Model.ActivationDate</td>
                 </tr>
-                <tr class="table-active bg-white">
+                <tr class="table-active bg-light">
                     <th scope="row">Active From:</th>
                     <td>@Model.ActiveFrom</td>
                 </tr>

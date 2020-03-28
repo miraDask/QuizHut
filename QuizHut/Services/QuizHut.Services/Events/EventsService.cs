@@ -130,11 +130,14 @@
             var now = DateTime.UtcNow;
             var @event = await this.GetEventById(eventId);
             @event.QuizId = quizId;
+
             if (@event.ActivationDateAndTime <= now
                 && @event.ActivationDateAndTime.Add(@event.DurationOfActivity) > now
                 && @event.Status != Status.Ended)
             {
                 @event.Status = Status.Active;
+                var endingDelay = @event.ActivationDateAndTime.Add(@event.DurationOfActivity) - now;
+                BackgroundJob.Schedule(() => this.SetStatusChangeJob(eventId, Status.Ended), endingDelay);
             }
 
             this.repository.Update(@event);
