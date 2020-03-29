@@ -39,7 +39,10 @@
                 GlobalConstants.DataSeeding.StudentName,
                 GlobalConstants.DataSeeding.StudentEmail);
 
-            await CreateQuizzes(teacherId, userManager, dbContext);
+            if (!dbContext.Quizzes.Any())
+            {
+                await CreateQuizzes(teacherId, userManager, dbContext);
+            }
         }
 
         private static async Task CreateQuizzes(string teacherId, UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)

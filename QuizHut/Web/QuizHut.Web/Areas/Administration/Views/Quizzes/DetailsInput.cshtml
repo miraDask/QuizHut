@@ -49,34 +49,6 @@
                         <div class="mt-4"><label asp-for="@Model.Description">Description</label></div>
                         <textarea class="form-control" asp-for="@Model.Description" placeholder="description">
                         </textarea>
-
-                        @* this is for event *@
-                        @*@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) || this.User.IsInRole(GlobalConstants.TeacherRoleName))
-                            {
-                                <div class="mt-4"><label asp-for="@Model.ActivationDate">Activation Date</label></div>
-                                <div class="input-group">
-                                    <input type="datetime" asp-for="@Model.ActivationDate" class="form-control" placeholder="dd/MM/yyyy">
-                                </div>
-                                <span asp-validation-for="@Model.ActivationDate" class="text-danger"></span>
-                                <div class="input-group mt-4">
-                                    <label asp-for="@Model.ActiveFrom">
-                                        Active from :
-                                        <input type="text" asp-for="@Model.ActiveFrom" class="form-control" placeholder="HH:mm">
-                                        <span asp-validation-for="@Model.ActiveFrom" class="text-danger"></span>
-                                    </label>
-
-                                    <label asp-for="@Model.ActiveTo">
-                                        To :
-                                        <input type="text" asp-for="@Model.ActiveTo" class="form-control" placeholder="HH:mm">
-                                        <span asp-validation-for="@Model.ActiveTo" class="text-danger"></span>
-                                    </label>
-
-                                </div>
-                                <p class="card-text text-primary">
-                                    <span class=" mr-1">∗</span>
-                                    If you want your quiz to be active leave date and time fields blank.
-                                </p>
-                            }*@
                         <div class="mt-4"><label asp-for="@Model.Timer">Set Timer</label></div>
                         <div class="input-group">
                             <input type="number" asp-for="@Model.Timer" class="form-control" placeholder="minutes">

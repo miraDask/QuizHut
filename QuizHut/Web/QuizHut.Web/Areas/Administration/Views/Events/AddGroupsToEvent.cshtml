@@ -63,9 +63,12 @@
         </div>
     </form>
 </div>
-@section InnerNav
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
-    @await Html.PartialAsync("_DashboardNavBarPartial")
+    @section InnerNav
+    {
+        <partial name="_DashboardNavBarPartial" />
+    }
 }
 @section Scripts
 {

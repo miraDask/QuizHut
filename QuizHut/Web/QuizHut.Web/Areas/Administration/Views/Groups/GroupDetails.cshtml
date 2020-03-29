@@ -216,9 +216,12 @@
     </div>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllGroupsCreatedByTeacher" asp-controller="Groups">Go Back</a>
 </div>
-@section InnerNav
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
-    @await Html.PartialAsync("_DashboardNavBarPartial")
+    @section InnerNav
+    {
+        <partial name="_DashboardNavBarPartial" />
+    }
 }
 @section Scripts
 {

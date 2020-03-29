@@ -101,9 +101,12 @@
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes" asp-route-id="@Model.Id">Export To PDF</a>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">Go Back</a>
 </form>
-@section InnerNav
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
 {
-    @await Html.PartialAsync("_DashboardNavBarPartial")
+    @section InnerNav
+    {
+        <partial name="_DashboardNavBarPartial" />
+    }
 }
 @section Scripts
 {
