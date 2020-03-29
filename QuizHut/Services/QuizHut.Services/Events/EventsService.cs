@@ -86,9 +86,12 @@
 
             if (studentId != null)
             {
-                query = query.Where(
-                    x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId))
-                    && !x.Results.Any(x => x.StudentId == studentId));
+                query = query.Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
+
+                if (status == Status.Active)
+                {
+                    query = query.Where(x => !x.Results.Any(x => x.StudentId == studentId));
+                }
             }
 
             return await query

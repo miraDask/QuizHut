@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@
     [Authorize]
     public class StudentsController : Controller
     {
+        private const int ResultsPerPageDefaultValue = 5;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IResultsService resultService;
         private readonly IEventsService eventsService;
@@ -43,11 +45,20 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Results()
+        public async Task<IActionResult> Results(int page = 1, int countPerPage = ResultsPerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var resultsModel = await this.resultService.GetAllByStudentIdAsync<StudentResultViewModel>(studentId);
-            return this.View(resultsModel);
+            var pagesCount = (int)Math.Ceiling(this.resultService.GetResultsCountByStudentId(studentId) / (decimal)countPerPage);
+            var results = await this.resultService.GetByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
+
+            var model = new StudentResultsViewModel()
+            {
+                Results = results,
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            return this.View(model);
         }
 
         public async Task<IActionResult> StudentActiveEventsAll()

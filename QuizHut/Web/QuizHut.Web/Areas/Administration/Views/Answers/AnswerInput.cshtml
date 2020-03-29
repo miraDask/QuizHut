@@ -47,13 +47,6 @@
     <a class="btn btn-primary col-md-4 mt-2 offset-2" asp-area="Administration" asp-action="QuestionInput" asp-controller="Questions">New Question</a>
     <a class="btn btn-primary col-md-4 mt-2 ml-3" asp-area="Administration" asp-action="Display" asp-controller="Quizzes">View Quiz</a>
 </div>
-@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-{
-    @section InnerNav
-    {
-        <partial name="_DashboardNavBarPartial" />
-    }
-}
 @section Scripts {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />

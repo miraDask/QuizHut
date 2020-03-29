@@ -56,6 +56,16 @@
             return result.Id;
         }
 
+        public async Task<IEnumerable<T>> GetByStudentIdAsync<T>(string id, int page, int countPerPage)
+       => await this.repository
+           .AllAsNoTracking()
+           .Where(x => x.StudentId == id)
+           .OrderByDescending(x => x.CreatedOn)
+           .To<T>()
+           .Skip(countPerPage * (page - 1))
+           .Take(countPerPage)
+           .ToListAsync();
+
         public async Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id)
         => await this.repository
             .AllAsNoTracking()
@@ -63,5 +73,11 @@
             .OrderByDescending(x => x.CreatedOn)
             .To<T>()
             .ToListAsync();
+
+        public int GetResultsCountByStudentId(string id)
+         => this.repository
+            .AllAsNoTracking()
+            .Where(x => x.StudentId == id)
+            .Count();
     }
 }

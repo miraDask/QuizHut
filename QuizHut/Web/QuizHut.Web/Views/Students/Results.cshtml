@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StudentResultViewModel>
+﻿@model StudentResultsViewModel
 @{
     ViewData["Title"] = "Results";
 }
@@ -8,7 +8,7 @@
             <h5 class="mb-0 p-2 text-white">All Results</h5>
         </div>
     </nav>
-    @if (Model.Any())
+    @if (Model.Results.Any())
     {
         <table class="table table-hover mb-0">
             <thead>
@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var result in Model)
+                @foreach (var result in Model.Results)
                 {
                     <tr class="table-info">
                         <th scope="row">@result.Quiz</th>
@@ -39,9 +39,55 @@
         </div>
     }
 </div>
+@if (Model.PagesCount > 0)
+{
+<div class="text-center mt-4">
+    <ul class="pagination">
+        @if (Model.CurrentPage == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="/Students/Results?page=@Model.PreviousPage"><i class="fas fa-long-arrow-alt-left"></i></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" href="/Students/Results?page=@Model.PreviousPage"><i class="fas fa-long-arrow-alt-left"></i></a>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.PagesCount; i++)
+        {
+            if (i == Model.CurrentPage)
+            {
+                <li class="page-item active">
+                    <a class="page-link" href="/Students/Results?page=@i" onclick="changeArrowsClass(@Model.CurrentPage, @Model.PagesCount)">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Students/Results?page=@i" onclick="changeArrowsClass(@Model.CurrentPage, @Model.PagesCount)">@i</a>
+                </li>
+            }
+        }
+        @if (Model.CurrentPage == Model.PagesCount)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="/Students/Results?page=@Model.NextPage"><i class="fas fa-long-arrow-alt-right"></i></a>
+            </li>
+        }
+        else
+        {
+            <li id="right" class="page-item">
+                <a class="page-link" href="/Students/Results?page=@Model.NextPage"><i class="fas fa-long-arrow-alt-right"></i></a>
+            </li>
+        }
+    </ul>
+</div>
+}
 @section Profile
 {
-
     <li class="nav-item">
         <a class="btn btn-outline-white ml-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
             <i class="fas fa-address-card"></i>  Profile

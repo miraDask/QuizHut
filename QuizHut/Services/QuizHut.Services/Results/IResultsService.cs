@@ -9,6 +9,10 @@
 
         Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id);
 
+        int GetResultsCountByStudentId(string id);
+
+        Task<IEnumerable<T>> GetByStudentIdAsync<T>(string id, int page, int countPerPage);
+
         Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName);
     }
 }
