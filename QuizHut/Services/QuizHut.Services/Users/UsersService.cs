@@ -105,7 +105,7 @@
                 query = query.Where(x => x.TeacherId == id);
             }
 
-            return await query.To<T>().ToListAsync();
+            return await query.Where(x => !x.Roles.Any()).To<T>().ToListAsync();
         }
 
         public async Task<IList<T>> GetAllByRoleAsync<T>(string roleName)
