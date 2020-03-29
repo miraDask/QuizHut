@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.ViewModels.Events
 {
+    using System;
     using System.Collections.Generic;
 
     using AutoMapper;
@@ -21,11 +22,18 @@
 
         public Status Status { get; set; }
 
-        public string ActivationDate { get; set; }
+        public DateTime ActivationDateAndTime { get; set; }
 
-        public string ActiveFrom { get; set; }
+        public TimeSpan DurationOfActivity { get; set; }
 
-        public string ActiveTo { get; set; }
+        public string ActivationDate
+         => $"{this.ActivationDateAndTime.ToLocalTime().Date.ToString("dd/MM/yyyy")}";
+
+        public string ActiveFrom
+        => $"{this.ActivationDateAndTime.ToLocalTime().Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Minute.ToString("D2")}";
+
+        public string ActiveTo
+        => $"{this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Minute.ToString("D2")}";
 
         public string QuizName { get; set; }
 
@@ -43,18 +51,7 @@
                   opt => opt.MapFrom(x => x.QuizId))
             .ForMember(
                   x => x.QuizName,
-                  opt => opt.MapFrom(x => x.Quiz.Name))
-              .ForMember(
-                  x => x.ActivationDate,
-                  opt => opt.MapFrom(x => x.ActivationDateAndTime.ToString("dd/MM/yyyy")))
-             .ForMember(
-                  x => x.ActiveFrom,
-                  opt => opt.MapFrom(
-                      x => $"{x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}"))
-             .ForMember(
-                  x => x.ActiveTo,
-                  opt => opt.MapFrom(
-                      x => $"{x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"));
+                  opt => opt.MapFrom(x => x.Quiz.Name));
         }
     }
 }

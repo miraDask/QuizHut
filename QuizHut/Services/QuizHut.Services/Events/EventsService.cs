@@ -100,7 +100,7 @@
 
         public async Task<string> CreateEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
         {
-            var activationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            var activationDateAndTime = this.GetActivationDateAndTimeLocal(activationDate, activeFrom).ToUniversalTime();
             var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
             var @event = new Event
             {
@@ -173,7 +173,7 @@
         public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)
         {
             var @event = await this.GetEventById(id);
-            var activationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            var activationDateAndTime = this.GetActivationDateAndTimeLocal(activationDate, activeFrom).ToUniversalTime();
             var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
             @event.Name = name;
             @event.ActivationDateAndTime = activationDateAndTime;
@@ -192,8 +192,8 @@
 
         public string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate)
         {
-            var now = DateTime.UtcNow;
-            var activationDateAndTime = this.GetActivationDateAndTime(activationDate, activeFrom);
+            var now = DateTime.Now;
+            var activationDateAndTime = this.GetActivationDateAndTimeLocal(activationDate, activeFrom);
             if (now.Date > activationDateAndTime.Date)
             {
                 return ServicesConstants.InvalidActivationDate;
@@ -282,7 +282,7 @@
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
-        private DateTime GetActivationDateAndTime(string activationDate, string activeFrom)
+        private DateTime GetActivationDateAndTimeLocal(string activationDate, string activeFrom)
         => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
 
         private TimeSpan GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)

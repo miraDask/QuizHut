@@ -1,5 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Events
 {
+    using System;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -10,26 +12,24 @@
 
         public string Name { get; set; }
 
+        public DateTime ActivationDateAndTime { get; set; }
+
+        public TimeSpan DurationOfActivity { get; set; }
+
         public bool IsDeleted { get; set; }
 
-        public string StartDate { get; set; }
+        public string StartDate
+            => $"{this.ActivationDateAndTime.ToLocalTime().Date.ToString("dd/MM/yyyy")}";
 
-        public string Duration { get; set; }
+        public string Duration
+            => $"{this.ActivationDateAndTime.ToLocalTime().Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Minute.ToString("D2")}" +
+               $" - {this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Minute.ToString("D2")}";
 
         public string Status { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Event, EventListViewModel>()
-                .ForMember(
-                    x => x.StartDate,
-                    opt => opt.MapFrom(
-                        x => $"{x.ActivationDateAndTime.Date.ToString("dd/MM/yyyy")}"))
-                .ForMember(
-                    x => x.Duration,
-                    opt => opt.MapFrom(
-                        x => $"{x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}" +
-                        $" - {x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"))
                 .ForMember(
                     x => x.Status,
                     opt => opt.MapFrom(x => x.Status.ToString()));
