@@ -131,7 +131,7 @@
             if (allGroupsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allGroupsCount / (decimal)countPerPage);
-                var groups = await this.groupsService.GetAllPerPage<GroupListViewModel>(page, countPerPage); model.PagesCount = pagesCount;
+                var groups = await this.groupsService.GetAllPerPage<GroupListViewModel>(page, countPerPage);
                 model.Groups = groups;
                 model.PagesCount = pagesCount;
             }
@@ -142,8 +142,22 @@
         [ClearDashboardRequestInSessionActionFilterAttribute]
         public async Task<IActionResult> QuizzesAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var quizzes = await this.quizzesService.GetAllAsync<QuizListViewModel>(false);
-            var model = new QuizzesAllListingViewModel() { Quizzes = quizzes };
+            var allQuizzesCount = this.quizzesService.GetAllQuizzesCount();
+            int pagesCount = 0;
+            var model = new QuizzesAllListingViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allQuizzesCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allQuizzesCount / (decimal)countPerPage);
+                var quizzes = await this.quizzesService.GetAllPerPage<QuizListViewModel>(page, countPerPage);
+                model.PagesCount = pagesCount;
+                model.Quizzes = quizzes;
+            }
+
             return this.View(model);
         }
 
@@ -161,7 +175,7 @@
             if (allStudentsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allStudentsCount / (decimal)countPerPage);
-                var students = await this.userService.GetAllPerPage<StudentViewModel>(page, countPerPage); 
+                var students = await this.userService.GetAllPerPage<StudentViewModel>(page, countPerPage);
                 model.Students = students;
                 model.PagesCount = pagesCount;
             }

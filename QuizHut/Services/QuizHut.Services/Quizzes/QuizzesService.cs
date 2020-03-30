@@ -208,5 +208,16 @@
                 .Where(x => x.Id == id)
                 .Select(x => x.CreatorId)
                 .FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage)
+        => await this.quizRepository.AllAsNoTracking()
+            .OrderByDescending(x => x.CreatedOn)
+            .Skip(countPerPage * (page - 1))
+            .Take(countPerPage)
+            .To<T>()
+            .ToListAsync();
+
+        public int GetAllQuizzesCount()
+        => this.quizRepository.AllAsNoTracking().Count();
     }
 }

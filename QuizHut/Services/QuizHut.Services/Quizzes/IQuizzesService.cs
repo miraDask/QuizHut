@@ -9,6 +9,8 @@
 
         Task<IList<T>> GetAllAsync<T>(bool isAssignedToEventFilter);
 
+        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage);
+
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, bool isAssignedToEventFilter);
 
         Task<IList<T>> GetAllByCategoryIdAsync<T>(string id);
@@ -30,5 +32,7 @@
         Task<bool> HasUserPermition(string userId, string quizId);
 
         Task AssignEventToQuiz(string eventId, string quizId);
+
+        int GetAllQuizzesCount();
     }
 }
