@@ -98,9 +98,26 @@
         [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> EventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage);
-            var model = new EventsListAllViewModel { Events = events };
+            var allEventsCount = this.eventService.GetAllEventsCount();
+            int pagesCount = 0;
+            var model = new EventsListAllViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allEventsCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
+                var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage);
+                model.PagesCount = pagesCount;
+                model.Events = events;
+            }
+
             return this.View(model);
+            //var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage);
+            //var model = new EventsListAllViewModel { Events = events };
+            //return this.View(model);
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]

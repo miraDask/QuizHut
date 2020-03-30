@@ -300,12 +300,6 @@
             }
         }
 
-        public async Task<IList<T>> GetAllAsync<T>()
-        => await this.repository
-                .AllAsNoTracking()
-                .To<T>()
-                .ToListAsync();
-
         public int GetEventsCountByStudentIdAndStatus(string id, Status status)
         {
             var query = this.repository.AllAsNoTracking()

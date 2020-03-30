@@ -9,8 +9,6 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null);
 
-       // Task<IList<T>> GetAllAsync<T>();
-
         Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage);
 
         int GetAllEventsCount();
