@@ -115,16 +115,27 @@
             }
 
             return this.View(model);
-            //var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage);
-            //var model = new EventsListAllViewModel { Events = events };
-            //return this.View(model);
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]
-        public async Task<IActionResult> GroupsAll()
+        public async Task<IActionResult> GroupsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var groups = await this.groupsService.GetAllAsync<GroupListViewModel>();
-            var model = new GroupsListAllViewModel() { Groups = groups };
+            var allGroupsCount = this.groupsService.GetAllGroupsCount();
+            int pagesCount = 0;
+            var model = new GroupsListAllViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allGroupsCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allGroupsCount / (decimal)countPerPage);
+                var groups = await this.groupsService.GetAllPerPage<GroupListViewModel>(page, countPerPage); model.PagesCount = pagesCount;
+                model.Groups = groups;
+                model.PagesCount = pagesCount;
+            }
+
             return this.View(model);
         }
 

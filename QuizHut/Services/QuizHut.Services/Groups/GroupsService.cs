@@ -111,6 +111,7 @@
             .To<T>()
             .ToListAsync();
 
+        // TODO - ???
         public async Task<IList<T>> GetAllAsync<T>(string eventId = null)
         {
             var query = this.repository
@@ -124,5 +125,15 @@
 
             return await query.To<T>().ToListAsync();
         }
+
+        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage)
+        => await this.repository.AllAsNoTracking()
+                 .OrderByDescending(x => x.CreatedOn)
+                 .Skip(countPerPage * (page - 1))
+                 .Take(countPerPage)
+                 .To<T>()
+                 .ToListAsync();
+
+        public int GetAllGroupsCount() => this.repository.AllAsNoTracking().Count();
     }
 }
