@@ -1,4 +1,4 @@
-﻿@model IEnumerable<StudentEndedEventViewModel>
+﻿@model StudentEventsViewModel<StudentEndedEventViewModel>
 @{
     ViewData["Title"] = "Student Ended Events All";
 }
@@ -23,14 +23,14 @@
                 <tbody>
                     @if (Model != null)
                     {
-                        @foreach (var _event in Model)
+                        @foreach (var _event in Model.Events)
                         {
                             <tr class="table-danger">
                                 <th scope="row" class="pt-3">@_event.Name</th>
                                 <th scope="row" class="pt-3">@_event.QuizName</th>
                                 <th scope="row" class="pt-3">@_event.Date</th>
                                 <th scope="row" class="pt-3">@(_event.Score != null ? _event.Score.Score : "")</th>
-                     
+
                             </tr>
                         }
                     }
@@ -39,8 +39,55 @@
         </div>
     </div>
 </div>
-<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block"
-   asp-action="Index" asp-controller="Students">Go Back</a>
+@if (Model.PagesCount > 0)
+{
+    <div class="text-center mt-4">
+        <ul class="pagination">
+            @if (Model.CurrentPage == 1)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="/Students/StudentEndedEventsAll?page=@Model.PreviousPage"><i class="fas fa-long-arrow-alt-left"></i></a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" href="/Students/StudentEndedEventsAll?page=@Model.PreviousPage"><i class="fas fa-long-arrow-alt-left"></i></a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PagesCount; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" href="/Students/StudentEndedEventsAll?page=@i">@i</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="/Students/StudentEndedEventsAll?page=@i">@i</a>
+                    </li>
+                }
+            }
+            @if (Model.CurrentPage == Model.PagesCount)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="/Students/StudentEndedEventsAll?page=@Model.NextPage"><i class="fas fa-long-arrow-alt-right"></i></a>
+                </li>
+            }
+            else
+            {
+                <li id="right" class="page-item">
+                    <a class="page-link" href="/Students/StudentEndedEventsAll?page=@Model.NextPage"><i class="fas fa-long-arrow-alt-right"></i></a>
+                </li>
+            }
+        </ul>
+    </div>
+}
+@*<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block"
+   asp-action="Index" asp-controller="Students">Go Back</a>*@
 
 
 @section Profile

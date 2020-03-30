@@ -66,6 +66,25 @@
                 .ToListAsync();
         }
 
+        public async Task<IList<T>> GetByStudentIdFilteredByStatus<T>(Status status, string studentId, int page, int countPerPage)
+        {
+            var query = this.repository.AllAsNoTracking()
+                .Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
+
+            if (status == Status.Active)
+            {
+                query = query.Where(x => !x.Results.Any(x => x.StudentId == studentId));
+            }
+
+            return await query.Where(x => x.Status == status)
+              .OrderByDescending(x => x.CreatedOn)
+              .Skip(countPerPage * (page - 1))
+              .Take(countPerPage)
+              .To<T>()
+              .ToListAsync();
+        }
+
+        // TODO - ???
         public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(
             Status status,
             string creatorId = null,
@@ -278,6 +297,19 @@
                 .AllAsNoTracking()
                 .To<T>()
                 .ToListAsync();
+
+        public int GetEventsCountByStudentIdAndStatus(string id, Status status)
+        {
+            var query = this.repository.AllAsNoTracking()
+                   .Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == id)));
+
+            if (status == Status.Active)
+            {
+                query = query.Where(x => !x.Results.Any(x => x.StudentId == id));
+            }
+
+            return query.Where(x => x.Status == status).Count();
+        }
 
         private async Task<Event> GetEventById(string id)
         => await this.repository

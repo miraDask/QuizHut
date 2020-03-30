@@ -13,6 +13,10 @@
 
         Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null, string groupId = null);
 
+        Task<IList<T>> GetByStudentIdFilteredByStatus<T>(Status status, string studentId, int page, int countPerPage);
+
+        int GetEventsCountByStudentIdAndStatus(string id, Status status);
+
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
 
         Task DeleteAsync(string eventId);

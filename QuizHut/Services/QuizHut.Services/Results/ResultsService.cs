@@ -61,9 +61,9 @@
            .AllAsNoTracking()
            .Where(x => x.StudentId == id)
            .OrderByDescending(x => x.CreatedOn)
-           .To<T>()
            .Skip(countPerPage * (page - 1))
            .Take(countPerPage)
+           .To<T>()
            .ToListAsync();
 
         public async Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id)

@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -48,49 +49,99 @@
         public async Task<IActionResult> Results(int page = 1, int countPerPage = ResultsPerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var pagesCount = (int)Math.Ceiling(this.resultService.GetResultsCountByStudentId(studentId) / (decimal)countPerPage);
-            var results = await this.resultService.GetByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
-
+            var allResultsCount = this.resultService.GetResultsCountByStudentId(studentId);
+            int pagesCount = 0;
             var model = new StudentResultsViewModel()
             {
-                Results = results,
                 CurrentPage = page,
                 PagesCount = pagesCount,
             };
 
+            if (allResultsCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allResultsCount / (decimal)countPerPage);
+                var results = await this.resultService.GetByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
+                model.PagesCount = pagesCount;
+                model.Results = results;
+            }
+
             return this.View(model);
         }
 
-        public async Task<IActionResult> StudentActiveEventsAll()
+        public async Task<IActionResult> StudentActiveEventsAll(int page = 1, int countPerPage = ResultsPerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var activeEvents = await this.eventsService
-                .GetAllFiteredByStatusAsync<StudentActiveEventViewModel>(Status.Active, null, studentId);
-
-            return this.View(activeEvents);
-        }
-
-        public async Task<IActionResult> StudentEndedEventsAll()
-        {
-            var studentId = this.userManager.GetUserId(this.User);
-            var endedEvents = await this.eventsService
-                .GetAllFiteredByStatusAsync<StudentEndedEventViewModel>(Status.Ended, null, studentId);
-            var scores = await this.resultService.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
-            foreach (var endenEvent in endedEvents)
+            var allActiveEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Active);
+            int pagesCount = 0;
+            var model = new StudentEventsViewModel<StudentActiveEventViewModel>()
             {
-                endenEvent.Score = scores.FirstOrDefault(x => x.EventId == endenEvent.Id);
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allActiveEventsCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allActiveEventsCount / (decimal)countPerPage);
+                var activeEvents = await this.eventsService
+               .GetByStudentIdFilteredByStatus<StudentActiveEventViewModel>(Status.Pending, studentId, page, countPerPage);
+
+                model.PagesCount = pagesCount;
+                model.Events = activeEvents;
             }
 
-            return this.View(endedEvents);
+            return this.View(model);
         }
 
-        public async Task<IActionResult> StudentPendingEventsAll()
+        public async Task<IActionResult> StudentEndedEventsAll(int page = 1, int countPerPage = ResultsPerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var activeEvents = await this.eventsService
-                .GetAllFiteredByStatusAsync<StudentPendingEventViewModel>(Status.Pending, null, studentId);
+            var allEndedEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Ended);
+            int pagesCount = 0;
+            var model = new StudentEventsViewModel<StudentEndedEventViewModel>()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
 
-            return this.View(activeEvents);
+            if (allEndedEventsCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allEndedEventsCount / (decimal)countPerPage);
+                var endedEvents = await this.eventsService
+               .GetByStudentIdFilteredByStatus<StudentEndedEventViewModel>(Status.Ended, studentId, page, countPerPage);
+                var scores = await this.resultService.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
+                foreach (var endenEvent in endedEvents)
+                {
+                    endenEvent.Score = scores.FirstOrDefault(x => x.EventId == endenEvent.Id);
+                }
+
+                model.PagesCount = pagesCount;
+                model.Events = endedEvents;
+            }
+
+            return this.View(model);
+        }
+
+        public async Task<IActionResult> StudentPendingEventsAll(int page, int countPerPage)
+        {
+            var studentId = this.userManager.GetUserId(this.User);
+            var allPendingEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending);
+            int pagesCount = 0;
+            var model = new StudentEventsViewModel<StudentPendingEventViewModel>()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allPendingEventsCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allPendingEventsCount / (decimal)countPerPage);
+                var pendingEvents = await this.eventsService
+               .GetByStudentIdFilteredByStatus<StudentPendingEventViewModel>(Status.Pending, studentId, page, countPerPage);
+                model.PagesCount = pagesCount;
+                model.Events = pendingEvents;
+            }
+
+            return this.View(model);
         }
     }
 }

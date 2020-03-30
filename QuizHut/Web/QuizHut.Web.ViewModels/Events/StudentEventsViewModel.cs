@@ -1,10 +1,10 @@
-﻿namespace QuizHut.Web.ViewModels.Results
+﻿namespace QuizHut.Web.ViewModels.Events
 {
     using System.Collections.Generic;
 
-    public class StudentResultsViewModel
+    public class StudentEventsViewModel<T>
     {
-        public IEnumerable<StudentResultViewModel> Results { get; set; } = new HashSet<StudentResultViewModel>();
+        public IList<T> Events { get; set; } = new List<T>();
 
         public int PagesCount { get; set; }
 

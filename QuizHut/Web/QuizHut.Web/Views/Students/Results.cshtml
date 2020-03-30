@@ -61,13 +61,13 @@
             if (i == Model.CurrentPage)
             {
                 <li class="page-item active">
-                    <a class="page-link" href="/Students/Results?page=@i" onclick="changeArrowsClass(@Model.CurrentPage, @Model.PagesCount)">@i</a>
+                    <a class="page-link" href="/Students/Results?page=@i">@i</a>
                 </li>
             }
             else
             {
                 <li class="page-item">
-                    <a class="page-link" href="/Students/Results?page=@i" onclick="changeArrowsClass(@Model.CurrentPage, @Model.PagesCount)">@i</a>
+                    <a class="page-link" href="/Students/Results?page=@i">@i</a>
                 </li>
             }
         }
