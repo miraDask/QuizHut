@@ -84,6 +84,14 @@
               .ToListAsync();
         }
 
+        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage)
+        => await this.repository.AllAsNoTracking()
+              .OrderByDescending(x => x.CreatedOn)
+              .Skip(countPerPage * (page - 1))
+              .Take(countPerPage)
+              .To<T>()
+              .ToListAsync();
+
         // TODO - ???
         public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(
             Status status,
@@ -310,6 +318,8 @@
 
             return query.Where(x => x.Status == status).Count();
         }
+
+        public int GetAllEventsCount() => this.repository.AllAsNoTracking().Count();
 
         private async Task<Event> GetEventById(string id)
         => await this.repository

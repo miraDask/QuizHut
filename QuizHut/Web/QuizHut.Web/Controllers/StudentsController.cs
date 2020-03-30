@@ -1,7 +1,6 @@
 ﻿namespace QuizHut.Web.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -19,7 +18,7 @@
     [Authorize]
     public class StudentsController : Controller
     {
-        private const int ResultsPerPageDefaultValue = 5;
+        private const int PerPageDefaultValue = 5;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IResultsService resultService;
         private readonly IEventsService eventsService;
@@ -46,7 +45,7 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Results(int page = 1, int countPerPage = ResultsPerPageDefaultValue)
+        public async Task<IActionResult> Results(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
             var allResultsCount = this.resultService.GetResultsCountByStudentId(studentId);
@@ -68,7 +67,7 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> StudentActiveEventsAll(int page = 1, int countPerPage = ResultsPerPageDefaultValue)
+        public async Task<IActionResult> StudentActiveEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
             var allActiveEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Active);
@@ -92,7 +91,7 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> StudentEndedEventsAll(int page = 1, int countPerPage = ResultsPerPageDefaultValue)
+        public async Task<IActionResult> StudentEndedEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
             var allEndedEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Ended);
