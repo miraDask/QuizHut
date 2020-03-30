@@ -6,9 +6,12 @@
 <div class="col-md-10 mb-4 ml-md-5">
     <div class="component">
         <div class="card">
-            <div class="card-body p-0 mt-2">
-                <h4 class="card-title pl-3">All Results</h4>
-                <table class="table table-hover col-12 mt-2 mb-0">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+                    <div class="container my-1">
+                        <h5 class="mb-0">All Results</h5>
+                    </div>
+                </nav>
+                <table class="table table-hover col-12 mb-0">
                     <tbody>
                         @foreach (var _event in Model.Events)
                         {
@@ -27,7 +30,6 @@
                         }
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
     @if (Model.PagesCount > 0)

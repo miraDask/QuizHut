@@ -18,5 +18,9 @@
         Task<bool> AssignRoleAsync(string email, string roleName);
 
         Task RemoveFromRoleAsync(string id, string roleName);
+
+        int GetAllStudentsCount();
+
+        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage);
     }
 }

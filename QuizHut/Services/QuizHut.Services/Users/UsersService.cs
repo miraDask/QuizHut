@@ -124,5 +124,19 @@
             .Where(x => x.StudentsInGroups.Select(x => x.GroupId).Contains(groupId))
             .To<T>()
             .ToListAsync();
+
+        public int GetAllStudentsCount()
+        => this.repository.AllAsNoTracking()
+            .Where(x => !x.Roles.Any())
+            .Count();
+
+        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage)
+      => await this.repository.AllAsNoTracking()
+            .Where(x => !x.Roles.Any())
+            .OrderByDescending(x => x.CreatedOn)
+            .Skip(countPerPage * (page - 1))
+            .Take(countPerPage)
+            .To<T>()
+            .ToListAsync();
     }
 }

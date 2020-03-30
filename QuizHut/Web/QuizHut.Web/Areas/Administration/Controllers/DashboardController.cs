@@ -21,18 +21,18 @@
     public class DashboardController : AdministrationController
     {
         private const int PerPageDefaultValue = 5;
-        private readonly IUsersService service;
+        private readonly IUsersService userService;
         private readonly IEventsService eventService;
         private readonly IGroupsService groupsService;
         private readonly IQuizzesService quizzesService;
 
         public DashboardController(
-            IUsersService service,
+            IUsersService userService,
             IEventsService eventService,
             IGroupsService groupsService,
             IQuizzesService quizzesService)
         {
-            this.service = service;
+            this.userService = userService;
             this.eventService = eventService;
             this.groupsService = groupsService;
             this.quizzesService = quizzesService;
@@ -57,7 +57,7 @@
                 return this.RedirectToAction("Index", new { invalidEmail = GlobalConstants.Empty, roleName = model.RoleName });
             }
 
-            var isAdded = await this.service.AssignRoleAsync(model.NewUser.Email, model.RoleName);
+            var isAdded = await this.userService.AssignRoleAsync(model.NewUser.Email, model.RoleName);
 
             if (!isAdded)
             {
@@ -69,7 +69,7 @@
 
         public async Task<IActionResult> Delete(string id, string roleName)
         {
-            await this.service.RemoveFromRoleAsync(id, roleName);
+            await this.userService.RemoveFromRoleAsync(id, roleName);
             return this.RedirectToAction("Index");
         }
 
@@ -140,7 +140,7 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> QuizzesAll()
+        public async Task<IActionResult> QuizzesAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var quizzes = await this.quizzesService.GetAllAsync<QuizListViewModel>(false);
             var model = new QuizzesAllListingViewModel() { Quizzes = quizzes };
@@ -148,10 +148,25 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> StudentsAll()
+        public async Task<IActionResult> StudentsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var students = await this.service.GetAllByUserIdAsync<StudentViewModel>();
-            return this.View(students);
+            var allStudentsCount = this.userService.GetAllStudentsCount();
+            int pagesCount = 0;
+            var model = new StudentsAllViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allStudentsCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allStudentsCount / (decimal)countPerPage);
+                var students = await this.userService.GetAllPerPage<StudentViewModel>(page, countPerPage); 
+                model.Students = students;
+                model.PagesCount = pagesCount;
+            }
+
+            return this.View(model);
         }
     }
 }
