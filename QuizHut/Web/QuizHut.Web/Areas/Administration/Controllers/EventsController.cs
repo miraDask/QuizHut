@@ -216,26 +216,48 @@
             return this.RedirectToAction("EventDetails", new { id = eventId });
         }
 
-        public async Task<IActionResult> ActiveEventsAll()
+        public async Task<IActionResult> ActiveEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var activeEvents = await this.service.GetAllFiteredByStatusAsync<EventListViewModel>(Status.Active, userId);
-            var model = new EventsListAllViewModel
+            var allActiveEventsCreatedByTeacher = this.service.GetAllEventsCount(Status.Active, userId);
+            int pagesCount = 0;
+
+            var model = new EventsListAllViewModel()
             {
-                Events = activeEvents,
+                CurrentPage = page,
+                PagesCount = pagesCount,
             };
+
+            if (allActiveEventsCreatedByTeacher > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allActiveEventsCreatedByTeacher / (decimal)countPerPage);
+                var events = await this.service.GetAllPerPage<EventListViewModel>(page, countPerPage, Status.Active, userId);
+                model.Events = events;
+                model.PagesCount = pagesCount;
+            }
 
             return this.View(model);
         }
 
-        public async Task<IActionResult> EndedEventsAll()
+        public async Task<IActionResult> EndedEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var endedEvents = await this.service.GetAllFiteredByStatusAsync<EventListViewModel>(Status.Ended, userId);
-            var model = new EventsListAllViewModel
+            var allEndedEventsCreatedByTeacher = this.service.GetAllEventsCount(Status.Ended, userId);
+            int pagesCount = 0;
+
+            var model = new EventsListAllViewModel()
             {
-                Events = endedEvents,
+                CurrentPage = page,
+                PagesCount = pagesCount,
             };
+
+            if (allEndedEventsCreatedByTeacher > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allEndedEventsCreatedByTeacher / (decimal)countPerPage);
+                var events = await this.service.GetAllPerPage<EventListViewModel>(page, countPerPage, Status.Ended, userId);
+                model.Events = events;
+                model.PagesCount = pagesCount;
+            }
 
             return this.View(model);
         }
