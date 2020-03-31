@@ -26,6 +26,8 @@
 
         public const string Empty = "empty";
 
+        public const string DashboardRequest = "DashboardRequest";
+
         public static class DataSeeding
         {
             public const string Password = "123456";

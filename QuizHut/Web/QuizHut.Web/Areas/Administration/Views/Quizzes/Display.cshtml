@@ -101,7 +101,7 @@
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes" asp-route-id="@Model.Id">Export To PDF</a>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">Go Back</a>
 </form>
-@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) && this.ViewData[GlobalConstants.DashboardRequest] != null)
 {
     @section InnerNav
     {

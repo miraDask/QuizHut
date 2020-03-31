@@ -114,7 +114,7 @@
             var userId = this.userManager.GetUserId(this.User);
 
             IList<GroupAssignViewModel> groups;
-            var isDashboardRequest = this.HttpContext.Session.GetString("DashboardRequest") != null;
+            var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
                 groups = await this.groupsService.GetAllAsync<GroupAssignViewModel>(id);
@@ -149,7 +149,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             IList<QuizAssignViewModel> quizzes;
-            var isDashboardRequest = this.HttpContext.Session.GetString("DashboardRequest") != null;
+            var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
                 quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>(true);
@@ -190,6 +190,11 @@
             if (messagesAreSend != null)
             {
                 model.ConfirmationMessage = messagesAreSend;
+            }
+
+            if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
+            {
+                this.ViewData[GlobalConstants.DashboardRequest] = true;
             }
 
             return this.View(model);

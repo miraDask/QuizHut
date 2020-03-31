@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
@@ -135,6 +136,12 @@
             var model = await this.service.GetGroupModelAsync<GroupDetailsViewModel>(id);
             model.Students = students;
             model.Events = events;
+
+            if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
+            {
+                this.ViewData[GlobalConstants.DashboardRequest] = true;
+            }
+
             return this.View(model);
         }
 
@@ -167,7 +174,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             IList<EventsAssignViewModel> events;
-            var isDashboardRequest = this.HttpContext.Session.GetString("DashboardRequest") != null;
+            var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
                 events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, null, null, id);
@@ -201,7 +208,7 @@
         public async Task<IActionResult> AddStudents(string id)
         {
             IList<StudentViewModel> students;
-            var isDashboardRequest = this.HttpContext.Session.GetString("DashboardRequest") != null;
+            var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
                 students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(null, id);

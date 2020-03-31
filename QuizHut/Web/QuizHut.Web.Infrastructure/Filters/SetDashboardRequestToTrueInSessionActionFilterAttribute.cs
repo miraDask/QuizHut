@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using QuizHut.Common;
 
     public class SetDashboardRequestToTrueInSessionActionFilterAttribute : ActionFilterAttribute
     {
@@ -10,7 +11,7 @@
         {
             var controller = (Controller)context.Controller;
 
-            controller.HttpContext.Session.SetString("DashboardRequest", "true");
+            controller.HttpContext.Session.SetString(GlobalConstants.DashboardRequest, "true");
         }
     }
 }

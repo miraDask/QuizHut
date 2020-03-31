@@ -60,6 +60,11 @@
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
             var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
 
+            if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
+            {
+                this.ViewData[GlobalConstants.DashboardRequest] = true;
+            }
+
             return this.View(quizModel);
         }
 

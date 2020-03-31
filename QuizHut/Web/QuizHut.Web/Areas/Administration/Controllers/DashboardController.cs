@@ -73,7 +73,7 @@
             return this.RedirectToAction("Index");
         }
 
-        [ClearDashboardRequestInSessionActionFilterAttribute]
+        [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> ResultsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var allEventsCount = this.eventService.GetAllEventsCount();
@@ -139,7 +139,7 @@
             return this.View(model);
         }
 
-        [ClearDashboardRequestInSessionActionFilterAttribute]
+        [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> QuizzesAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var allQuizzesCount = this.quizzesService.GetAllQuizzesCount();
@@ -161,7 +161,7 @@
             return this.View(model);
         }
 
-        [ClearDashboardRequestInSessionActionFilterAttribute]
+        [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> StudentsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var allStudentsCount = this.userService.GetAllStudentsCount();
