@@ -24,8 +24,8 @@
                 .ForMember(
                     x => x.Duration,
                     opt => opt.MapFrom(
-                        x => $"{x.ActivationDateAndTime.Hour.ToString("D2")}:{x.ActivationDateAndTime.Minute.ToString("D2")}" +
-                        $" - {x.ActivationDateAndTime.Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.Add(x.DurationOfActivity).Minute.ToString("D2")}"));
+                        x => $"{x.ActivationDateAndTime.ToLocalTime().Hour.ToString("D2")}:{x.ActivationDateAndTime.ToLocalTime().Minute.ToString("D2")}" +
+                        $" - {x.ActivationDateAndTime.ToLocalTime().Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.ToLocalTime().Add(x.DurationOfActivity).Minute.ToString("D2")}"));
         }
     }
 }

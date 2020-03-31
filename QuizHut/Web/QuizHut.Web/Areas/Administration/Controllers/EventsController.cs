@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -20,6 +21,7 @@
 
     public class EventsController : AdministrationController
     {
+        private const int PerPageDefaultValue = 5;
         private readonly IEventsService service;
         private readonly IQuizzesService quizService;
         private readonly IGroupsService groupsService;
@@ -38,11 +40,26 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllEventsCreatedByTeacher()
+        public async Task<IActionResult> AllEventsCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var events = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(userId);
-            var model = new EventsListAllViewModel { Events = events };
+            var allEventsCreatedByTeacher = this.service.GetAllEventsCount(userId);
+            int pagesCount = 0;
+
+            var model = new EventsListAllViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allEventsCreatedByTeacher > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allEventsCreatedByTeacher / (decimal)countPerPage);
+                var events = await this.service.GetAllPerPage<EventListViewModel>(page, countPerPage, userId);
+                model.Events = events;
+                model.PagesCount = pagesCount;
+            }
+
             return this.View(model);
         }
 

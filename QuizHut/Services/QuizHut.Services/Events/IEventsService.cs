@@ -9,9 +9,9 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null);
 
-        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage);
+        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
 
-        int GetAllEventsCount();
+        int GetAllEventsCount(string creatorId = null);
 
         Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null, string groupId = null);
 

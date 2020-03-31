@@ -82,7 +82,7 @@
             {
                 pagesCount = (int)Math.Ceiling(allActiveEventsCount / (decimal)countPerPage);
                 var activeEvents = await this.eventsService
-               .GetByStudentIdFilteredByStatus<StudentActiveEventViewModel>(Status.Pending, studentId, page, countPerPage);
+               .GetByStudentIdFilteredByStatus<StudentActiveEventViewModel>(Status.Active, studentId, page, countPerPage);
 
                 model.PagesCount = pagesCount;
                 model.Events = activeEvents;

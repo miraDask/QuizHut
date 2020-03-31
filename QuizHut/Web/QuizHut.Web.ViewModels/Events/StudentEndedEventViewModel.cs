@@ -22,7 +22,7 @@
             configuration.CreateMap<Event, StudentEndedEventViewModel>()
                  .ForMember(
                     x => x.Date,
-                    opt => opt.MapFrom(x => x.ActivationDateAndTime.Date.ToString("dd/MM/yyyy")));
+                    opt => opt.MapFrom(x => x.ActivationDateAndTime.ToLocalTime().Date.ToString("dd/MM/yyyy")));
         }
     }
 }

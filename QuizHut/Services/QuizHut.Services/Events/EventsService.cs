@@ -84,13 +84,22 @@
               .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage)
-        => await this.repository.AllAsNoTracking()
-              .OrderByDescending(x => x.CreatedOn)
-              .Skip(countPerPage * (page - 1))
-              .Take(countPerPage)
-              .To<T>()
-              .ToListAsync();
+        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null)
+        {
+            var query = this.repository.AllAsNoTracking();
+
+            if (creatorId != null)
+            {
+                query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            return await query
+                   .OrderByDescending(x => x.CreatedOn)
+                   .Skip(countPerPage * (page - 1))
+                   .Take(countPerPage)
+                   .To<T>()
+                   .ToListAsync();
+        }
 
         // TODO - ???
         public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(
@@ -313,7 +322,17 @@
             return query.Where(x => x.Status == status).Count();
         }
 
-        public int GetAllEventsCount() => this.repository.AllAsNoTracking().Count();
+        public int GetAllEventsCount(string creatorId)
+        {
+            var query = this.repository.AllAsNoTracking();
+
+            if (creatorId != null)
+            {
+                query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            return query.Count();
+        }
 
         private async Task<Event> GetEventById(string id)
         => await this.repository
