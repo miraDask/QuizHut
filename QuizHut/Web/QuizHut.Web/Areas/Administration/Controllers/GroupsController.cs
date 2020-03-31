@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -19,6 +20,7 @@
 
     public class GroupsController : AdministrationController
     {
+        private const int PerPageDefaultValue = 5;
         private readonly IGroupsService service;
         private readonly IEventsService eventService;
         private readonly IUsersService userService;
@@ -37,11 +39,26 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllGroupsCreatedByTeacher()
+        public async Task<IActionResult> AllGroupsCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var groups = await this.service.GetAllByCreatorIdAsync<GroupListViewModel>(userId);
-            var model = new GroupsListAllViewModel() { Groups = groups };
+            var allGroupsCreatedByTeacherCount = this.service.GetAllGroupsCount(userId);
+            int pagesCount = 0;
+
+            var model = new GroupsListAllViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allGroupsCreatedByTeacherCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allGroupsCreatedByTeacherCount / (decimal)countPerPage);
+                var groups = await this.service.GetAllPerPage<GroupListViewModel>(page, countPerPage, userId);
+                model.Groups = groups;
+                model.PagesCount = pagesCount;
+            }
+
             return this.View(model);
         }
 

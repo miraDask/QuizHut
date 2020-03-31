@@ -126,14 +126,33 @@
             return await query.To<T>().ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage)
-        => await this.repository.AllAsNoTracking()
-                 .OrderByDescending(x => x.CreatedOn)
-                 .Skip(countPerPage * (page - 1))
-                 .Take(countPerPage)
-                 .To<T>()
-                 .ToListAsync();
+        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null)
+        {
+            var query = this.repository.AllAsNoTracking();
 
-        public int GetAllGroupsCount() => this.repository.AllAsNoTracking().Count();
+            if (creatorId != null)
+            {
+                query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            return await query
+                   .OrderByDescending(x => x.CreatedOn)
+                   .Skip(countPerPage * (page - 1))
+                   .Take(countPerPage)
+                   .To<T>()
+                   .ToListAsync();
+        }
+
+        public int GetAllGroupsCount(string creatorId = null)
+        {
+            var query = this.repository.AllAsNoTracking();
+
+            if (creatorId != null)
+            {
+                query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            return query.Count();
+        }
     }
 }
