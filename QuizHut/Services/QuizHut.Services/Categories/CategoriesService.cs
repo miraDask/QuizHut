@@ -30,11 +30,12 @@
             return category.Id;
         }
 
-        public async Task<IEnumerable<T>> GetAllByCreatorIdAsync<T>(string id)
-         => await this.repository
-                .AllAsNoTracking()
-                .Where(x => x.CreatorId == id)
+        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId)
+        => await this.repository.AllAsNoTracking()
+                .Where(x => x.CreatorId == creatorId)
                 .OrderByDescending(x => x.CreatedOn)
+                .Skip(countPerPage * (page - 1))
+                .Take(countPerPage)
                 .To<T>()
                 .ToListAsync();
 
@@ -105,5 +106,8 @@
             .Where(x => x.Id == id)
             .To<T>()
             .FirstOrDefaultAsync();
+
+        public int GetAllCategoriesCount(string creatorId)
+        => this.repository.AllAsNoTracking().Where(x => x.CreatorId == creatorId).Count();
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -14,6 +15,7 @@
 
     public class CategoriesController : AdministrationController
     {
+        private const int PerPageDefaultValue = 5;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ICategoriesService service;
         private readonly IQuizzesService quizService;
@@ -29,11 +31,26 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllCategoriesCreatedByTeacher()
+        public async Task<IActionResult> AllCategoriesCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var categories = await this.service.GetAllByCreatorIdAsync<CategoryViewModel>(userId);
-            var model = new CategoriesListAllViewModel() { Categories = categories };
+            var allCategoriesCreatedByTeacherCount = this.service.GetAllCategoriesCount(userId);
+            int pagesCount = 0;
+
+            var model = new CategoriesListAllViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allCategoriesCreatedByTeacherCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allCategoriesCreatedByTeacherCount / (decimal)countPerPage);
+                var categories = await this.service.GetAllPerPage<CategoryViewModel>(page, countPerPage, userId);
+                model.Categories = categories;
+                model.PagesCount = pagesCount;
+            }
+
             return this.View(model);
         }
 
