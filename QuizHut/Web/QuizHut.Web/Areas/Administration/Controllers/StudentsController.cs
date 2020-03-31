@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
@@ -11,6 +12,7 @@
 
     public class StudentsController : AdministrationController
     {
+        private const int PerPageDefaultValue = 5;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUsersService service;
 
@@ -21,15 +23,26 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllStudentsAddedByTeacher(string invalidEmail)
+        public async Task<IActionResult> AllStudentsAddedByTeacher(string invalidEmail, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var students = await this.service.GetAllByUserIdAsync<StudentViewModel>(userId);
+            var allStudentsAddedByTeacherCount = this.service.GetAllStudentsCount(userId);
+            int pagesCount = 0;
+
             var model = new AllStudentsAddedByTeacherViewModel()
             {
-                Students = students,
                 NewStudent = new StudentInputViewModel(),
+                CurrentPage = page,
+                PagesCount = pagesCount,
             };
+
+            if (allStudentsAddedByTeacherCount > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allStudentsAddedByTeacherCount / (decimal)countPerPage);
+                var students = await this.service.GetAllPerPage<StudentViewModel>(page, countPerPage, userId);
+                model.Students = students;
+                model.PagesCount = pagesCount;
+            }
 
             if (invalidEmail != null)
             {

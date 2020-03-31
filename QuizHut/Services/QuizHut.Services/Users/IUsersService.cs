@@ -19,8 +19,8 @@
 
         Task RemoveFromRoleAsync(string id, string roleName);
 
-        int GetAllStudentsCount();
+        int GetAllStudentsCount(string teacher = null);
 
-        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage);
+        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string teacherId = null);
     }
 }
