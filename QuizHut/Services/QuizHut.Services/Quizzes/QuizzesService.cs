@@ -209,15 +209,32 @@
                 .Select(x => x.CreatorId)
                 .FirstOrDefaultAsync();
 
-        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage)
-        => await this.quizRepository.AllAsNoTracking()
-            .OrderByDescending(x => x.CreatedOn)
+        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null)
+        {
+            var query = this.quizRepository.AllAsNoTracking();
+
+            if (creatorId != null)
+            {
+                query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            return await query.OrderByDescending(x => x.CreatedOn)
             .Skip(countPerPage * (page - 1))
             .Take(countPerPage)
             .To<T>()
             .ToListAsync();
+        }
 
-        public int GetAllQuizzesCount()
-        => this.quizRepository.AllAsNoTracking().Count();
+        public int GetAllQuizzesCount(string creatorId = null)
+        {
+            var query = this.quizRepository.AllAsNoTracking();
+
+            if (creatorId != null)
+            {
+                query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            return query.Count();
+        }
     }
 }

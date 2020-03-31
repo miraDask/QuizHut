@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@
 
     public class QuizzesController : AdministrationController
     {
+        private const int PerPageDefaultValue = 5;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
 
@@ -62,11 +64,26 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllQuizzesCreatedByTeacher()
+        public async Task<IActionResult> AllQuizzesCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizListViewModel>(userId, false);
-            var model = new QuizzesAllListingViewModel() { Quizzes = quizzes };
+            var allQuizzesCreatedByTeacher = this.quizService.GetAllQuizzesCount(userId);
+            var pagesCount = 0;
+
+            var model = new QuizzesAllListingViewModel()
+            {
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            if (allQuizzesCreatedByTeacher > 0)
+            {
+                pagesCount = (int)Math.Ceiling(allQuizzesCreatedByTeacher / (decimal)countPerPage);
+                var quizzes = await this.quizService.GetAllPerPage<QuizListViewModel>(page, countPerPage, userId);
+                model.Quizzes = quizzes;
+                model.PagesCount = pagesCount;
+            }
+
             return this.View(model);
         }
 
