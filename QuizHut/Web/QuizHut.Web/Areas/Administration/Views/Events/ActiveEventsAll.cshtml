@@ -3,116 +3,73 @@
     ViewData["Title"] = "All Active Events";
 }
 
-    <div class="col-md-10 mb-4 ml-md-5">
-        <div class="component">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-circle text-success"></i> Results for:
-                </div>
-                <div class="card-body p-0 mt-2">
-                    <h4 class="card-title pl-3">All Active Events</h4>
-                    <table class="table table-hover col-12 mt-2 mb-0">
-                        <tbody>
-                            @foreach (var _event in Model.Events)
-                            {
-                                <tr class="table-success">
-                                    <th scope="row" class="pt-3">@_event.Name</th>
-                                    <th scope="row" class="pt-3 text-center"></th>
-                                    <td class="text-right">
-                                        <a type="submit" class="btn btn-outline-success py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
-                                            View Results
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
+<div class="col-md-10 mb-4 ml-md-5">
+    <div class="component">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-circle text-success"></i> Results for:
+            </div>
+            <div class="card-body p-0 mt-2">
+                <h4 class="card-title pl-3">All Active Events</h4>
+                <table class="table table-hover col-12 mt-2 mb-0">
+                    <tbody>
+                        @foreach (var _event in Model.Events)
+                        {
+                            <tr class="table-success">
+                                <th scope="row" class="pt-3">@_event.Name</th>
+                                <th scope="row" class="pt-3 text-center"></th>
+                                <td class="text-right">
+                                    <a type="submit" class="btn btn-outline-success py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
+                                        View Results
+                                    </a>
+                                </td>
+                            </tr>
+                        }
 
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
         </div>
-        @if (Model.PagesCount > 1)
-        {
-            <div class="text-center mt-4">
-                <ul class="pagination justify-content-center">
-                    @if (Model.CurrentPage == 1)
-                    {
-                        <li class="page-item disabled">
-                            <a class="page-link"
-                               asp-area="Administration"
-                               asp-controller="Events"
-                               asp-action="ActiveEventsAll"
-                               asp-route-page="@Model.PreviousPage">
-                                <i class="fas fa-long-arrow-alt-left"></i>
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item">
-                            <a class="page-link"
-                               asp-area="Administration"
-                               asp-controller="Events"
-                               asp-action="ActiveEventsAll"
-                               asp-route-page="@Model.PreviousPage">
-                                <i class="fas fa-long-arrow-alt-left"></i>
-                            </a>
-                        </li>
-                    }
-
-                    @for (int i = 1; i <= Model.PagesCount; i++)
-                    {
-                        if (i == Model.CurrentPage)
-                        {
-                            <li class="page-item active">
-                                <a class="page-link"
-                                   asp-area="Administration"
-                                   asp-controller="Events"
-                                   asp-action="ActiveEventsAll"
-                                   asp-route-page="@i">
-                                    @i
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="page-item">
-                                <a class="page-link"
-                                   asp-area="Administration"
-                                   asp-controller="Events"
-                                   asp-action="ActiveEventsAll"
-                                   asp-route-page="@i">
-                                    @i
-                                </a>
-                            </li>
-                        }
-                    }
-                    @if (Model.CurrentPage == Model.PagesCount)
-                    {
-                        <li class="page-item disabled">
-                            <a class="page-link"
-                               asp-area="Administration"
-                               asp-controller="Events"
-                               asp-action="ActiveEventsAll"
-                               asp-route-page="@Model.NextPage">
-                                <i class="fas fa-long-arrow-alt-right"></i>
-                            </a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="page-item">
-                            <a class="page-link"
-                               asp-area="Administration"
-                               asp-controller="Events"
-                               asp-action="ActiveEventsAll"
-                               asp-route-page="@Model.NextPage">
-                                <i class="fas fa-long-arrow-alt-right"></i>
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        }
     </div>
+    @if (Model.PagesCount > 1)
+    {
+        var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+        var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+        <div class="text-center mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @disabledLeftArrow">
+                    <a class="page-link"
+                       asp-area="Administration"
+                       asp-controller="Events"
+                       asp-action="ActiveEventsAll"
+                       asp-route-page="@Model.PreviousPage">
+                        <i class="fas fa-long-arrow-alt-left"></i>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.PagesCount; i++)
+                {
+                    var active = i == Model.CurrentPage ? "active" : string.Empty;
+                    <li class="page-item @active">
+                        <a class="page-link"
+                           asp-area="Administration"
+                           asp-controller="Events"
+                           asp-action="ActiveEventsAll"
+                           asp-route-page="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+                <li class="page-item @disabledRightArrow">
+                    <a class="page-link"
+                       asp-area="Administration"
+                       asp-controller="Events"
+                       asp-action="ActiveEventsAll"
+                       asp-route-page="@Model.NextPage">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    }
+</div>
 
