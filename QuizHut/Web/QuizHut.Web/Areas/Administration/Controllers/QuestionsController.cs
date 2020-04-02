@@ -31,7 +31,7 @@
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> AddNewQuestion(QuestionViewModel model)
+        public async Task<IActionResult> AddNewQuestion(QuestionInputModel model)
         {
             var quizId = this.HttpContext.Session.GetString(Constants.QuizSeesionId);
             var questionId = await this.questionService.CreateQuestionAsync(quizId, model.Text);
@@ -39,25 +39,24 @@
             return this.RedirectToAction("AnswerInput", "Answers");
         }
 
-        [HttpPost]
-        [ModelStateValidationActionFilterAttribute]
-        public IActionResult EditQuestionInput(QuestionViewModel model)
+        public async Task<IActionResult> EditQuestionInput(string id)
         {
+            var model = await this.questionService.GetByIdAsync<QuestionInputModel>(id);
             return this.View(model);
         }
 
+        [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> Edit(QuestionViewModel model)
+        public async Task<IActionResult> Edit(QuestionInputModel model)
         {
             await this.questionService.Update(model.Id, model.Text);
 
             return this.RedirectToAction("Display", "Quizzes");
         }
 
-        [ModelStateValidationActionFilterAttribute]
-        public async Task<IActionResult> Delete(QuestionViewModel model)
+        public async Task<IActionResult> Delete(string id)
         {
-            await this.questionService.DeleteQuestionByIdAsync(model.Id);
+            await this.questionService.DeleteQuestionByIdAsync(id);
 
             return this.RedirectToAction("Display", "Quizzes");
         }

@@ -6,7 +6,6 @@
     var deleteTarget = "#" + deleteId;
 }
 
-
 <form method="post" class="form-group flex-grow-1 d-inline">
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 py-2 pr-1">
         <div class="container">
@@ -22,21 +21,19 @@
             <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item m-1">
-                        <input type="hidden" class="form-control" name="AnswerToAdd" value="true">
-
-                        <button type="submit" class="nav-link  btn btn-primary col-lg-12"
+                        <a class="nav-link  btn btn-primary col-lg-12"
                                 asp-area="Administration"
                                 asp-action="ApendAnswerInput"
-                                asp-controller="Answers">
+                                asp-controller="Answers"
+                                asp-route-id="@Model.Id">
                             Add Answer
-                        </button>
+                        </a>
                     </li>
                     <li class="nav-item m-1">
-                        <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="id" value="@Model.Id">
                         <!-- button that opens the modal -->
-                        <button type="button" class="nav-link btn btn-primary col-lg-12" data-toggle="modal" data-target="@deleteTarget">
+                        <a class="nav-link btn btn-primary col-lg-12" data-toggle="modal" data-target="@deleteTarget">
                             Delete
-                        </button>
+                        </a>
                         <!-- the modal -->
                         <div class="modal fade" id="@deleteId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -51,28 +48,27 @@
                                         <h5>Are you sure you want to delete this question?</h5>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit"
-                                                asp-area="Administration"
-                                                asp-action="Delete"
-                                                asp-controller="Questions"
-                                                class="btn btn-success">
+                                        <a asp-area="Administration"
+                                           asp-action="Delete"
+                                           asp-controller="Questions"
+                                           asp-route-id="@Model.Id"
+                                           class="btn btn-success">
                                             Delete
-                                        </button>
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                        </a>
+                                        <a class="btn btn-danger" data-dismiss="modal">No!</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
                     <li class="nav-item m-1">
-                        <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" name="Text" value="@Model.Text">
-                        <button type="submit"
-                                asp-area="Administration"
-                                asp-action="EditQuestionInput"
-                                asp-controller="Questions"
-                                class="nav-link  btn btn-primary col-lg-12">
+                        <a asp-area="Administration"
+                           asp-action="EditQuestionInput"
+                           asp-controller="Questions"
+                           asp-route-id="@Model.Id"
+                           class="nav-link  btn btn-primary col-lg-12">
                             Edit
-                        </button>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -80,11 +76,9 @@
     </nav>
     <input type="text"
            class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate"
-           disabled 
+           disabled
            name="@Model.Text"
            value="@Model.Text">
-    <input type="hidden" class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" asp-for="@Model.Id" value="@Model.Id">
-
     @*answers*@
     @for (int i = 0; i < Model.Answers.Count; i++)
     {
@@ -146,10 +140,10 @@
                             </li>
                             <li class="nav-item m-1">
                                 <a class="nav-link  btn btn-primary"
-                                   asp-action="EditAnswerInput" 
-                                   asp-controller="Answers" 
+                                   asp-action="EditAnswerInput"
+                                   asp-controller="Answers"
                                    asp-route-id="@answer.Id">
-                                Edit
+                                    Edit
                                 </a>
                             </li>
                         </ul>
@@ -157,7 +151,7 @@
                 </div>
             </nav>
             <input type="text"
-                   class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate" 
+                   class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate"
                    disabled
                    asp-for="@answer.Text"
                    value="@answer.Text">

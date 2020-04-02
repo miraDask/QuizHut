@@ -160,7 +160,7 @@
         [HttpGet]
         public async Task<IActionResult> PDFExport(string id)
         {
-            var quizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(id);
+            var quizModel = await this.quizService.GetQuizByIdAsync<QuizDetailsViewModel>(id);
 
             return new ViewAsPdf("PDFExport", quizModel)
             {

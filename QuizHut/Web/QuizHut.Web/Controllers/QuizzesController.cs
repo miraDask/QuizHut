@@ -114,7 +114,7 @@
         public async Task<IActionResult> Submit(AttemtedQuizViewModel model)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var originalQuizModel = await this.quizService.GetQuizByIdAsync<InputQuizViewModel>(model.Id);
+            var originalQuizModel = await this.quizService.GetQuizByIdAsync<QuizDetailsViewModel>(model.Id);
             var points = this.resultHelper.CalculateResult(originalQuizModel.Questions, model.Questions);
             var creatorId = await this.quizService.GetCreatorIdByQuizIdAsync(model.Id);
             if (creatorId != userId)

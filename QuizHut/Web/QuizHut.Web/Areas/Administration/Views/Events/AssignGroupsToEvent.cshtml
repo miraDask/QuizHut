@@ -63,14 +63,6 @@
         </div>
     </form>
 </div>
-
-@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
-{
-    @section InnerNav
-    {
-        <partial name="_DashboardNavBarPartial" />
-    }
-}
 @section Scripts
 {
     <script src="~/js/navigation.js" asp-append-version="true"></script>

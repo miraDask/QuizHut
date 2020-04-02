@@ -6,6 +6,7 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Mapping;
 
     public class QuestionsService : IQuestionsService
     {
@@ -23,12 +24,12 @@
             var quiz = await this.quizRepository.AllAsNoTracking().Select(x => new
             {
                 x.Id,
-                Questions = x.Questions.ToList(),
+                Questions = x.Questions.Count(),
             }).FirstOrDefaultAsync(x => x.Id == quizId);
 
             var question = new Question
             {
-                Number = quiz.Questions.Count() + 1,
+                Number = quiz.Questions + 1,
                 Text = questionText,
                 QuizId = quizId,
             };
@@ -72,5 +73,11 @@
             this.repository.Update(question);
             await this.repository.SaveChangesAsync();
         }
+
+        public async Task<T> GetByIdAsync<T>(string id)
+        => await this.repository.AllAsNoTracking()
+            .Where(x => x.Id == id)
+            .To<T>()
+            .FirstOrDefaultAsync();
     }
 }

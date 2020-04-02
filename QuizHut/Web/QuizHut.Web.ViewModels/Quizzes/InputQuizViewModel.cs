@@ -13,7 +13,7 @@
     {
         public InputQuizViewModel()
         {
-            this.Questions = new List<QuestionViewModel>();
+            this.Questions = new List<QuestionInputModel>();
         }
 
         public string Id { get; set; }
@@ -42,7 +42,7 @@
 
         public bool PasswordIsValid { get; set; }
 
-        public IList<QuestionViewModel> Questions { get; set; }
+        public IList<QuestionInputModel> Questions { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

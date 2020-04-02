@@ -34,7 +34,6 @@
             return this.RedirectToAction("AnswerInput");
         }
 
-        [HttpPost]
         public IActionResult ApendAnswerInput(string id)
         {
             var model = new AnswerViewModel() { QuestionId = id };

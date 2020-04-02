@@ -11,5 +11,7 @@
         Task UpdateAllQuestionsInQuizNumeration(string quizId);
 
         Task Update(string id, string text);
+
+        Task<T> GetByIdAsync<T>(string id);
     }
 }
