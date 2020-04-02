@@ -1,110 +1,153 @@
-﻿@model QuizDetailsViewModel
+﻿@model QuizDetailsPagingModel
 @{
     ViewData["Title"] = "Quiz Details";
 }
-@*<form id="quiz" method="post">*@
-    @* Details *@
-    <div class="form-group flex-grow-1 d-inline">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
-            <div class="container">
-                <h5 class="mb-0">Quiz Details</h5>
-                <button class="navbar-toggler collapsed bg-primary"
-                        type="button" data-toggle="collapse"
-                        data-target="#navbarNavDropdown"
-                        aria-controls="navbarNavDropdown"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary"
-                               asp-action="QuestionInput"
-                               asp-controller="Questions"
-                               asp-route-id="@Model.Id">
-                                Add Question
-                            </a>
-                        </li>
-                        <li class="nav-item m-1">
-                            <!-- button that opens the modal -->
-                            <button type="button" class="nav-link btn btn-primary" data-toggle="modal" data-target="#target">
-                                Delete Quiz
-                            </button>
-                            <!-- the modal -->
-                            <div class="modal fade" id="target" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <h5>Are you sure you want to delete this quiz?</h5>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a class="btn btn-success"
-                                               asp-action="DeleteQuiz"
-                                               asp-controller="Quizzes"
-                                               asp-route-id="@Model.Id">
-                                                Delete
-                                            </a>
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
-                                        </div>
+@* Details *@
+<div class="form-group flex-grow-1 d-inline">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+        <div class="container">
+            <h5 class="mb-0">Quiz Details</h5>
+            <button class="navbar-toggler collapsed bg-primary"
+                    type="button" data-toggle="collapse"
+                    data-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary"
+                           asp-action="QuestionInput"
+                           asp-controller="Questions"
+                           asp-route-id="@Model.Details.Id">
+                            Add Question
+                        </a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <!-- button that opens the modal -->
+                        <button type="button" class="nav-link btn btn-primary" data-toggle="modal" data-target="#target">
+                            Delete Quiz
+                        </button>
+                        <!-- the modal -->
+                        <div class="modal fade" id="target" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h5>Are you sure you want to delete this quiz?</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a class="btn btn-success"
+                                           asp-action="DeleteQuiz"
+                                           asp-controller="Quizzes"
+                                           asp-route-id="@Model.Details.Id">
+                                            Delete
+                                        </a>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
                                     </div>
                                 </div>
                             </div>
-                        </li>
-                        <li class="nav-item m-1">
-                            <a class="nav-link  btn btn-primary"
-                               asp-action="EditDetailsInput"
-                               asp-controller="Quizzes"
-                               asp-route-id="@Model.Id">
-                                Edit
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a class="nav-link  btn btn-primary"
+                           asp-action="EditDetailsInput"
+                           asp-controller="Quizzes"
+                           asp-route-id="@Model.Details.Id">
+                            Edit
+                        </a>
+                    </li>
+                </ul>
             </div>
-        </nav>
-        <div class="component">
-            <table class="table table-hover">
-                <tbody>
-                    <tr class="table-active bg-white">
-                        <th scope="row">Name</th>
-                        <td>@Model.Name</td>
-                    </tr>
-                    <tr class="table-active bg-light">
-                        <th scope="row">Quiz Password</th>
-                        <td>@Model.Password</td>
-                    </tr>
-                    <tr class="table-active bg-white">
-                        <th scope="row">Description</th>
-                        <td>@Model.Description</td>
-                    </tr>
-                    <tr class="table-active bg-light">
-                        <th scope="row">Timer</th>
-                        <td>@Model.Timer</td>
-                    </tr>
-                    <tr class="table-active bg-white">
-                        <th scope="row">Event</th>
-                        <td>@Model.EventName</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
+    </nav>
+    <div class="component">
+        <table class="table table-hover">
+            <tbody>
+                <tr class="table-active bg-white">
+                    <th scope="row">Name</th>
+                    <td>@Model.Details.Name</td>
+                </tr>
+                <tr class="table-active bg-light">
+                    <th scope="row">Quiz Password</th>
+                    <td>@Model.Details.Password</td>
+                </tr>
+                <tr class="table-active bg-white">
+                    <th scope="row">Description</th>
+                    <td>@Model.Details.Description</td>
+                </tr>
+                <tr class="table-active bg-light">
+                    <th scope="row">Timer</th>
+                    <td>@Model.Details.Timer</td>
+                </tr>
+                <tr class="table-active bg-white">
+                    <th scope="row">Event</th>
+                    <td>@Model.Details.EventName</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    @* questions *@
-    @foreach (var question in Model.Questions.OrderBy(x => x.Number))
+</div>
+@* question *@
+<div id="scrollHere">
+    @if (Model.PagesCount > 1)
     {
-        @await Html.PartialAsync("_QuestionDetailsPartial", question);
+        var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+        var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+        <div class="text-center mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @disabledLeftArrow">
+                    <a class="page-link"
+                       asp-area="Administration"
+                       asp-controller="Quizzes"
+                       asp-action="Display"
+                       asp-route-id="@Model.Details.Id"
+                       asp-route-page="@Model.PreviousPage">
+                        <i class="fas fa-long-arrow-alt-left"></i>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.PagesCount; i++)
+                {
+                    var active = i == Model.CurrentPage ? "active" : string.Empty;
+                    <li class="page-item @active">
+                        <a class="page-link"
+                           asp-area="Administration"
+                           asp-controller="Quizzes"
+                           asp-action="Display"
+                           asp-route-id="@Model.Details.Id"
+                           asp-route-page="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+                <li class="page-item @disabledRightArrow">
+                    <a class="page-link"
+                       asp-area="Administration"
+                       asp-controller="Quizzes"
+                       asp-action="Display"
+                       asp-route-id="@Model.Details.Id"
+                       asp-route-page="@Model.NextPage">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
     }
-    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="QuestionInput" asp-controller="Questions" asp-route-id="@Model.Id">Add Question</a>
-    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes" asp-route-id="@Model.Id">Export To PDF</a>
-    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">Go Back</a>
-@*</form>*@
+</div>
+@if (Model.Question != null)
+{
+    @await Html.PartialAsync("_QuestionDetailsPartial", Model.Question)
+
+}
+<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="QuestionInput" asp-controller="Questions" asp-route-id="@Model.Details.Id">Add Question</a>
+<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes" asp-route-id="@Model.Details.Id">Export To PDF</a>
 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) && this.ViewData[GlobalConstants.DashboardRequest] != null)
 {
     @section InnerNav
@@ -115,4 +158,13 @@
 @section Scripts
 {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
+    <script>
+        $(function () {
+            if (@Model.CurrentPage > 1) {
+                $([document.documentElement, document.body]).animate({
+                    scrollTop: $("#scrollHere").offset().top
+                }, 50);
+            }
+        });
+    </script>
 }

@@ -8,22 +8,30 @@
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Questions;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Common;
     using QuizHut.Web.Infrastructure.Filters;
+    using QuizHut.Web.ViewModels.Questions;
     using QuizHut.Web.ViewModels.Quizzes;
     using Rotativa.AspNetCore;
 
     public class QuizzesController : AdministrationController
     {
         private const int PerPageDefaultValue = 5;
+        private const int QuestionsPerPageDefaultValue = 1;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
+        private readonly IQuestionsService questionsService;
 
-        public QuizzesController(UserManager<ApplicationUser> userManager, IQuizzesService quizService)
+        public QuizzesController(
+            UserManager<ApplicationUser> userManager,
+            IQuizzesService quizService,
+            IQuestionsService questionsService)
         {
             this.userManager = userManager;
             this.quizService = quizService;
+            this.questionsService = questionsService;
         }
 
         public IActionResult DetailsInput()
@@ -50,7 +58,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Display(string id)
+        public async Task<IActionResult> Display(string id, int page = 1, int countPerPage = QuestionsPerPageDefaultValue)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
@@ -58,14 +66,31 @@
             }
 
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
-            var quizModel = await this.quizService.GetQuizByIdAsync<QuizDetailsViewModel>(id);
+
+            var pagesCount = 0;
+            var quizDetails = await this.quizService.GetQuizByIdAsync<QuizDetailsViewModel>(id);
+            var model = new QuizDetailsPagingModel()
+            {
+                Details = quizDetails,
+                CurrentPage = page,
+                PagesCount = pagesCount,
+            };
+
+            var questionsCount = this.questionsService.GetAllByQuizIdCount(id);
+
+            if (questionsCount > 0)
+            {
+                var question = await this.questionsService.GetQuestionByQuizIdAndNumberAsync<QuestionViewModel>(id, page);
+                model.Question = question;
+                model.PagesCount = questionsCount;
+            }
 
             if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
             {
                 this.ViewData[GlobalConstants.DashboardRequest] = true;
             }
 
-            return this.View(quizModel);
+            return this.View(model);
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
@@ -160,7 +185,7 @@
         [HttpGet]
         public async Task<IActionResult> PDFExport(string id)
         {
-            var quizModel = await this.quizService.GetQuizByIdAsync<QuizDetailsViewModel>(id);
+            var quizModel = await this.quizService.GetQuizByIdAsync<QuizPDFViewModel>(id);
 
             return new ViewAsPdf("PDFExport", quizModel)
             {

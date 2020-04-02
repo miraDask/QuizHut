@@ -20,7 +20,5 @@
         public IList<AnswerViewModel> Answers { get; set; }
 
         public int Number { get; set; }
-
-        //public string QuizId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Services.Questions
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -77,6 +78,21 @@
         public async Task<T> GetByIdAsync<T>(string id)
         => await this.repository.AllAsNoTracking()
             .Where(x => x.Id == id)
+            .To<T>()
+            .FirstOrDefaultAsync();
+
+        public async Task<IList<T>> GetAllByQuizIdAsync<T>(string id)
+        => await this.repository.AllAsNoTracking()
+            .Where(x => x.QuizId == id)
+            .To<T>()
+            .ToListAsync();
+
+        public int GetAllByQuizIdCount(string id)
+        => this.repository.AllAsNoTracking().Where(x => x.QuizId == id).Count();
+
+        public async Task<T> GetQuestionByQuizIdAndNumberAsync<T>(string quizId, int number)
+        => await this.repository.AllAsNoTracking()
+            .Where(x => x.QuizId == quizId && x.Number == number)
             .To<T>()
             .FirstOrDefaultAsync();
     }

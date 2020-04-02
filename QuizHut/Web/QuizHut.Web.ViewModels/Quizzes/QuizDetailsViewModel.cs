@@ -9,11 +9,6 @@
 
     public class QuizDetailsViewModel : IMapFrom<Quiz>, IHaveCustomMappings
     {
-        public QuizDetailsViewModel()
-        {
-            this.Questions = new List<QuestionViewModel>();
-        }
-
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -25,8 +20,6 @@
         public string Password { get; set; }
 
         public int? Timer { get; set; }
-
-        public IList<QuestionViewModel> Questions { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
