@@ -1,8 +1,8 @@
-﻿@model InputQuizViewModel
+﻿@model QuizDetailsViewModel
 @{
     ViewData["Title"] = "Quiz Details";
 }
-<form id="quiz" method="post">
+@*<form id="quiz" method="post">*@
     @* Details *@
     <div class="form-group flex-grow-1 d-inline">
         <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
@@ -100,7 +100,7 @@
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="QuestionInput" asp-controller="Questions" asp-route-id="@Model.Id">Add Question</a>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" target="_blank" asp-action="PDFExport" asp-controller="Quizzes" asp-route-id="@Model.Id">Export To PDF</a>
     <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">Go Back</a>
-</form>
+@*</form>*@
 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) && this.ViewData[GlobalConstants.DashboardRequest] != null)
 {
     @section InnerNav
