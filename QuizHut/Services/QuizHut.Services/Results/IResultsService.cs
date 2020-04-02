@@ -11,6 +11,8 @@
 
         int GetResultsCountByStudentId(string id);
 
+        Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId);
+
         Task<IEnumerable<T>> GetByStudentIdAsync<T>(string id, int page, int countPerPage);
 
         Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName);

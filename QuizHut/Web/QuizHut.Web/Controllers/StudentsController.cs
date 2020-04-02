@@ -82,7 +82,7 @@
             {
                 pagesCount = (int)Math.Ceiling(allActiveEventsCount / (decimal)countPerPage);
                 var activeEvents = await this.eventsService
-               .GetByStudentIdFilteredByStatus<StudentActiveEventViewModel>(Status.Active, studentId, page, countPerPage);
+               .GetByStudentIdFilteredByStatus<StudentActiveEventViewModel>(Status.Active, studentId, page, countPerPage, false);
 
                 model.PagesCount = pagesCount;
                 model.Events = activeEvents;
@@ -106,10 +106,15 @@
             {
                 pagesCount = (int)Math.Ceiling(allEndedEventsCount / (decimal)countPerPage);
                 var endedEvents = await this.eventsService
-               .GetByStudentIdFilteredByStatus<StudentEndedEventViewModel>(Status.Ended, studentId, page, countPerPage);
+               .GetByStudentIdFilteredByStatus<StudentEndedEventViewModel>(Status.Ended, studentId, page, countPerPage, true);
                 var scores = await this.resultService.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
                 foreach (var endenEvent in endedEvents)
                 {
+                    if (endenEvent.QuizName == null)
+                    {
+                        endenEvent.QuizName = await this.resultService.GetQuizNameByEventIdAndStudentIdAsync(endenEvent.Id, studentId);
+                    }
+
                     endenEvent.Score = scores.FirstOrDefault(x => x.EventId == endenEvent.Id);
                 }
 
@@ -135,7 +140,7 @@
             {
                 pagesCount = (int)Math.Ceiling(allPendingEventsCount / (decimal)countPerPage);
                 var pendingEvents = await this.eventsService
-               .GetByStudentIdFilteredByStatus<StudentPendingEventViewModel>(Status.Pending, studentId, page, countPerPage);
+               .GetByStudentIdFilteredByStatus<StudentPendingEventViewModel>(Status.Pending, studentId, page, countPerPage, false);
                 model.PagesCount = pagesCount;
                 model.Events = pendingEvents;
             }

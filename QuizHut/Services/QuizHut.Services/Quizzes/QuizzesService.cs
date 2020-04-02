@@ -236,5 +236,11 @@
 
             return query.Count();
         }
+
+        public async Task<string> GetQuizNameByIdAsync(string id)
+        => await this.quizRepository.AllAsNoTracking()
+             .Where(x => x.Id == id)
+             .Select(x => x.Name)
+             .FirstOrDefaultAsync();
     }
 }

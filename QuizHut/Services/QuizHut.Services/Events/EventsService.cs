@@ -66,10 +66,10 @@
                 .ToListAsync();
         }
 
-        public async Task<IList<T>> GetByStudentIdFilteredByStatus<T>(Status status, string studentId, int page, int countPerPage)
+        public async Task<IList<T>> GetByStudentIdFilteredByStatus<T>(Status status, string studentId, int page, int countPerPage, bool withDeleted)
         {
-            var query = this.repository.AllAsNoTracking()
-                .Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
+            var query = withDeleted == true ? this.repository.AllAsNoTrackingWithDeleted() : this.repository.AllAsNoTracking();
+            query = query.Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
 
             if (status == Status.Active)
             {
@@ -118,7 +118,6 @@
                    .ToListAsync();
         }
 
-        // TODO - ???
         public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(
             Status status,
             string creatorId = null,
@@ -184,8 +183,9 @@
         public async Task AssigQuizToEventAsync(string eventId, string quizId)
         {
             var now = DateTime.UtcNow;
-            var @event = await this.GetEventById(eventId);
+            var @event = await this.GetEventById(eventId); 
             @event.QuizId = quizId;
+            @event.QuizName = await this.quizService.GetQuizNameByIdAsync(quizId);
 
             if (@event.ActivationDateAndTime <= now
                 && @event.ActivationDateAndTime.Add(@event.DurationOfActivity) > now
@@ -329,14 +329,15 @@
         public int GetEventsCountByStudentIdAndStatus(string id, Status status)
         {
             var query = this.repository.AllAsNoTracking()
-                   .Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == id)));
+                   .Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == id)))
+                   .Where(x => x.Status == status);
 
             if (status == Status.Active)
             {
                 query = query.Where(x => !x.Results.Any(x => x.StudentId == id));
             }
 
-            return query.Where(x => x.Status == status).Count();
+            return query.Count();
         }
 
         public int GetAllEventsCount(string creatorId = null)

@@ -79,5 +79,11 @@
             .AllAsNoTracking()
             .Where(x => x.StudentId == id)
             .Count();
+
+        public async Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId)
+        => await this.repository.AllAsNoTracking()
+                 .Where(x => x.EventId == eventId && x.StudentId == studentId)
+                 .Select(x => x.QuizName)
+                 .FirstOrDefaultAsync();
     }
 }

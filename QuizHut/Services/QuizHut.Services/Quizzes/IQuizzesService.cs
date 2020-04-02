@@ -21,6 +21,8 @@
 
         Task<string> GetQuizIdByPasswordAsync(string password);
 
+        Task<string> GetQuizNameByIdAsync(string id);
+
         Task DeleteByIdAsync(string id);
 
         Task DeleteEventFromQuiz(string eventId, string quizId);

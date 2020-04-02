@@ -31,6 +31,8 @@
 
         public virtual Quiz Quiz { get; set; }
 
+        public string QuizName { get; set; }
+
         public ICollection<Result> Results { get; set; }
 
         public ICollection<EventGroup> EventsGroups { get; set; }
