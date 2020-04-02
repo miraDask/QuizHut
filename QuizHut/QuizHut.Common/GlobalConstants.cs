@@ -28,6 +28,8 @@
 
         public const string DashboardRequest = "DashboardRequest";
 
+        public const string PageToReturnTo = "Page";
+
         public static class DataSeeding
         {
             public const string Password = "123456";

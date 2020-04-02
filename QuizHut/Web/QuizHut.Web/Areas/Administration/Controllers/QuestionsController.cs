@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Services.Questions;
     using QuizHut.Web.Common;
     using QuizHut.Web.Infrastructure.Filters;
@@ -50,8 +51,8 @@
         public async Task<IActionResult> Edit(QuestionInputModel model)
         {
             await this.questionService.Update(model.Id, model.Text);
-
-            return this.RedirectToAction("Display", "Quizzes");
+            var page = this.HttpContext.Session.GetInt32(GlobalConstants.PageToReturnTo);
+            return this.RedirectToAction("Display", "Quizzes", new { page });
         }
 
         public async Task<IActionResult> Delete(string id)

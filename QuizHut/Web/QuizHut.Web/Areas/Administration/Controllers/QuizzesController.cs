@@ -90,6 +90,7 @@
                 this.ViewData[GlobalConstants.DashboardRequest] = true;
             }
 
+            this.HttpContext.Session.SetInt32(GlobalConstants.PageToReturnTo, page);
             return this.View(model);
         }
 
