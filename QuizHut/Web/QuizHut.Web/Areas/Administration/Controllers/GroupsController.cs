@@ -81,7 +81,7 @@
         public async Task<IActionResult> AssignEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, userId, null, id);
+            var events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Ended, userId, null, id);
             var model = await this.service.GetGroupModelAsync<GroupWithEventsViewModel>(id);
             model.Events = events;
 
@@ -129,6 +129,7 @@
         }
 
         [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> GroupDetails(string id)
         {
             var events = await this.eventService.GetAllByGroupIdAsync<EventsAssignViewModel>(id);
@@ -136,11 +137,6 @@
             var model = await this.service.GetGroupModelAsync<GroupDetailsViewModel>(id);
             model.Students = students;
             model.Events = events;
-
-            if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
-            {
-                this.ViewData[GlobalConstants.DashboardRequest] = true;
-            }
 
             return this.View(model);
         }
@@ -170,6 +166,8 @@
             return this.RedirectToAction("GroupDetails", new { id = groupId });
         }
 
+        [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> AddNewEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -177,11 +175,11 @@
             var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
-                events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, null, null, id);
+                events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Ended, null, null, id);
             }
             else
             {
-                events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Pending, userId, null, id);
+                events = await this.eventService.GetAllFiteredByStatusAsync<EventsAssignViewModel>(Status.Ended, userId, null, id);
             }
 
             var model = await this.service.GetGroupModelAsync<GroupWithEventsViewModel>(id);
@@ -205,6 +203,7 @@
             return this.RedirectToAction("GroupDetails", new { id = model.Id });
         }
 
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> AddStudents(string id)
         {
             IList<StudentViewModel> students;
@@ -240,6 +239,8 @@
             return this.RedirectToAction("GroupDetails", new { id = model.Id });
         }
 
+        [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public IActionResult EditName(string id, string name)
         {
             var model = new EditGroupNameInputViewModel() { Id = id, Name = name };

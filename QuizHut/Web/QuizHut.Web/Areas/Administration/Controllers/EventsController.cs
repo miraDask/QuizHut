@@ -109,6 +109,7 @@
             return this.RedirectToAction("AssignQuizToEvent", new { id = model.Id });
         }
 
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> AddGroupsToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -145,6 +146,8 @@
             return this.RedirectToAction("EventDetails", new { id = model.Id });
         }
 
+        [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> AssignQuizToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
@@ -181,6 +184,7 @@
         }
 
         [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> EventDetails(string id, string messagesAreSend)
         {
             var groups = await this.groupsService.GetGroupModelsAllByEventIdAsync<GroupAssignViewModel>(id);
@@ -190,11 +194,6 @@
             if (messagesAreSend != null)
             {
                 model.ConfirmationMessage = messagesAreSend;
-            }
-
-            if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
-            {
-                this.ViewData[GlobalConstants.DashboardRequest] = true;
             }
 
             return this.View(model);
@@ -268,6 +267,7 @@
         }
 
         [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> EditEventDetails(string id)
         {
             var editModel = await this.service.GetEventModelByIdAsync<EditEventDetailsInputViewModel>(id);

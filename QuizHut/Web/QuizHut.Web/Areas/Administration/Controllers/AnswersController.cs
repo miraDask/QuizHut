@@ -20,6 +20,7 @@
         }
 
         [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public IActionResult AnswerInput()
         {
             return this.View();
@@ -35,6 +36,8 @@
             return this.RedirectToAction("AnswerInput");
         }
 
+        [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public IActionResult ApendAnswerInput(string id)
         {
             var model = new AnswerViewModel() { QuestionId = id };
@@ -53,6 +56,7 @@
         }
 
         [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> EditAnswerInput(string id)
         {
             var model = await this.answerService.GetByIdAsync<AnswerViewModel>(id);

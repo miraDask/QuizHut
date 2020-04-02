@@ -27,13 +27,10 @@
             return this.View();
         }
 
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> EventResultsDetails(string id)
         {
             var eventModel = await this.eventService.GetEventModelByIdAsync<EventWithGroupAndQuizNamesViewModel>(id);
-            if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
-            {
-                this.ViewData[GlobalConstants.DashboardRequest] = true;
-            }
 
             return this.View(eventModel);
         }

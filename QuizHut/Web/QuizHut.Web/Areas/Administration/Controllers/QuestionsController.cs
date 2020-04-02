@@ -20,6 +20,7 @@
         }
 
         [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public IActionResult QuestionInput(string id)
         {
             if (id != null)
@@ -40,6 +41,8 @@
             return this.RedirectToAction("AnswerInput", "Answers");
         }
 
+        [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> EditQuestionInput(string id)
         {
             var model = await this.questionService.GetByIdAsync<QuestionInputModel>(id);

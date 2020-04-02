@@ -58,7 +58,8 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Display(string id, int page = 1, int countPerPage = QuestionsPerPageDefaultValue)
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
+        public async Task<IActionResult> Display(string id, int? page, int countPerPage = QuestionsPerPageDefaultValue)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
@@ -67,12 +68,17 @@
 
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, id);
 
+            if (page == null)
+            {
+                page = this.HttpContext.Session.GetInt32(GlobalConstants.PageToReturnTo) ?? 1;
+            }
+
             var pagesCount = 0;
             var quizDetails = await this.quizService.GetQuizByIdAsync<QuizDetailsViewModel>(id);
             var model = new QuizDetailsPagingModel()
             {
                 Details = quizDetails,
-                CurrentPage = page,
+                CurrentPage = (int)page,
                 PagesCount = pagesCount,
             };
 
@@ -80,17 +86,12 @@
 
             if (questionsCount > 0)
             {
-                var question = await this.questionsService.GetQuestionByQuizIdAndNumberAsync<QuestionViewModel>(id, page);
+                var question = await this.questionsService.GetQuestionByQuizIdAndNumberAsync<QuestionViewModel>(id, (int)page);
                 model.Question = question;
                 model.PagesCount = questionsCount;
             }
 
-            if (this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null)
-            {
-                this.ViewData[GlobalConstants.DashboardRequest] = true;
-            }
-
-            this.HttpContext.Session.SetInt32(GlobalConstants.PageToReturnTo, page);
+            this.HttpContext.Session.SetInt32(GlobalConstants.PageToReturnTo, (int)page);
             return this.View(model);
         }
 
@@ -159,6 +160,7 @@
         }
 
         [HttpGet]
+        [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> EditDetailsInput(string id)
         {
             var editModel = await this.quizService.GetQuizByIdAsync<EditDetailsViewModel>(id);

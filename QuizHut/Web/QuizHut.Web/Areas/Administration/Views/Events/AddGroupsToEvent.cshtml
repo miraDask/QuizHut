@@ -63,7 +63,7 @@
         </div>
     </form>
 </div>
-@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) && this.ViewData[GlobalConstants.DashboardRequest] != null)
 {
     @section InnerNav
     {

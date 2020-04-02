@@ -34,6 +34,13 @@
 <div class="text-center">
     <a id="viewQuiz" class="btn btn-primary col-md-5 mt-2" asp-action="Display" asp-controller="Quizzes">View Quiz</a>
 </div>
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) && this.ViewData[GlobalConstants.DashboardRequest] != null)
+{
+    @section InnerNav
+    {
+        <partial name="_DashboardNavBarPartial" />
+    }
+}
 @section Scripts {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />

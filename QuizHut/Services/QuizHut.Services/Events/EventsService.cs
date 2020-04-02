@@ -148,7 +148,7 @@
             }
 
             return await query
-              .Where(x => x.Status == status)
+              .Where(x => x.Status != status)
               .OrderByDescending(x => x.CreatedOn)
               .To<T>()
               .ToListAsync();
