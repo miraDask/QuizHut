@@ -13,86 +13,67 @@
 
     public class UsersService : IUsersService
     {
-        private readonly IDeletableEntityRepository<ApplicationUser> repository;
+        private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
+        private readonly IDeletableEntityRepository<ApplicationRole> roleRepository;
         private readonly IStudentsGroupsService studentsGroupsService;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<ApplicationRole> roleManager;
 
         public UsersService(
-            IDeletableEntityRepository<ApplicationUser> repository,
-            IStudentsGroupsService studentsGroupsService,
-            UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager)
+            IDeletableEntityRepository<ApplicationUser> userRepository,
+            IDeletableEntityRepository<ApplicationRole> roleRepository,
+            IStudentsGroupsService studentsGroupsService)
         {
-            this.repository = repository;
+            this.userRepository = userRepository;
+            this.roleRepository = roleRepository;
             this.studentsGroupsService = studentsGroupsService;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
         }
 
         public async Task<bool> AddStudentAsync(string email, string teacherId)
         {
-            var user = await this.repository
+            var user = await this.userRepository
                 .AllAsNoTracking()
                 .Where(x => x.Email == email)
                 .FirstOrDefaultAsync();
 
             if (user != null)
             {
-                var teacher = await this.repository
+                var teacher = await this.userRepository
                     .AllAsNoTracking()
                     .Where(x => x.Id == teacherId)
                     .FirstOrDefaultAsync();
 
                 user.TeacherId = teacherId;
                 teacher.Students.Add(user);
-                this.repository.Update(user);
-                this.repository.Update(teacher);
-                await this.repository.SaveChangesAsync();
+                this.userRepository.Update(user);
+                this.userRepository.Update(teacher);
+                await this.userRepository.SaveChangesAsync();
                 return true;
             }
 
             return false;
         }
 
-        public async Task<bool> AssignRoleAsync(string email, string roleName)
+        public async Task DeleteFromTeacherListAsync(string id, string teacherId)
         {
-            var user = await this.userManager.FindByEmailAsync(email);
-
-            if (user != null)
-            {
-                await this.userManager.AddToRoleAsync(user, roleName);
-                return true;
-            }
-
-            return false;
-        }
-
-        public async Task RemoveFromRoleAsync(string id, string roleName)
-        {
-            var user = await this.userManager.FindByIdAsync(id);
-
-            if (user != null)
-            {
-                await this.userManager.RemoveFromRoleAsync(user, roleName);
-            }
-        }
-
-        public async Task DeleteAsync(string id, string teacherId)
-        {
-            var studentsToRemove = await this.repository
+            var studentsToRemove = await this.userRepository
                 .AllAsNoTracking()
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
+            var teacher = await this.userRepository
+                   .AllAsNoTracking()
+                   .Where(x => x.Id == teacherId)
+                   .FirstOrDefaultAsync();
+
             studentsToRemove.TeacherId = null;
-            this.repository.Update(studentsToRemove);
-            await this.repository.SaveChangesAsync();
+            teacher.Students.Remove(studentsToRemove);
+            this.userRepository.Update(studentsToRemove);
+            this.userRepository.Update(teacher);
+            await this.userRepository.SaveChangesAsync();
         }
 
         public async Task<IList<T>> GetAllByUserIdAsync<T>(string id = null, string groupId = null)
         {
-            var query = this.repository.AllAsNoTracking();
+            var query = this.userRepository.AllAsNoTracking();
 
             if (groupId != null)
             {
@@ -110,16 +91,20 @@
 
         public async Task<IList<T>> GetAllByRoleAsync<T>(string roleName)
         {
-            var role = await this.roleManager.FindByNameAsync(roleName);
-            return await this.repository
+            var roleId = await this.roleRepository
+                .AllAsNoTracking()
+                .Where(x => x.Name == roleName)
+                .Select(x => x.Id).FirstOrDefaultAsync();
+
+            return await this.userRepository
                    .AllAsNoTracking()
-                   .Where(x => x.Roles.Any(x => x.RoleId == role.Id))
+                   .Where(x => x.Roles.Any(x => x.RoleId == roleId))
                    .To<T>()
                    .ToListAsync();
         }
 
         public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)
-        => await this.repository
+        => await this.userRepository
             .AllAsNoTracking()
             .Where(x => x.StudentsInGroups.Select(x => x.GroupId).Contains(groupId))
             .To<T>()
@@ -127,7 +112,7 @@
 
         public int GetAllStudentsCount(string teacherId = null)
         {
-            var query = this.repository.AllAsNoTracking().Where(x => !x.Roles.Any());
+            var query = this.userRepository.AllAsNoTracking().Where(x => !x.Roles.Any());
 
             if (teacherId != null)
             {
@@ -139,7 +124,7 @@
 
         public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string teacherId = null)
         {
-            var query = this.repository.AllAsNoTracking().Where(x => !x.Roles.Any());
+            var query = this.userRepository.AllAsNoTracking().Where(x => !x.Roles.Any());
 
             if (teacherId != null)
             {

@@ -13,11 +13,7 @@
 
         Task<bool> AddStudentAsync(string email, string teacherId);
 
-        Task DeleteAsync(string id, string teacherId);
-
-        Task<bool> AssignRoleAsync(string email, string roleName);
-
-        Task RemoveFromRoleAsync(string id, string roleName);
+        Task DeleteFromTeacherListAsync(string id, string teacherId);
 
         int GetAllStudentsCount(string teacher = null);
 

@@ -4,8 +4,10 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using QuizHut.Common;
+    using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
@@ -25,17 +27,20 @@
         private readonly IEventsService eventService;
         private readonly IGroupsService groupsService;
         private readonly IQuizzesService quizzesService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public DashboardController(
             IUsersService userService,
             IEventsService eventService,
             IGroupsService groupsService,
-            IQuizzesService quizzesService)
+            IQuizzesService quizzesService,
+            UserManager<ApplicationUser> userManager)
         {
             this.userService = userService;
             this.eventService = eventService;
             this.groupsService = groupsService;
             this.quizzesService = quizzesService;
+            this.userManager = userManager;
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
@@ -57,19 +62,21 @@
                 return this.RedirectToAction("Index", new { invalidEmail = GlobalConstants.Empty, roleName = model.RoleName });
             }
 
-            var isAdded = await this.userService.AssignRoleAsync(model.NewUser.Email, model.RoleName);
+            var user = await this.userManager.FindByEmailAsync(model.NewUser.Email);
 
-            if (!isAdded)
+            if (user == null)
             {
                 return this.RedirectToAction("Index", new { invalidEmail = model.NewUser.Email, roleName = model.RoleName });
             }
 
+            await this.userManager.AddToRoleAsync(user, model.RoleName);
             return this.RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Delete(string id, string roleName)
         {
-            await this.userService.RemoveFromRoleAsync(id, roleName);
+            var user = await this.userManager.FindByIdAsync(id);
+            await this.userManager.RemoveFromRoleAsync(user, roleName);
             return this.RedirectToAction("Index");
         }
 

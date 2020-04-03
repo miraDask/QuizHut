@@ -71,7 +71,7 @@
         public async Task<IActionResult> Delete(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            await this.service.DeleteAsync(id, userId);
+            await this.service.DeleteFromTeacherListAsync(id, userId);
             return this.RedirectToAction("AllStudentsAddedByTeacher");
         }
     }
