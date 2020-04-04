@@ -21,12 +21,12 @@
             </button>
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">
-                    @if (Model.Status != Status.Ended)
-                    {
+                    @*@if (Model.Status != Status.Ended)
+                    {*@
                     <li class="nav-item m-1">
                         <a class="btn btn-primary" asp-action="EditEventDetails" asp-controller="Events" asp-route-id="@Model.Id">Edit</a>
                     </li>
-                    }
+                        @*//}*@
                     <li class="nav-item m-1">
                         <!-- button that opens the modal -->
                         <button type="button" class="btn btn-primary mr-md-3" data-toggle="modal" data-target="#event">
@@ -71,7 +71,8 @@
                 </tr>
                 <tr class="table-active bg-light">
                     <th scope="row">Status:</th>
-                    <td style="color:@color">@Model.Status</td>
+                    <td class="status" style="color:@color" data="@Model.Id">@Model.Status</td>
+                    @*<td style="display:none" class="id"></td>*@
                 </tr>
                 <tr class="table-active bg-white">
                     <th scope="row">Activation Date:</th>
@@ -302,6 +303,7 @@
 @section Scripts
 {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
+    <script src="~/js/statusUpdates.js" asp-append-version="true"></script>
 }
 
 

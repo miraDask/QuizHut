@@ -12,10 +12,10 @@
             {
                 this.Groups.AddToGroupAsync(this.Context.ConnectionId, GlobalConstants.AdministratorRoleName);
             }
-            else
-            {
-                this.Groups.AddToGroupAsync(this.Context.ConnectionId, this.Context.User.Identity.Name);
-            }
+            //else
+            //{
+            //    this.Groups.AddToGroupAsync(this.Context.ConnectionId, this.Context.User.Identity.Name);
+            //}
 
             return base.OnConnectedAsync();
         }

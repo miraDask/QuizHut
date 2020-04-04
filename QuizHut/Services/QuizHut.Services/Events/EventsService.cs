@@ -311,9 +311,11 @@
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", @event.Name);
             }
             else
-            {
+            { 
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("EndedEventUpdate", @event.Name);
             }
+
+            await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
         }
 
         public async Task SendEmailsToEventGroups(string eventId, string emailHtmlContent)
@@ -378,6 +380,11 @@
             return query.Count();
         }
 
+        // public async Task<Status> GetStatusAsync(string eventId)
+        // {
+        //    var @event = await this.GetEventById(eventId);
+        //    return @event.Status;
+        // }
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()

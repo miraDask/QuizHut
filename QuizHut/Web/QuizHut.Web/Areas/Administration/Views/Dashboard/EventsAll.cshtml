@@ -35,7 +35,7 @@
                         <th scope="row" class="pt-4">@_event.Name</th>
                         <td class="pt-4">@_event.StartDate</td>
                         <td class="pt-4">@_event.Duration</td>
-                        <td style="color:@color" class="status pt-4">@_event.Status</td>
+                        <td style="color:@color" class="status pt-4" data="@_event.Id">@_event.Status</td>
                         <td>
                             <div class="component navbar-expand-lg text-right">
                                 <ul class="navbar-nav ml-auto">
@@ -138,4 +138,5 @@
 @section Scripts
 {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
+    <script src="~/js/statusUpdates.js" asp-append-version="true"></script>
 }
