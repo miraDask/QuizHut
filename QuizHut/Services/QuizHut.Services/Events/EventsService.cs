@@ -175,7 +175,6 @@
             await this.repository.AddAsync(@event);
             await this.repository.SaveChangesAsync();
 
-            await this.SheduleStatusChange(activationDateAndTime, durationOfActivity, @event.Id);
             return @event.Id;
         }
 
@@ -193,9 +192,9 @@
             @event.QuizId = quizId;
             @event.QuizName = await this.quizService.GetQuizNameByIdAsync(quizId);
 
+            /*&& @event.Status != Status.Ended*/
             if (@event.ActivationDateAndTime <= now
-                && @event.ActivationDateAndTime.Add(@event.DurationOfActivity) > now
-                && @event.Status != Status.Ended)
+                && @event.ActivationDateAndTime.Add(@event.DurationOfActivity) > now)
             {
                 @event.Status = Status.Active;
                 var endingDelay = @event.ActivationDateAndTime.Add(@event.DurationOfActivity) - now;
@@ -241,19 +240,17 @@
             @event.Name = name;
             @event.ActivationDateAndTime = activationDateAndTime;
             @event.DurationOfActivity = durationOfActivity;
-            @event.Status = this.GetStatus(activationDateAndTime);
+            @event.Status = this.GetStatus(activationDateAndTime, @event.QuizId);
 
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
 
-            await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
-
-            if (@event.QuizId == null)
+            if (@event.QuizId != null)
             {
-                return;
+                await this.SheduleStatusChange(activationDateAndTime, durationOfActivity, id);
             }
 
-            await this.SheduleStatusChange(activationDateAndTime, durationOfActivity, id);
+            await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
         }
 
         public string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate)
@@ -391,8 +388,13 @@
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
-        private Status GetStatus(DateTime activationDateAndTime)
+        private Status GetStatus(DateTime activationDateAndTime, string quizId)
         {
+            if (quizId == null)
+            {
+                return Status.Pending;
+            }
+
             var now = DateTime.UtcNow;
             if (now.Date < activationDateAndTime.Date || activationDateAndTime.TimeOfDay.Minutes > now.TimeOfDay.Minutes)
             {
