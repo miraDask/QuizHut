@@ -14,6 +14,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using QuizHut.Common;
+    using QuizHut.Common.Hubs;
     using QuizHut.Data;
     using QuizHut.Data.Common;
     using QuizHut.Data.Common.Repositories;
@@ -80,6 +81,11 @@
                 options.Cookie.HttpOnly = true;
                 options.IdleTimeout = TimeSpan.FromMinutes(GlobalConstants.CookieTimeOut);
                 options.Cookie.IsEssential = true;
+            });
+
+            services.AddSignalR(options =>
+            {
+                options.EnableDetailedErrors = true;
             });
 
             // Data repositories
@@ -149,6 +155,7 @@
             app.UseEndpoints(
                 endpoints =>
                     {
+                        endpoints.MapHub<QuizHub>("/quizHub");
                         endpoints.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                         endpoints.MapRazorPages();

@@ -17,8 +17,7 @@
 
         <link rel="stylesheet" href="~/css/lazy.css" asp-append-version="true">
         <link rel="stylesheet" href="~/css/demo.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true"/>
-
+        <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
         <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
@@ -71,10 +70,13 @@
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+        <script src="~/lib/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
+
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+        <script src="~/lib/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
     </environment>
 
     @this.RenderSection("Scripts", required: false)

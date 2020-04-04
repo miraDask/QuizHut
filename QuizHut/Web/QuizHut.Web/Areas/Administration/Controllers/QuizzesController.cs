@@ -6,7 +6,9 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
     using QuizHut.Common;
+    using QuizHut.Common.Hubs;
     using QuizHut.Data.Models;
     using QuizHut.Services.Questions;
     using QuizHut.Services.Quizzes;
@@ -23,15 +25,18 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
         private readonly IQuestionsService questionsService;
+        private readonly IHubContext<QuizHub> hub;
 
         public QuizzesController(
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
-            IQuestionsService questionsService)
+            IQuestionsService questionsService,
+            IHubContext<QuizHub> hub)
         {
             this.userManager = userManager;
             this.quizService = quizService;
             this.questionsService = questionsService;
+            this.hub = hub;
         }
 
         public IActionResult DetailsInput()
@@ -49,11 +54,12 @@
                 return this.View(model);
             }
 
-            var userId = this.userManager.GetUserId(this.User);
-            model.CreatorId = userId;
+            var user = await this.userManager.GetUserAsync(this.User);
+            model.CreatorId = user.Id;
             model.PasswordIsValid = true;
             var quizId = await this.quizService.CreateQuizAsync(model.Name, model.Description, model.Timer, model.CreatorId, model.Password);
             this.HttpContext.Session.SetString(Constants.QuizSeesionId, quizId);
+            await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("NewQuizUpdate", user.UserName, model.Name);
             return this.RedirectToAction("QuestionInput", "Questions");
         }
 

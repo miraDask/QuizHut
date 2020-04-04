@@ -28,9 +28,11 @@
                 <i class="far fa-arrow-alt-circle-right ml-1"></i>
             </a>
         </div>
-        <div class="headline headline-md text-center">
-            <h4>Last Updates</h4>
+        <div class="headline headline-md">
+            <h4 class="text-center">Last Updates</h4>
             <hr>
+            <ul id="updates">
+            </ul>
         </div>
     </aside>
 </div>
@@ -41,5 +43,6 @@
 @section Scripts
 {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
+    <script src="~/js/adminUpdates.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
 }

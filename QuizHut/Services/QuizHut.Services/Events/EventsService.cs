@@ -6,7 +6,10 @@
     using System.Threading.Tasks;
 
     using Hangfire;
+    using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
+    using QuizHut.Common;
+    using QuizHut.Common.Hubs;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
@@ -22,17 +25,20 @@
         private readonly IQuizzesService quizService;
         private readonly IEventsGroupsService eventsGroupsService;
         private readonly IEmailSender emailSender;
+        private readonly IHubContext<QuizHub> hub;
 
         public EventsService(
             IDeletableEntityRepository<Event> repository,
             IQuizzesService quizService,
             IEventsGroupsService eventsGroupsService,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IHubContext<QuizHub> hub)
         {
             this.repository = repository;
             this.quizService = quizService;
             this.eventsGroupsService = eventsGroupsService;
             this.emailSender = emailSender;
+            this.hub = hub;
         }
 
         public async Task DeleteAsync(string eventId)
@@ -183,7 +189,7 @@
         public async Task AssigQuizToEventAsync(string eventId, string quizId)
         {
             var now = DateTime.UtcNow;
-            var @event = await this.GetEventById(eventId); 
+            var @event = await this.GetEventById(eventId);
             @event.QuizId = quizId;
             @event.QuizName = await this.quizService.GetQuizNameByIdAsync(quizId);
 
@@ -234,7 +240,6 @@
             @event.Name = name;
             @event.ActivationDateAndTime = activationDateAndTime;
             @event.DurationOfActivity = durationOfActivity;
-            @event.Status = Status.Pending;
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
 
@@ -257,7 +262,7 @@
 
             var timeToStart = TimeSpan.Parse(activeFrom);
             var timeNow = now.TimeOfDay;
-            if (now.Date == activationDateAndTime.Date && timeToStart < timeNow)
+            if (now.Date == activationDateAndTime.Date && timeToStart.Minutes < timeNow.Minutes)
             {
                 return ServicesConstants.InvalidStartingTime;
             }
@@ -292,7 +297,7 @@
         public async Task SetStatusChangeJob(string eventId, Status status)
         {
             var @event = await this.GetEventById(eventId);
-            if (@event.QuizId == null)
+            if (@event.QuizId == null || @event.Status == status)
             {
                 return;
             }
@@ -300,6 +305,15 @@
             @event.Status = status;
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
+
+            if (status == Status.Active)
+            {
+                await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", @event.Name);
+            }
+            else
+            {
+                await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("EndedEventUpdate", @event.Name);
+            }
         }
 
         public async Task SendEmailsToEventGroups(string eventId, string emailHtmlContent)

@@ -8,7 +8,9 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
     using QuizHut.Common;
+    using QuizHut.Common.Hubs;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
@@ -26,17 +28,20 @@
         private readonly IQuizzesService quizService;
         private readonly IGroupsService groupsService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IHubContext<QuizHub> hub;
 
         public EventsController(
             IEventsService service,
             IQuizzesService quizService,
             IGroupsService groupsService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IHubContext<QuizHub> hub)
         {
             this.service = service;
             this.quizService = quizService;
             this.groupsService = groupsService;
             this.userManager = userManager;
+            this.hub = hub;
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
@@ -79,8 +84,10 @@
                 return this.View(model);
             }
 
-            var userId = this.userManager.GetUserId(this.User);
-            var eventId = await this.service.CreateEventAsync(model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo, userId);
+            var user = await this.userManager.GetUserAsync(this.User);
+            var eventId = await this.service.CreateEventAsync(model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo, user.Id);
+            await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("NewEventUpdate", user.UserName, model.Name);
+
             return this.RedirectToAction("AssignGroupsToEvent", new { id = eventId });
         }
 

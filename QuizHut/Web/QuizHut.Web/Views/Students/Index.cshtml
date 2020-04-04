@@ -20,6 +20,22 @@
             <div class="headline headline-md text-center">
                 <h4>Active Events</h4>
                 <hr>
+                <div id="event"></div>
+                @*<table>
+                    <tbody id="events">*@
+                        @*<tr id="template" class="table-success" style="display:none">
+                            <th id="name" scope="row" class="pt-3"> </th>
+                            <th id="quiz-name" scope="row" class="pt-3"> </th>
+                            <th id="count-timer" scope="row" class="pt-3"> </th>
+                            <th id="duration" scope="row" class="pt-3"> </th>
+                            <td class="text-right">
+                                <a id="quizId" type="submit" class="btn btn-outline-success py-1" asp-area="" asp-action="Start" asp-controller="Quizzes">
+                                    Enter
+                                </a>
+                            </td>
+                        </tr>*@
+                    @*</tbody>
+                </table>*@
             </div>
         </aside>
 </div>
@@ -47,5 +63,6 @@
 }
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/studentUpdates.js" asp-append-version="true"></script>
 }
 
