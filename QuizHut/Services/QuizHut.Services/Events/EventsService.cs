@@ -237,11 +237,16 @@
             var @event = await this.GetEventById(id);
             var activationDateAndTime = this.GetActivationDateAndTimeLocal(activationDate, activeFrom).ToUniversalTime();
             var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
+
             @event.Name = name;
             @event.ActivationDateAndTime = activationDateAndTime;
             @event.DurationOfActivity = durationOfActivity;
+            @event.Status = this.GetStatus(activationDateAndTime);
+
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
+
+            await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
 
             if (@event.QuizId == null)
             {
@@ -311,7 +316,7 @@
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", @event.Name);
             }
             else
-            { 
+            {
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("EndedEventUpdate", @event.Name);
             }
 
@@ -380,16 +385,22 @@
             return query.Count();
         }
 
-        // public async Task<Status> GetStatusAsync(string eventId)
-        // {
-        //    var @event = await this.GetEventById(eventId);
-        //    return @event.Status;
-        // }
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
+
+        private Status GetStatus(DateTime activationDateAndTime)
+        {
+            var now = DateTime.UtcNow;
+            if (now.Date < activationDateAndTime.Date || activationDateAndTime.TimeOfDay.Minutes > now.TimeOfDay.Minutes)
+            {
+                return Status.Pending;
+            }
+
+            return Status.Active;
+        }
 
         private DateTime GetActivationDateAndTimeLocal(string activationDate, string activeFrom)
         => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
