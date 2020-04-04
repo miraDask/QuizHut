@@ -5,10 +5,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Hangfire;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
-    using QuizHut.Common;
     using QuizHut.Common.Hubs;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
@@ -18,12 +16,14 @@
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Messaging;
     using QuizHut.Services.Quizzes;
+    using QuizHut.Services.ScheduledJobsService;
 
     public class EventsService : IEventsService
     {
         private readonly IDeletableEntityRepository<Event> repository;
         private readonly IQuizzesService quizService;
         private readonly IEventsGroupsService eventsGroupsService;
+        private readonly IScheduledJobsService scheduledJobsService;
         private readonly IEmailSender emailSender;
         private readonly IHubContext<QuizHub> hub;
 
@@ -31,12 +31,14 @@
             IDeletableEntityRepository<Event> repository,
             IQuizzesService quizService,
             IEventsGroupsService eventsGroupsService,
+            IScheduledJobsService scheduledJobsService,
             IEmailSender emailSender,
             IHubContext<QuizHub> hub)
         {
             this.repository = repository;
             this.quizService = quizService;
             this.eventsGroupsService = eventsGroupsService;
+            this.scheduledJobsService = scheduledJobsService;
             this.emailSender = emailSender;
             this.hub = hub;
         }
@@ -198,11 +200,12 @@
             {
                 @event.Status = Status.Active;
                 var endingDelay = @event.ActivationDateAndTime.Add(@event.DurationOfActivity) - now;
-                BackgroundJob.Schedule(() => this.SetStatusChangeJob(eventId, Status.Ended), endingDelay);
+                await this.scheduledJobsService.DeleteJobsAsync(eventId, false);
+                await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
             }
             else if (@event.ActivationDateAndTime > now)
             {
-                await this.SheduleStatusChange(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id);
+                await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id);
             }
 
             this.repository.Update(@event);
@@ -247,7 +250,7 @@
 
             if (@event.QuizId != null)
             {
-                await this.SheduleStatusChange(activationDateAndTime, durationOfActivity, id);
+                await this.SheduleStatusChangeAsync(activationDateAndTime, durationOfActivity, id);
             }
 
             await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
@@ -284,40 +287,6 @@
             {
                 await this.eventsGroupsService.CreateEventGroupAsync(eventId, groupId);
             }
-        }
-
-        public async Task SheduleStatusChange(DateTime activationDateAndTime, TimeSpan durationOfActivity, string eventId)
-        {
-            var @event = await this.GetEventById(eventId);
-            var now = DateTime.UtcNow;
-            var activationDelay = activationDateAndTime - now;
-            var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;
-            BackgroundJob.Schedule(() => this.SetStatusChangeJob(eventId, Status.Active), activationDelay);
-            BackgroundJob.Schedule(() => this.SetStatusChangeJob(eventId, Status.Ended), endingDelay);
-        }
-
-        public async Task SetStatusChangeJob(string eventId, Status status)
-        {
-            var @event = await this.GetEventById(eventId);
-            if (@event.QuizId == null || @event.Status == status)
-            {
-                return;
-            }
-
-            @event.Status = status;
-            this.repository.Update(@event);
-            await this.repository.SaveChangesAsync();
-
-            if (status == Status.Active)
-            {
-                await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", @event.Name);
-            }
-            else
-            {
-                await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("EndedEventUpdate", @event.Name);
-            }
-
-            await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
         }
 
         public async Task SendEmailsToEventGroups(string eventId, string emailHtmlContent)
@@ -382,6 +351,17 @@
             return query.Count();
         }
 
+        private async Task SheduleStatusChangeAsync(DateTime activationDateAndTime, TimeSpan durationOfActivity, string eventId)
+        {
+            var now = DateTime.UtcNow;
+            var activationDelay = activationDateAndTime - now;
+            var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;
+
+            await this.scheduledJobsService.DeleteJobsAsync(eventId, true);
+            await this.scheduledJobsService.CreateStarEventJobAsync(eventId, activationDelay);
+            await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
+        }
+
         private async Task<Event> GetEventById(string id)
         => await this.repository
                 .AllAsNoTracking()
@@ -390,13 +370,8 @@
 
         private Status GetStatus(DateTime activationDateAndTime, string quizId)
         {
-            if (quizId == null)
-            {
-                return Status.Pending;
-            }
-
             var now = DateTime.UtcNow;
-            if (now.Date < activationDateAndTime.Date || activationDateAndTime.TimeOfDay.Minutes > now.TimeOfDay.Minutes)
+            if (quizId == null || now.Date < activationDateAndTime.Date || activationDateAndTime.TimeOfDay.Minutes > now.TimeOfDay.Minutes)
             {
                 return Status.Pending;
             }

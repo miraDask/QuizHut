@@ -43,6 +43,8 @@
 
         public DbSet<EventGroup> EventsGroups { get; set; }
 
+        public DbSet<ScheduledJob> ScheduledJobs { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)

@@ -31,6 +31,7 @@
     using QuizHut.Services.Questions;
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.Results;
+    using QuizHut.Services.ScheduledJobsService;
     using QuizHut.Services.StudentsGroups;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
@@ -106,6 +107,7 @@
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IStudentsGroupsService, StudentsGroupsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<IScheduledJobsService, ScheduledJobsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

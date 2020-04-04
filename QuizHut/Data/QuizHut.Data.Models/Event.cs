@@ -13,6 +13,7 @@
             this.Id = Guid.NewGuid().ToString();
             this.Results = new HashSet<Result>();
             this.EventsGroups = new HashSet<EventGroup>();
+            this.ScheduledJobs = new HashSet<ScheduledJob>();
         }
 
         public string Name { get; set; }
@@ -33,8 +34,10 @@
 
         public string QuizName { get; set; }
 
-        public ICollection<Result> Results { get; set; }
+        public virtual ICollection<Result> Results { get; set; }
 
-        public ICollection<EventGroup> EventsGroups { get; set; }
+        public virtual ICollection<EventGroup> EventsGroups { get; set; }
+
+        public virtual ICollection<ScheduledJob> ScheduledJobs { get; set; }
     }
 }
