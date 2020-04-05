@@ -208,6 +208,7 @@
             if (@event.Status != Status.Ended)
             {
                 @event.Status = Status.Pending;
+                await this.scheduledJobsService.DeleteJobsAsync(@event.Id, true);
             }
 
             this.repository.Update(@event);
