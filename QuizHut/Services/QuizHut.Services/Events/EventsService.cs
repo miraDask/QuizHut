@@ -340,6 +340,13 @@
             return query.Count();
         }
 
+        private async Task<string[]> GetStudentsNamesByEventIdAsync(string id)
+        => await this.repository
+                     .AllAsNoTracking()
+                     .Where(x => x.Id == id)
+                     .SelectMany(x => x.EventsGroups.SelectMany(x => x.Group.StudentstGroups.Select(x => x.Student.UserName)))
+                     .ToArrayAsync();
+
         private async Task SheduleStatusChangeAsync(
             DateTime activationDateAndTime,
             TimeSpan durationOfActivity,
@@ -350,15 +357,26 @@
             var now = DateTime.UtcNow;
             var activationDelay = activationDateAndTime - now;
             var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;
+            var studentsNames = await this.GetStudentsNamesByEventIdAsync(eventId);
 
             if (eventStatus == Status.Active)
             {
+                foreach (var name in studentsNames)
+                {
+                    await this.hub.Clients.Group(name).SendAsync("NewActiveEventMessage");
+                }
+
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", eventName);
                 await this.scheduledJobsService.DeleteJobsAsync(eventId, false);
                 await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
             }
             else
             {
+                foreach (var name in studentsNames)
+                {
+                    await this.hub.Clients.Group(name).SendAsync("NewPendingEventMessage");
+                }
+
                 await this.scheduledJobsService.DeleteJobsAsync(eventId, true);
                 await this.scheduledJobsService.CreateStarEventJobAsync(eventId, activationDelay);
                 await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);

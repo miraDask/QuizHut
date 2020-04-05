@@ -12,6 +12,7 @@
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Events;
 
     public class ScheduledJobsService : IScheduledJobsService
     {
@@ -85,13 +86,23 @@
                 .Where(x => x.Id == eventId)
                 .FirstOrDefaultAsync();
 
+            var studentNames = await this.GetStudentsNamesByEventIdAsync(eventId);
+
             if (status == Status.Active)
             {
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", @event.Name);
+                foreach (var name in studentNames)
+                {
+                    await this.hub.Clients.Group(name).SendAsync("NewActiveEventMessage");
+                }
             }
             else
             {
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("EndedEventUpdate", @event.Name);
+                foreach (var name in studentNames)
+                {
+                    await this.hub.Clients.Group(name).SendAsync("NewEndedEventMessage");
+                }
             }
 
             if (@event.QuizId == null || @event.Status == status)
@@ -104,5 +115,12 @@
             await this.eventRepository.SaveChangesAsync();
             await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
         }
+
+        private async Task<string[]> GetStudentsNamesByEventIdAsync(string id)
+        => await this.eventRepository
+                   .AllAsNoTracking()
+                   .Where(x => x.Id == id)
+                   .SelectMany(x => x.EventsGroups.SelectMany(x => x.Group.StudentstGroups.Select(x => x.Student.UserName)))
+                   .ToArrayAsync();
     }
 }

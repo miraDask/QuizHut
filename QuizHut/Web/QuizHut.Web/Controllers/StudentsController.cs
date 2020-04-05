@@ -125,7 +125,7 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> StudentPendingEventsAll(int page, int countPerPage)
+        public async Task<IActionResult> StudentPendingEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
             var allPendingEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending);
