@@ -7,6 +7,7 @@
 
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
+    using QuizHut.Common;
     using QuizHut.Common.Hubs;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
@@ -189,27 +190,14 @@
 
         public async Task AssigQuizToEventAsync(string eventId, string quizId)
         {
-            var now = DateTime.UtcNow;
             var @event = await this.GetEventById(eventId);
             @event.QuizId = quizId;
             @event.QuizName = await this.quizService.GetQuizNameByIdAsync(quizId);
-
-            /*&& @event.Status != Status.Ended*/
-            if (@event.ActivationDateAndTime <= now
-                && @event.ActivationDateAndTime.Add(@event.DurationOfActivity) > now)
-            {
-                @event.Status = Status.Active;
-                var endingDelay = @event.ActivationDateAndTime.Add(@event.DurationOfActivity) - now;
-                await this.scheduledJobsService.DeleteJobsAsync(eventId, false);
-                await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
-            }
-            else if (@event.ActivationDateAndTime > now)
-            {
-                await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id);
-            }
-
+            @event.Status = this.GetStatus(@event.ActivationDateAndTime, quizId);
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
+
+            await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id, @event.Name, @event.Status);
             await this.quizService.AssignEventToQuiz(eventId, quizId);
         }
 
@@ -250,7 +238,7 @@
 
             if (@event.QuizId != null)
             {
-                await this.SheduleStatusChangeAsync(activationDateAndTime, durationOfActivity, id);
+                await this.SheduleStatusChangeAsync(activationDateAndTime, durationOfActivity, id, @event.Name, @event.Status);
             }
 
             await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
@@ -351,15 +339,29 @@
             return query.Count();
         }
 
-        private async Task SheduleStatusChangeAsync(DateTime activationDateAndTime, TimeSpan durationOfActivity, string eventId)
+        private async Task SheduleStatusChangeAsync(
+            DateTime activationDateAndTime,
+            TimeSpan durationOfActivity,
+            string eventId,
+            string eventName,
+            Status eventStatus)
         {
             var now = DateTime.UtcNow;
             var activationDelay = activationDateAndTime - now;
             var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;
 
-            await this.scheduledJobsService.DeleteJobsAsync(eventId, true);
-            await this.scheduledJobsService.CreateStarEventJobAsync(eventId, activationDelay);
-            await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
+            if (eventStatus == Status.Active)
+            {
+                await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", eventName);
+                await this.scheduledJobsService.DeleteJobsAsync(eventId, false);
+                await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
+            }
+            else
+            {
+                await this.scheduledJobsService.DeleteJobsAsync(eventId, true);
+                await this.scheduledJobsService.CreateStarEventJobAsync(eventId, activationDelay);
+                await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
+            }
         }
 
         private async Task<Event> GetEventById(string id)

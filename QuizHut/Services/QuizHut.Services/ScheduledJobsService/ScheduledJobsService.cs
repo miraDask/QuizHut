@@ -85,15 +85,6 @@
                 .Where(x => x.Id == eventId)
                 .FirstOrDefaultAsync();
 
-            if (@event.QuizId == null || @event.Status == status)
-            {
-                return;
-            }
-
-            @event.Status = status;
-            this.eventRepository.Update(@event);
-            await this.eventRepository.SaveChangesAsync();
-
             if (status == Status.Active)
             {
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", @event.Name);
@@ -103,6 +94,14 @@
                 await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("EndedEventUpdate", @event.Name);
             }
 
+            if (@event.QuizId == null || @event.Status == status)
+            {
+                return;
+            }
+
+            @event.Status = status;
+            this.eventRepository.Update(@event);
+            await this.eventRepository.SaveChangesAsync();
             await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
         }
     }

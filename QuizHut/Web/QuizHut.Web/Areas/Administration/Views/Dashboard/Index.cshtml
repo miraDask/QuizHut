@@ -31,8 +31,11 @@
         <div class="headline headline-md">
             <h4 class="text-center">Last Updates</h4>
             <hr>
-            <ul id="updates">
-            </ul>
+            <cache expires-after="TimeSpan.FromMinutes(5)">
+                <ul id="updates" class="navbar-nav">
+                   
+                </ul>
+            </cache>
         </div>
     </aside>
 </div>
