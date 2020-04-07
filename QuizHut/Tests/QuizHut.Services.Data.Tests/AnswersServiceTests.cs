@@ -40,9 +40,12 @@
             var questionId = Guid.NewGuid().ToString();
 
             await this.service.CreateAnswerAsync(answerText: "Second answer", isRightAnswer: false, questionId);
-
+            var secondAnswer = await this.dbContext.Answers.Where(x => x.Id != this.firstAnswerId).FirstOrDefaultAsync();
             var answersCount = this.dbContext.Answers.ToArray().Count();
             Assert.Equal(2, answersCount);
+            Assert.Equal("Second answer", secondAnswer.Text);
+            Assert.Equal(questionId, secondAnswer.QuestionId);
+            Assert.False(secondAnswer.IsRightAnswer);
         }
 
         [Fact]

@@ -39,62 +39,135 @@
         }
 
         [Fact]
+        public void GetAllCategoriesCountShouldReturnCorrectCount()
+        {
+            var categoriesCount = this.dbContext.Categories.ToArray().Count();
+            Assert.Equal(1, categoriesCount);
+        }
+
+        [Fact]
         public async Task CreateCategoryAsyncShouldCreateNewCategoryInDb()
         {
             var creatorId = Guid.NewGuid().ToString();
 
             var newCategoryId = await this.service.CreateCategoryAsync(name: "Second category", creatorId);
             var categoriesCount = this.dbContext.Categories.ToArray().Count();
+            var newCategory = await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == newCategoryId);
+
             Assert.Equal(2, categoriesCount);
-            Assert.NotNull(await this.dbContext.Categories.FirstOrDefaultAsync(x => x.Id == newCategoryId));
+            Assert.Equal("Second category", newCategory.Name);
+            Assert.Equal(creatorId, newCategory.CreatorId);
         }
 
-        // [Fact]
-        // public async Task GetAllByCreatorIdAsyncShouldReturnCorrectModelCollection()
-        // {
-        // var creatorId = Guid.NewGuid().ToString();
-        // var firstCategory = new Category()
-        // {
-        //     Name = "Category 1",
-        //     CreatorId = creatorId,
-        // };
+        [Fact]
+        public async Task GetAllPerPageShouldReturnCorrectModelCollection()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var firstCategory = new Category()
+            {
+                Name = "Category 1",
+                CreatorId = creatorId,
+            };
 
-        // var secondCategory = new Category()
-        // {
-        //     Name = "Category 2",
-        //     CreatorId = creatorId,
-        // };
+            var secondCategory = new Category()
+            {
+                Name = "Category 2",
+                CreatorId = creatorId,
+            };
 
-        // await this.dbContext.Categories.AddAsync(firstCategory);
-        // await this.dbContext.Categories.AddAsync(secondCategory);
-        // await this.dbContext.SaveChangesAsync();
+            await this.dbContext.Categories.AddAsync(firstCategory);
+            await this.dbContext.Categories.AddAsync(secondCategory);
+            await this.dbContext.SaveChangesAsync();
 
-        // var firstModel = new CategoryViewModel()
-        // {
-        //     Name = firstCategory.Name,
-        //     Id = firstCategory.Id,
-        //     QuizzesCount = firstCategory.Quizzes.Count().ToString(),
-        //     CreatedOn = firstCategory.CreatedOn.ToString("dd/MM/yyyy"),
-        // };
+            var firstModel = new CategoryViewModel()
+            {
+                Name = firstCategory.Name,
+                Id = firstCategory.Id,
+                QuizzesCount = firstCategory.Quizzes.Count().ToString(),
+                CreatedOn = firstCategory.CreatedOn.ToString("dd/MM/yyyy"),
+            };
 
-        // var secondModel = new CategoryViewModel()
-        // {
-        //     Name = secondCategory.Name,
-        //     Id = secondCategory.Id,
-        //     QuizzesCount = secondCategory.Quizzes.Count().ToString(),
-        //     CreatedOn = secondCategory.CreatedOn.ToString("dd/MM/yyyy"),
-        // };
+            var secondModel = new CategoryViewModel()
+            {
+                Name = secondCategory.Name,
+                Id = secondCategory.Id,
+                QuizzesCount = secondCategory.Quizzes.Count().ToString(),
+                CreatedOn = secondCategory.CreatedOn.ToString("dd/MM/yyyy"),
+            };
 
-        // var resultModelCollection = await this.service.GetAllByCreatorIdAsync<CategoryViewModel>(creatorId);
-        // Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
-        // Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
-        // Assert.Equal(firstModel.QuizzesCount, resultModelCollection.Last().QuizzesCount);
-        // Assert.Equal(firstModel.CreatedOn, resultModelCollection.Last().CreatedOn);
-        // Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
-        // Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
-        // Assert.Equal(secondModel.QuizzesCount, resultModelCollection.First().QuizzesCount);
-        // Assert.Equal(secondModel.CreatedOn, resultModelCollection.First().CreatedOn);
-        // Assert.Equal(2, resultModelCollection.Count());
+            var resultModelCollection = await this.service.GetAllPerPage<CategoryViewModel>(1, 2, creatorId);
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.QuizzesCount, resultModelCollection.Last().QuizzesCount);
+            Assert.Equal(firstModel.CreatedOn, resultModelCollection.Last().CreatedOn);
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.QuizzesCount, resultModelCollection.First().QuizzesCount);
+            Assert.Equal(secondModel.CreatedOn, resultModelCollection.First().CreatedOn);
+            Assert.Equal(2, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetAllPerPageShouldSkipCorrectly()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var firstCategory = new Category()
+            {
+                Name = "Category 1",
+                CreatorId = creatorId,
+            };
+
+            var secondCategory = new Category()
+            {
+                Name = "Category 2",
+                CreatorId = creatorId,
+            };
+
+            await this.dbContext.Categories.AddAsync(firstCategory);
+            await this.dbContext.Categories.AddAsync(secondCategory);
+            await this.dbContext.SaveChangesAsync();
+
+            var firstModel = new CategoryViewModel()
+            {
+                Name = firstCategory.Name,
+                Id = firstCategory.Id,
+                QuizzesCount = firstCategory.Quizzes.Count().ToString(),
+                CreatedOn = firstCategory.CreatedOn.ToString("dd/MM/yyyy"),
+            };
+
+            var resultModelCollection = await this.service.GetAllPerPage<CategoryViewModel>(2, 1, creatorId);
+
+            Assert.Single(resultModelCollection);
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.QuizzesCount, resultModelCollection.Last().QuizzesCount);
+            Assert.Equal(firstModel.CreatedOn, resultModelCollection.Last().CreatedOn);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(1, 10000)]
+        public async Task GetAllPerPageShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            for (int i = 0; i < countPerPage * 2; i++)
+            {
+                var category = new Category()
+                {
+                    Name = $"Category {i}",
+                    CreatorId = creatorId,
+                };
+
+                await this.dbContext.Categories.AddAsync(category);
+            }
+
+            await this.dbContext.SaveChangesAsync();
+
+            var resultModelCollection = await this.service.GetAllPerPage<CategoryViewModel>(page, countPerPage, creatorId);
+
+            Assert.Equal(countPerPage, resultModelCollection.Count());
+        }
+
         [Fact]
         public async Task UpdateNameAsyncShouldUpdateCorrectly()
         {
@@ -164,9 +237,10 @@
                 .Where(x => x.Id == this.firstCategoryId)
                 .Select(x => x.Quizzes.Select(x => x.Id))
                 .FirstOrDefaultAsync();
+            var quiz = await this.dbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
 
             Assert.Empty(categoryQuizzesIds);
-            Assert.DoesNotContain(quizId, categoryQuizzesIds);
+            Assert.Null(quiz.CategoryId);
         }
 
         private async Task AssignQuizToFirstCategoryAsync(string quizId)

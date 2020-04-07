@@ -43,9 +43,3 @@
 
     setupConnection();
 });
-
-                            //<span class="ml-2">
-                            //    <a href="/Students/StudentPendingEventsAll" class="btn btn-link" style="text-decoration: none">
-                            //        <i class="fas fa-arrow-alt-circle-right text-warning"></i>
-                            //    </a>
-                            //</span>
