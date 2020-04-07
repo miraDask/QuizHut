@@ -33,30 +33,44 @@
 
         public async Task<string> CreateResultAsync(string studentId, int points, int maxPoints, string quizId)
         {
-            var @event = await this.eventRepository
-                .AllAsNoTracking()
+            var eventWithQuiz = await this.eventRepository
+                .All()
                 .Where(x => x.QuizId == quizId)
-                .Include(x => x.Quiz)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Name,
+                    QuizName = x.Quiz.Name,
+                    x.ActivationDateAndTime,
+                })
                 .FirstOrDefaultAsync();
+
             var result = new Result()
             {
                 Points = points,
                 StudentId = studentId,
                 MaxPoints = maxPoints,
-                EventId = @event.Id,
-                EventName = @event.Name,
-                QuizName = @event.Quiz.Name,
-                EventActivationDateAndTime = @event.ActivationDateAndTime,
+                EventId = eventWithQuiz.Id,
+                EventName = eventWithQuiz.Name,
+                QuizName = eventWithQuiz.QuizName,
+                EventActivationDateAndTime = eventWithQuiz.ActivationDateAndTime,
             };
 
-            @event.Results.Add(result);
             await this.repository.AddAsync(result);
-            await this.eventRepository.SaveChangesAsync();
             await this.repository.SaveChangesAsync();
+
+            var @event = await this.eventRepository
+                .All()
+                .Where(x => x.QuizId == quizId)
+                .FirstOrDefaultAsync();
+            @event.Results.Add(result);
+            this.eventRepository.Update(@event);
+            await this.eventRepository.SaveChangesAsync();
+
             return result.Id;
         }
 
-        public async Task<IEnumerable<T>> GetByStudentIdAsync<T>(string id, int page, int countPerPage)
+        public async Task<IEnumerable<T>> GetPerPageByStudentIdAsync<T>(string id, int page, int countPerPage)
        => await this.repository
            .AllAsNoTracking()
            .Where(x => x.StudentId == id)

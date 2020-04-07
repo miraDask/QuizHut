@@ -35,6 +35,7 @@
 
             AutoMapperConfig.RegisterMappings(typeof(ScoreViewModel).GetTypeInfo().Assembly);
             AutoMapperConfig.RegisterMappings(typeof(ResultViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(StudentResultViewModel).GetTypeInfo().Assembly);
         }
 
         [Fact]
@@ -124,6 +125,123 @@
             Assert.NotNull(await this.dbContext.Results.FirstOrDefaultAsync(x => x.Id == newResultId));
         }
 
+        [Fact]
+        public async Task GetResultsCountByStudentIdShouldReturnCorrectCount()
+        {
+            var studentId = await this.CreateStudentAsync();
+            var firstEventInfo = await this.CreateEventAsync("First Event", DateTime.UtcNow);
+            var secondEventInfo = await this.CreateEventAsync("Second Event", DateTime.UtcNow);
+
+            await this.CreateResultAsync(studentId, 2, 10, firstEventInfo[0]);
+            await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
+
+            var count = this.service.GetResultsCountByStudentId(studentId);
+
+            Assert.Equal(2, count);
+        }
+
+        [Fact]
+        public async Task GetPerPageByStudentIdAsyncShouldReturnCorrectModelCollection()
+        {
+            var studentId = await this.CreateStudentAsync();
+            var firstEventDate = DateTime.UtcNow;
+            var secondEventDate = DateTime.UtcNow;
+
+            var firstEventInfo = await this.CreateEventAsync("First Event", firstEventDate);
+            var secondEventInfo = await this.CreateEventAsync("Second Event", secondEventDate);
+
+            await this.CreateResultAsync(studentId, 2, 10, firstEventInfo[0]);
+            await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
+
+            var firstModel = new StudentResultViewModel()
+            {
+                Event = "First Event",
+                Quiz = "quiz",
+                Date = firstEventDate.Date.ToString("dd/MM/yyyy"),
+                Score = "2/10",
+            };
+
+            var secondModel = new StudentResultViewModel()
+            {
+                Event = "Second Event",
+                Quiz = "quiz",
+                Date = secondEventDate.Date.ToString("dd/MM/yyyy"),
+                Score = "5/10",
+            };
+
+            var resultModelCollection = await this.service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, 1, 2);
+            Assert.Equal(firstModel.Event, resultModelCollection.Last().Event);
+            Assert.Equal(firstModel.Quiz, resultModelCollection.Last().Quiz);
+            Assert.Equal(firstModel.Date, resultModelCollection.Last().Date);
+            Assert.Equal(firstModel.Score, resultModelCollection.Last().Score);
+            Assert.Equal(secondModel.Event, resultModelCollection.First().Event);
+            Assert.Equal(secondModel.Quiz, resultModelCollection.First().Quiz);
+            Assert.Equal(secondModel.Date, resultModelCollection.First().Date);
+            Assert.Equal(secondModel.Score, resultModelCollection.First().Score);
+            Assert.Equal(2, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetPerPageByStudentIdAsyncShouldSkipCorrectly()
+        {
+            var studentId = await this.CreateStudentAsync();
+            var firstEventDate = DateTime.UtcNow;
+            var secondEventDate = DateTime.UtcNow;
+
+            var firstEventInfo = await this.CreateEventAsync("First Event", firstEventDate);
+            var secondEventInfo = await this.CreateEventAsync("Second Event", secondEventDate);
+
+            await this.CreateResultAsync(studentId, 2, 10, firstEventInfo[0]);
+            await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
+
+            var firstModel = new StudentResultViewModel()
+            {
+                Event = "First Event",
+                Quiz = "quiz",
+                Date = firstEventDate.Date.ToString("dd/MM/yyyy"),
+                Score = "2/10",
+            };
+
+            var resultModelCollection = await this.service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, 2, 1);
+
+            Assert.Single(resultModelCollection);
+            Assert.Equal(firstModel.Event, resultModelCollection.First().Event);
+            Assert.Equal(firstModel.Quiz, resultModelCollection.First().Quiz);
+            Assert.Equal(firstModel.Date, resultModelCollection.First().Date);
+            Assert.Equal(firstModel.Score, resultModelCollection.First().Score);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(1, 10)]
+        public async Task GetPerPageByStudentIdAsyncShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        {
+            var studentId = await this.CreateStudentAsync();
+
+            for (int i = 0; i < countPerPage * 2; i++)
+            {
+                var eventDate = DateTime.UtcNow;
+                var eventInfo = await this.CreateEventAsync("First Event", eventDate);
+                await this.CreateResultAsync(studentId, 5, 10, eventInfo[0]);
+            }
+
+            var resultModelCollection = await this.service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
+
+            Assert.Equal(countPerPage, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetQuizNameByEventIdAndStudentIdAsyncShouldReturnCorrectName()
+        {
+            var studentId = await this.CreateStudentAsync();
+            var eventDate = DateTime.UtcNow;
+            var eventInfo = await this.CreateEventAsync("First Event", eventDate);
+            await this.CreateResultAsync(studentId, 5, 10, eventInfo[0]);
+
+            var quizName = await this.service.GetQuizNameByEventIdAndStudentIdAsync(eventInfo[0], studentId);
+            Assert.Equal("quiz", quizName);
+        }
+
         private async Task<string> AssignStudentsToGroupAsync(string[] studentIds)
         {
             var creatorId = Guid.NewGuid().ToString();
@@ -144,17 +262,21 @@
 
         private async Task CreateResultAsync(string studentId, int points, int maxPoints, string eventId)
         {
+            var @event = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+
             var result = new Result()
             {
                 Points = points,
                 StudentId = studentId,
                 MaxPoints = maxPoints,
                 EventId = eventId,
+                EventName = @event.Name,
+                EventActivationDateAndTime = @event.ActivationDateAndTime,
+                QuizName = @event.QuizName,
             };
 
             await this.dbContext.Results.AddAsync(result);
 
-            var @event = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
             @event.Results.Add(result);
             this.dbContext.Update(@event);
             await this.dbContext.SaveChangesAsync();
@@ -179,6 +301,7 @@
                 DurationOfActivity = TimeSpan.FromMinutes(30),
                 CreatorId = creatorId,
                 QuizId = quiz.Id,
+                QuizName = quiz.Name,
             };
 
             await this.dbContext.Events.AddAsync(@event);

@@ -73,7 +73,7 @@
         }
 
         [Fact]
-        public async Task CreateStudentGroupAsyncShouldNotCreateNewStudentGroupAlreadyExist()
+        public async Task CreateStudentGroupAsyncShouldNotCreateNewStudentGroupIfAlreadyExist()
         {
             var groupId = await this.CreateGroupAsync();
             var studentId = await this.CreateStudentAsync();

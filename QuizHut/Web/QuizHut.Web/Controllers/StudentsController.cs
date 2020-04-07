@@ -59,7 +59,7 @@
             if (allResultsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allResultsCount / (decimal)countPerPage);
-                var results = await this.resultService.GetByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
+                var results = await this.resultService.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
                 model.PagesCount = pagesCount;
                 model.Results = results;
             }
