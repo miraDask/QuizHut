@@ -84,6 +84,7 @@
         public async Task<IList<T>> GetAllByQuizIdAsync<T>(string id)
         => await this.repository.AllAsNoTracking()
             .Where(x => x.QuizId == id)
+            .OrderBy(x => x.Number)
             .To<T>()
             .ToListAsync();
 
