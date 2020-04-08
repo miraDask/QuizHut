@@ -7,15 +7,15 @@
 
     public interface IEventsService
     {
-        Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null);
+        Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId);
 
         Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
 
-        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, Status status, string creatorId = null);
+        Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId);
 
         int GetAllEventsCount(string creatorId = null);
 
-        int GetAllEventsCount(Status status, string creatorId = null);
+        int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId);
 
         Task<IList<T>> GetAllFiteredByStatusAsync<T>(Status status, string creatorId = null, string studentId = null, string groupId = null);
 

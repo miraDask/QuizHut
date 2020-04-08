@@ -111,7 +111,6 @@
             .To<T>()
             .ToListAsync();
 
-        // TODO - ???
         public async Task<IList<T>> GetAllAsync<T>(string eventId = null)
         {
             var query = this.repository

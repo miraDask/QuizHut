@@ -57,23 +57,12 @@
             await this.repository.SaveChangesAsync();
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId, string groupId = null)
-        {
-            var query = this.repository.AllAsNoTracking();
-
-            if (groupId != null)
-            {
-                query = this.repository
-                .AllAsNoTrackingWithDeleted()
-                .Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
-            }
-
-            return await query
-                .Where(x => x.CreatorId == creatorId)
-                .OrderByDescending(x => x.CreatedOn)
-                .To<T>()
-                .ToListAsync();
-        }
+        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId)
+        => await this.repository.AllAsNoTracking()
+                 .Where(x => x.CreatorId == creatorId)
+                 .OrderByDescending(x => x.CreatedOn)
+                 .To<T>()
+                 .ToListAsync();
 
         public async Task<IList<T>> GetByStudentIdFilteredByStatus<T>(Status status, string studentId, int page, int countPerPage, bool withDeleted)
         {
@@ -110,7 +99,7 @@
                    .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, Status status, string creatorId = null)
+        public async Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId)
         {
             var query = this.repository.AllAsNoTracking().Where(x => x.Status == status);
 
@@ -328,17 +317,11 @@
             return query.Count();
         }
 
-        public int GetAllEventsCount(Status status, string creatorId = null)
-        {
-            var query = this.repository.AllAsNoTracking().Where(x => x.Status == status);
-
-            if (creatorId != null)
-            {
-                query = query.Where(x => x.CreatorId == creatorId);
-            }
-
-            return query.Count();
-        }
+        public int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId)
+        => this.repository
+               .AllAsNoTracking()
+               .Where(x => x.Status == status && x.CreatorId == creatorId)
+               .Count();
 
         private async Task<string[]> GetStudentsNamesByEventIdAsync(string id)
         => await this.repository

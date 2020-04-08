@@ -193,6 +193,7 @@
             var quiz = new Quiz() { Name = "Test Quiz" };
             await this.dbContext.Quizzes.AddAsync(quiz);
             await this.dbContext.SaveChangesAsync();
+
             return quiz.Id;
         }
 
