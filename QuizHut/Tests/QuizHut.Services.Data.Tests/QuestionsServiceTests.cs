@@ -30,12 +30,10 @@
             this.questionsRepository = new EfDeletableEntityRepository<Question>(this.dbContext);
             this.quizzesRepository = new EfDeletableEntityRepository<Quiz>(this.dbContext);
             this.service = new QuestionsService(this.questionsRepository, this.quizzesRepository);
-            AutoMapperConfig.RegisterMappings(typeof(QuestionInputModel).GetTypeInfo().Assembly);
-            AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
         }
 
         [Fact]
-        public async Task CreateQuestionAsyncShouldCreateNewQuestionInDb()
+        public async Task A_CreateQuestionAsyncShouldCreateNewQuestionInDb()
         {
             var quizId = await this.CreateQuizAsync();
 
@@ -46,7 +44,7 @@
         }
 
         [Fact]
-        public async Task UpdateAllQuestionsInQuizNumerationShouldUpdateNumerationOfQuestionsCorrectly()
+        public async Task B_UpdateAllQuestionsInQuizNumerationShouldUpdateNumerationOfQuestionsCorrectly()
         {
             var quizId = await this.CreateQuizAsync();
             var firstQuestionId = await this.CreateAndAddQuestionToQuiz(quizId, 1, "text");
@@ -65,7 +63,7 @@
         }
 
         [Fact]
-        public async Task DeleteQuestionByIdAsyncShouldDeleteCorrectly()
+        public async Task C_DeleteQuestionByIdAsyncShouldDeleteCorrectly()
         {
             var quizId = await this.CreateQuizAsync();
             var questionId = await this.CreateAndAddQuestionToQuiz(quizId, 1, "text");
@@ -78,7 +76,7 @@
         }
 
         [Fact]
-        public async Task UpdateShouldUpdateQuestionCorrectly()
+        public async Task D_UpdateShouldUpdateQuestionCorrectly()
         {
             var quizId = await this.CreateQuizAsync();
             var questionId = await this.CreateAndAddQuestionToQuiz(quizId, 1, "text");
@@ -89,8 +87,9 @@
         }
 
         [Fact]
-        public async Task GetByIdAsyncShouldReturnCorrectModel()
+        public async Task E_GetByIdAsyncShouldReturnCorrectModel()
         {
+            AutoMapperConfig.RegisterMappings(typeof(QuestionInputModel).GetTypeInfo().Assembly);
             var text = "First question text";
             var quizId = await this.CreateQuizAsync();
             var newQuestionId = await this.service.CreateQuestionAsync(quizId, text);
@@ -108,8 +107,9 @@
         }
 
         [Fact]
-        public async Task GetAllByQuizIdAsyncShouldReturnCorrectModelCollection()
+        public async Task F_GetAllByQuizIdAsyncShouldReturnCorrectModelCollection()
         {
+            AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
             var quizId = await this.CreateQuizAsync();
             var firstQuestionId = await this.service.CreateQuestionAsync(quizId, "First Question");
             var secondQuestionId = await this.service.CreateQuestionAsync(quizId, "Second Question");
@@ -139,7 +139,7 @@
         }
 
         [Fact]
-        public async Task GetAllByQuizIdCountShouldReturnCorrectCount()
+        public async Task G_GetAllByQuizIdCountShouldReturnCorrectCount()
         {
             var quizId = await this.CreateQuizAsync();
             await this.service.CreateQuestionAsync(quizId, "First Question");
@@ -150,8 +150,9 @@
         }
 
         [Fact]
-        public async Task GetQuestionByQuizIdAndNumberAsyncShouldReturnCorrectModel()
+        public async Task H_GetQuestionByQuizIdAndNumberAsyncShouldReturnCorrectModel()
         {
+            AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
             var text = "First question text";
             var quizId = await this.CreateQuizAsync();
             var firstQuestionId = await this.service.CreateQuestionAsync(quizId, text);

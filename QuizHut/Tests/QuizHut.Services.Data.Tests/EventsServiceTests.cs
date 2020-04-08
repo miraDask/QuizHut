@@ -208,6 +208,26 @@
             Assert.Equal(2, caseWhenNoCreatorIdIsPassedCount);
         }
 
+        // [Fact]
+        // public async Task UpdateAsyncShouldUpdateEventCorrectly()
+        // {
+        // var creatorId = Guid.NewGuid().ToString();
+        // var eventId = await this.CreateEventAsync("Event", DateTime.UtcNow, creatorId);
+        // var newEventName = "Test Event";
+        // var newEventActivationDate = DateTime.Now.AddDays(1);
+        // var activeFrom = newEventActivationDate.Add(TimeSpan.FromMinutes(2));
+        // var activeTo = newEventActivationDate.Add(TimeSpan.FromHours(1));
+
+        // await this.service.UpdateAsync(eventId, newEventName, newEventActivationDate.Date.ToString(), activeFrom.TimeOfDay.ToString(), activeTo.TimeOfDay.ToString());
+
+        // var expectedEventDuration = activeTo - activeFrom;
+
+        // var updatedEvent = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+
+        // Assert.Equal(newEventName, updatedEvent.Name);
+        // Assert.Equal(newEventActivationDate, updatedEvent.ActivationDateAndTime);
+        // Assert.Equal(expectedEventDuration, updatedEvent.DurationOfActivity);
+        // }
         private async Task<string> CreateEventAsync(string name, DateTime activation, string creatorId)
         {
             var quiz = new Quiz()
