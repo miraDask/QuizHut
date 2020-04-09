@@ -1,46 +1,30 @@
 ﻿namespace QuizHut.Services.Data.Tests
 {
-    using System;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-    using QuizHut.Data;
+    using Microsoft.Extensions.DependencyInjection;
     using QuizHut.Data.Models;
-    using QuizHut.Data.Repositories;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Questions;
     using QuizHut.Web.ViewModels.Questions;
     using Xunit;
 
-    public class QuestionsServiceTests
+    public class QuestionsServiceTests : BaseServiceTests
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly EfDeletableEntityRepository<Question> questionsRepository;
-        private readonly EfDeletableEntityRepository<Quiz> quizzesRepository;
-        private readonly QuestionsService service;
-
-        public QuestionsServiceTests()
-        {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-              .UseInMemoryDatabase(Guid.NewGuid().ToString())
-              .Options;
-            this.dbContext = new ApplicationDbContext(options);
-            this.questionsRepository = new EfDeletableEntityRepository<Question>(this.dbContext);
-            this.quizzesRepository = new EfDeletableEntityRepository<Quiz>(this.dbContext);
-            this.service = new QuestionsService(this.questionsRepository, this.quizzesRepository);
-        }
+        private IQuestionsService Service => this.ServiceProvider.GetRequiredService<IQuestionsService>();
 
         [Fact]
         public async Task A_CreateQuestionAsyncShouldCreateNewQuestionInDb()
         {
             var quizId = await this.CreateQuizAsync();
 
-            var newQuestionId = await this.service.CreateQuestionAsync(quizId, "First question text");
-            var questionsCount = this.dbContext.Questions.ToArray().Count();
+            var newQuestionId = await this.Service.CreateQuestionAsync(quizId, "First question text");
+            var questionsCount = this.DbContext.Questions.ToArray().Count();
             Assert.Equal(1, questionsCount);
-            Assert.NotNull(await this.dbContext.Questions.FirstOrDefaultAsync(x => x.Id == newQuestionId));
+            Assert.NotNull(await this.DbContext.Questions.FirstOrDefaultAsync(x => x.Id == newQuestionId));
         }
 
         [Fact]
@@ -53,10 +37,10 @@
 
             await this.DeleteQuestionAsync(secondQuestionId, quizId);
 
-            await this.service.UpdateAllQuestionsInQuizNumeration(quizId);
+            await this.Service.UpdateAllQuestionsInQuizNumeration(quizId);
 
-            var firstQuestion = await this.dbContext.Questions.FirstOrDefaultAsync(x => x.Id == firstQuestionId);
-            var thirdQuestion = await this.dbContext.Questions.FirstOrDefaultAsync(x => x.Id == thirdQuestionId);
+            var firstQuestion = await this.DbContext.Questions.FirstOrDefaultAsync(x => x.Id == firstQuestionId);
+            var thirdQuestion = await this.DbContext.Questions.FirstOrDefaultAsync(x => x.Id == thirdQuestionId);
 
             Assert.Equal(1, firstQuestion.Number);
             Assert.Equal(2, thirdQuestion.Number);
@@ -67,10 +51,10 @@
         {
             var quizId = await this.CreateQuizAsync();
             var questionId = await this.CreateAndAddQuestionToQuiz(quizId, 1, "text");
-            await this.service.DeleteQuestionByIdAsync(questionId);
+            await this.Service.DeleteQuestionByIdAsync(questionId);
 
-            var questionsCount = this.dbContext.Questions.Where(x => !x.IsDeleted).ToArray().Count();
-            var question = await this.dbContext.Questions.FindAsync(questionId);
+            var questionsCount = this.DbContext.Questions.Where(x => !x.IsDeleted).ToArray().Count();
+            var question = await this.DbContext.Questions.FindAsync(questionId);
             Assert.Equal(0, questionsCount);
             Assert.True(question.IsDeleted);
         }
@@ -80,9 +64,9 @@
         {
             var quizId = await this.CreateQuizAsync();
             var questionId = await this.CreateAndAddQuestionToQuiz(quizId, 1, "text");
-            await this.service.Update(questionId, "Updated text");
+            await this.Service.Update(questionId, "Updated text");
 
-            var question = await this.dbContext.Questions.FindAsync(questionId);
+            var question = await this.DbContext.Questions.FindAsync(questionId);
             Assert.Equal("Updated text", question.Text);
         }
 
@@ -92,7 +76,7 @@
             AutoMapperConfig.RegisterMappings(typeof(QuestionInputModel).GetTypeInfo().Assembly);
             var text = "First question text";
             var quizId = await this.CreateQuizAsync();
-            var newQuestionId = await this.service.CreateQuestionAsync(quizId, text);
+            var newQuestionId = await this.Service.CreateQuestionAsync(quizId, text);
 
             var model = new QuestionInputModel()
             {
@@ -100,7 +84,7 @@
                 Text = text,
             };
 
-            var resultModel = await this.service.GetByIdAsync<QuestionInputModel>(newQuestionId);
+            var resultModel = await this.Service.GetByIdAsync<QuestionInputModel>(newQuestionId);
 
             Assert.Equal(model.Id, resultModel.Id);
             Assert.Equal(model.Text, resultModel.Text);
@@ -111,8 +95,8 @@
         {
             AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
             var quizId = await this.CreateQuizAsync();
-            var firstQuestionId = await this.service.CreateQuestionAsync(quizId, "First Question");
-            var secondQuestionId = await this.service.CreateQuestionAsync(quizId, "Second Question");
+            var firstQuestionId = await this.Service.CreateQuestionAsync(quizId, "First Question");
+            var secondQuestionId = await this.Service.CreateQuestionAsync(quizId, "Second Question");
 
             var firstModel = new QuestionViewModel()
             {
@@ -128,7 +112,7 @@
                 Number = 2,
             };
 
-            var resultModelCollection = await this.service.GetAllByQuizIdAsync<QuestionViewModel>(quizId);
+            var resultModelCollection = await this.Service.GetAllByQuizIdAsync<QuestionViewModel>(quizId);
             Assert.Equal(firstModel.Id, resultModelCollection.First().Id);
             Assert.Equal(firstModel.Text, resultModelCollection.First().Text);
             Assert.Equal(firstModel.Answers.Count, resultModelCollection.First().Answers.Count);
@@ -142,9 +126,9 @@
         public async Task G_GetAllByQuizIdCountShouldReturnCorrectCount()
         {
             var quizId = await this.CreateQuizAsync();
-            await this.service.CreateQuestionAsync(quizId, "First Question");
-            await this.service.CreateQuestionAsync(quizId, "Second Question");
-            var count = this.service.GetAllByQuizIdCount(quizId);
+            await this.Service.CreateQuestionAsync(quizId, "First Question");
+            await this.Service.CreateQuestionAsync(quizId, "Second Question");
+            var count = this.Service.GetAllByQuizIdCount(quizId);
 
             Assert.Equal(2, count);
         }
@@ -155,7 +139,7 @@
             AutoMapperConfig.RegisterMappings(typeof(QuestionViewModel).GetTypeInfo().Assembly);
             var text = "First question text";
             var quizId = await this.CreateQuizAsync();
-            var firstQuestionId = await this.service.CreateQuestionAsync(quizId, text);
+            var firstQuestionId = await this.Service.CreateQuestionAsync(quizId, text);
 
             var model = new QuestionViewModel()
             {
@@ -164,7 +148,7 @@
                 Number = 1,
             };
 
-            var resultModel = await this.service.GetQuestionByQuizIdAndNumberAsync<QuestionViewModel>(quizId, 1);
+            var resultModel = await this.Service.GetQuestionByQuizIdAndNumberAsync<QuestionViewModel>(quizId, 1);
 
             Assert.Equal(model.Id, resultModel.Id);
             Assert.Equal(model.Text, resultModel.Text);
@@ -180,11 +164,11 @@
                 QuizId = quizId,
             };
 
-            var quiz = await this.dbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
             quiz.Questions.Add(question);
-            this.dbContext.Update(quiz);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<Question>(question).State = EntityState.Detached;
+            this.DbContext.Update(quiz);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Question>(question).State = EntityState.Detached;
 
             return question.Id;
         }
@@ -192,22 +176,22 @@
         private async Task<string> CreateQuizAsync()
         {
             var quiz = new Quiz() { Name = "Test Quiz" };
-            await this.dbContext.Quizzes.AddAsync(quiz);
-            await this.dbContext.SaveChangesAsync();
+            await this.DbContext.Quizzes.AddAsync(quiz);
+            await this.DbContext.SaveChangesAsync();
 
             return quiz.Id;
         }
 
         private async Task DeleteQuestionAsync(string questionId, string quizId)
         {
-            var quiz = await this.dbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
-            var question = await this.dbContext.Questions.FirstOrDefaultAsync(x => x.Id == questionId);
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+            var question = await this.DbContext.Questions.FirstOrDefaultAsync(x => x.Id == questionId);
 
             quiz.Questions.Remove(question);
-            this.dbContext.Quizzes.Update(quiz);
-            this.dbContext.Questions.Remove(question);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+            this.DbContext.Quizzes.Update(quiz);
+            this.DbContext.Questions.Remove(question);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
         }
     }
 }
