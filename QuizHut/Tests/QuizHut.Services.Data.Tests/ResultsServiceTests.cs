@@ -3,40 +3,19 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-    using QuizHut.Data;
+    using Microsoft.Extensions.DependencyInjection;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
-    using QuizHut.Data.Repositories;
-    using QuizHut.Services.Mapping;
     using QuizHut.Services.Results;
     using QuizHut.Web.ViewModels.Results;
     using Xunit;
 
-    public class ResultsServiceTests
+    public class ResultsServiceTests : BaseServiceTests
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly EfDeletableEntityRepository<Result> resultRepository;
-        private readonly EfDeletableEntityRepository<Event> eventRepository;
-        private readonly ResultsService service;
-
-        public ResultsServiceTests()
-        {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-               .UseInMemoryDatabase(Guid.NewGuid().ToString())
-               .Options;
-            this.dbContext = new ApplicationDbContext(options);
-            this.resultRepository = new EfDeletableEntityRepository<Result>(this.dbContext);
-            this.eventRepository = new EfDeletableEntityRepository<Event>(this.dbContext);
-            this.service = new ResultsService(this.resultRepository, this.eventRepository);
-
-            AutoMapperConfig.RegisterMappings(typeof(ScoreViewModel).GetTypeInfo().Assembly);
-            AutoMapperConfig.RegisterMappings(typeof(ResultViewModel).GetTypeInfo().Assembly);
-            AutoMapperConfig.RegisterMappings(typeof(StudentResultViewModel).GetTypeInfo().Assembly);
-        }
+        private IResultsService Service => this.ServiceProvider.GetRequiredService<IResultsService>();
 
         [Fact]
         public async Task GetAllByStudentIdAsyncShouldReturnCorrectModelCollection()
@@ -63,7 +42,7 @@
                 Score = "15/15",
             };
 
-            var resultModelCollection = await this.service.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
+            var resultModelCollection = await this.Service.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
 
             Assert.Equal(firstModel.EventId, resultModelCollection.Last().EventId);
             Assert.Equal(firstModel.Score, resultModelCollection.Last().Score);
@@ -101,7 +80,8 @@
                 Score = "15/15",
             };
 
-            var resultModelCollection = await this.service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
+            var resultModelCollection = await this.Service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
+
             Assert.Equal(firstModel.StudentName, resultModelCollection.Last().StudentName);
             Assert.Equal(firstModel.StudentEmail, resultModelCollection.First().StudentEmail);
             Assert.Equal(firstModel.Score, resultModelCollection.First().Score);
@@ -109,7 +89,6 @@
             Assert.Equal(secondModel.StudentEmail, resultModelCollection.Last().StudentEmail);
             Assert.Equal(secondModel.Score, resultModelCollection.Last().Score);
             Assert.Equal(2, resultModelCollection.Count());
-            Assert.IsAssignableFrom<IEnumerable<ResultViewModel>>(resultModelCollection);
         }
 
         [Fact]
@@ -119,10 +98,10 @@
             var eventInfo = await this.CreateEventAsync("event", DateTime.UtcNow);
             var quizId = eventInfo[1];
 
-            var newResultId = await this.service.CreateResultAsync(studentId, 2, 10, quizId);
-            var resultsCount = this.dbContext.Results.ToArray().Count();
+            var newResultId = await this.Service.CreateResultAsync(studentId, 2, 10, quizId);
+            var resultsCount = this.DbContext.Results.ToArray().Count();
             Assert.Equal(1, resultsCount);
-            Assert.NotNull(await this.dbContext.Results.FirstOrDefaultAsync(x => x.Id == newResultId));
+            Assert.NotNull(await this.DbContext.Results.FirstOrDefaultAsync(x => x.Id == newResultId));
         }
 
         [Fact]
@@ -135,7 +114,7 @@
             await this.CreateResultAsync(studentId, 2, 10, firstEventInfo[0]);
             await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
 
-            var count = this.service.GetResultsCountByStudentId(studentId);
+            var count = this.Service.GetResultsCountByStudentId(studentId);
 
             Assert.Equal(2, count);
         }
@@ -169,7 +148,8 @@
                 Score = "5/10",
             };
 
-            var resultModelCollection = await this.service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, 1, 2);
+            var resultModelCollection = await this.Service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, 1, 2);
+
             Assert.Equal(firstModel.Event, resultModelCollection.Last().Event);
             Assert.Equal(firstModel.Quiz, resultModelCollection.Last().Quiz);
             Assert.Equal(firstModel.Date, resultModelCollection.Last().Date);
@@ -202,7 +182,7 @@
                 Score = "2/10",
             };
 
-            var resultModelCollection = await this.service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, 2, 1);
+            var resultModelCollection = await this.Service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, 2, 1);
 
             Assert.Single(resultModelCollection);
             Assert.Equal(firstModel.Event, resultModelCollection.First().Event);
@@ -225,7 +205,7 @@
                 await this.CreateResultAsync(studentId, 5, 10, eventInfo[0]);
             }
 
-            var resultModelCollection = await this.service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
+            var resultModelCollection = await this.Service.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
 
             Assert.Equal(countPerPage, resultModelCollection.Count());
         }
@@ -238,7 +218,7 @@
             var eventInfo = await this.CreateEventAsync("First Event", eventDate);
             await this.CreateResultAsync(studentId, 5, 10, eventInfo[0]);
 
-            var quizName = await this.service.GetQuizNameByEventIdAndStudentIdAsync(eventInfo[0], studentId);
+            var quizName = await this.Service.GetQuizNameByEventIdAndStudentIdAsync(eventInfo[0], studentId);
             Assert.Equal("quiz", quizName);
         }
 
@@ -246,23 +226,23 @@
         {
             var creatorId = Guid.NewGuid().ToString();
             var group = new Group() { Name = "Group", CreatorId = creatorId };
-            await this.dbContext.Groups.AddAsync(group);
+            await this.DbContext.Groups.AddAsync(group);
             foreach (var id in studentIds)
             {
                 var studentGroup = new StudentGroup() { StudentId = id, GroupId = group.Id };
-                await this.dbContext.StudentsGroups.AddAsync(studentGroup);
-                var student = await this.dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+                await this.DbContext.StudentsGroups.AddAsync(studentGroup);
+                var student = await this.DbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
                 student.StudentsInGroups.Add(studentGroup);
-                this.dbContext.Update(student);
+                this.DbContext.Update(student);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await this.DbContext.SaveChangesAsync();
             return group.Name;
         }
 
         private async Task CreateResultAsync(string studentId, int points, int maxPoints, string eventId)
         {
-            var @event = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+            var @event = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
 
             var result = new Result()
             {
@@ -275,12 +255,12 @@
                 QuizName = @event.QuizName,
             };
 
-            await this.dbContext.Results.AddAsync(result);
+            await this.DbContext.Results.AddAsync(result);
 
             @event.Results.Add(result);
-            this.dbContext.Update(@event);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<Result>(result).State = EntityState.Detached;
+            this.DbContext.Update(@event);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Result>(result).State = EntityState.Detached;
         }
 
         private async Task<string[]> CreateEventAsync(string name, DateTime activation)
@@ -291,7 +271,7 @@
                 Name = "quiz",
             };
 
-            await this.dbContext.Quizzes.AddAsync(quiz);
+            await this.DbContext.Quizzes.AddAsync(quiz);
 
             var @event = new Event
             {
@@ -304,8 +284,8 @@
                 QuizName = quiz.Name,
             };
 
-            await this.dbContext.Events.AddAsync(@event);
-            await this.dbContext.SaveChangesAsync();
+            await this.DbContext.Events.AddAsync(@event);
+            await this.DbContext.SaveChangesAsync();
             return new string[] { @event.Id, quiz.Id };
         }
 
@@ -319,9 +299,9 @@
                 UserName = "email@email.com",
             };
 
-            await this.dbContext.Users.AddAsync(student);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<ApplicationUser>(student).State = EntityState.Detached;
+            await this.DbContext.Users.AddAsync(student);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<ApplicationUser>(student).State = EntityState.Detached;
             return student.Id;
         }
     }
