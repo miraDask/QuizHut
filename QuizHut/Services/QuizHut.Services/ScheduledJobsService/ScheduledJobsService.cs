@@ -19,20 +19,23 @@
         private readonly IDeletableEntityRepository<ScheduledJob> repository;
         private readonly IDeletableEntityRepository<Event> eventRepository;
         private readonly IHubContext<QuizHub> hub;
+        private readonly IBackgroundJobClient backgroundJobClient;
 
         public ScheduledJobsService(
             IDeletableEntityRepository<ScheduledJob> repository,
             IDeletableEntityRepository<Event> eventRepository,
-            IHubContext<QuizHub> hub)
+            IHubContext<QuizHub> hub,
+            IBackgroundJobClient backgroundJobClient)
         {
             this.repository = repository;
             this.eventRepository = eventRepository;
             this.hub = hub;
+            this.backgroundJobClient = backgroundJobClient;
         }
 
-        public async Task CreateStarEventJobAsync(string eventId, TimeSpan activationDelay)
+        public async Task CreateStartEventJobAsync(string eventId, TimeSpan activationDelay)
         {
-            var activationScheduleJobId = BackgroundJob.Schedule(() => this.SetStatusChangeJobAsync(eventId, Status.Active), activationDelay);
+            var activationScheduleJobId = this.backgroundJobClient.Schedule(() => this.SetStatusChangeJobAsync(eventId, Status.Active), activationDelay);
             var job = new ScheduledJob()
             {
                 JobId = activationScheduleJobId,
@@ -46,7 +49,7 @@
 
         public async Task CreateEndEventJobAsync(string eventId, TimeSpan endingDelay)
         {
-            var endingScheduleJobId = BackgroundJob.Schedule(() => this.SetStatusChangeJobAsync(eventId, Status.Ended), endingDelay);
+            var endingScheduleJobId = this.backgroundJobClient.Schedule(() => this.SetStatusChangeJobAsync(eventId, Status.Ended), endingDelay);
             var job = new ScheduledJob()
             {
                 JobId = endingScheduleJobId,
@@ -75,7 +78,7 @@
 
             foreach (var jobId in jobsIds)
             {
-                BackgroundJob.Delete(jobId);
+                this.backgroundJobClient.Delete(jobId);
             }
         }
 

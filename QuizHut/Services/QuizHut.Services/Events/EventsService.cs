@@ -362,7 +362,7 @@
                 }
 
                 await this.scheduledJobsService.DeleteJobsAsync(eventId, true);
-                await this.scheduledJobsService.CreateStarEventJobAsync(eventId, activationDelay);
+                await this.scheduledJobsService.CreateStartEventJobAsync(eventId, activationDelay);
                 await this.scheduledJobsService.CreateEndEventJobAsync(eventId, endingDelay);
             }
         }

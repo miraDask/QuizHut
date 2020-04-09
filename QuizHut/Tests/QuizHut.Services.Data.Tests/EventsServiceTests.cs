@@ -8,6 +8,7 @@
 
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using QuizHut.Common.Hubs;
     using QuizHut.Data;
@@ -23,51 +24,19 @@
     using QuizHut.Web.ViewModels.Events;
     using Xunit;
 
-    public class EventsServiceTests
+    public class EventsServiceTests : BaseServiceTests
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly EfDeletableEntityRepository<Event> eventsRepository;
-        private readonly QuizzesService quizzesService;
-        private readonly Mock<IHubContext<QuizHub>> hubContext;
-        private readonly EventsService service;
-
-        public EventsServiceTests()
-        {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
-            this.dbContext = new ApplicationDbContext(options);
-            this.eventsRepository = new EfDeletableEntityRepository<Event>(this.dbContext);
-            this.quizzesService = new QuizzesService(
-                new EfDeletableEntityRepository<Quiz>(this.dbContext),
-                new EfRepository<Password>(this.dbContext));
-            this.hubContext = new Mock<IHubContext<QuizHub>>();
-
-            var scheduledJobsService = new ScheduledJobsService(
-                new EfDeletableEntityRepository<ScheduledJob>(this.dbContext),
-                this.eventsRepository,
-                this.hubContext.Object);
-
-            this.service = new EventsService(
-                this.eventsRepository,
-                this.quizzesService,
-                new EventsGroupsService(new EfDeletableEntityRepository<EventGroup>(this.dbContext)),
-                scheduledJobsService,
-                new SendGridEmailSender("someFalseKey"),
-                this.hubContext.Object);
-
-            AutoMapperConfig.RegisterMappings(typeof(EventListViewModel).GetTypeInfo().Assembly);
-        }
+        private IEventsService Service => this.ServiceProvider.GetRequiredService<IEventsService>();
 
         [Fact]
         public async Task DeleteAsyncShouldDeleteCorrectly()
         {
             var creatorId = Guid.NewGuid().ToString();
             var firstEventId = await this.CreateEventAsync("First Event", DateTime.UtcNow, creatorId);
-            await this.service.DeleteAsync(firstEventId);
+            await this.Service.DeleteAsync(firstEventId);
 
-            var eventsCount = this.dbContext.Events.Where(x => !x.IsDeleted).ToArray().Count();
-            var @event = await this.dbContext.Events.FindAsync(firstEventId);
+            var eventsCount = this.DbContext.Events.Where(x => !x.IsDeleted).ToArray().Count();
+            var @event = await this.DbContext.Events.FindAsync(firstEventId);
             Assert.Equal(0, eventsCount);
             Assert.True(@event.IsDeleted);
         }
@@ -114,7 +83,7 @@
                $" - {secondEventDate.ToLocalTime().Add(TimeSpan.FromMinutes(30)).Hour.ToString("D2")}" +
                $":{secondEventDate.ToLocalTime().Add(TimeSpan.FromMinutes(30)).Minute.ToString("D2")}";
 
-            var resultModelCollection = await this.service.GetAllByCreatorIdAsync<EventListViewModel>(creatorId);
+            var resultModelCollection = await this.Service.GetAllByCreatorIdAsync<EventListViewModel>(creatorId);
 
             Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
             Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
@@ -145,7 +114,7 @@
             await this.CreateEventAsync("First Event", DateTime.UtcNow, creatorId);
             await this.CreateEventAsync("Second Event", DateTime.UtcNow, creatorId);
 
-            var count = this.service.GetEventsCountByCreatorIdAndStatus(Status.Pending, creatorId);
+            var count = this.Service.GetEventsCountByCreatorIdAndStatus(Status.Pending, creatorId);
 
             Assert.Equal(2, count);
         }
@@ -161,7 +130,7 @@
             await this.AssignStudentToEvent(studentId, secondEventId);
             var thirdEventId = await this.CreateEventAsync("Third Event", DateTime.UtcNow, creatorId);
             await this.AssignStudentToEvent(studentId, thirdEventId);
-            var count = this.service.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending);
+            var count = this.Service.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending);
 
             Assert.Equal(2, count);
         }
@@ -179,9 +148,9 @@
                 groupsIds.Add(groupId);
             }
 
-            await this.service.AssignGroupsToEventAsync(groupsIds, eventId);
+            await this.Service.AssignGroupsToEventAsync(groupsIds, eventId);
 
-            var assignedGroupsIds = await this.dbContext.Events
+            var assignedGroupsIds = await this.DbContext.Events
                 .Where(x => x.Id == eventId)
                 .Select(x => x.EventsGroups.Select(x => x.GroupId))
                 .FirstOrDefaultAsync();
@@ -201,8 +170,8 @@
             await this.CreateEventAsync("First Event", DateTime.UtcNow, firstCreatorId);
             await this.CreateEventAsync("Second Event", DateTime.UtcNow, secondCreatorId);
 
-            var caseWhenCreatorIdIsPassedCount = this.service.GetAllEventsCount(firstCreatorId);
-            var caseWhenNoCreatorIdIsPassedCount = this.service.GetAllEventsCount();
+            var caseWhenCreatorIdIsPassedCount = this.Service.GetAllEventsCount(firstCreatorId);
+            var caseWhenNoCreatorIdIsPassedCount = this.Service.GetAllEventsCount();
 
             Assert.Equal(1, caseWhenCreatorIdIsPassedCount);
             Assert.Equal(2, caseWhenNoCreatorIdIsPassedCount);
@@ -220,14 +189,14 @@
             var expectedEventActivationDate = new DateTime(2020, 4, 1, 7, 00, 00);
             var expectedEventDuration = new TimeSpan(2, 0, 0);
 
-            var eventId = await this.service.CreateEventAsync(
+            var eventId = await this.Service.CreateEventAsync(
                 expectedEventName,
                 eventActivationDate,
                 activeFrom,
                 activeTo,
                 creatorId);
 
-            var @event = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+            var @event = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
 
             Assert.NotNull(@event);
             Assert.Equal(expectedEventName, @event.Name);
@@ -237,26 +206,28 @@
             Assert.Equal(creatorId, @event.CreatorId);
         }
 
-        // [Fact]
-        // public async Task UpdateAsyncShouldUpdateEventCorrectly()
-        // {
-        // var creatorId = Guid.NewGuid().ToString();
-        // var eventId = await this.CreateEventAsync("Event", DateTime.UtcNow, creatorId);
-        // var newEventName = "Test Event";
-        // var newEventActivationDate = DateTime.Now.AddDays(1);
-        // var activeFrom = newEventActivationDate.Add(TimeSpan.FromMinutes(2));
-        // var activeTo = newEventActivationDate.Add(TimeSpan.FromHours(1));
+        [Fact]
+        public async Task UpdateAsyncShouldUpdateEventCorrectly()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var eventId = await this.CreateEventAsync("Event", DateTime.UtcNow, creatorId);
+            var expectedEventName = "Test Event";
+            var eventActivationDate = "01/04/2020";
+            var activeFrom = "08:00";
+            var activeTo = "10:00";
 
-        // await this.service.UpdateAsync(eventId, newEventName, newEventActivationDate.Date.ToString(), activeFrom.TimeOfDay.ToString(), activeTo.TimeOfDay.ToString());
+            await this.Service.UpdateAsync(eventId, expectedEventName, eventActivationDate, activeFrom, activeTo);
 
-        // var expectedEventDuration = activeTo - activeFrom;
+            var expectedEventActivationDate = new DateTime(2020, 4, 1, 7, 00, 00);
+            var expectedEventDuration = new TimeSpan(2, 0, 0);
 
-        // var updatedEvent = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+            var updatedEvent = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
 
-        // Assert.Equal(newEventName, updatedEvent.Name);
-        // Assert.Equal(newEventActivationDate, updatedEvent.ActivationDateAndTime);
-        // Assert.Equal(expectedEventDuration, updatedEvent.DurationOfActivity);
-        // }
+            Assert.Equal(expectedEventName, updatedEvent.Name);
+            Assert.Equal(expectedEventActivationDate, updatedEvent.ActivationDateAndTime);
+            Assert.Equal(expectedEventDuration, updatedEvent.DurationOfActivity);
+        }
+
         [Fact]
         public async Task AssigQuizToEventAsyncShouldSetEventQuizIdCorrectly()
         {
@@ -270,15 +241,16 @@
                 DurationOfActivity = TimeSpan.FromMinutes(30),
                 CreatorId = creatorId,
             };
-            await this.dbContext.Events.AddAsync(@event);
-            await this.dbContext.SaveChangesAsync();
+            await this.DbContext.Events.AddAsync(@event);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Event>(@event).State = EntityState.Detached;
 
-            await this.service.AssigQuizToEventAsync(@event.Id, quiz.Id);
+            await this.Service.AssigQuizToEventAsync(@event.Id, quiz.Id);
 
-            var eventWithAssignedQuiz = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == @event.Id);
+            var eventWithAssignedQuiz = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == @event.Id);
 
-            Assert.Equal(quiz.Id, @event.QuizId);
-            Assert.Equal(quiz.Name, @event.QuizName);
+            Assert.Equal(quiz.Id, eventWithAssignedQuiz.QuizId);
+            Assert.Equal(quiz.Name, eventWithAssignedQuiz.QuizName);
         }
 
         [Fact]
@@ -287,9 +259,9 @@
             var creatorId = Guid.NewGuid().ToString();
             var quiz = await this.CreateQuizAsync();
             var eventId = await this.CreateEventAsync("Event", DateTime.UtcNow, creatorId, quiz.Id);
-            await this.service.DeleteQuizFromEventAsync(eventId, quiz.Id);
+            await this.Service.DeleteQuizFromEventAsync(eventId, quiz.Id);
 
-            var @event = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+            var @event = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
 
             Assert.NotNull(@event);
             Assert.Null(@event.QuizId);
@@ -303,9 +275,9 @@
             var eventId = await this.CreateEventAsync("Event", DateTime.UtcNow, creatorId, quiz.Id);
             await this.ChangeEventStatus(eventId, Status.Active);
 
-            await this.service.DeleteQuizFromEventAsync(eventId, quiz.Id);
+            await this.Service.DeleteQuizFromEventAsync(eventId, quiz.Id);
 
-            var @event = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+            var @event = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
 
             Assert.Equal(Status.Pending, @event.Status);
         }
@@ -315,7 +287,7 @@
             Quiz quiz;
             if (quizId != null)
             {
-                quiz = await this.dbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+                quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
             }
             else
             {
@@ -333,30 +305,30 @@
                 QuizName = quiz.Name,
             };
 
-            await this.dbContext.Events.AddAsync(@event);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
-            this.dbContext.Entry<Event>(@event).State = EntityState.Detached;
+            await this.DbContext.Events.AddAsync(@event);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+            this.DbContext.Entry<Event>(@event).State = EntityState.Detached;
             return @event.Id;
         }
 
         private async Task ChangeEventStatus(string eventId, Status status)
         {
-            var @event = await this.dbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
+            var @event = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
             @event.Status = status;
-            this.dbContext.Update(@event);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<Event>(@event).State = EntityState.Detached;
+            this.DbContext.Update(@event);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Event>(@event).State = EntityState.Detached;
         }
 
         private async Task AssignStudentToEvent(string studentId, string eventId)
         {
             var groupId = await this.CreateGroupAsync();
             var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = groupId };
-            await this.dbContext.StudentsGroups.AddAsync(studentGroup);
+            await this.DbContext.StudentsGroups.AddAsync(studentGroup);
             await this.CreateEventGroupAsync(eventId, groupId);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<StudentGroup>(studentGroup).State = EntityState.Detached;
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<StudentGroup>(studentGroup).State = EntityState.Detached;
         }
 
         private async Task<string> CreateGroupAsync()
@@ -367,9 +339,9 @@
                 CreatorId = Guid.NewGuid().ToString(),
             };
 
-            await this.dbContext.Groups.AddAsync(group);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<Group>(group).State = EntityState.Detached;
+            await this.DbContext.Groups.AddAsync(group);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Group>(group).State = EntityState.Detached;
             return group.Id;
         }
 
@@ -380,18 +352,18 @@
                 Name = "quiz",
             };
 
-            await this.dbContext.Quizzes.AddAsync(quiz);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+            await this.DbContext.Quizzes.AddAsync(quiz);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
             return quiz;
         }
 
         private async Task<EventGroup> CreateEventGroupAsync(string eventId, string groupId)
         {
             var eventGroup = new EventGroup() { EventId = eventId, GroupId = groupId };
-            await this.dbContext.EventsGroups.AddAsync(eventGroup);
-            await this.dbContext.SaveChangesAsync();
-            this.dbContext.Entry<EventGroup>(eventGroup).State = EntityState.Detached;
+            await this.DbContext.EventsGroups.AddAsync(eventGroup);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<EventGroup>(eventGroup).State = EntityState.Detached;
             return eventGroup;
         }
     }

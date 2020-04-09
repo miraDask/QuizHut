@@ -5,16 +5,24 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.Extensions.Logging;
     using SendGrid;
     using SendGrid.Helpers.Mail;
 
     public class SendGridEmailSender : IEmailSender
     {
         private readonly SendGridClient client;
+        private readonly ILogger<SendGridEmailSender> logger;
 
-        public SendGridEmailSender(string apiKey)
+        public SendGridEmailSender(ILoggerFactory loggerFactory, string apiKey)
         {
+            if (loggerFactory == null)
+            {
+                throw new ArgumentNullException(nameof(loggerFactory));
+            }
+
             this.client = new SendGridClient(apiKey);
+            this.logger = loggerFactory.CreateLogger<SendGridEmailSender>();
         }
 
         public async Task SendEmailAsync(string from, string fromName, string to, string subject, string htmlContent, IEnumerable<EmailAttachment> attachments = null)
@@ -43,8 +51,7 @@
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                this.logger.LogError($"Exception during sending email: {e}");
             }
         }
     }
