@@ -3,24 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using Moq;
-    using QuizHut.Common.Hubs;
-    using QuizHut.Data;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
-    using QuizHut.Data.Repositories;
     using QuizHut.Services.Events;
-    using QuizHut.Services.EventsGroups;
-    using QuizHut.Services.Mapping;
-    using QuizHut.Services.Messaging;
-    using QuizHut.Services.Quizzes;
-    using QuizHut.Services.ScheduledJobsService;
     using QuizHut.Web.ViewModels.Events;
     using Xunit;
 
