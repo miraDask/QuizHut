@@ -194,7 +194,8 @@
         {
             var @event = await this.GetEventById(eventId);
             @event.QuizId = null;
-            if (@event.Status != Status.Ended)
+
+            if (@event.Status == Status.Active)
             {
                 @event.Status = Status.Pending;
                 await this.scheduledJobsService.DeleteJobsAsync(@event.Id, true);
