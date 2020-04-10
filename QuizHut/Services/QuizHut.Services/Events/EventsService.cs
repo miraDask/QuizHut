@@ -186,7 +186,11 @@
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
 
-            await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id, @event.Name, @event.Status);
+            if (@event.Status != Status.Ended)
+            {
+                await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id, @event.Name, @event.Status);
+            }
+
             await this.quizService.AssignEventToQuiz(eventId, quizId);
         }
 
@@ -376,6 +380,11 @@
         private Status GetStatus(DateTime activationDateAndTime, string quizId)
         {
             var now = DateTime.UtcNow;
+            if (now.Date > activationDateAndTime.Date || (now.Date == activationDateAndTime.Date && activationDateAndTime.TimeOfDay < now.TimeOfDay))
+            {
+                return Status.Ended;
+            }
+
             if (quizId == null || now.Date < activationDateAndTime.Date || activationDateAndTime.TimeOfDay.Minutes > now.TimeOfDay.Minutes)
             {
                 return Status.Pending;

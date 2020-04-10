@@ -96,7 +96,7 @@
         }
 
         [Fact]
-        public async Task GetEventsCountByCreatorIdAndCountShouldReturnCorrectCount()
+        public async Task GetEventsCountByCreatorIdAndStatusShouldReturnCorrectCount()
         {
             var creatorId = Guid.NewGuid().ToString();
 
