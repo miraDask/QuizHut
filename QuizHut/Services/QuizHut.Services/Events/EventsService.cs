@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -394,7 +395,7 @@
         }
 
         private DateTime GetActivationDateAndTimeLocal(string activationDate, string activeFrom)
-        => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
+        => DateTime.ParseExact(activationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).Add(TimeSpan.Parse(activeFrom));
 
         private TimeSpan GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
         => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
