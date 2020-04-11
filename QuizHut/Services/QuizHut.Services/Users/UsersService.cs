@@ -70,19 +70,20 @@
             await this.userRepository.SaveChangesAsync();
         }
 
-        public async Task<IList<T>> GetAllByUserIdAsync<T>(string id = null, string groupId = null)
+        public async Task<IList<T>> GetAllStudentsAsync<T>(string teacherId = null, string groupId = null)
         {
             var query = this.userRepository.AllAsNoTracking();
 
             if (groupId != null)
             {
-                var assignedstudentsIds = await this.studentsGroupsService.GetAllStudentsIdsByGroupIdAsync(groupId);
-                query = query.Where(x => !assignedstudentsIds.Contains(x.Id));
+                // var assignedstudentsIds = await this.studentsGroupsService.GetAllStudentsIdsByGroupIdAsync(groupId);
+                // query = query.Where(x => !assignedstudentsIds.Contains(x.Id));
+                query = query.Where(x => !x.StudentsInGroups.Select(x => x.GroupId).Contains(groupId));
             }
 
-            if (id != null)
+            if (teacherId != null)
             {
-                query = query.Where(x => x.TeacherId == id);
+                query = query.Where(x => x.TeacherId == teacherId);
             }
 
             return await query.Where(x => !x.Roles.Any()).To<T>().ToListAsync();

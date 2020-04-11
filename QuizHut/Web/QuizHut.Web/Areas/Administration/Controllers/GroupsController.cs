@@ -107,7 +107,7 @@
         public async Task<IActionResult> AssignStudents(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(userId);
+            var students = await this.userService.GetAllStudentsAsync<StudentViewModel>(userId);
             var model = new GroupWithStudentsViewModel() { Id = id, Students = students };
             return this.View(model);
         }
@@ -210,12 +210,12 @@
             var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
-                students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(null, id);
+                students = await this.userService.GetAllStudentsAsync<StudentViewModel>(null, id);
             }
             else
             {
                 var userId = this.userManager.GetUserId(this.User);
-                students = await this.userService.GetAllByUserIdAsync<StudentViewModel>(userId, id);
+                students = await this.userService.GetAllStudentsAsync<StudentViewModel>(userId, id);
             }
 
             var model = new GroupWithStudentsViewModel() { Id = id, Students = students };

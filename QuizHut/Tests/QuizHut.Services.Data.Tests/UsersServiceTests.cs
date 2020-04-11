@@ -124,16 +124,109 @@
             Assert.Equal(1, studentsWithSameTeacherCount);
         }
 
-        private async Task<string> AssignStudentToGroupAsync(string studentId)
+        [Fact]
+        public async Task GetAllStudentsAsyncShouldReturnCorrectModelCollection()
         {
-            var group = new Group() { Name = "group" };
-            var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = group.Id };
+            await this.CreateUserAsync("teacher@teacher.com", "teacher");
+            var studentId = await this.CreateUserAsync("student@student.com");
 
-            await this.DbContext.Groups.AddAsync(group);
+            var model = new StudentViewModel()
+            {
+                Id = studentId,
+                FullName = "John Doe",
+                Email = "student@student.com",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>();
+
+            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(model.Id, resultModelCollection.First().Id);
+            Assert.Equal(model.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(model.Email, resultModelCollection.First().Email);
+        }
+
+        [Fact]
+        public async Task GetAllStudentsAsyncShouldReturnAllStudentsWithSameTeacherWhenTeacherIdIsPassed()
+        {
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            await this.AddStudentAsync(firstStudentId, teacherId);
+            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            await this.AddStudentAsync(secondStudentId, teacherId);
+            await this.CreateUserAsync("student3@student.com");
+
+            var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>(teacherId);
+
+            Assert.Equal(2, resultModelCollection.Count);
+        }
+
+        [Fact]
+        public async Task GetAllStudentsAsyncShouldReturnAllStudentsThatAreNotInTheGroupWhichGroupIdIsPassed()
+        {
+            var group = await this.CreateGroupAsync();
+
+            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            await this.AssignStudentToGroupAsync(firstStudentId, group.Id);
+            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            await this.AssignStudentToGroupAsync(secondStudentId, group.Id);
+
+            await this.CreateUserAsync("student3@student.com");
+
+            var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>(null, group.Id);
+
+            Assert.Equal(1, resultModelCollection.Count);
+        }
+
+        [Fact]
+        public async Task GetAllStudentsAsyncShouldReturnAllStudentsWhitSameTeacherWhichIdIsPassedAndThatAreNotInTheGroupWhichIdIsPassed()
+        {
+            var group = await this.CreateGroupAsync();
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
+
+            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            await this.AddStudentAsync(firstStudentId, teacherId);
+
+            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            await this.AddStudentAsync(secondStudentId, teacherId);
+            await this.AssignStudentToGroupAsync(secondStudentId, group.Id);
+
+            var thirdStudentId = await this.CreateUserAsync("student3@student.com");
+            await this.AssignStudentToGroupAsync(thirdStudentId, group.Id);
+
+            var model = new StudentViewModel()
+            {
+                Id = firstStudentId,
+                FullName = "John Doe",
+                Email = "student1@student.com",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>(teacherId, group.Id);
+
+            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(model.Id, resultModelCollection.First().Id);
+            Assert.Equal(model.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(model.Email, resultModelCollection.First().Email);
+        }
+
+        private async Task<string> AssignStudentToGroupAsync(string studentId, string groupId = null)
+        {
+            Group group;
+            if (groupId != null)
+            {
+                group = await this.DbContext.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+            }
+            else
+            {
+                group = await this.CreateGroupAsync();
+            }
+
+            var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = group.Id };
             await this.DbContext.StudentsGroups.AddAsync(studentGroup);
             await this.DbContext.SaveChangesAsync();
 
-            this.DbContext.Entry<Group>(group).State = EntityState.Detached;
+            // this.DbContext.Entry<Group>(group).State = EntityState.Detached;
             this.DbContext.Entry<StudentGroup>(studentGroup).State = EntityState.Detached;
             return group.Id;
         }
@@ -193,6 +286,15 @@
             var user = await this.DbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
             this.DbContext.Entry<ApplicationUser>(user).State = EntityState.Detached;
             return user;
+        }
+
+        private async Task<Group> CreateGroupAsync()
+        {
+            var group = new Group() { Name = "group" };
+            await this.DbContext.Groups.AddAsync(group);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Group>(group).State = EntityState.Detached;
+            return group;
         }
     }
 }
