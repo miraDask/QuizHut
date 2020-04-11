@@ -9,6 +9,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
     using QuizHut.Services.Events;
     using QuizHut.Web.ViewModels.Events;
     using Xunit;
@@ -886,6 +887,57 @@
             var @event = await this.DbContext.Events.FirstOrDefaultAsync(x => x.Id == eventId);
 
             Assert.Equal(Status.Pending, @event.Status);
+        }
+
+        [Fact]
+        public void GetTimeErrorMessageShouldReturnInvalidActivationDateMessageIfDateIsBeforeDateNow()
+        {
+            var invalidActivationDateMessage = ServicesConstants.InvalidActivationDate;
+            var resultMessage = this.Service.GetTimeErrorMessage("08:00", "22:00", "01/01/2000");
+            Assert.Equal(invalidActivationDateMessage, resultMessage);
+        }
+
+        [Fact]
+        public void GetTimeErrorMessageShouldReturnInvalidStartingTimeMessageIfStartingTimeIsBeforeDateNowMinutes()
+        {
+            var invalidStartingTimeMessage = ServicesConstants.InvalidStartingTime;
+            var resultMessage = this.Service.GetTimeErrorMessage(DateTime.Now.TimeOfDay.Subtract(TimeSpan.FromMinutes(3)).ToString(), "23:59", DateTime.Now.Date.ToString("dd/MM/yyyy"));
+            Assert.Equal(invalidStartingTimeMessage, resultMessage);
+        }
+
+        [Fact]
+        public void GetTimeErrorMessageShouldReturnInvalidDurationOfActivityMessageIfendingTimeIsBeforeOrEquelToStartingTime()
+        {
+            var invalidDurationOfActivityMessage = ServicesConstants.InvalidDurationOfActivity;
+            var caseWhenAreEquelResultMessage = this.Service.GetTimeErrorMessage(
+                DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+                DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+                DateTime.Now.Date.ToString("dd/MM/yyyy"));
+
+            var caseWhenEndingTimeIsBeforeStartingResultMessage = this.Service.GetTimeErrorMessage(
+                DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+                DateTime.Now.TimeOfDay.ToString(),
+                DateTime.Now.Date.ToString("dd/MM/yyyy"));
+
+            Assert.Equal(invalidDurationOfActivityMessage, caseWhenAreEquelResultMessage);
+            Assert.Equal(invalidDurationOfActivityMessage, caseWhenEndingTimeIsBeforeStartingResultMessage);
+        }
+
+        [Fact]
+        public void GetTimeErrorMessageShouldReturnNullIfAllTheChecksPassed()
+        {
+            var resultMessageWhenStartTimeIsEquelToTimeNowMinutes = this.Service.GetTimeErrorMessage(
+                DateTime.Now.TimeOfDay.ToString(),
+                "23:59",
+                DateTime.Now.Date.ToString("dd/MM/yyyy"));
+
+            var resultMessageWhenStartTimeIsAfterTimeNowMinutes = this.Service.GetTimeErrorMessage(
+               DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+               "23:59",
+               DateTime.Now.Date.ToString("dd/MM/yyyy"));
+
+            Assert.Null(resultMessageWhenStartTimeIsEquelToTimeNowMinutes);
+            Assert.Null(resultMessageWhenStartTimeIsAfterTimeNowMinutes);
         }
 
         private async Task<string> CreateEventAsync(string name, DateTime activation, string creatorId, string quizId = null)
