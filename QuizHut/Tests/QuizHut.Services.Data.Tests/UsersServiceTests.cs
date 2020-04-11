@@ -108,6 +108,22 @@
             Assert.Equal(model.Email, resultModelCollection.First().Email);
         }
 
+        [Fact]
+        public async Task GetAllStudentsCountShouldReturnCorrectCountOfAllStudent()
+        {
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            await this.AddStudentAsync(firstStudentId, teacherId);
+
+            await this.CreateUserAsync("student2@student.com");
+
+            var studentsAllCount = this.Service.GetAllStudentsCount();
+            var studentsWithSameTeacherCount = this.Service.GetAllStudentsCount(teacherId);
+
+            Assert.Equal(2, studentsAllCount);
+            Assert.Equal(1, studentsWithSameTeacherCount);
+        }
+
         private async Task<string> AssignStudentToGroupAsync(string studentId)
         {
             var group = new Group() { Name = "group" };
