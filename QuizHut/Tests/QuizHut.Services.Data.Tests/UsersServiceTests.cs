@@ -1,13 +1,14 @@
 ﻿namespace QuizHut.Services.Data.Tests
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using QuizHut.Data.Models;
     using QuizHut.Services.Users;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading.Tasks;
+    using QuizHut.Web.ViewModels.UsersInRole;
     using Xunit;
 
     public class UsersServiceTests : BaseServiceTests
@@ -61,6 +62,27 @@
             Assert.Null(student.TeacherId);
         }
 
+        [Fact]
+        public async Task GetAllByRoleAsyncShouldReturnCorrectModelCollection()
+        {
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
+            await this.CreateUserAsync("student@student.com");
+
+            var model = new UserInRoleViewModel()
+            {
+                Id = teacherId,
+                FullName = "John Doe",
+                Email = "teacher@teacher.com",
+            };
+
+            var resultModelCollection = await this.Service.GetAllByRoleAsync<UserInRoleViewModel>("teacher");
+
+            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(model.Id, resultModelCollection.First().Id);
+            Assert.Equal(model.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(model.Email, resultModelCollection.First().Email);
+        }
+
         private async Task AddStudentAsync(string studentId, string teacherId)
         {
             var teacher = await this.GetUserAsync(teacherId);
@@ -75,15 +97,35 @@
             this.DbContext.Entry<ApplicationUser>(teacher).State = EntityState.Detached;
         }
 
-        private async Task<string> CreateUserAsync(string email)
+        private async Task<string> CreateUserAsync(string email, string roleName = null)
         {
             var user = new ApplicationUser()
             {
-                FirstName = "First Name",
-                LastName = "Last Name",
+                FirstName = "John",
+                LastName = "Doe",
                 Email = email,
                 UserName = email,
             };
+
+            if (roleName != null)
+            {
+                var role = new ApplicationRole()
+                {
+                    Name = roleName,
+                };
+
+                await this.DbContext.Roles.AddAsync(role);
+                var userRole = new IdentityUserRole<string>
+                {
+                    RoleId = role.Id,
+                    UserId = user.Id,
+                };
+
+                await this.DbContext.UserRoles.AddAsync(userRole);
+                await this.DbContext.SaveChangesAsync();
+                this.DbContext.Entry<ApplicationRole>(role).State = EntityState.Detached;
+                this.DbContext.Entry<IdentityUserRole<string>>(userRole).State = EntityState.Detached;
+            }
 
             await this.DbContext.Users.AddAsync(user);
             await this.DbContext.SaveChangesAsync();
