@@ -463,6 +463,115 @@
             Assert.Equal(firstModelExpectedDuration, resultModelCollection.Last().Duration);
         }
 
+        [Theory]
+        [InlineData(Status.Active)]
+        [InlineData(Status.Ended)]
+        [InlineData(Status.Pending)]
+        public async Task GetAllPerPageByCreatorIdAndStatusShouldReturnCorrectModelCollection(Status status)
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var secondEventDate = DateTime.UtcNow;
+
+            var firstEventId = await this.CreateEventAsync("First Event", DateTime.UtcNow, creatorId);
+            if (status == Status.Pending)
+            {
+                await this.ChangeEventStatus(firstEventId, Status.Active);
+            }
+
+            var secondEventId = await this.CreateEventAsync("Second Event", secondEventDate, creatorId);
+            if (status != Status.Pending)
+            {
+                await this.ChangeEventStatus(secondEventId, status);
+            }
+
+            await this.CreateEventAsync("First Event", DateTime.UtcNow, Guid.NewGuid().ToString());
+
+            var secondModel = new EventListViewModel()
+            {
+                Id = secondEventId,
+                Name = "Second Event",
+                IsDeleted = false,
+                ActivationDateAndTime = secondEventDate,
+                DurationOfActivity = TimeSpan.FromMinutes(30),
+                Status = status.ToString(),
+            };
+
+            var secondModelExpectedStartDate = $"{secondEventDate.ToLocalTime().Date.ToString("dd/MM/yyyy")}";
+            var secondModelExpectedDuration = $"{secondEventDate.ToLocalTime().Hour.ToString("D2")}" +
+                $":{secondEventDate.ToLocalTime().Minute.ToString("D2")}" +
+               $" - {secondEventDate.ToLocalTime().Add(TimeSpan.FromMinutes(30)).Hour.ToString("D2")}" +
+               $":{secondEventDate.ToLocalTime().Add(TimeSpan.FromMinutes(30)).Minute.ToString("D2")}";
+
+            var resultModelCollection = await this.Service.GetAllPerPageByCreatorIdAndStatus<EventListViewModel>(1, 3, status, creatorId);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<EventListViewModel>>(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.IsDeleted, resultModelCollection.First().IsDeleted);
+            Assert.Equal(secondModel.ActivationDateAndTime, resultModelCollection.First().ActivationDateAndTime);
+            Assert.Equal(secondModel.DurationOfActivity, resultModelCollection.First().DurationOfActivity);
+            Assert.Equal(secondModel.Status, resultModelCollection.First().Status);
+            Assert.Equal(secondModelExpectedDuration, resultModelCollection.First().Duration);
+            Assert.Equal(secondModelExpectedStartDate, resultModelCollection.First().StartDate);
+        }
+
+        [Theory]
+        [InlineData(1, 5)]
+        [InlineData(1, 1000)]
+        public async Task GetAllPerPageByCreatorIdAndStatusShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        {
+            var creatorId = Guid.NewGuid().ToString();
+
+            for (int i = 0; i < countPerPage * 2; i++)
+            {
+                await this.CreateEventAsync("Event", DateTime.UtcNow, creatorId);
+            }
+
+            var resultModelCollection =
+                await this.Service.GetAllPerPageByCreatorIdAndStatus<EventListViewModel>(page, countPerPage, Status.Pending, creatorId);
+
+            Assert.Equal(countPerPage, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetAllPerPageByCreatorIdAndStatusShouldSkipCorrectly()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var firstEventDate = DateTime.UtcNow;
+            var firstEventId = await this.CreateEventAsync("First Event", firstEventDate, creatorId);
+            await this.CreateEventAsync("Second Event", DateTime.UtcNow, creatorId);
+
+            var firstModel = new EventListViewModel()
+            {
+                Id = firstEventId,
+                Name = "First Event",
+                IsDeleted = false,
+                ActivationDateAndTime = firstEventDate,
+                DurationOfActivity = TimeSpan.FromMinutes(30),
+                Status = Status.Pending.ToString(),
+            };
+
+            var firstModelExpectedStartDate = $"{firstEventDate.ToLocalTime().Date.ToString("dd/MM/yyyy")}";
+            var firstModelExpectedDuration = $"{firstEventDate.ToLocalTime().Hour.ToString("D2")}" +
+                $":{firstEventDate.ToLocalTime().Minute.ToString("D2")}" +
+               $" - {firstEventDate.ToLocalTime().Add(TimeSpan.FromMinutes(30)).Hour.ToString("D2")}" +
+               $":{firstEventDate.ToLocalTime().Add(TimeSpan.FromMinutes(30)).Minute.ToString("D2")}";
+
+            var resultModelCollection =
+                await this.Service.GetAllPerPageByCreatorIdAndStatus<EventListViewModel>(2, 1, Status.Pending, creatorId);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.IsDeleted, resultModelCollection.Last().IsDeleted);
+            Assert.Equal(firstModel.ActivationDateAndTime, resultModelCollection.Last().ActivationDateAndTime);
+            Assert.Equal(firstModel.DurationOfActivity, resultModelCollection.Last().DurationOfActivity);
+            Assert.Equal(firstModel.Status, resultModelCollection.Last().Status);
+            Assert.Equal(firstModelExpectedStartDate, resultModelCollection.Last().StartDate);
+            Assert.Equal(firstModelExpectedDuration, resultModelCollection.Last().Duration);
+        }
+
         [Fact]
         public async Task GetAllFiteredByStatusAndGroupAsyncShouldFilterCorrectllyAndReturnCorrectModelCollectionWhenCreatorIdIsNull()
         {
@@ -515,6 +624,84 @@
             };
 
             var resultModelCollection = await this.Service.GetAllFiteredByStatusAndGroupAsync<EventsAssignViewModel>(Status.Active, groupId, creatorId);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<EventsAssignViewModel>>(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
+        [Fact]
+        public async Task GetEventModelByIdAsyncShouldReturnCorrectModel()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var eventId = await this.CreateEventAsync("Second Event", DateTime.UtcNow, creatorId);
+
+            var model = new EventWithQuizzesViewModel()
+            {
+                Id = eventId,
+                Name = "Second Event",
+                Error = false,
+            };
+
+            var resultModel = await this.Service.GetEventModelByIdAsync<EventWithQuizzesViewModel>(eventId);
+
+            Assert.IsAssignableFrom<EventWithQuizzesViewModel>(resultModel);
+
+            Assert.Equal(model.Id, resultModel.Id);
+            Assert.Equal(model.Name, resultModel.Name);
+            Assert.Empty(resultModel.Quizzes);
+            Assert.False(resultModel.Error);
+        }
+
+        [Fact]
+        public async Task GetEventModelByIdAsyncShouldReturnCorrectModelIfEventIsDeleted()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var eventId = await this.CreateEventAsync("Second Event", DateTime.UtcNow, creatorId);
+            await this.Service.DeleteAsync(eventId);
+
+            var model = new EventWithQuizzesViewModel()
+            {
+                Id = eventId,
+                Name = "Second Event",
+                Error = false,
+            };
+
+            var resultModel = await this.Service.GetEventModelByIdAsync<EventWithQuizzesViewModel>(eventId);
+
+            Assert.IsAssignableFrom<EventWithQuizzesViewModel>(resultModel);
+
+            Assert.Equal(model.Id, resultModel.Id);
+            Assert.Equal(model.Name, resultModel.Name);
+            Assert.Empty(resultModel.Quizzes);
+            Assert.False(resultModel.Error);
+        }
+
+        [Fact]
+        public async Task GetAllByGroupIdAsyncShouldReturnCorrectModelCollection()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+
+            await this.CreateEventAsync("First Event", DateTime.UtcNow, creatorId);
+            var secondEventId = await this.CreateEventAsync("Second Event", DateTime.UtcNow, creatorId);
+            await this.CreateEventAsync("Third Event", DateTime.UtcNow, Guid.NewGuid().ToString());
+
+            var groupId = await this.CreateGroupAsync();
+            await this.CreateEventGroupAsync(secondEventId, groupId);
+
+            var secondModel = new EventsAssignViewModel()
+            {
+                Id = secondEventId,
+                CreatorId = creatorId,
+                Name = "Second Event",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllByGroupIdAsync<EventsAssignViewModel>(groupId);
 
             Assert.Single(resultModelCollection);
             Assert.IsAssignableFrom<IList<EventsAssignViewModel>>(resultModelCollection);

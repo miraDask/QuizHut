@@ -101,21 +101,14 @@
         }
 
         public async Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId)
-        {
-            var query = this.repository.AllAsNoTracking().Where(x => x.Status == status);
-
-            if (creatorId != null)
-            {
-                query = query.Where(x => x.CreatorId == creatorId);
-            }
-
-            return await query
-                   .OrderByDescending(x => x.CreatedOn)
-                   .Skip(countPerPage * (page - 1))
-                   .Take(countPerPage)
-                   .To<T>()
-                   .ToListAsync();
-        }
+        => await this.repository
+                     .AllAsNoTracking()
+                     .Where(x => x.Status == status && x.CreatorId == creatorId)
+                     .OrderByDescending(x => x.CreatedOn)
+                     .Skip(countPerPage * (page - 1))
+                     .Take(countPerPage)
+                     .To<T>()
+                     .ToListAsync();
 
         public async Task<IList<T>> GetAllFiteredByStatusAndGroupAsync<T>(
             Status status, string groupId, string creatorId = null)
