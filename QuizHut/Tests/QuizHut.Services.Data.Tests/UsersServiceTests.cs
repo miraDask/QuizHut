@@ -31,6 +31,19 @@
             Assert.Equal(teacherId, student.TeacherId);
         }
 
+        [Fact]
+        public async Task AddStudentAsyncShouldReturnFalseIfStudentIsNotFound()
+        {
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com");
+
+            var result = await this.Service.AddStudentAsync("student@student.com", teacherId);
+
+            var teacher = await this.DbContext.Users.FirstOrDefaultAsync(x => x.Id == teacherId);
+
+            Assert.False(result);
+            Assert.Equal(0, teacher.Students.Count);
+        }
+
         private async Task<string> CreateUserAsync(string email)
         {
             var user = new ApplicationUser()
