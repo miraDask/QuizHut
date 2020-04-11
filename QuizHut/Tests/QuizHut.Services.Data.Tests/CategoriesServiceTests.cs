@@ -3,16 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using QuizHut.Data;
     using QuizHut.Data.Models;
-    using QuizHut.Data.Repositories;
     using QuizHut.Services.Categories;
-    using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Categories;
     using QuizHut.Web.ViewModels.Quizzes;
     using Xunit;
@@ -24,8 +20,6 @@
         [Fact]
         public async Task A_GetByIdAsyncShouldReturnCorrectModel()
         {
-            AutoMapperConfig.RegisterMappings(typeof(CategoryWithQuizzesViewModel).GetTypeInfo().Assembly);
-
             var creatorId = await this.CreateUserAsync();
             var category = await this.CreateCategoryAsync("Category 1", creatorId);
             var model = new CategoryWithQuizzesViewModel()
@@ -47,7 +41,6 @@
         [Fact]
         public async Task B_GetAllPerPageShouldReturnCorrectModelCollection()
         {
-            AutoMapperConfig.RegisterMappings(typeof(CategoryViewModel).GetTypeInfo().Assembly);
             var creatorId = Guid.NewGuid().ToString();
             var firstCategory = await this.CreateCategoryAsync("Category 1", creatorId);
             var secondCategory = await this.CreateCategoryAsync("Category 2", creatorId);
@@ -107,7 +100,6 @@
         [Fact]
         public async Task E_GetAllPerPageShouldSkipCorrectly()
         {
-            AutoMapperConfig.RegisterMappings(typeof(CategoryViewModel).GetTypeInfo().Assembly);
             var creatorId = await this.CreateUserAsync();
             var firstCategory = await this.CreateCategoryAsync("Category 1", creatorId);
             await this.CreateCategoryAsync("Category 2", creatorId);
@@ -134,7 +126,6 @@
         [InlineData(1, 1000)]
         public async Task F_GetAllPerPageShouldTakeCorrectCountPerPage(int page, int countPerPage)
         {
-            AutoMapperConfig.RegisterMappings(typeof(CategoryViewModel).GetTypeInfo().Assembly);
             var creatorId = await this.CreateUserAsync();
             for (int i = 0; i < countPerPage * 2; i++)
             {

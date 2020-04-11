@@ -82,7 +82,7 @@
             {
                 pagesCount = (int)Math.Ceiling(allActiveEventsCount / (decimal)countPerPage);
                 var activeEvents = await this.eventsService
-               .GetByStudentIdFilteredByStatus<StudentActiveEventViewModel>(Status.Active, studentId, page, countPerPage, false);
+               .GetPerPageByStudentIdFilteredByStatusAsync<StudentActiveEventViewModel>(Status.Active, studentId, page, countPerPage, false);
 
                 model.PagesCount = pagesCount;
                 model.Events = activeEvents;
@@ -106,7 +106,7 @@
             {
                 pagesCount = (int)Math.Ceiling(allEndedEventsCount / (decimal)countPerPage);
                 var endedEvents = await this.eventsService
-               .GetByStudentIdFilteredByStatus<StudentEndedEventViewModel>(Status.Ended, studentId, page, countPerPage, true);
+               .GetPerPageByStudentIdFilteredByStatusAsync<StudentEndedEventViewModel>(Status.Ended, studentId, page, countPerPage, true);
                 var scores = await this.resultService.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
                 foreach (var endenEvent in endedEvents)
                 {
@@ -140,7 +140,7 @@
             {
                 pagesCount = (int)Math.Ceiling(allPendingEventsCount / (decimal)countPerPage);
                 var pendingEvents = await this.eventsService
-               .GetByStudentIdFilteredByStatus<StudentPendingEventViewModel>(Status.Pending, studentId, page, countPerPage, false);
+               .GetPerPageByStudentIdFilteredByStatusAsync<StudentPendingEventViewModel>(Status.Pending, studentId, page, countPerPage, false);
                 model.PagesCount = pagesCount;
                 model.Events = pendingEvents;
             }
