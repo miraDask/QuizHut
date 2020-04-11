@@ -117,32 +117,14 @@
                    .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllFiteredByStatusAsync<T>(
-            Status status,
-            string creatorId = null,
-            string studentId = null,
-            string groupId = null)
+        public async Task<IList<T>> GetAllFiteredByStatusAndGroupAsync<T>(
+            Status status, string groupId, string creatorId = null)
         {
-            var query = this.repository.AllAsNoTracking();
+            var query = this.repository.AllAsNoTracking().Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
-            }
-
-            if (groupId != null)
-            {
-                query = query.Where(x => !x.EventsGroups.Any(x => x.GroupId == groupId));
-            }
-
-            if (studentId != null)
-            {
-                query = query.Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
-
-                if (status == Status.Active)
-                {
-                    query = query.Where(x => !x.Results.Any(x => x.StudentId == studentId));
-                }
             }
 
             return await query

@@ -464,6 +464,68 @@
         }
 
         [Fact]
+        public async Task GetAllFiteredByStatusAndGroupAsyncShouldFilterCorrectllyAndReturnCorrectModelCollectionWhenCreatorIdIsNull()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var secondEventDate = DateTime.UtcNow;
+
+            var firstEventId = await this.CreateEventAsync("First Event", DateTime.UtcNow, creatorId);
+            var secondEventId = await this.CreateEventAsync("Second Event", secondEventDate, creatorId);
+            var groupId = await this.CreateGroupAsync();
+            await this.CreateEventGroupAsync(firstEventId, groupId);
+
+            var secondModel = new EventsAssignViewModel()
+            {
+                Id = secondEventId,
+                CreatorId = creatorId,
+                Name = "Second Event",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllFiteredByStatusAndGroupAsync<EventsAssignViewModel>(Status.Active, groupId);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<EventsAssignViewModel>>(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
+        [Fact]
+        public async Task GetAllFiteredByStatusAndGroupAsyncShouldFilterCorrectllyAndReturnCorrectModelCollectionWhenCreatorIdIsPassed()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var secondEventDate = DateTime.UtcNow;
+
+            var firstEventId = await this.CreateEventAsync("First Event", DateTime.UtcNow, creatorId);
+            var secondEventId = await this.CreateEventAsync("Second Event", secondEventDate, creatorId);
+            await this.CreateEventAsync("Third Event", DateTime.UtcNow, Guid.NewGuid().ToString());
+
+            var groupId = await this.CreateGroupAsync();
+            await this.CreateEventGroupAsync(firstEventId, groupId);
+
+            var secondModel = new EventsAssignViewModel()
+            {
+                Id = secondEventId,
+                CreatorId = creatorId,
+                Name = "Second Event",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllFiteredByStatusAndGroupAsync<EventsAssignViewModel>(Status.Active, groupId, creatorId);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<EventsAssignViewModel>>(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
+        [Fact]
         public async Task GetEventsCountByCreatorIdAndStatusShouldReturnCorrectCount()
         {
             var creatorId = Guid.NewGuid().ToString();
