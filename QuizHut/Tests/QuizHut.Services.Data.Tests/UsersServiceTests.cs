@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Services.Data.Tests
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using QuizHut.Data.Models;
     using QuizHut.Services.Users;
+    using QuizHut.Web.ViewModels.Students;
     using QuizHut.Web.ViewModels.UsersInRole;
     using Xunit;
 
@@ -81,6 +83,43 @@
             Assert.Equal(model.Id, resultModelCollection.First().Id);
             Assert.Equal(model.FullName, resultModelCollection.First().FullName);
             Assert.Equal(model.Email, resultModelCollection.First().Email);
+        }
+
+        [Fact]
+        public async Task GetAllByGroupIdAsyncShouldReturnCorrectModelCollection()
+        {
+            await this.CreateUserAsync("teacher@teacher.com");
+            var studentId = await this.CreateUserAsync("student@student.com");
+            var groupId = await this.AssignStudentToGroupAsync(studentId);
+
+            var model = new StudentViewModel()
+            {
+                Id = studentId,
+                FullName = "John Doe",
+                Email = "student@student.com",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllByGroupIdAsync<StudentViewModel>(groupId);
+
+            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(model.Id, resultModelCollection.First().Id);
+            Assert.Equal(model.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(model.Email, resultModelCollection.First().Email);
+        }
+
+        private async Task<string> AssignStudentToGroupAsync(string studentId)
+        {
+            var group = new Group() { Name = "group" };
+            var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = group.Id };
+
+            await this.DbContext.Groups.AddAsync(group);
+            await this.DbContext.StudentsGroups.AddAsync(studentGroup);
+            await this.DbContext.SaveChangesAsync();
+
+            this.DbContext.Entry<Group>(group).State = EntityState.Detached;
+            this.DbContext.Entry<StudentGroup>(studentGroup).State = EntityState.Detached;
+            return group.Id;
         }
 
         private async Task AddStudentAsync(string studentId, string teacherId)
