@@ -39,7 +39,7 @@
             if (allStudentsAddedByTeacherCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allStudentsAddedByTeacherCount / (decimal)countPerPage);
-                var students = await this.service.GetAllPerPage<StudentViewModel>(page, countPerPage, userId);
+                var students = await this.service.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage, userId);
                 model.Students = students;
                 model.PagesCount = pagesCount;
             }

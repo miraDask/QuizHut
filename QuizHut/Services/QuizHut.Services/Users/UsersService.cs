@@ -122,7 +122,7 @@
             return query.Count();
         }
 
-        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string teacherId = null)
+        public async Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(int page, int countPerPage, string teacherId = null)
         {
             var query = this.userRepository.AllAsNoTracking().Where(x => !x.Roles.Any());
 

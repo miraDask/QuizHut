@@ -182,7 +182,7 @@
             if (allStudentsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allStudentsCount / (decimal)countPerPage);
-                var students = await this.userService.GetAllPerPage<StudentViewModel>(page, countPerPage);
+                var students = await this.userService.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage);
                 model.Students = students;
                 model.PagesCount = pagesCount;
             }

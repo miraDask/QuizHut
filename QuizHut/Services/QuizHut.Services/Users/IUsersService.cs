@@ -17,6 +17,6 @@
 
         int GetAllStudentsCount(string teacher = null);
 
-        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string teacherId = null);
+        Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(int page, int countPerPage, string teacherId = null);
     }
 }

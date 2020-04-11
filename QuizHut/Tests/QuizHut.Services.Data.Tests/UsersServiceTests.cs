@@ -1,6 +1,5 @@
 ﻿namespace QuizHut.Services.Data.Tests
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -208,6 +207,107 @@
             Assert.Equal(model.Id, resultModelCollection.First().Id);
             Assert.Equal(model.FullName, resultModelCollection.First().FullName);
             Assert.Equal(model.Email, resultModelCollection.First().Email);
+        }
+
+        [Fact]
+        public async Task GetAllStudentsPerPageAsyncShouldReturnCorrectModelCollectionIfTeacherIdIsNull()
+        {
+            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+
+            var firstModel = new StudentViewModel()
+            {
+                Id = firstStudentId,
+                FullName = "John Doe",
+                Email = "student1@student.com",
+                IsAssigned = false,
+            };
+
+            var secondModel = new StudentViewModel()
+            {
+                Id = secondStudentId,
+                FullName = "John Doe",
+                Email = "student2@student.com",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllStudentsPerPageAsync<StudentViewModel>(1, 2);
+
+            Assert.Equal(2, resultModelCollection.Count());
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(secondModel.Email, resultModelCollection.First().Email);
+            Assert.False(resultModelCollection.First().IsAssigned);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.FullName, resultModelCollection.Last().FullName);
+            Assert.Equal(firstModel.Email, resultModelCollection.Last().Email);
+            Assert.False(resultModelCollection.Last().IsAssigned);
+        }
+
+        [Fact]
+        public async Task GetAllStudentsPerPageAsyncShouldReturnCorrectModelCollectionIfTeacherIdIsPassed()
+        {
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com");
+
+            await this.CreateUserAsync("student1@student.com");
+            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            await this.AddStudentAsync(secondStudentId, teacherId);
+
+            var secondModel = new StudentViewModel()
+            {
+                Id = secondStudentId,
+                FullName = "John Doe",
+                Email = "student2@student.com",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllStudentsPerPageAsync<StudentViewModel>(1, 2, teacherId);
+
+            Assert.Single(resultModelCollection);
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(secondModel.Email, resultModelCollection.First().Email);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
+        [Fact]
+        public async Task GetAllStudentsPerPageAsyncShouldSkipCorrectly()
+        {
+            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            await this.CreateUserAsync("student2@student.com");
+
+            var firstModel = new StudentViewModel()
+            {
+                Id = firstStudentId,
+                FullName = "John Doe",
+                Email = "student1@student.com",
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllStudentsPerPageAsync<StudentViewModel>(2, 1);
+
+            Assert.Single(resultModelCollection);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.FullName, resultModelCollection.Last().FullName);
+            Assert.Equal(firstModel.Email, resultModelCollection.Last().Email);
+            Assert.False(resultModelCollection.Last().IsAssigned);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(1, 10)]
+        public async Task GetAllStudentsPerPageAsyncShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        {
+            for (int i = 1; i <= countPerPage * 2; i++)
+            {
+                await this.CreateUserAsync($"student{i}@student.com");
+            }
+
+            var resultModelCollection = await this.Service.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage);
+
+            Assert.Equal(countPerPage, resultModelCollection.Count());
         }
 
         private async Task<string> AssignStudentToGroupAsync(string studentId, string groupId = null)
