@@ -44,6 +44,37 @@
             Assert.Equal(0, teacher.Students.Count);
         }
 
+        [Fact]
+        public async Task DeleteFromTeacherListAsyncShouldRemoveStudentSuccessfully()
+        {
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com");
+            var studentId = await this.CreateUserAsync("student@student.com");
+
+            await this.AddStudentAsync(studentId, teacherId);
+            await this.Service.DeleteFromTeacherListAsync(studentId, teacherId);
+
+            var teacher = await this.GetUserAsync(teacherId);
+            var student = await this.GetUserAsync(studentId);
+
+            Assert.Equal(0, teacher.Students.Count);
+            Assert.False(teacher.Students.Contains(student));
+            Assert.Null(student.TeacherId);
+        }
+
+        private async Task AddStudentAsync(string studentId, string teacherId)
+        {
+            var teacher = await this.GetUserAsync(teacherId);
+            var student = await this.GetUserAsync(studentId);
+            teacher.Students.Add(student);
+            student.TeacherId = teacherId;
+            this.DbContext.Users.Update(student);
+            this.DbContext.Users.Update(teacher);
+
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<ApplicationUser>(student).State = EntityState.Detached;
+            this.DbContext.Entry<ApplicationUser>(teacher).State = EntityState.Detached;
+        }
+
         private async Task<string> CreateUserAsync(string email)
         {
             var user = new ApplicationUser()
@@ -58,6 +89,13 @@
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<ApplicationUser>(user).State = EntityState.Detached;
             return user.Id;
+        }
+
+        private async Task<ApplicationUser> GetUserAsync(string id)
+        {
+            var user = await this.DbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            this.DbContext.Entry<ApplicationUser>(user).State = EntityState.Detached;
+            return user;
         }
     }
 }

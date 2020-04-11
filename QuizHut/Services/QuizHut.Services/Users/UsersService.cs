@@ -51,11 +51,11 @@
             return false;
         }
 
-        public async Task DeleteFromTeacherListAsync(string id, string teacherId)
+        public async Task DeleteFromTeacherListAsync(string studentId, string teacherId)
         {
-            var studentsToRemove = await this.userRepository
+            var studentToRemove = await this.userRepository
                 .AllAsNoTracking()
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == studentId)
                 .FirstOrDefaultAsync();
 
             var teacher = await this.userRepository
@@ -63,9 +63,9 @@
                    .Where(x => x.Id == teacherId)
                    .FirstOrDefaultAsync();
 
-            studentsToRemove.TeacherId = null;
-            teacher.Students.Remove(studentsToRemove);
-            this.userRepository.Update(studentsToRemove);
+            studentToRemove.TeacherId = null;
+            teacher.Students.Remove(studentToRemove);
+            this.userRepository.Update(studentToRemove);
             this.userRepository.Update(teacher);
             await this.userRepository.SaveChangesAsync();
         }

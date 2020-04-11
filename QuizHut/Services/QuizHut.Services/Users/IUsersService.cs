@@ -13,7 +13,7 @@
 
         Task<bool> AddStudentAsync(string email, string teacherId);
 
-        Task DeleteFromTeacherListAsync(string id, string teacherId);
+        Task DeleteFromTeacherListAsync(string studentId, string teacherId);
 
         int GetAllStudentsCount(string teacher = null);
 
