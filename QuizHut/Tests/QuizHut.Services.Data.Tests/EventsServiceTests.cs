@@ -910,14 +910,14 @@
         {
             var invalidDurationOfActivityMessage = ServicesConstants.InvalidDurationOfActivity;
             var caseWhenAreEquelResultMessage = this.Service.GetTimeErrorMessage(
-                DateTime.UtcNow.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
-                DateTime.UtcNow.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
-                DateTime.UtcNow.Date.ToString("dd/MM/yyyy"));
+                DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+                DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+                DateTime.Now.Date.ToString("dd/MM/yyyy"));
 
             var caseWhenEndingTimeIsBeforeStartingResultMessage = this.Service.GetTimeErrorMessage(
-                DateTime.UtcNow.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
-                DateTime.UtcNow.TimeOfDay.ToString(),
-                DateTime.UtcNow.Date.ToString("dd/MM/yyyy"));
+                DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+                DateTime.Now.TimeOfDay.ToString(),
+                DateTime.Now.Date.ToString("dd/MM/yyyy"));
 
             Assert.Equal(invalidDurationOfActivityMessage, caseWhenAreEquelResultMessage);
             Assert.Equal(invalidDurationOfActivityMessage, caseWhenEndingTimeIsBeforeStartingResultMessage);
@@ -927,14 +927,14 @@
         public void GetTimeErrorMessageShouldReturnNullIfAllTheChecksPassed()
         {
             var resultMessageWhenStartTimeIsEquelToTimeNowMinutes = this.Service.GetTimeErrorMessage(
-                DateTime.UtcNow.TimeOfDay.ToString(),
+                DateTime.Now.TimeOfDay.ToString(),
                 "23:59",
-                DateTime.UtcNow.Date.ToString("dd/MM/yyyy"));
+                DateTime.Now.Date.ToString("dd/MM/yyyy"));
 
             var resultMessageWhenStartTimeIsAfterTimeNowMinutes = this.Service.GetTimeErrorMessage(
-               DateTime.UtcNow.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
+               DateTime.Now.TimeOfDay.Add(TimeSpan.FromMinutes(1)).ToString(),
                "23:59",
-               DateTime.UtcNow.Date.ToString("dd/MM/yyyy"));
+               DateTime.Now.Date.ToString("dd/MM/yyyy"));
 
             Assert.Null(resultMessageWhenStartTimeIsEquelToTimeNowMinutes);
             Assert.Null(resultMessageWhenStartTimeIsAfterTimeNowMinutes);

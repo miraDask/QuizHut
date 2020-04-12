@@ -10,6 +10,7 @@
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Groups;
+    using QuizHut.Web.ViewModels.Groups;
     using Xunit;
 
     public class GroupsServiceTests : BaseServiceTests
@@ -138,7 +139,7 @@
         [Fact]
         public async Task UpdateNameAsyncShouldChangeTheNameOfTheGroupCorrectly()
         {
-            var groupId = await this.CreateGroupAsync();
+            var groupId = await this.CreateGroupAsync(null, "group");
             await this.Service.UpdateNameAsync(groupId, "Test Group");
 
             var updatedGroup = await this.DbContext.Groups.FirstOrDefaultAsync();
@@ -163,14 +164,35 @@
             Assert.Equal(4, caseNoCreatorIdPassedCount);
         }
 
-        private async Task<string> CreateGroupAsync(string creatorId = null)
+        [Fact]
+        public async Task GetGroupModelAsyncShouldReturnCorrectModel()
         {
-            if (creatorId == null)
-            {
-                creatorId = Guid.NewGuid().ToString();
-            }
+            var firstgroupId = await this.CreateGroupAsync(null, "First Group");
+            await this.CreateGroupAsync();
 
-            var group = new Group() { Name = "group", CreatorId = creatorId };
+            var model = new GroupWithEventsViewModel()
+            {
+                Id = firstgroupId,
+                Name = "First Group",
+                Error = false,
+            };
+
+            var resultModel = await this.Service.GetGroupModelAsync<GroupWithEventsViewModel>(firstgroupId);
+
+            Assert.Equal(model.Id, resultModel.Id);
+            Assert.Equal(model.Name, resultModel.Name);
+            Assert.False(resultModel.Error);
+            Assert.Empty(resultModel.Events);
+        }
+
+        private async Task<string> CreateGroupAsync(string creatorId = null, string name = null)
+        {
+            var group = new Group()
+            {
+                Name = name != null ? name : "group",
+                CreatorId = creatorId != null ? creatorId : Guid.NewGuid().ToString(),
+            };
+
             await this.DbContext.Groups.AddAsync(group);
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<Group>(group).State = EntityState.Detached;
