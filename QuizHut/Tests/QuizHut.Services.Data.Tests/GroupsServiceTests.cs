@@ -64,7 +64,7 @@
         }
 
         [Fact]
-        public async Task AssignEventsToGroupAsyncAsyncShouldAssignEventsCorrectly()
+        public async Task AssignEventsToGroupAsyncShouldAssignEventsCorrectly()
         {
             List<string> eventsIds = new List<string>();
 
@@ -108,6 +108,19 @@
 
             Assert.DoesNotContain(eventsIds[0], eventsInGroupsAfterDeleteEvent);
             Assert.Equal(4, eventsInGroupsAfterDeleteEvent.Count());
+        }
+
+        [Fact]
+        public async Task CreateGroupAsyncShouldCreateCorrectly()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            await this.Service.CreateGroupAsync("Test Group", creatorId);
+
+            var group = await this.DbContext.Groups.FirstOrDefaultAsync();
+            Assert.NotNull(group);
+            Assert.Equal("Test Group", group.Name);
+            Assert.Equal(creatorId, group.CreatorId);
+            Assert.Equal(1, this.DbContext.Groups.Count());
         }
 
         private async Task<string> CreateGroupAsync()
