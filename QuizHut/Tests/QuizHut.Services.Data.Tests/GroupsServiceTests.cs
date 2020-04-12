@@ -123,6 +123,18 @@
             Assert.Equal(1, this.DbContext.Groups.Count());
         }
 
+        [Fact]
+        public async Task DeleteAsyncShouldDeleteCorrectly()
+        {
+            var groupId = await this.CreateGroupAsync();
+
+            await this.Service.DeleteAsync(groupId);
+
+            var group = await this.DbContext.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
+            Assert.Null(group);
+            Assert.Equal(0, this.DbContext.Groups.Count());
+        }
+
         private async Task<string> CreateGroupAsync()
         {
             var group = new Group() { Name = "group" };
