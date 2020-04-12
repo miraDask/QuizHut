@@ -125,7 +125,7 @@
             var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
-                groups = await this.groupsService.GetAllAsync<GroupAssignViewModel>(id);
+                groups = (IList<GroupAssignViewModel>)await this.groupsService.GetAllByEventIdAsync<GroupAssignViewModel>(id);
             }
             else
             {
@@ -194,7 +194,7 @@
         [SetDashboardRequestToTrueInViewDataActionFilterAttribute]
         public async Task<IActionResult> EventDetails(string id, string messagesAreSend)
         {
-            var groups = await this.groupsService.GetGroupModelsAllByEventIdAsync<GroupAssignViewModel>(id);
+            var groups = await this.groupsService.GetAllByEventIdAsync<GroupAssignViewModel>(id);
             var model = await this.service.GetEventModelByIdAsync<EventDetailsViewModel>(id);
             model.Groups = groups;
 

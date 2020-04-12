@@ -7,8 +7,6 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId = null);
 
-        Task<IList<T>> GetAllAsync<T>(string eventId = null);
-
         Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
 
         Task<string> CreateGroupAsync(string name, string creatorId);
@@ -17,7 +15,7 @@
 
         int GetAllGroupsCount(string creatorId = null);
 
-        Task<IEnumerable<T>> GetGroupModelsAllByEventIdAsync<T>(string eventId);
+        Task<IEnumerable<T>> GetAllByEventIdAsync<T>(string eventId);
 
         Task AssignEventsToGroupAsync(string groupId, IList<string> eventsIds);
 

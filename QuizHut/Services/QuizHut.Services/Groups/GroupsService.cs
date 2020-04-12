@@ -101,26 +101,12 @@
             }
         }
 
-        public async Task<IEnumerable<T>> GetGroupModelsAllByEventIdAsync<T>(string eventId)
+        public async Task<IEnumerable<T>> GetAllByEventIdAsync<T>(string eventId)
         => await this.repository
             .AllAsNoTracking()
             .Where(x => x.EventsGroups.Any(x => x.EventId == eventId))
             .To<T>()
             .ToListAsync();
-
-        public async Task<IList<T>> GetAllAsync<T>(string eventId = null)
-        {
-            var query = this.repository
-                    .AllAsNoTracking();
-            if (eventId != null)
-            {
-                var assignedGroupsIds = await this.eventsGroupsService.GetAllGroupsIdsByEventIdAsync(eventId);
-                query = query.Where(x => !assignedGroupsIds.Contains(x.Id))
-                    .OrderByDescending(x => x.CreatedOn);
-            }
-
-            return await query.To<T>().ToListAsync();
-        }
 
         public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null)
         {

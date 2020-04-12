@@ -135,9 +135,32 @@
             Assert.Equal(0, this.DbContext.Groups.Count());
         }
 
-        private async Task<string> CreateGroupAsync()
+        [Fact]
+        public async Task GetAllGroupsCountShouldReturnCorrectCount()
         {
-            var group = new Group() { Name = "group" };
+            var creatorId = Guid.NewGuid().ToString();
+
+            for (int i = 1; i <= 4; i++)
+            {
+                var currentCreator = i % 2 == 0 ? creatorId : null;
+                await this.CreateGroupAsync(currentCreator);
+            }
+
+            var caseWithCreatorIdPassedCount = this.Service.GetAllGroupsCount(creatorId);
+            var caseNoCreatorIdPassedCount = this.Service.GetAllGroupsCount();
+
+            Assert.Equal(2, caseWithCreatorIdPassedCount);
+            Assert.Equal(4, caseNoCreatorIdPassedCount);
+        }
+
+        private async Task<string> CreateGroupAsync(string creatorId = null)
+        {
+            if (creatorId == null)
+            {
+                creatorId = Guid.NewGuid().ToString();
+            }
+
+            var group = new Group() { Name = "group", CreatorId = creatorId };
             await this.DbContext.Groups.AddAsync(group);
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<Group>(group).State = EntityState.Detached;
