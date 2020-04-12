@@ -27,10 +27,10 @@
                 studentsIds.Add(studentId);
             }
 
-            var group = await this.CreateGroupAsync();
-            await this.Service.AssignStudentsToGroupAsync(group.Id, studentsIds);
+            var groupId = await this.CreateGroupAsync();
+            await this.Service.AssignStudentsToGroupAsync(groupId, studentsIds);
 
-            var groupAfterAssigningStudents = await this.DbContext.Groups.FirstOrDefaultAsync(x => x.Id == group.Id);
+            var groupAfterAssigningStudents = await this.DbContext.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
             var idsOfAssignedStudents = groupAfterAssigningStudents.StudentstGroups.Select(x => x.StudentId);
 
             foreach (var id in studentsIds)
@@ -39,6 +39,28 @@
             }
 
             Assert.Equal(5, groupAfterAssigningStudents.StudentstGroups.Count);
+        }
+
+        [Fact]
+        public async Task DeleteStudentFromGroupAsyncShouldRemoveCurrentStudentFromGroup()
+        {
+            var groupId = await this.CreateGroupAsync();
+            List<string> studentsIds = new List<string>();
+
+            for (int i = 1; i <= 5; i++)
+            {
+                var studentId = await this.CreateStudentAsync();
+                studentsIds.Add(studentId);
+                await this.AssignStudentToGroupAsync(studentId, groupId);
+            }
+
+            await this.Service.DeleteStudentFromGroupAsync(groupId, studentsIds[0]);
+
+            var studentsInGroupsAfterDeleteStudent = await this.DbContext.Groups
+                .Where(x => x.Id == groupId).Select(x => x.StudentstGroups.Select(x => x.StudentId)).FirstOrDefaultAsync();
+
+            Assert.DoesNotContain(studentsIds[0], studentsInGroupsAfterDeleteStudent);
+            Assert.Equal(4, studentsInGroupsAfterDeleteStudent.Count());
         }
 
         [Fact]
@@ -52,10 +74,10 @@
                 eventsIds.Add(eventId);
             }
 
-            var group = await this.CreateGroupAsync();
-            await this.Service.AssignEventsToGroupAsync(group.Id, eventsIds);
+            var groupId = await this.CreateGroupAsync();
+            await this.Service.AssignEventsToGroupAsync(groupId, eventsIds);
 
-            var groupAfterAssigningEvents = await this.DbContext.Groups.FirstOrDefaultAsync(x => x.Id == group.Id);
+            var groupAfterAssigningEvents = await this.DbContext.Groups.FirstOrDefaultAsync(x => x.Id == groupId);
             var idsOfAssignedEvents = groupAfterAssigningEvents.EventsGroups.Select(x => x.EventId);
 
             foreach (var id in eventsIds)
@@ -66,13 +88,35 @@
             Assert.Equal(5, groupAfterAssigningEvents.EventsGroups.Count);
         }
 
-        private async Task<Group> CreateGroupAsync()
+        [Fact]
+        public async Task DeleteEventFromGroupAsyncShouldRemoveCurrentEventFromGroup()
+        {
+            var groupId = await this.CreateGroupAsync();
+            List<string> eventsIds = new List<string>();
+
+            for (int i = 1; i <= 5; i++)
+            {
+                var eventId = await this.CreateEventAsync($"Event {i}", DateTime.UtcNow);
+                eventsIds.Add(eventId);
+                await this.AssignEventToGroupAsync(eventId, groupId);
+            }
+
+            await this.Service.DeleteEventFromGroupAsync(groupId, eventsIds[0]);
+
+            var eventsInGroupsAfterDeleteEvent = await this.DbContext.Groups
+                .Where(x => x.Id == groupId).Select(x => x.EventsGroups.Select(x => x.EventId)).FirstOrDefaultAsync();
+
+            Assert.DoesNotContain(eventsIds[0], eventsInGroupsAfterDeleteEvent);
+            Assert.Equal(4, eventsInGroupsAfterDeleteEvent.Count());
+        }
+
+        private async Task<string> CreateGroupAsync()
         {
             var group = new Group() { Name = "group" };
             await this.DbContext.Groups.AddAsync(group);
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<Group>(group).State = EntityState.Detached;
-            return group;
+            return group.Id;
         }
 
         private async Task<string> CreateStudentAsync()
@@ -109,6 +153,24 @@
             this.DbContext.Entry<Event>(@event).State = EntityState.Detached;
 
             return @event.Id;
+        }
+
+        private async Task AssignStudentToGroupAsync(string studentId, string groupId)
+        {
+            var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = groupId };
+            await this.DbContext.StudentsGroups.AddAsync(studentGroup);
+
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<StudentGroup>(studentGroup).State = EntityState.Detached;
+        }
+
+        private async Task AssignEventToGroupAsync(string eventId, string groupId)
+        {
+            var eventGroup = new EventGroup() { EventId = eventId, GroupId = groupId };
+            await this.DbContext.EventsGroups.AddAsync(eventGroup);
+
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<EventGroup>(eventGroup).State = EntityState.Detached;
         }
     }
 }
