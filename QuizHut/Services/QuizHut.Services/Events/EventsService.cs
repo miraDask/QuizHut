@@ -356,7 +356,7 @@
         private Status GetStatus(DateTime activationDateAndTime, string quizId)
         {
             var now = DateTime.UtcNow;
-            if (now.Date > activationDateAndTime.Date || (now.Date == activationDateAndTime.Date && activationDateAndTime.TimeOfDay < now.TimeOfDay))
+            if (now.Date > activationDateAndTime.Date || (now.Date == activationDateAndTime.Date && activationDateAndTime.TimeOfDay.Minutes < now.TimeOfDay.Minutes))
             {
                 return Status.Ended;
             }
@@ -373,6 +373,7 @@
         => DateTime.ParseExact(activationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).Add(TimeSpan.Parse(activeFrom));
 
         private TimeSpan GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
-        => DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeTo)) - DateTime.Parse(activationDate).Add(TimeSpan.Parse(activeFrom));
+        => DateTime.ParseExact(activationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).Add(TimeSpan.Parse(activeTo))
+            - this.GetActivationDateAndTimeLocal(activationDate, activeFrom);
     }
 }
