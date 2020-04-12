@@ -14,18 +14,15 @@
     public class GroupsService : IGroupsService
     {
         private readonly IDeletableEntityRepository<Group> repository;
-        private readonly IDeletableEntityRepository<Event> eventRepository;
         private readonly IStudentsGroupsService studentsGroupsService;
         private readonly IEventsGroupsService eventsGroupsService;
 
         public GroupsService(
             IDeletableEntityRepository<Group> repository,
-            IDeletableEntityRepository<Event> eventRepository,
             IStudentsGroupsService studentsGroupsService,
             IEventsGroupsService eventsGroupsService)
         {
             this.repository = repository;
-            this.eventRepository = eventRepository;
             this.studentsGroupsService = studentsGroupsService;
             this.eventsGroupsService = eventsGroupsService;
         }
