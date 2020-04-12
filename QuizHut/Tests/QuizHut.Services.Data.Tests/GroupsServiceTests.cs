@@ -136,6 +136,16 @@
         }
 
         [Fact]
+        public async Task UpdateNameAsyncShouldChangeTheNameOfTheGroupCorrectly()
+        {
+            var groupId = await this.CreateGroupAsync();
+            await this.Service.UpdateNameAsync(groupId, "Test Group");
+
+            var updatedGroup = await this.DbContext.Groups.FirstOrDefaultAsync();
+            Assert.Equal("Test Group", updatedGroup.Name);
+        }
+
+        [Fact]
         public async Task GetAllGroupsCountShouldReturnCorrectCount()
         {
             var creatorId = Guid.NewGuid().ToString();
