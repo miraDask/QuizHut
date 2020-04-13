@@ -220,6 +220,33 @@
             Assert.False(resultModelCollection.First().IsAssigned);
         }
 
+        [Fact]
+        public async Task GetUnAssignedToCategoryByCreatorIdAsyncShouldReturnCorrectModelCollection()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var firstQuizId = await this.CreateQuizAsync("First quiz", creatorId, "testquizpass");
+
+            var secondQuizId = await this.CreateQuizAsync("Second quiz", creatorId);
+            var categoryId = Guid.NewGuid().ToString();
+            await this.AddQuizToCategoryAsync(categoryId, secondQuizId);
+
+            var model = new QuizAssignViewModel()
+            {
+                Id = firstQuizId,
+                Name = "First quiz",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetUnAssignedToCategoryByCreatorIdAsync<QuizAssignViewModel>(categoryId, creatorId);
+
+            Assert.IsAssignableFrom<IList<QuizAssignViewModel>>(resultModelCollection);
+            Assert.Equal(model.Id, resultModelCollection.First().Id);
+            Assert.Equal(model.Name, resultModelCollection.First().Name);
+            Assert.Equal(model.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
         {
             var quiz = new Quiz
