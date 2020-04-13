@@ -46,12 +46,5 @@
             this.repository.Delete(eventGroup);
             await this.repository.SaveChangesAsync();
         }
-
-        public async Task<string[]> GetAllGroupsIdsByEventIdAsync(string eventId)
-         => await this.repository
-             .AllAsNoTracking()
-             .Where(x => x.EventId == eventId)
-             .Select(x => x.GroupId)
-             .ToArrayAsync();
     }
 }

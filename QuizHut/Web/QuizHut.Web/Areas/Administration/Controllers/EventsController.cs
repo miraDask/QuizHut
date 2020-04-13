@@ -94,7 +94,7 @@
         public async Task<IActionResult> AssignGroupsToEvent(string id)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId);
+            var groups = await this.groupsService.GetAllAsync<GroupAssignViewModel>(userId);
             var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);
             model.Groups = groups;
             return this.View(model);
@@ -123,13 +123,14 @@
 
             IList<GroupAssignViewModel> groups;
             var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
+
             if (isDashboardRequest)
             {
-                groups = (IList<GroupAssignViewModel>)await this.groupsService.GetAllByEventIdAsync<GroupAssignViewModel>(id);
+                groups = await this.groupsService.GetAllAsync<GroupAssignViewModel>(null, id);
             }
             else
             {
-                groups = await this.groupsService.GetAllByCreatorIdAsync<GroupAssignViewModel>(userId, id);
+                groups = await this.groupsService.GetAllAsync<GroupAssignViewModel>(userId, id);
             }
 
             var model = await this.service.GetEventModelByIdAsync<EventWithGroupsViewModel>(id);

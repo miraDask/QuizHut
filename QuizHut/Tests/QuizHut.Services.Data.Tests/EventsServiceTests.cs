@@ -901,7 +901,7 @@
         public void GetTimeErrorMessageShouldReturnInvalidStartingTimeMessageIfStartingTimeIsBeforeDateNowMinutes()
         {
             var invalidStartingTimeMessage = ServicesConstants.InvalidStartingTime;
-            var resultMessage = this.Service.GetTimeErrorMessage(DateTime.UtcNow.TimeOfDay.Subtract(TimeSpan.FromMinutes(3)).ToString(), "23:59", DateTime.Now.Date.ToString("dd/MM/yyyy"));
+            var resultMessage = this.Service.GetTimeErrorMessage(DateTime.Now.TimeOfDay.Subtract(TimeSpan.FromMinutes(3)).ToString(), "23:59", DateTime.Now.Date.ToString("dd/MM/yyyy"));
             Assert.Equal(invalidStartingTimeMessage, resultMessage);
         }
 

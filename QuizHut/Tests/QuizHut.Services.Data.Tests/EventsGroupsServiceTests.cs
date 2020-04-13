@@ -31,22 +31,6 @@
         }
 
         [Fact]
-        public async Task GetAllGroupsIdsByEventIdAsyncShouldReturnCorrectCollection()
-        {
-            var eventId = await this.CreateEventAsync();
-            var firstGroupId = await this.CreateGroupAsync();
-            var secondGroupId = await this.CreateGroupAsync();
-
-            await this.CreateEventGroupAsync(firstGroupId, eventId);
-            await this.CreateEventGroupAsync(secondGroupId, eventId);
-
-            var groupIds = await this.Service.GetAllGroupsIdsByEventIdAsync(eventId);
-
-            Assert.Contains(firstGroupId, groupIds);
-            Assert.Contains(secondGroupId, groupIds);
-        }
-
-        [Fact]
         public async Task CreateEventGroupAsyncShouldCreateNewEventGroupIfDoesntExistsAsDeleted()
         {
             var eventId = await this.CreateEventAsync();

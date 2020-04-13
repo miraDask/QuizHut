@@ -30,22 +30,6 @@
         }
 
         [Fact]
-        public async Task GetAllStudentsIdsByGroupIdAsyncShouldReturnCorrectCollection()
-        {
-            var groupId = await this.CreateGroupAsync();
-            var firstStudentId = await this.CreateStudentAsync();
-            var secondStudentId = await this.CreateStudentAsync();
-
-            await this.CreateStudentGroupAsync(firstStudentId, groupId);
-            await this.CreateStudentGroupAsync(secondStudentId, groupId);
-
-            var studentIds = await this.Service.GetAllStudentsIdsByGroupIdAsync(groupId);
-
-            Assert.Contains(firstStudentId, studentIds);
-            Assert.Contains(secondStudentId, studentIds);
-        }
-
-        [Fact]
         public async Task CreateStudentGroupAsyncShouldCreateNewStudentGroupIfDoesntExist()
         {
             var groupId = await this.CreateGroupAsync();

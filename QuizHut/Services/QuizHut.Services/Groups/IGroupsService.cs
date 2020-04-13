@@ -5,7 +5,7 @@
 
     public interface IGroupsService
     {
-        Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId = null);
+        Task<IList<T>> GetAllAsync<T>(string creatorId = null, string eventId = null);
 
         Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
 

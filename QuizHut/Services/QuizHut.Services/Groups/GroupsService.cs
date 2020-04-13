@@ -43,19 +43,21 @@
             return group.Id;
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, string eventId = null)
+        public async Task<IList<T>> GetAllAsync<T>(string creatorId = null, string eventId = null)
         {
-            var query = this.repository
-                    .AllAsNoTracking()
-                    .OrderByDescending(x => x.CreatedOn)
-                    .Where(x => x.CreatorId == id);
-            if (eventId != null)
+            var query = this.repository.AllAsNoTracking();
+
+            if (creatorId != null)
             {
-                var assignedGroupsIds = await this.eventsGroupsService.GetAllGroupsIdsByEventIdAsync(eventId);
-                query = query.Where(x => !assignedGroupsIds.Contains(x.Id));
+                query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            return await query.To<T>().ToListAsync();
+            if (eventId != null)
+            {
+                query = query.Where(x => !x.EventsGroups.Any(x => x.EventId == eventId));
+            }
+
+            return await query.OrderByDescending(x => x.CreatedOn).To<T>().ToListAsync();
         }
 
         public async Task<T> GetGroupModelAsync<T>(string groupId)
