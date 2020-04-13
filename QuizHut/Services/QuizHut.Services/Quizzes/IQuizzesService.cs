@@ -11,8 +11,6 @@
 
         Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
 
-        //Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, bool isAssignedToEventFilter);
-
         Task<IList<T>> GetAllByCategoryIdAsync<T>(string id);
 
         Task<T> GetQuizByIdAsync<T>(string id);
