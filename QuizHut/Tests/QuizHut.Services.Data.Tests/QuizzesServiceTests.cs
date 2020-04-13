@@ -152,6 +152,22 @@
             Assert.Null(quizAfterDeletingTheEvent.EventId);
         }
 
+        [Fact]
+        public async Task UpdateAsyncShouldUpdateCorrectly()
+        {
+            var eventId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test quiz");
+
+            await this.Service.UpdateAsync(quizId, "First Quiz", "Description", 32, "6543211");
+
+            var quizAfterUpdate = await this.GetQuizAsync(quizId);
+
+            Assert.Equal("First Quiz", quizAfterUpdate.Name);
+            Assert.Equal("Description", quizAfterUpdate.Description);
+            Assert.Equal(32, quizAfterUpdate.Timer);
+            Assert.Equal("6543211", quizAfterUpdate.Password.Content);
+        }
+
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
         {
             var quiz = new Quiz
