@@ -55,7 +55,7 @@
             if (allGroupsCreatedByTeacherCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allGroupsCreatedByTeacherCount / (decimal)countPerPage);
-                var groups = await this.service.GetAllPerPage<GroupListViewModel>(page, countPerPage, userId);
+                var groups = await this.service.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, userId);
                 model.Groups = groups;
                 model.PagesCount = pagesCount;
             }

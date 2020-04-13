@@ -226,6 +226,110 @@
             Assert.Equal(2, resultModelCollection.Count());
         }
 
+        [Fact]
+        public async Task GetAllPerPageAsyncShouldReturnCorrectModelCollection()
+        {
+            var firstGroupId = await this.CreateGroupAsync(null, "First Group");
+            var secondGroupId = await this.CreateGroupAsync(null, "Second Group");
+
+            var firstModel = new GroupListViewModel()
+            {
+                Id = firstGroupId,
+                Name = "First Group",
+                StudentsCount = 0,
+                EventsCount = 0,
+            };
+
+            var secondModel = new GroupListViewModel()
+            {
+                Id = secondGroupId,
+                Name = "Second Group",
+                StudentsCount = 0,
+                EventsCount = 0,
+            };
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<GroupListViewModel>(1, 2);
+
+            Assert.Equal(2, resultModelCollection.Count());
+            Assert.IsAssignableFrom<IList<GroupListViewModel>>(resultModelCollection);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.StudentsCount, resultModelCollection.Last().StudentsCount);
+            Assert.Equal(firstModel.EventsCount, resultModelCollection.Last().EventsCount);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.StudentsCount, resultModelCollection.First().StudentsCount);
+            Assert.Equal(secondModel.EventsCount, resultModelCollection.First().EventsCount);
+        }
+
+        [Fact]
+        public async Task GetAllPerPageAsyncShouldReturnCorrectModelCollectionWhenCreatorIdIsPassed()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            await this.CreateGroupAsync(null, "First Group");
+            var secondGroupId = await this.CreateGroupAsync(creatorId, "Second Group");
+
+            var secondModel = new GroupListViewModel()
+            {
+                Id = secondGroupId,
+                Name = "Second Group",
+                StudentsCount = 0,
+                EventsCount = 0,
+            };
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<GroupListViewModel>(1, 2, creatorId);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<GroupListViewModel>>(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.StudentsCount, resultModelCollection.First().StudentsCount);
+            Assert.Equal(secondModel.EventsCount, resultModelCollection.First().EventsCount);
+        }
+
+        [Theory]
+        [InlineData(1, 5)]
+        [InlineData(1, 1000)]
+        public async Task GetAllPerPageAsyncShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        {
+            for (int i = 0; i < countPerPage * 2; i++)
+            {
+                await this.CreateGroupAsync();
+            }
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage);
+
+            Assert.Equal(countPerPage, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetPerPageByStudentIdFilteredByStatusAsyncShouldSkipCorrectly()
+        {
+            var firstGroupId = await this.CreateGroupAsync(null, "First Group");
+            await this.CreateGroupAsync(null, "Second Group");
+
+            var firstModel = new GroupListViewModel()
+            {
+                Id = firstGroupId,
+                Name = "First Group",
+                StudentsCount = 0,
+                EventsCount = 0,
+            };
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<GroupListViewModel>(2, 1);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<GroupListViewModel>>(resultModelCollection);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(firstModel.StudentsCount, resultModelCollection.First().StudentsCount);
+            Assert.Equal(firstModel.EventsCount, resultModelCollection.First().EventsCount);
+        }
+
         private async Task<string> CreateGroupAsync(string creatorId = null, string name = null)
         {
             var group = new Group()

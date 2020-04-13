@@ -7,7 +7,7 @@
     {
         Task<IList<T>> GetAllAsync<T>(string creatorId = null, string eventId = null);
 
-        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
+        Task<IList<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null);
 
         Task<string> CreateGroupAsync(string name, string creatorId);
 

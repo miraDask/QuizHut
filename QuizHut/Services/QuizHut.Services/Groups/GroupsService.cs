@@ -110,7 +110,7 @@
             .To<T>()
             .ToListAsync();
 
-        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null)
+        public async Task<IList<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null)
         {
             var query = this.repository.AllAsNoTracking();
 
