@@ -43,6 +43,34 @@
         }
 
         [Fact]
+        public async Task DeleteByIdAsyncShouldDeleteQuizCorrectly()
+        {
+            var quizId = await this.CreateQuizAsync("Quiz", null, "testpassword");
+
+            await this.Service.DeleteByIdAsync(quizId);
+
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+
+            Assert.Null(quiz);
+        }
+
+        [Fact]
+        public async Task DeleteByIdAsyncShouldDeletePasswordCorrectly()
+        {
+            var quizId = await this.CreateQuizAsync("Quiz", null, "testpassword");
+
+            var passwordBeforeQuizIsDeleted = await this.DbContext.Passwords.FirstOrDefaultAsync(x => x.QuizId == quizId);
+            this.DbContext.Entry<Password>(passwordBeforeQuizIsDeleted).State = EntityState.Detached;
+
+            await this.Service.DeleteByIdAsync(quizId);
+
+            var passwordAfterQuizIsDeleted = await this.DbContext.Passwords.FirstOrDefaultAsync(x => x.QuizId == quizId);
+
+            Assert.NotNull(passwordBeforeQuizIsDeleted);
+            Assert.Null(passwordAfterQuizIsDeleted);
+        }
+
+        [Fact]
         public async Task GetQuizIdByPasswordAsyncShouldReturnCorrectQuizId()
         {
             var quizId = await this.CreateQuizAsync("Quiz", null, "testpassword");
