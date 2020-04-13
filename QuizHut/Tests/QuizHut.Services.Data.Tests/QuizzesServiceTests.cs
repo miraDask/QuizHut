@@ -10,6 +10,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using QuizHut.Data.Models;
     using QuizHut.Services.Quizzes;
+    using QuizHut.Web.ViewModels.Quizzes;
     using Xunit;
 
     public class QuizzesServiceTests : BaseServiceTests
@@ -155,7 +156,6 @@
         [Fact]
         public async Task UpdateAsyncShouldUpdateCorrectly()
         {
-            var eventId = Guid.NewGuid().ToString();
             var quizId = await this.CreateQuizAsync("Test quiz");
 
             await this.Service.UpdateAsync(quizId, "First Quiz", "Description", 32, "6543211");
@@ -166,6 +166,32 @@
             Assert.Equal("Description", quizAfterUpdate.Description);
             Assert.Equal(32, quizAfterUpdate.Timer);
             Assert.Equal("6543211", quizAfterUpdate.Password.Content);
+        }
+
+        [Fact]
+        public async Task GetQuizByIdAsyncShouldReturnCorrectModel()
+        {
+            var quizId = await this.CreateQuizAsync("Test quiz", null, "testquizpass");
+
+            var model = new QuizDetailsViewModel()
+            {
+                Id = quizId,
+                Name = "Test quiz",
+                Description = null,
+                Timer = null,
+                Password = "testquizpass",
+                EventName = null,
+            };
+
+            var resultModel = await this.Service.GetQuizByIdAsync<QuizDetailsViewModel>(quizId);
+
+            Assert.IsAssignableFrom<QuizDetailsViewModel>(resultModel);
+            Assert.Equal(model.Id, resultModel.Id);
+            Assert.Equal(model.Name, resultModel.Name);
+            Assert.Equal(model.Description, resultModel.Description);
+            Assert.Equal(model.Timer, resultModel.Timer);
+            Assert.Equal(model.Password, resultModel.Password);
+            Assert.Equal(model.EventName, resultModel.EventName);
         }
 
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
