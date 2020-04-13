@@ -40,70 +40,46 @@
 
         public async Task<IActionResult> Start(string password, string id)
         {
-            if (id == null)
-            {
-                id = await this.quizService.GetQuizIdByPasswordAsync(password);
-            }
+            id ??= await this.quizService.GetQuizIdByPasswordAsync(password);
 
             var user = await this.userManager.GetUserAsync(this.User);
-            var userHasPermitionToTakeTheQuiz = await this.quizService.HasUserPermition(user.Id, id);
             var roles = await this.userManager.GetRolesAsync(user);
+            var userHasPermitionToTakeTheQuiz = await this.quizService.HasUserPermition(user.Id, id);
 
             if (!userHasPermitionToTakeTheQuiz)
             {
-                if (roles.Count > 0)
+                var controller = roles.Count > 0 ? "Home" : "Students";
+                var routObject = new
                 {
-                    return this.RedirectToAction("Index", "Home", new
-                    {
-                        password,
-                        area = GlobalConstants.Administration,
-                        errorText = GlobalConstants.ErrorMessages.PermissionDenied,
-                    });
-                }
-                else
-                {
-                    return this.RedirectToAction("Index", "Students", new
-                    {
-                        password,
-                        area = string.Empty,
-                        errorText = GlobalConstants.ErrorMessages.PermissionDenied,
-                    });
-                }
+                    password,
+                    area = roles.Count > 0 ? GlobalConstants.Administration : string.Empty,
+                    errorText = GlobalConstants.ErrorMessages.PermissionDenied,
+                };
+
+                return this.RedirectToAction("Index", controller, routObject);
             }
 
-            if (roles.Count > 0)
-            {
-                this.ViewData["Area"] = Constants.AdminArea;
-            }
-
+            this.ViewData["Area"] = roles.Count > 0 ? Constants.AdminArea : string.Empty;
             var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
-
             return this.View(quizModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Start(PasswordInputViewModel model)
         {
-            if (model.Password == null)
-            {
-                return this.RedirectToAction("Index", "Students", new
-                {
-                    password = model.Password,
-                    area = string.Empty,
-                    errorText = GlobalConstants.ErrorMessages.EmptyPasswordField,
-                });
-            }
-
             var id = await this.quizService.GetQuizIdByPasswordAsync(model.Password);
 
-            if (id == null)
+            if (model.Password == null || id == null)
             {
-                return this.RedirectToAction("Index", "Students", new
+                var routObject = new
                 {
                     password = model.Password,
                     area = string.Empty,
-                    errorText = string.Format(GlobalConstants.ErrorMessages.QuizNotFound, model.Password),
-                });
+                    errorText = model.Password == null ? GlobalConstants.ErrorMessages.EmptyPasswordField
+                        : id == null ? string.Format(GlobalConstants.ErrorMessages.QuizNotFound, model.Password) : null,
+                };
+
+                return this.RedirectToAction("Index", "Students", routObject);
             }
 
             return this.RedirectToAction("Start", new { password = model.Password });
