@@ -185,12 +185,53 @@
             Assert.Empty(resultModel.Events);
         }
 
+        [Fact]
+        public async Task GetAllByEventIdAsyncShouldReturnCorrectModelCollection()
+        {
+            var eventId = Guid.NewGuid().ToString();
+            var creatorId = Guid.NewGuid().ToString();
+
+            var firstGroupId = await this.CreateGroupAsync(creatorId, "First Group");
+            var secondGroupId = await this.CreateGroupAsync(creatorId, "Second Group");
+
+            await this.AssignEventToGroupAsync(eventId, firstGroupId);
+            await this.AssignEventToGroupAsync(eventId, secondGroupId);
+
+            var firstModel = new GroupAssignViewModel()
+            {
+                Id = firstGroupId,
+                Name = "First Group",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var secondModel = new GroupAssignViewModel()
+            {
+                Id = secondGroupId,
+                Name = "Second Group",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllByEventIdAsync<GroupAssignViewModel>(eventId);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(firstModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+            Assert.Equal(secondModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.Last().CreatorId);
+            Assert.False(resultModelCollection.Last().IsAssigned);
+            Assert.Equal(2, resultModelCollection.Count());
+        }
+
         private async Task<string> CreateGroupAsync(string creatorId = null, string name = null)
         {
             var group = new Group()
             {
-                Name = name != null ? name : "group",
-                CreatorId = creatorId != null ? creatorId : Guid.NewGuid().ToString(),
+                Name = name ?? "group",
+                CreatorId = creatorId ?? Guid.NewGuid().ToString(),
             };
 
             await this.DbContext.Groups.AddAsync(group);
