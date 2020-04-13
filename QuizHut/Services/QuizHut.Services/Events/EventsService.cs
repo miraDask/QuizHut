@@ -226,7 +226,7 @@
 
             var timeToStart = TimeSpan.Parse(activeFrom);
             var timeNow = now.TimeOfDay;
-            if (now.Date == activationDateAndTime.Date && timeToStart.Minutes < timeNow.Minutes)
+            if (timeToStart.Hours < timeNow.Hours || timeToStart.Minutes < timeNow.Minutes)
             {
                 return ServicesConstants.InvalidStartingTime;
             }
@@ -356,17 +356,21 @@
         private Status GetStatus(DateTime activationDateAndTime, string quizId)
         {
             var now = DateTime.UtcNow;
-            if (now.Date > activationDateAndTime.Date || (now.Date == activationDateAndTime.Date && activationDateAndTime.TimeOfDay.Minutes < now.TimeOfDay.Minutes))
-            {
-                return Status.Ended;
-            }
 
-            if (quizId == null || now.Date < activationDateAndTime.Date || activationDateAndTime.TimeOfDay.Minutes > now.TimeOfDay.Minutes)
+            if (quizId == null
+                || now.Date < activationDateAndTime.Date
+                || activationDateAndTime.TimeOfDay > now.TimeOfDay)
             {
                 return Status.Pending;
             }
 
-            return Status.Active;
+            if (activationDateAndTime.TimeOfDay.Hours <= now.TimeOfDay.Hours
+                || activationDateAndTime.TimeOfDay.Minutes <= now.TimeOfDay.Minutes)
+            {
+                return Status.Active;
+            }
+
+            return Status.Ended;
         }
 
         private DateTime GetActivationDateAndTimeLocal(string activationDate, string activeFrom)

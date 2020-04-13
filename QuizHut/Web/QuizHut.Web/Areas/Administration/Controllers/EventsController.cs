@@ -163,15 +163,16 @@
             var isDashboardRequest = this.HttpContext.Session.GetString(GlobalConstants.DashboardRequest) != null;
             if (isDashboardRequest)
             {
-                quizzes = await this.quizService.GetAllAsync<QuizAssignViewModel>(true);
+                quizzes = await this.quizService.GetAllUnAssignedToEventAsync<QuizAssignViewModel>();
             }
             else
             {
-                quizzes = await this.quizService.GetAllByCreatorIdAsync<QuizAssignViewModel>(userId, true);
+                quizzes = await this.quizService.GetAllUnAssignedToEventAsync<QuizAssignViewModel>(userId);
             }
 
             var model = await this.service.GetEventModelByIdAsync<EventWithQuizzesViewModel>(id);
             model.Quizzes = quizzes;
+
             return this.View(model);
         }
 

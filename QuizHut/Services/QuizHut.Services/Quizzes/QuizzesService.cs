@@ -44,15 +44,31 @@
             return quiz.Id;
         }
 
-        public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, bool isAssignedToEventFilter)
+        //public async Task<IList<T>> GetAllByCreatorIdAsync<T>(string id, bool isAssignedToEventFilter)
+        //{
+        //    var query = this.quizRepository
+        //           .AllAsNoTracking()
+        //           .Where(x => x.CreatorId == id);
+
+        //    if (isAssignedToEventFilter)
+        //    {
+        //        query = query.Where(x => x.EventId == null);
+        //    }
+
+        //    return await query.OrderByDescending(x => x.CreatedOn)
+        //        .To<T>()
+        //        .ToListAsync();
+        //}
+
+        public async Task<IList<T>> GetAllUnAssignedToEventAsync<T>(string creatorId = null)
         {
             var query = this.quizRepository
                    .AllAsNoTracking()
-                   .Where(x => x.CreatorId == id);
+                   .Where(x => x.EventId == null);
 
-            if (isAssignedToEventFilter)
+            if (creatorId != null)
             {
-                query = query.Where(x => x.EventId == null);
+                query = query.Where(x => x.CreatorId == creatorId);
             }
 
             return await query.OrderByDescending(x => x.CreatedOn)
@@ -66,21 +82,6 @@
                .Where(x => x.Id == id)
                .To<T>()
                .FirstOrDefaultAsync();
-
-        public async Task<IList<T>> GetAllAsync<T>(bool isAssignedToEventFilter)
-        {
-            var query = this.quizRepository
-                   .AllAsNoTracking();
-
-            if (isAssignedToEventFilter)
-            {
-                query = query.Where(x => x.EventId == null);
-            }
-
-            return await query.OrderByDescending(x => x.CreatedOn)
-                .To<T>()
-                .ToListAsync();
-        }
 
         public async Task DeleteByIdAsync(string id)
         {
