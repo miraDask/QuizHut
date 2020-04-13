@@ -167,7 +167,7 @@
                 await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id, @event.Name, @event.Status);
             }
 
-            await this.quizService.AssignEventToQuiz(eventId, quizId);
+            await this.quizService.AssignQuizToEventAsync(eventId, quizId);
         }
 
         public async Task DeleteQuizFromEventAsync(string eventId, string quizId)

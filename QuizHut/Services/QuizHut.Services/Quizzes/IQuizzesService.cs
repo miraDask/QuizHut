@@ -31,7 +31,7 @@
 
         Task<bool> HasUserPermition(string userId, string quizId);
 
-        Task AssignEventToQuiz(string eventId, string quizId);
+        Task AssignQuizToEventAsync(string eventId, string quizId);
 
         int GetAllQuizzesCount(string creatorId = null);
     }

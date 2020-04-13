@@ -120,6 +120,20 @@
             Assert.Equal(creatorId, creatorIdResult);
         }
 
+        [Fact]
+        public async Task AssignQuizToEventAsyncShouldAssignCorrectly()
+        {
+            var eventId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test quiz");
+
+            await this.Service.AssignQuizToEventAsync(eventId, quizId);
+
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync();
+
+            Assert.NotNull(quiz.EventId);
+            Assert.Equal(eventId, quiz.EventId);
+        }
+
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
         {
             var quiz = new Quiz

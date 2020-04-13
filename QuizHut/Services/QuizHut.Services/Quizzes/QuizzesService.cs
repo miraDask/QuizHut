@@ -149,7 +149,7 @@
             return eventGroups.Count() > 0;
         }
 
-        public async Task AssignEventToQuiz(string eventId, string quizId)
+        public async Task AssignQuizToEventAsync(string eventId, string quizId)
         {
             var quiz = await this.quizRepository
                 .AllAsNoTracking()
