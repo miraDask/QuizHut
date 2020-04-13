@@ -330,6 +330,126 @@
             Assert.Equal(firstModel.EventsCount, resultModelCollection.First().EventsCount);
         }
 
+        [Fact]
+        public async Task GetAllAsyncShouldReturnCorrectModelCollection()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+
+            var firstGroupId = await this.CreateGroupAsync(creatorId, "First Group");
+            var secondGroupId = await this.CreateGroupAsync(creatorId, "Second Group");
+
+            var firstModel = new GroupAssignViewModel()
+            {
+                Id = firstGroupId,
+                Name = "First Group",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var secondModel = new GroupAssignViewModel()
+            {
+                Id = secondGroupId,
+                Name = "Second Group",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllAsync<GroupAssignViewModel>();
+
+            Assert.Equal(2, resultModelCollection.Count());
+
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.CreatorId, resultModelCollection.Last().CreatorId);
+            Assert.False(resultModelCollection.Last().IsAssigned);
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
+        [Fact]
+        public async Task GetAllAsyncShouldReturnOnlyGroupsCreatedByCurrentCreatorWhenCreatorIdIsPassed()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+
+            await this.CreateGroupAsync(null, "First Group");
+            var secondGroupId = await this.CreateGroupAsync(creatorId, "Second Group");
+
+            var secondModel = new GroupAssignViewModel()
+            {
+                Id = secondGroupId,
+                Name = "Second Group",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllAsync<GroupAssignViewModel>(creatorId);
+
+            Assert.Single(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
+        [Fact]
+        public async Task GetAllAsyncShouldReturnOnlyUnAssignedGroupsToCurrentEventWhenEventIdIsPassed()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var eventId = Guid.NewGuid().ToString();
+
+            var firstGroupId = await this.CreateGroupAsync(null, "First Group");
+            await this.AssignEventToGroupAsync(eventId, firstGroupId);
+            var secondGroupId = await this.CreateGroupAsync(creatorId, "Second Group");
+
+            var secondModel = new GroupAssignViewModel()
+            {
+                Id = secondGroupId,
+                Name = "Second Group",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllAsync<GroupAssignViewModel>(null, eventId);
+
+            Assert.Single(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
+        [Fact]
+        public async Task GetAllAsyncShouldReturnOnlyUnAssignedGroupsToCurrentEventAndCreatedByCurrentCreatorWhenEventIdAndCreatorIdArePassed()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var eventId = Guid.NewGuid().ToString();
+
+            var firstGroupId = await this.CreateGroupAsync(null, "First Group");
+            await this.AssignEventToGroupAsync(eventId, firstGroupId);
+            var secondGroupId = await this.CreateGroupAsync(creatorId, "Second Group");
+
+            var secondModel = new GroupAssignViewModel()
+            {
+                Id = secondGroupId,
+                Name = "Second Group",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllAsync<GroupAssignViewModel>(creatorId, eventId);
+
+            Assert.Single(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
         private async Task<string> CreateGroupAsync(string creatorId = null, string name = null)
         {
             var group = new Group()
