@@ -194,6 +194,32 @@
             Assert.Equal(model.EventName, resultModel.EventName);
         }
 
+        [Fact]
+        public async Task GetAllByCategoryIdAsyncShouldReturnCorrectModelCollection()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var categoryId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("First quiz", creatorId, "testquizpass");
+            await this.AddQuizToCategoryAsync(categoryId, quizId);
+            await this.CreateQuizAsync("Second quiz");
+
+            var model = new QuizAssignViewModel()
+            {
+                Id = quizId,
+                Name = "First quiz",
+                CreatorId = creatorId,
+                IsAssigned = false,
+            };
+
+            var resultModelCollection = await this.Service.GetAllByCategoryIdAsync<QuizAssignViewModel>(categoryId);
+
+            Assert.IsAssignableFrom<IList<QuizAssignViewModel>>(resultModelCollection);
+            Assert.Equal(model.Id, resultModelCollection.First().Id);
+            Assert.Equal(model.Name, resultModelCollection.First().Name);
+            Assert.Equal(model.CreatorId, resultModelCollection.First().CreatorId);
+            Assert.False(resultModelCollection.First().IsAssigned);
+        }
+
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
         {
             var quiz = new Quiz
@@ -239,6 +265,15 @@
             var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == id);
             this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
             return quiz;
+        }
+
+        private async Task AddQuizToCategoryAsync(string categoryId, string quizId)
+        {
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+            quiz.CategoryId = categoryId;
+            this.DbContext.Update(quiz);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
         }
     }
 }
