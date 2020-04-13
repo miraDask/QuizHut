@@ -3,11 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -247,6 +247,70 @@
             Assert.False(resultModelCollection.First().IsAssigned);
         }
 
+        [Fact]
+        public async Task HasUserPermitionShouldReturnTrueIfTheUserIsTheCreator()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz", creatorId);
+            var result = await this.Service.HasUserPermition(creatorId, quizId);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task HasUserPermitionShouldReturnFalseIfTheQuizIsAssignedToUnActiveEvent()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz", creatorId);
+            var eventId = await this.CreateEventAsync(Status.Pending);
+            await this.AssignEventToQuizAsync(quizId, eventId);
+
+            var result = await this.Service.HasUserPermition(Guid.NewGuid().ToString(), quizId);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task HasUserPermitionShouldReturnFalseIfTheQuizIsAlreadyTakenFromTheStudent()
+        {
+            var studentId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz");
+            var eventId = await this.CreateEventAsync(Status.Active);
+            await this.AssignEventToQuizAsync(quizId, eventId);
+            await this.CreateResultAsync(studentId, eventId);
+
+            var result = await this.Service.HasUserPermition(studentId, quizId);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task HasUserPermitionShouldReturnFalseIfStudentIsNotInTheAssignedToTheEventGroup()
+        {
+            var studentId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz");
+            var eventId = await this.CreateEventAsync(Status.Active);
+            await this.AssignEventToQuizAsync(quizId, eventId);
+
+            var result = await this.Service.HasUserPermition(studentId, quizId);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task HasUserPermitionShouldReturnTrueIfStudentIsInTheAssignedToTheEventGroup()
+        {
+            var studentId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz");
+            var eventId = await this.CreateEventAsync(Status.Active);
+            await this.AssignEventToQuizAsync(quizId, eventId);
+            await this.CreateGroupAndAssignStudentAndEventAsync(studentId, eventId);
+
+            var result = await this.Service.HasUserPermition(studentId, quizId);
+
+            Assert.True(result);
+        }
+
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
         {
             var quiz = new Quiz
@@ -301,6 +365,61 @@
             this.DbContext.Update(quiz);
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+        }
+
+        private async Task<string> CreateEventAsync(Status status)
+        {
+            var @event = new Event
+            {
+                Name = "Event",
+                Status = status,
+                ActivationDateAndTime = DateTime.Now,
+                DurationOfActivity = TimeSpan.FromMinutes(30),
+                CreatorId = Guid.NewGuid().ToString(),
+            };
+
+            await this.DbContext.Events.AddAsync(@event);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Event>(@event).State = EntityState.Detached;
+            return @event.Id;
+        }
+
+        private async Task CreateResultAsync(string studentId, string eventId)
+        {
+            var result = new Result()
+            {
+                Points = 10,
+                StudentId = studentId,
+                MaxPoints = 10,
+                EventId = eventId,
+            };
+
+            await this.DbContext.Results.AddAsync(result);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Result>(result).State = EntityState.Detached;
+        }
+
+        private async Task CreateGroupAndAssignStudentAndEventAsync(string studentId, string eventId)
+        {
+            var group = new Group()
+            {
+                Name = "group",
+                CreatorId = Guid.NewGuid().ToString(),
+            };
+
+            await this.DbContext.Groups.AddAsync(group);
+
+            var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = group.Id };
+            await this.DbContext.StudentsGroups.AddAsync(studentGroup);
+
+            var eventGroup = new EventGroup() { EventId = eventId, GroupId = group.Id };
+            await this.DbContext.EventsGroups.AddAsync(eventGroup);
+
+            await this.DbContext.SaveChangesAsync();
+
+            this.DbContext.Entry<EventGroup>(eventGroup).State = EntityState.Detached;
+            this.DbContext.Entry<Group>(group).State = EntityState.Detached;
+            this.DbContext.Entry<StudentGroup>(studentGroup).State = EntityState.Detached;
         }
     }
 }

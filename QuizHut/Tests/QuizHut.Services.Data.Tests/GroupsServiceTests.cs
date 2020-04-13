@@ -504,7 +504,6 @@
         {
             var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = groupId };
             await this.DbContext.StudentsGroups.AddAsync(studentGroup);
-
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<StudentGroup>(studentGroup).State = EntityState.Detached;
         }
