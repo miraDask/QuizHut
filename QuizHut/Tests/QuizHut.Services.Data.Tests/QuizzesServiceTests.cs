@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using QuizHut.Data.Models;
@@ -61,6 +62,34 @@
 
             Assert.NotNull(quizName);
             Assert.Equal("Quiz", quizName);
+        }
+
+        [Fact]
+        public async Task GetAllQuizzesCountShouldReturnCorrectCount()
+        {
+            var firstCreatorId = Guid.NewGuid().ToString();
+            var secondCreatorId = Guid.NewGuid().ToString();
+
+            await this.CreateQuizAsync("First Quiz", firstCreatorId);
+            await this.CreateQuizAsync("Second Quiz", secondCreatorId);
+
+            var caseWhenCreatorIdIsPassedCount = this.Service.GetAllQuizzesCount(firstCreatorId);
+            var caseWhenNoCreatorIdIsPassedCount = this.Service.GetAllQuizzesCount();
+
+            Assert.Equal(1, caseWhenCreatorIdIsPassedCount);
+            Assert.Equal(2, caseWhenNoCreatorIdIsPassedCount);
+        }
+
+        [Fact]
+        public async Task GetCreatorIdByQuizIdAsyncShouldReturnCorrectCreatorId()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Quiz", creatorId, "testpassword");
+
+            var creatorIdResult = await this.Service.GetCreatorIdByQuizIdAsync(quizId);
+
+            Assert.NotNull(creatorIdResult);
+            Assert.Equal(creatorId, creatorIdResult);
         }
 
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
