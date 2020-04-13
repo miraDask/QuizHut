@@ -194,7 +194,7 @@
                 .Select(x => x.CreatorId)
                 .FirstOrDefaultAsync();
 
-        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null)
+        public async Task<IEnumerable<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null)
         {
             var query = this.quizRepository.AllAsNoTracking();
 

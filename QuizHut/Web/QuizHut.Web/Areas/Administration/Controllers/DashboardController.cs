@@ -160,7 +160,7 @@
             if (allQuizzesCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allQuizzesCount / (decimal)countPerPage);
-                var quizzes = await this.quizzesService.GetAllPerPage<QuizListViewModel>(page, countPerPage);
+                var quizzes = await this.quizzesService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage);
                 model.PagesCount = pagesCount;
                 model.Quizzes = quizzes;
             }

@@ -9,7 +9,7 @@
 
         Task<IList<T>> GetAllUnAssignedToEventAsync<T>(string creatorId = null);
 
-        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
+        Task<IEnumerable<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null);
 
         Task<IList<T>> GetAllByCategoryIdAsync<T>(string id);
 

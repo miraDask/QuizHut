@@ -10,6 +10,7 @@
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Quizzes;
+    using QuizHut.Web.ViewModels.Common;
     using QuizHut.Web.ViewModels.Quizzes;
     using Xunit;
 
@@ -309,6 +310,114 @@
             var result = await this.Service.HasUserPermition(studentId, quizId);
 
             Assert.True(result);
+        }
+
+        [Fact]
+        public async Task GetAllPerPageAsyncShouldReturnCorrectModelCollection()
+        {
+            var firstQuizId = await this.CreateQuizAsync("First quiz");
+            await this.AssignEventToQuizAsync(firstQuizId, Guid.NewGuid().ToString());
+
+            var secondQuizId = await this.CreateQuizAsync("Second quiz");
+
+            var firstModel = new QuizListViewModel()
+            {
+                Id = firstQuizId,
+                Name = "First quiz",
+                QuestionsCount = 0,
+                Color = ModelCostants.ColorActive,
+            };
+
+            var secondModel = new QuizListViewModel()
+            {
+                Id = secondQuizId,
+                Name = "Second quiz",
+                QuestionsCount = 0,
+                Color = ModelCostants.ColorEnded,
+            };
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<QuizListViewModel>(1, 2);
+
+            Assert.Equal(2, resultModelCollection.Count());
+            Assert.IsAssignableFrom<IList<QuizListViewModel>>(resultModelCollection);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.QuestionsCount, resultModelCollection.Last().QuestionsCount);
+            Assert.Equal(firstModel.Color, resultModelCollection.Last().Color);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.QuestionsCount, resultModelCollection.First().QuestionsCount);
+            Assert.Equal(secondModel.Color, resultModelCollection.First().Color);
+        }
+
+        [Fact]
+        public async Task GetAllPerPageAsyncShouldReturnCorrectModelCollectionIfCreatorIdIsPassed()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            await this.CreateQuizAsync("First quiz");
+            var secondQuizId = await this.CreateQuizAsync("Second quiz", creatorId);
+
+            var secondModel = new QuizListViewModel()
+            {
+                Id = secondQuizId,
+                Name = "Second quiz",
+                QuestionsCount = 0,
+                Color = ModelCostants.ColorEnded,
+            };
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<QuizListViewModel>(1, 2, creatorId);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<QuizListViewModel>>(resultModelCollection);
+
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.QuestionsCount, resultModelCollection.First().QuestionsCount);
+            Assert.Equal(secondModel.Color, resultModelCollection.First().Color);
+        }
+
+        [Theory]
+        [InlineData(1, 5)]
+        [InlineData(1, 1000)]
+        public async Task GetAllPerPageAsyncShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        {
+            for (int i = 0; i < countPerPage * 2; i++)
+            {
+                await this.CreateQuizAsync($"quiz {i}");
+            }
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage);
+
+            Assert.Equal(countPerPage, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetPerPageByStudentIdFilteredByStatusAsyncShouldSkipCorrectly()
+        {
+            var firstQuizId = await this.CreateQuizAsync("First quiz");
+            await this.AssignEventToQuizAsync(firstQuizId, Guid.NewGuid().ToString());
+
+            await this.CreateQuizAsync("Second quiz");
+
+            var firstModel = new QuizListViewModel()
+            {
+                Id = firstQuizId,
+                Name = "First quiz",
+                QuestionsCount = 0,
+                Color = ModelCostants.ColorActive,
+            };
+
+            var resultModelCollection = await this.Service.GetAllPerPageAsync<QuizListViewModel>(2, 1);
+
+            Assert.Single(resultModelCollection);
+            Assert.IsAssignableFrom<IList<QuizListViewModel>>(resultModelCollection);
+
+            Assert.Equal(firstModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(firstModel.QuestionsCount, resultModelCollection.First().QuestionsCount);
+            Assert.Equal(firstModel.Color, resultModelCollection.First().Color);
         }
 
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
