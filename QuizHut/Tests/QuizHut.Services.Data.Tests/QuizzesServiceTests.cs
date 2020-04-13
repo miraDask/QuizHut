@@ -52,6 +52,17 @@
             Assert.Equal(quizId, resultQuizId);
         }
 
+        [Fact]
+        public async Task GetQuizNameByIdAsyncShouldReturnCorrectName()
+        {
+            var quizId = await this.CreateQuizAsync("Quiz", null, "testpassword");
+
+            var quizName = await this.Service.GetQuizNameByIdAsync(quizId);
+
+            Assert.NotNull(quizName);
+            Assert.Equal("Quiz", quizName);
+        }
+
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
         {
             var quiz = new Quiz
