@@ -161,7 +161,7 @@
             await this.quizRepository.SaveChangesAsync();
         }
 
-        public async Task DeleteEventFromQuiz(string eventId, string quizId)
+        public async Task DeleteEventFromQuizAsync(string eventId, string quizId)
         {
             var quiz = await this.quizRepository
                 .AllAsNoTracking()

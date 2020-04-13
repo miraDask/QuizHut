@@ -51,7 +51,7 @@
             var quizId = @event.QuizId;
             if (quizId != null)
             {
-                await this.quizService.DeleteEventFromQuiz(eventId, quizId);
+                await this.quizService.DeleteEventFromQuizAsync(eventId, quizId);
             }
 
             this.repository.Delete(@event);
@@ -183,7 +183,7 @@
 
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
-            await this.quizService.DeleteEventFromQuiz(eventId, quizId);
+            await this.quizService.DeleteEventFromQuizAsync(eventId, quizId);
         }
 
         public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)

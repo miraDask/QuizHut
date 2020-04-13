@@ -23,7 +23,7 @@
 
         Task DeleteByIdAsync(string id);
 
-        Task DeleteEventFromQuiz(string eventId, string quizId);
+        Task DeleteEventFromQuizAsync(string eventId, string quizId);
 
         Task UpdateAsync(string id, string name, string description, int? timer, string password);
 

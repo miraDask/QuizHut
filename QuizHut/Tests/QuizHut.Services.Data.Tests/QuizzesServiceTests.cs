@@ -22,7 +22,7 @@
             var creatorId = Guid.NewGuid().ToString();
             var quizId = await this.Service.CreateQuizAsync("Quiz", "description", 30, creatorId, "123456789");
 
-            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+            var quiz = await this.GetQuizAsync(quizId);
 
             Assert.NotNull(quiz);
             Assert.Equal("Quiz", quiz.Name);
@@ -49,7 +49,7 @@
 
             await this.Service.DeleteByIdAsync(quizId);
 
-            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync();
 
             Assert.Null(quiz);
         }
@@ -128,10 +128,28 @@
 
             await this.Service.AssignQuizToEventAsync(eventId, quizId);
 
-            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync();
+            var quiz = await this.GetQuizAsync(quizId);
 
             Assert.NotNull(quiz.EventId);
             Assert.Equal(eventId, quiz.EventId);
+        }
+
+        [Fact]
+        public async Task DeleteEventFromQuizAsyncShouldRemoveEventIdCorrectly()
+        {
+            var eventId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test quiz");
+            await this.AssignEventToQuizAsync(quizId, eventId);
+
+            var quizAfterAssigningTheEvent = await this.GetQuizAsync(quizId);
+
+            await this.Service.DeleteEventFromQuizAsync(eventId, quizId);
+
+            var quizAfterDeletingTheEvent = await this.GetQuizAsync(quizId);
+
+            Assert.NotNull(quizAfterAssigningTheEvent.EventId);
+            Assert.Equal(eventId, quizAfterAssigningTheEvent.EventId);
+            Assert.Null(quizAfterDeletingTheEvent.EventId);
         }
 
         private async Task<string> CreateQuizAsync(string name, string creatorId = null, string password = null)
@@ -163,6 +181,22 @@
             this.DbContext.Entry<Password>(passwordModel).State = EntityState.Detached;
 
             return quiz.Id;
+        }
+
+        private async Task AssignEventToQuizAsync(string quizId, string eventId)
+        {
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == quizId);
+            quiz.EventId = eventId;
+            this.DbContext.Update(quiz);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+        }
+
+        private async Task<Quiz> GetQuizAsync(string id)
+        {
+            var quiz = await this.DbContext.Quizzes.FirstOrDefaultAsync(x => x.Id == id);
+            this.DbContext.Entry<Quiz>(quiz).State = EntityState.Detached;
+            return quiz;
         }
     }
 }
