@@ -226,7 +226,12 @@
 
             var timeToStart = TimeSpan.Parse(activeFrom);
             var timeNow = now.TimeOfDay;
-            if (timeToStart.Hours < timeNow.Hours || timeToStart.Minutes < timeNow.Minutes)
+            var startHours = timeToStart.Hours;
+            var nowHours = timeNow.Hours;
+            var startMins = timeToStart.Minutes;
+            var nowMins = timeNow.Minutes;
+
+            if (startHours < nowHours || (startHours == nowHours && startMins < nowMins))
             {
                 return ServicesConstants.InvalidStartingTime;
             }
