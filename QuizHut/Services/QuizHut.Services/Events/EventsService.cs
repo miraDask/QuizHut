@@ -19,6 +19,7 @@
     using QuizHut.Services.Messaging;
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.ScheduledJobsService;
+    using TimeZoneConverter;
 
     public class EventsService : IEventsService
     {
@@ -129,7 +130,7 @@
 
         public async Task<string> CreateEventAsync(string name, string activationDate, string activeFrom, string activeTo, string creatorId)
         {
-            var activationDateAndTime = this.GetActivationDateAndTimeLocal(activationDate, activeFrom).ToUniversalTime();
+            var activationDateAndTime = this.GetActivationDateAndTimeUtc(activationDate, activeFrom);
             var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
             var @event = new Event
             {
@@ -153,18 +154,18 @@
                 .To<T>()
                 .FirstOrDefaultAsync();
 
-        public async Task AssigQuizToEventAsync(string eventId, string quizId)
+        public async Task AssigQuizToEventAsync(string eventId, string quizId, string timeZone)
         {
             var @event = await this.GetEventById(eventId);
             @event.QuizId = quizId;
             @event.QuizName = await this.quizService.GetQuizNameByIdAsync(quizId);
-            @event.Status = this.GetStatus(@event.ActivationDateAndTime, quizId);
+            @event.Status = this.GetStatus(@event.ActivationDateAndTime, @event.DurationOfActivity, quizId, timeZone);
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
 
             if (@event.Status != Status.Ended)
             {
-                await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id, @event.Name, @event.Status);
+                await this.SheduleStatusChangeAsync(@event.ActivationDateAndTime, @event.DurationOfActivity, @event.Id, @event.Name, @event.Status, timeZone);
             }
 
             await this.quizService.AssignQuizToEventAsync(eventId, quizId);
@@ -193,39 +194,42 @@
             .To<T>()
             .ToListAsync();
 
-        public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo)
+        public async Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string activeTo, string timeZone)
         {
             var @event = await this.GetEventById(id);
-            var activationDateAndTime = this.GetActivationDateAndTimeLocal(activationDate, activeFrom).ToUniversalTime();
+            var activationDateAndTime = this.GetActivationDateAndTimeUtc(activationDate, activeFrom);
             var durationOfActivity = this.GetDurationOfActivity(activationDate, activeFrom, activeTo);
 
             @event.Name = name;
             @event.ActivationDateAndTime = activationDateAndTime;
             @event.DurationOfActivity = durationOfActivity;
-            @event.Status = this.GetStatus(activationDateAndTime, @event.QuizId);
+            @event.Status = this.GetStatus(activationDateAndTime, durationOfActivity, @event.QuizId, timeZone);
 
             this.repository.Update(@event);
             await this.repository.SaveChangesAsync();
 
             if (@event.QuizId != null)
             {
-                await this.SheduleStatusChangeAsync(activationDateAndTime, durationOfActivity, id, @event.Name, @event.Status);
+                await this.SheduleStatusChangeAsync(activationDateAndTime, durationOfActivity, id, @event.Name, @event.Status, timeZone);
             }
 
             await this.hub.Clients.All.SendAsync("NewEventStatusUpdate", @event.Status.ToString(), @event.Id);
         }
 
-        public string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate)
+        public string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate, string timeZone)
         {
-            var now = DateTime.Now;
-            var activationDateAndTime = this.GetActivationDateAndTimeLocal(activationDate, activeFrom);
-            if (now.Date > activationDateAndTime.Date)
+            var zone = TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(timeZone));
+            var userLocalTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zone);
+            var activationDateAndTimeUtc = this.GetActivationDateAndTimeUtc(activationDate, activeFrom);
+            var activationDateAndTimeToUserLocalTime = TimeZoneInfo.ConvertTimeFromUtc(activationDateAndTimeUtc, zone);
+
+            if (userLocalTimeNow.Date > activationDateAndTimeToUserLocalTime.Date)
             {
                 return ServicesConstants.InvalidActivationDate;
             }
 
             var timeToStart = TimeSpan.Parse(activeFrom);
-            var timeNow = now.TimeOfDay;
+            var timeNow = userLocalTimeNow.TimeOfDay;
             var startHours = timeToStart.Hours;
             var nowHours = timeNow.Hours;
             var startMins = timeToStart.Minutes;
@@ -321,11 +325,15 @@
             TimeSpan durationOfActivity,
             string eventId,
             string eventName,
-            Status eventStatus)
+            Status eventStatus,
+            string timeZone)
         {
-            var now = DateTime.UtcNow;
-            var activationDelay = activationDateAndTime - now;
-            var endingDelay = activationDateAndTime.Add(durationOfActivity) - now;
+            var zone = TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(timeZone));
+            var userLocalTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zone);
+            var activationDateAndTimeToUserLocalTime = TimeZoneInfo.ConvertTimeFromUtc(activationDateAndTime, zone);
+
+            var activationDelay = activationDateAndTimeToUserLocalTime - userLocalTimeNow;
+            var endingDelay = activationDateAndTimeToUserLocalTime.Add(durationOfActivity) - userLocalTimeNow;
             var studentsNames = await this.GetStudentsNamesByEventIdAsync(eventId);
 
             if (eventStatus == Status.Active)
@@ -358,19 +366,29 @@
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
 
-        private Status GetStatus(DateTime activationDateAndTime, string quizId)
+        private Status GetStatus(DateTime activationDateAndTime, TimeSpan durationOfActivity, string quizId, string timeZone)
         {
-            var now = DateTime.UtcNow;
+            var zone = TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(timeZone));
+            var userLocalTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zone);
+            var activationDateAndTimeToUserLocalTime = TimeZoneInfo.ConvertTimeFromUtc(activationDateAndTime, zone);
 
             if (quizId == null
-                || now.Date < activationDateAndTime.Date
-                || activationDateAndTime.TimeOfDay > now.TimeOfDay)
+                || userLocalTimeNow.Date < activationDateAndTimeToUserLocalTime.Date
+                || activationDateAndTimeToUserLocalTime.TimeOfDay > userLocalTimeNow.TimeOfDay)
             {
                 return Status.Pending;
             }
 
-            if (activationDateAndTime.TimeOfDay.Hours <= now.TimeOfDay.Hours
-                || activationDateAndTime.TimeOfDay.Minutes <= now.TimeOfDay.Minutes)
+            var startHours = activationDateAndTimeToUserLocalTime.TimeOfDay.Hours;
+            var nowHours = userLocalTimeNow.TimeOfDay.Hours;
+            var startMins = activationDateAndTimeToUserLocalTime.TimeOfDay.Minutes;
+            var nowMins = userLocalTimeNow.TimeOfDay.Minutes;
+
+            var endHours = activationDateAndTimeToUserLocalTime.Add(durationOfActivity).TimeOfDay.Hours;
+            var endMinutes = activationDateAndTimeToUserLocalTime.Add(durationOfActivity).TimeOfDay.Minutes;
+
+            if (startHours <= nowHours && startMins <= nowMins
+                && (endHours > nowHours || (endHours == nowHours && endMinutes >= nowMins)))
             {
                 return Status.Active;
             }
@@ -378,11 +396,11 @@
             return Status.Ended;
         }
 
-        private DateTime GetActivationDateAndTimeLocal(string activationDate, string activeFrom)
-        => DateTime.ParseExact(activationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).Add(TimeSpan.Parse(activeFrom));
+        private DateTime GetActivationDateAndTimeUtc(string activationDate, string activeFrom)
+        => DateTime.ParseExact(activationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).Add(TimeSpan.Parse(activeFrom)).ToUniversalTime();
 
         private TimeSpan GetDurationOfActivity(string activationDate, string activeFrom, string activeTo)
-        => DateTime.ParseExact(activationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).Add(TimeSpan.Parse(activeTo))
-            - this.GetActivationDateAndTimeLocal(activationDate, activeFrom);
+        => DateTime.ParseExact(activationDate, "dd/MM/yyyy", CultureInfo.InvariantCulture).Add(TimeSpan.Parse(activeTo)).ToUniversalTime()
+            - this.GetActivationDateAndTimeUtc(activationDate, activeFrom);
     }
 }

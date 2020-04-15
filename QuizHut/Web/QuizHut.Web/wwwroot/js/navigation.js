@@ -8,6 +8,9 @@
         MAIN: "Dashboard"
     }
 
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    $('#timezone').val(timezone);
+
     var url = window.location.href;
     var navs = $('a[class*=" nav-to-change"]');
 

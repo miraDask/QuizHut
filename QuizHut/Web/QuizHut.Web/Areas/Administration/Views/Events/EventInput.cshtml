@@ -51,7 +51,7 @@
                                 <input type="text" asp-for="@Model.ActiveTo" class="form-control" placeholder="HH:mm">
                                 <span asp-validation-for="@Model.ActiveTo" class="text-danger"></span>
                             </label>
-
+                            <input id="timezone" type="hidden" asp-for="@Model.TimeZone" value="">
                         </div>
                         <p class="card-text text-primary">
                             <span class=" mr-1">∗</span>

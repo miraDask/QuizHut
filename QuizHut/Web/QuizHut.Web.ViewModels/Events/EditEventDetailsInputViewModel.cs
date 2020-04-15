@@ -30,6 +30,8 @@
         [RegularExpression(ModelValidations.RegEx.TimeActiveTo, ErrorMessage = ModelValidations.Error.TimeActiveToMessage)]
         public string ActiveTo { get; set; }
 
+        public string TimeZone { get; set; }
+
         public string Error { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)

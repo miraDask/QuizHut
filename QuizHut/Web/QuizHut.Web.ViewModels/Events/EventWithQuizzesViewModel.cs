@@ -19,6 +19,8 @@
 
         public bool Error { get; set; }
 
+        public string TimeZone { get; set; }
+
         public IList<QuizAssignViewModel> Quizzes { get; set; }
     }
 }

@@ -77,7 +77,7 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> EventInput(CreateEventInputViewModel model)
         {
-            var timeErrorMessage = this.service.GetTimeErrorMessage(model.ActiveFrom, model.ActiveTo, model.ActivationDate);
+            var timeErrorMessage = this.service.GetTimeErrorMessage(model.ActiveFrom, model.ActiveTo, model.ActivationDate, model.TimeZone);
             if (timeErrorMessage != null)
             {
                 model.Error = timeErrorMessage;
@@ -188,7 +188,7 @@
                 return this.View(model);
             }
 
-            await this.service.AssigQuizToEventAsync(model.Id, quizzes[0].Id);
+            await this.service.AssigQuizToEventAsync(model.Id, quizzes[0].Id, model.TimeZone);
             return this.RedirectToAction("EventDetails", new { id = model.Id });
         }
 
@@ -288,14 +288,14 @@
         [ModelStateValidationActionFilterAttribute]
         public async Task<IActionResult> EditEventDetails(EditEventDetailsInputViewModel model)
         {
-            var timeErrorMessage = this.service.GetTimeErrorMessage(model.ActiveFrom, model.ActiveTo, model.ActivationDate);
+            var timeErrorMessage = this.service.GetTimeErrorMessage(model.ActiveFrom, model.ActiveTo, model.ActivationDate, model.TimeZone);
             if (timeErrorMessage != null)
             {
                 model.Error = timeErrorMessage;
                 return this.View(model);
             }
 
-            await this.service.UpdateAsync(model.Id, model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo);
+            await this.service.UpdateAsync(model.Id, model.Name, model.ActivationDate, model.ActiveFrom, model.ActiveTo, model.TimeZone);
 
             return this.RedirectToAction("EventDetails", new { id = model.Id });
         }

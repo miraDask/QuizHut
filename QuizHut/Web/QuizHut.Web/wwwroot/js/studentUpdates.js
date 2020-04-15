@@ -22,7 +22,7 @@
 
         connection.on("NewPendingEventMessage", () => {
             let li = document.createElement('li');
-            li.innerHTML = `<i class="fas fa-check text-warning mr-3"></i>You have one new pending event waiting for you!
+            li.innerHTML = `<i class="fas fa-check text-warning mr-3"></i>You have one new pending event!
                              <a href="/Students/StudentPendingEventsAll" class="btn btn-outline-warning btn-icon btn-sm">
                              <i class="fas fa-arrow-right text-warning"></i>
                              </a>

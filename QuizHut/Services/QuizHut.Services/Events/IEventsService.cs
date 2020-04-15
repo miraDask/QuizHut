@@ -27,9 +27,9 @@
 
         Task DeleteAsync(string eventId);
 
-        Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string ativeTo);
+        Task UpdateAsync(string id, string name, string activationDate, string activeFrom, string ativeTo, string timeZone);
 
-        Task AssigQuizToEventAsync(string eventId, string quizId);
+        Task AssigQuizToEventAsync(string eventId, string quizId, string timeZone);
 
         Task AssignGroupsToEventAsync(IList<string> groupIds, string eventId);
 
@@ -39,7 +39,7 @@
 
         Task DeleteQuizFromEventAsync(string eventId, string quizId);
 
-        string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate);
+        string GetTimeErrorMessage(string activeFrom, string activeTo, string activationDate, string timeZone);
 
         Task SendEmailsToEventGroups(string eventId, string emailHtmlContent);
     }
