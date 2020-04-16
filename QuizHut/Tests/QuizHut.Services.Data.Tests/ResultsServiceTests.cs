@@ -136,7 +136,7 @@
             {
                 Event = "First Event",
                 Quiz = "quiz",
-                Date = firstEventDate.Date.ToString("dd/MM/yyyy"),
+                EventActivationDateAndTime = firstEventDate,
                 Score = "2/10",
             };
 
@@ -144,7 +144,7 @@
             {
                 Event = "Second Event",
                 Quiz = "quiz",
-                Date = secondEventDate.Date.ToString("dd/MM/yyyy"),
+                EventActivationDateAndTime = secondEventDate,
                 Score = "5/10",
             };
 
@@ -178,7 +178,7 @@
             {
                 Event = "First Event",
                 Quiz = "quiz",
-                Date = firstEventDate.Date.ToString("dd/MM/yyyy"),
+                EventActivationDateAndTime = firstEventDate,
                 Score = "2/10",
             };
 
