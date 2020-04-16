@@ -50,7 +50,7 @@
                 Name = firstCategory.Name,
                 Id = firstCategory.Id,
                 QuizzesCount = firstCategory.Quizzes.Count().ToString(),
-                CreatedOn = firstCategory.CreatedOn.ToString("dd/MM/yyyy"),
+                CreatedOn = firstCategory.CreatedOn,
             };
 
             var secondModel = new CategoryViewModel()
@@ -58,7 +58,7 @@
                 Name = secondCategory.Name,
                 Id = secondCategory.Id,
                 QuizzesCount = secondCategory.Quizzes.Count().ToString(),
-                CreatedOn = secondCategory.CreatedOn.ToString("dd/MM/yyyy"),
+                CreatedOn = secondCategory.CreatedOn,
             };
 
             var resultModelCollection = await this.Service.GetAllPerPage<CategoryViewModel>(1, 2, creatorId);
@@ -109,7 +109,7 @@
                 Name = firstCategory.Name,
                 Id = firstCategory.Id,
                 QuizzesCount = firstCategory.Quizzes.Count().ToString(),
-                CreatedOn = firstCategory.CreatedOn.ToString("dd/MM/yyyy"),
+                CreatedOn = firstCategory.CreatedOn,
             };
 
             var resultModelCollection = await this.Service.GetAllPerPage<CategoryViewModel>(2, 1, creatorId);

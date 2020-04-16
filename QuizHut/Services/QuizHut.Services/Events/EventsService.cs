@@ -283,9 +283,10 @@
 
         public int GetEventsCountByStudentIdAndStatus(string id, Status status)
         {
-            var query = this.repository.AllAsNoTracking()
-                   .Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == id)))
-                   .Where(x => x.Status == status);
+            var query = this.repository
+                            .AllAsNoTracking()
+                            .Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == id)))
+                            .Where(x => x.Status == status);
 
             if (status == Status.Active)
             {
