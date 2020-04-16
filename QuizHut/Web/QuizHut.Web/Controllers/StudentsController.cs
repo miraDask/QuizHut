@@ -5,12 +5,15 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Results;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Quizzes;
     using QuizHut.Web.ViewModels.Results;
@@ -22,15 +25,18 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IResultsService resultService;
         private readonly IEventsService eventsService;
+        private readonly IDateTimeConverter dateTimeConverter;
 
         public StudentsController(
             UserManager<ApplicationUser> userManager,
             IResultsService resultService,
-            IEventsService eventsService)
+            IEventsService eventsService,
+            IDateTimeConverter dateTimeConverter)
         {
             this.userManager = userManager;
             this.resultService = resultService;
             this.eventsService = eventsService;
+            this.dateTimeConverter = dateTimeConverter;
         }
 
         public IActionResult Index(string password, string errorText)
@@ -60,6 +66,12 @@
             {
                 pagesCount = (int)Math.Ceiling(allResultsCount / (decimal)countPerPage);
                 var results = await this.resultService.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var result in results)
+                {
+                    result.Date = this.dateTimeConverter.GetDate(result.EventActivationDateAndTime, timeZoneIana);
+                }
+
                 model.PagesCount = pagesCount;
                 model.Results = results;
             }
@@ -83,6 +95,12 @@
                 pagesCount = (int)Math.Ceiling(allActiveEventsCount / (decimal)countPerPage);
                 var activeEvents = await this.eventsService
                .GetPerPageByStudentIdFilteredByStatusAsync<StudentActiveEventViewModel>(Status.Active, studentId, page, countPerPage, false);
+
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var activeEvent in activeEvents)
+                {
+                    activeEvent.Duration = this.dateTimeConverter.GetDurationString(activeEvent.ActivationDateAndTime, activeEvent.DurationOfActivity, timeZoneIana);
+                }
 
                 model.PagesCount = pagesCount;
                 model.Events = activeEvents;
@@ -108,6 +126,8 @@
                 var endedEvents = await this.eventsService
                .GetPerPageByStudentIdFilteredByStatusAsync<StudentEndedEventViewModel>(Status.Ended, studentId, page, countPerPage, true);
                 var scores = await this.resultService.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+
                 foreach (var endenEvent in endedEvents)
                 {
                     if (endenEvent.QuizName == null)
@@ -116,6 +136,7 @@
                     }
 
                     endenEvent.Score = scores.FirstOrDefault(x => x.EventId == endenEvent.Id);
+                    endenEvent.Date = this.dateTimeConverter.GetDate(endenEvent.ActivationDateAndTime, timeZoneIana);
                 }
 
                 model.PagesCount = pagesCount;
@@ -141,6 +162,14 @@
                 pagesCount = (int)Math.Ceiling(allPendingEventsCount / (decimal)countPerPage);
                 var pendingEvents = await this.eventsService
                .GetPerPageByStudentIdFilteredByStatusAsync<StudentPendingEventViewModel>(Status.Pending, studentId, page, countPerPage, false);
+
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var pendingEvent in pendingEvents)
+                {
+                    pendingEvent.Duration = this.dateTimeConverter.GetDurationString(pendingEvent.ActivationDateAndTime, pendingEvent.DurationOfActivity, timeZoneIana);
+                    pendingEvent.Date = this.dateTimeConverter.GetDate(pendingEvent.ActivationDateAndTime, timeZoneIana);
+                }
+
                 model.PagesCount = pagesCount;
                 model.Events = pendingEvents;
             }

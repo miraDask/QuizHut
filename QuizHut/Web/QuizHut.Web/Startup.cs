@@ -103,6 +103,7 @@
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(new LoggerFactory(), this.configuration["Sendgrid"]));
             services.AddTransient<IResultHelper, ResultHelper>();
+            services.AddTransient<IDateTimeConverter, DateTimeConverter>();
             services.AddTransient<IQuizzesService, QuizzesService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IAnswersService, AnswersService>();

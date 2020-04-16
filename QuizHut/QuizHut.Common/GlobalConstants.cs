@@ -61,5 +61,10 @@
 
             public const string EmptyEmailField = "You should enter email if you want to add somebody to role.";
         }
+
+        public static class Coockies
+        {
+            public const string TimeZoneIana = "timeZoneIana";
+        }
     }
 }

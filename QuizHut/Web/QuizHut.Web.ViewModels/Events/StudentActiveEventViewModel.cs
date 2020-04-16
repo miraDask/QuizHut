@@ -1,5 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Events
 {
+    using System;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -18,6 +20,10 @@
 
         public string Duration { get; set; }
 
+        public DateTime ActivationDateAndTime { get; set; }
+
+        public TimeSpan DurationOfActivity { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Event, StudentActiveEventViewModel>()
@@ -25,11 +31,6 @@
                     x => x.QuestionsCount,
                     opt => opt.MapFrom(
                         x => x.Quiz.Questions.Count))
-                .ForMember(
-                    x => x.Duration,
-                    opt => opt.MapFrom(
-                        x => $"{x.ActivationDateAndTime.ToLocalTime().Hour.ToString("D2")}:{x.ActivationDateAndTime.ToLocalTime().Minute.ToString("D2")}" +
-                        $" - {x.ActivationDateAndTime.ToLocalTime().Add(x.DurationOfActivity).Hour.ToString("D2")}:{x.ActivationDateAndTime.ToLocalTime().Add(x.DurationOfActivity).Minute.ToString("D2")}"))
                 .ForMember(
                     x => x.TimeToTake,
                     opt => opt.MapFrom(x => x.Quiz.Timer != null ? $"{x.Quiz.Timer.ToString()} minutes" : "no time limit"));

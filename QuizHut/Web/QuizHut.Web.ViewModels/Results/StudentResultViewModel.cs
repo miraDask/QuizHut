@@ -1,5 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Results
 {
+    using System;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -12,6 +14,8 @@
 
         public string Date { get; set; }
 
+        public DateTime EventActivationDateAndTime { get; set; }
+
         public string Score { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
@@ -20,9 +24,6 @@
               .ForMember(
                   x => x.Event,
                   opt => opt.MapFrom(x => x.EventName))
-              .ForMember(
-                  x => x.Date,
-                  opt => opt.MapFrom(x => x.EventActivationDateAndTime.Date.ToString("dd/MM/yyyy")))
               .ForMember(
                   x => x.Quiz,
                   opt => opt.MapFrom(x => x.QuizName))
