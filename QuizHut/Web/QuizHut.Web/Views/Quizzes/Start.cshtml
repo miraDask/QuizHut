@@ -12,7 +12,7 @@
     @if (Model.Timer != 0)
     {
         <input id="minutes" type="hidden" value="@Model.Timer" />
-        <div id="clockdiv" style="display:none">
+        <div id="clockdiv" class="pt-2" style="display:none">
             <div>
                 <span class="minutes"></span>
             </div>
@@ -21,9 +21,9 @@
             </div>
         </div>
     }
-    <div class="col-12 offset-md-2 col-md-8 my-5 row">
-        <form id="@(Model.Questions.Count.ToString())f" method="post" class="col-11 ml-4 mt-2 mb-5">
-            <div id="details" class="component">
+    <div class="col-12 offset-md-2 col-md-8 my-3 row">
+        <form id="@(Model.Questions.Count.ToString())f" method="post" class="col-11 ml-4 mb-5">
+            <div id="details" class="component pt-5">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-info pb-0" style="font-size: xx-large">
                         <i class="far fa-list-alt"></i>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="card-body pt-1">
                         <h4 class="card-title">@Model.Name</h4>
-                        <input type="hidden" asp-for="@Model.Name"  value="@Model.Name" />
+                        <input type="hidden" asp-for="@Model.Name" value="@Model.Name" />
                         <p class="card-text border-top pt-2" style="display: block;">
                             <span class="text-primary mr-1">∗</span>@Model.Description
                         </p>
@@ -47,7 +47,33 @@
                     </div>
                 </div>
             </div>
+            @* pagination *@
+            @if (Model.Questions.Count > 1)
+            {
+                <div id="pagging" class="text-center my-1" style="display:none">
+                    <ul class="pagination justify-content-center">
+                        <li id="first" class="page-item">
+                            <a class="page-link">
+                                <i class="fas fa-long-arrow-alt-left"></i>
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= Model.Questions.Count; i++)
+                        {
+                            <li class="page-item number @i">
+                                <a class="page-link">
+                                    @i
+                                </a>
+                            </li>
 
+                        }
+                        <li id="last" class="page-item" >
+                            <a class="page-link" >
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
             @for (int i = 0; i < Model.Questions.Count; i++)
             {
                 var question = Model.Questions[i];
@@ -88,7 +114,7 @@
                     </div>
                 </div>
             }
-        <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
             <button type="submit" id="submit" class="btn btn-primary col-md-5 offset-md-3" asp-action="Submit" asp-controller="Quizzes" style="display:none">Submit Quiz</button>
         </form>
     </div>

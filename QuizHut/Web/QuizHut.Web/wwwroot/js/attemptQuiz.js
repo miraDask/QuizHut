@@ -37,7 +37,18 @@
             $('#submit').show();
             $('#details').hide();
             showQuestion(counter);
+            var pagginationBtns = [...document.getElementsByClassName('page-item number')];
+            pagginationBtns.forEach(x => $(x).click(loadQuestion));
+            $('#first').click(loadPreviousQuestion);
+            $('#last').click(loadNextQuestion);
         })
+    }
+
+    function loadQuestion(e) {
+        e.preventDefault();
+        hideQuestion(counter)
+        counter = parseInt(e.currentTarget.classList[e.currentTarget.classList.length - 1]);
+        showQuestion(counter);
     }
 
     function loadNextQuestion(e) {
@@ -46,7 +57,7 @@
         if (counter == questionsCount) {
             showQuestion(counter);
         } else {
-            showQuestion(counter + 1)
+            showQuestion(counter + 1);
         }
 
         if (counter < questionsCount) {
@@ -70,6 +81,17 @@
 
     function showQuestion(counter) {
         $(`#${counter}`).show();
+        if (counter == 1) {
+            $('#first').addClass('disabled');
+        } else if (counter == questionsCount) {
+            $('#last').addClass('disabled');
+        }
+        else {
+            $('#first').removeClass('disabled');
+            $('#last').removeClass('disabled');
+        }
+        $('.number').removeClass('active');
+        $(`.${counter}`).addClass('active');
     }
 
     function hideQuestion(counter) {
