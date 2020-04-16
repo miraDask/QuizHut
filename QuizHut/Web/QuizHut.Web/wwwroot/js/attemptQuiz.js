@@ -128,7 +128,7 @@
 
                 if (t.total <= 0) {
                     clearInterval(timeinterval);
-                    $('#submit').click();
+                    $('#submitResult').click();
                 }
             }
 

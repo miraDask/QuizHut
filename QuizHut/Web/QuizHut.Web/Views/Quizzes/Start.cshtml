@@ -66,8 +66,8 @@
                             </li>
 
                         }
-                        <li id="last" class="page-item" >
-                            <a class="page-link" >
+                        <li id="last" class="page-item">
+                            <a class="page-link">
                                 <i class="fas fa-long-arrow-alt-right"></i>
                             </a>
                         </li>
@@ -115,7 +115,32 @@
                 </div>
             }
             <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
-            <button type="submit" id="submit" class="btn btn-primary col-md-5 offset-md-3" asp-action="Submit" asp-controller="Quizzes" style="display:none">Submit Quiz</button>
+            <button id="submit" type="button" class="btn btn-primary col-md-5 offset-md-3" data-toggle="modal" data-target="#btn" style="display:none">
+                Submit Quiz
+            </button>
+            <!-- the modal -->
+            <div class="modal fade" id="btn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <h5>Are you sure you want to submit your result?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-success" type="submit" id="submitResult"
+                               asp-action="Submit" asp-controller="Quizzes">
+                                Submit
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
 </div>
