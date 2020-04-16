@@ -1,5 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
+    using System;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -13,16 +15,15 @@
 
         public int QuestionsCount { get; set; }
 
-        public string CreatedOn { get; set; }
+        public string CreatedOnDate { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public string Color { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Quiz, QuizListViewModel>()
-                .ForMember(
-                    x => x.CreatedOn,
-                    opt => opt.MapFrom(x => x.CreatedOn.ToString("dd/MM/yyyy")))
                 .ForMember(
                     x => x.QuestionsCount,
                     opt => opt.MapFrom(x => x.Questions.Count))

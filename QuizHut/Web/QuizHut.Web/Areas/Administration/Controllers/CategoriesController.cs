@@ -6,10 +6,12 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Common;
     using QuizHut.Data.Models;
     using QuizHut.Services.Categories;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Infrastructure.Filters;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Categories;
     using QuizHut.Web.ViewModels.Quizzes;
 
@@ -19,15 +21,18 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ICategoriesService service;
         private readonly IQuizzesService quizService;
+        private readonly IDateTimeConverter dateTimeConverter;
 
         public CategoriesController(
             UserManager<ApplicationUser> userManager,
             ICategoriesService service,
-            IQuizzesService quizService)
+            IQuizzesService quizService,
+            IDateTimeConverter dateTimeConverter)
         {
             this.userManager = userManager;
             this.service = service;
             this.quizService = quizService;
+            this.dateTimeConverter = dateTimeConverter;
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
@@ -47,6 +52,12 @@
             {
                 pagesCount = (int)Math.Ceiling(allCategoriesCreatedByTeacherCount / (decimal)countPerPage);
                 var categories = await this.service.GetAllPerPage<CategoryViewModel>(page, countPerPage, userId);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var category in categories)
+                {
+                    category.CreatedOnDate = this.dateTimeConverter.GetDate(category.CreatedOn, timeZoneIana);
+                }
+
                 model.Categories = categories;
                 model.PagesCount = pagesCount;
             }

@@ -26,14 +26,11 @@
 
         public TimeSpan DurationOfActivity { get; set; }
 
-        public string ActivationDate
-         => $"{this.ActivationDateAndTime.ToLocalTime().Date.ToString("dd/MM/yyyy")}";
+        public string ActivationDate { get; set; }
 
-        public string ActiveFrom
-        => $"{this.ActivationDateAndTime.ToLocalTime().Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Minute.ToString("D2")}";
+        public string ActiveFrom { get; set; }
 
-        public string ActiveTo
-        => $"{this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Minute.ToString("D2")}";
+        public string ActiveTo { get; set; }
 
         public string QuizName { get; set; }
 
@@ -46,9 +43,9 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Event, EventDetailsViewModel>()
-            .ForMember(
-                  x => x.QuizId,
-                  opt => opt.MapFrom(x => x.QuizId))
+            //.ForMember(
+            //      x => x.QuizId,
+            //      opt => opt.MapFrom(x => x.QuizId))
             .ForMember(
                   x => x.QuizName,
                   opt => opt.MapFrom(x => x.Quiz.Name));

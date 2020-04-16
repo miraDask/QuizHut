@@ -6,6 +6,6 @@
     {
         public string GetDurationString(DateTime activationDateAndTime, TimeSpan duration, string timeZoneIana);
 
-        public string GetDate(DateTime activationDateAndTime, string timeZoneIana);
+        public string GetDate(DateTime dateAndTime, string timeZoneIana);
     }
 }

@@ -14,6 +14,7 @@
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Common;
     using QuizHut.Web.Infrastructure.Filters;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Questions;
     using QuizHut.Web.ViewModels.Quizzes;
     using Rotativa.AspNetCore;
@@ -25,17 +26,20 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
         private readonly IQuestionsService questionsService;
+        private readonly IDateTimeConverter dateTimeConverter;
         private readonly IHubContext<QuizHub> hub;
 
         public QuizzesController(
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
             IQuestionsService questionsService,
+            IDateTimeConverter dateTimeConverter,
             IHubContext<QuizHub> hub)
         {
             this.userManager = userManager;
             this.quizService = quizService;
             this.questionsService = questionsService;
+            this.dateTimeConverter = dateTimeConverter;
             this.hub = hub;
         }
 
@@ -118,6 +122,12 @@
             {
                 pagesCount = (int)Math.Ceiling(allQuizzesCreatedByTeacher / (decimal)countPerPage);
                 var quizzes = await this.quizService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, userId);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var quiz in quizzes)
+                {
+                    quiz.CreatedOnDate = this.dateTimeConverter.GetDate(quiz.CreatedOn, timeZoneIana);
+                }
+
                 model.Quizzes = quizzes;
                 model.PagesCount = pagesCount;
             }

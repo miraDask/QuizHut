@@ -6,9 +6,9 @@
 
     public class DateTimeConverter : IDateTimeConverter
     {
-        public string GetDate(DateTime activationDateAndTime, string timeZoneIana)
+        public string GetDate(DateTime dateAndTime, string timeZoneIana)
         {
-            var activationDateAndTimeToUserLocalTime = this.GetDateTimeLocalToTheUser(activationDateAndTime, timeZoneIana);
+            var activationDateAndTimeToUserLocalTime = this.GetDateTimeLocalToTheUser(dateAndTime, timeZoneIana);
             return activationDateAndTimeToUserLocalTime.Date.ToString("dd/MM/yyyy");
         }
 
@@ -22,10 +22,10 @@
                    $":{activationDateAndTimeToUserLocalTime.Add(duration).Minute.ToString("D2")}";
         }
 
-        private DateTime GetDateTimeLocalToTheUser(DateTime activationDateAndTime, string timeZoneIana)
+        private DateTime GetDateTimeLocalToTheUser(DateTime dateAndTime, string timeZoneIana)
         {
             var windowsTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(timeZoneIana));
-            return TimeZoneInfo.ConvertTimeFromUtc(activationDateAndTime, windowsTimeZone);
+            return TimeZoneInfo.ConvertTimeFromUtc(dateAndTime, windowsTimeZone);
         }
     }
 }

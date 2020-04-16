@@ -18,12 +18,9 @@
 
         public bool IsDeleted { get; set; }
 
-        public string StartDate
-            => $"{this.ActivationDateAndTime.ToLocalTime().Date.ToString("dd/MM/yyyy")}";
+        public string StartDate { get; set; }
 
-        public string Duration
-            => $"{this.ActivationDateAndTime.ToLocalTime().Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Minute.ToString("D2")}" +
-               $" - {this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Hour.ToString("D2")}:{this.ActivationDateAndTime.ToLocalTime().Add(this.DurationOfActivity).Minute.ToString("D2")}";
+        public string Duration { get; set; }
 
         public string Status { get; set; }
 

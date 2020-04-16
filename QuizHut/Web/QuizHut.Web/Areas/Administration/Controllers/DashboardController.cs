@@ -13,6 +13,7 @@
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -27,6 +28,7 @@
         private readonly IEventsService eventService;
         private readonly IGroupsService groupsService;
         private readonly IQuizzesService quizzesService;
+        private readonly IDateTimeConverter dateTimeConverter;
         private readonly UserManager<ApplicationUser> userManager;
 
         public DashboardController(
@@ -34,12 +36,14 @@
             IEventsService eventService,
             IGroupsService groupsService,
             IQuizzesService quizzesService,
+            IDateTimeConverter dateTimeConverter,
             UserManager<ApplicationUser> userManager)
         {
             this.userService = userService;
             this.eventService = eventService;
             this.groupsService = groupsService;
             this.quizzesService = quizzesService;
+            this.dateTimeConverter = dateTimeConverter;
             this.userManager = userManager;
         }
 
@@ -117,6 +121,13 @@
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
                 var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var @event in events)
+                {
+                    @event.Duration = this.dateTimeConverter.GetDurationString(@event.ActivationDateAndTime, @event.DurationOfActivity, timeZoneIana);
+                    @event.StartDate = this.dateTimeConverter.GetDate(@event.ActivationDateAndTime, timeZoneIana);
+                }
+
                 model.PagesCount = pagesCount;
                 model.Events = events;
             }
@@ -139,6 +150,12 @@
             {
                 pagesCount = (int)Math.Ceiling(allGroupsCount / (decimal)countPerPage);
                 var groups = await this.groupsService.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var group in groups)
+                {
+                    group.CreatedOnDate = this.dateTimeConverter.GetDate(group.CreatedOn, timeZoneIana);
+                }
+
                 model.Groups = groups;
                 model.PagesCount = pagesCount;
             }
@@ -161,6 +178,12 @@
             {
                 pagesCount = (int)Math.Ceiling(allQuizzesCount / (decimal)countPerPage);
                 var quizzes = await this.quizzesService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var quiz in quizzes)
+                {
+                    quiz.CreatedOnDate = this.dateTimeConverter.GetDate(quiz.CreatedOn, timeZoneIana);
+                }
+
                 model.PagesCount = pagesCount;
                 model.Quizzes = quizzes;
             }

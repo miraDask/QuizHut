@@ -1,5 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Groups
 {
+    using System;
+
     using AutoMapper;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -14,14 +16,13 @@
 
         public int EventsCount { get; set; }
 
-        public string CreatedOn { get; set; }
+        public string CreatedOnDate { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Group, GroupListViewModel>()
-                .ForMember(
-                    x => x.CreatedOn,
-                    opt => opt.MapFrom(x => x.CreatedOn.ToString("dd/MM/yyyy")))
                 .ForMember(
                     x => x.StudentsCount,
                     opt => opt.MapFrom(x => x.StudentstGroups.Count))

@@ -17,6 +17,7 @@
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Infrastructure.Filters;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Quizzes;
@@ -27,6 +28,7 @@
         private readonly IEventsService service;
         private readonly IQuizzesService quizService;
         private readonly IGroupsService groupsService;
+        private readonly IDateTimeConverter dateTimeConverter;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IHubContext<QuizHub> hub;
 
@@ -34,12 +36,14 @@
             IEventsService service,
             IQuizzesService quizService,
             IGroupsService groupsService,
+            IDateTimeConverter dateTimeConverter,
             UserManager<ApplicationUser> userManager,
             IHubContext<QuizHub> hub)
         {
             this.service = service;
             this.quizService = quizService;
             this.groupsService = groupsService;
+            this.dateTimeConverter = dateTimeConverter;
             this.userManager = userManager;
             this.hub = hub;
         }
@@ -61,6 +65,13 @@
             {
                 pagesCount = (int)Math.Ceiling(allEventsCreatedByTeacher / (decimal)countPerPage);
                 var events = await this.service.GetAllPerPage<EventListViewModel>(page, countPerPage, userId);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var @event in events)
+                {
+                    @event.Duration = this.dateTimeConverter.GetDurationString(@event.ActivationDateAndTime, @event.DurationOfActivity, timeZoneIana);
+                    @event.StartDate = this.dateTimeConverter.GetDate(@event.ActivationDateAndTime, timeZoneIana);
+                }
+
                 model.Events = events;
                 model.PagesCount = pagesCount;
             }
@@ -198,6 +209,11 @@
         {
             var groups = await this.groupsService.GetAllByEventIdAsync<GroupAssignViewModel>(id);
             var model = await this.service.GetEventModelByIdAsync<EventDetailsViewModel>(id);
+            var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+            var duration = this.dateTimeConverter.GetDurationString(model.ActivationDateAndTime, model.DurationOfActivity, timeZoneIana).Split(" - ");
+            model.ActivationDate = this.dateTimeConverter.GetDate(model.ActivationDateAndTime, timeZoneIana);
+            model.ActiveFrom = duration[0];
+            model.ActiveTo = duration[1];
             model.Groups = groups;
 
             if (messagesAreSend != null)

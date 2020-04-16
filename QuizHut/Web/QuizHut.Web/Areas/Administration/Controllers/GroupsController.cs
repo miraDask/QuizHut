@@ -15,6 +15,7 @@
     using QuizHut.Services.Groups;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
+    using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Events;
     using QuizHut.Web.ViewModels.Groups;
     using QuizHut.Web.ViewModels.Students;
@@ -25,17 +26,20 @@
         private readonly IGroupsService service;
         private readonly IEventsService eventService;
         private readonly IUsersService userService;
+        private readonly IDateTimeConverter dateTimeConverter;
         private readonly UserManager<ApplicationUser> userManager;
 
         public GroupsController(
             IGroupsService service,
             IEventsService eventService,
             IUsersService userService,
+            IDateTimeConverter dateTimeConverter,
             UserManager<ApplicationUser> userManager)
         {
             this.service = service;
             this.eventService = eventService;
             this.userService = userService;
+            this.dateTimeConverter = dateTimeConverter;
             this.userManager = userManager;
         }
 
@@ -56,6 +60,12 @@
             {
                 pagesCount = (int)Math.Ceiling(allGroupsCreatedByTeacherCount / (decimal)countPerPage);
                 var groups = await this.service.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, userId);
+                var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
+                foreach (var group in groups)
+                {
+                    group.CreatedOnDate = this.dateTimeConverter.GetDate(group.CreatedOn, timeZoneIana);
+                }
+
                 model.Groups = groups;
                 model.PagesCount = pagesCount;
             }
