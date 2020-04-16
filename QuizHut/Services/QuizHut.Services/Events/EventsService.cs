@@ -330,10 +330,10 @@
         {
             var zone = TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(timeZone));
             var userLocalTimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, zone);
-            var activationDateAndTimeToUserLocalTime = TimeZoneInfo.ConvertTimeFromUtc(activationDateAndTime, zone);
+            var userTimeToUtc = userLocalTimeNow.ToUniversalTime();
 
-            var activationDelay = activationDateAndTimeToUserLocalTime - userLocalTimeNow;
-            var endingDelay = activationDateAndTimeToUserLocalTime.Add(durationOfActivity) - userLocalTimeNow;
+            var activationDelay = activationDateAndTime - userTimeToUtc;
+            var endingDelay = activationDateAndTime.Add(durationOfActivity) - userTimeToUtc;
             var studentsNames = await this.GetStudentsNamesByEventIdAsync(eventId);
 
             if (eventStatus == Status.Active)
