@@ -29,7 +29,7 @@
 
         Task<IList<T>> GetUnAssignedToCategoryByCreatorIdAsync<T>(string categoryId, string creatorId);
 
-        Task<bool> HasUserPermition(string userId, string quizId);
+        Task<bool[]> HasUserPermition(string userId, string quizId, bool isQuizTaken);
 
         Task AssignQuizToEventAsync(string eventId, string quizId);
 

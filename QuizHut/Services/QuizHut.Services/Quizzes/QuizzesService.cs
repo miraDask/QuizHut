@@ -114,7 +114,7 @@
             .Select(x => x.Id)
             .FirstOrDefaultAsync();
 
-        public async Task<bool> HasUserPermition(string userId, string quizId)
+        public async Task<bool[]> HasUserPermition(string userId, string quizId, bool isQuizTaken)
         {
             var quizQuery = this.quizRepository
                 .AllAsNoTracking()
@@ -123,13 +123,18 @@
             var creatorId = await quizQuery.Select(x => x.CreatorId).FirstOrDefaultAsync();
             if (creatorId == userId)
             {
-                return true;
+                return new bool[] { true, true };
+            }
+
+            if (isQuizTaken)
+            {
+                return new bool[] { false, false };
             }
 
             var eventIsActive = await quizQuery.Select(x => x.Event.Status == Status.Active).FirstOrDefaultAsync();
             if (!eventIsActive)
             {
-                return false;
+                return new bool[] { false, false };
             }
 
             var results = await quizQuery
@@ -137,7 +142,7 @@
                 .ToListAsync();
             if (results.Count() > 0)
             {
-                return false;
+                return new bool[] { false, false };
             }
 
             var eventGroups = await quizQuery
@@ -146,7 +151,7 @@
                 .Any(x => x.StudentId == userId)))
                 .ToListAsync();
 
-            return eventGroups.Count() > 0;
+            return eventGroups.Count() > 0 ? new bool[] { true, false } : new bool[] { false, false };
         }
 
         public async Task AssignQuizToEventAsync(string eventId, string quizId)
