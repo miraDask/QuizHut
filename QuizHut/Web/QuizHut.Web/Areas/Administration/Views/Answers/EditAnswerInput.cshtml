@@ -8,7 +8,7 @@
         <partial name="_BublesAndCirclesPrtial" />
     </div>
     <div class="col-12 offset-md-2 col-md-8 row">
-        <form method="post" class="col-11 ml-4" asp-area="Administration" asp-action="Update" asp-controller="Answers">
+        <form method="post" class="col-12" asp-area="Administration" asp-action="Update" asp-controller="Answers">
             <div class="component">
                 <div class="card mb-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -29,7 +29,7 @@
                     </div>
                     <div class="card-footer pb-5">
                         <div class="input-group">
-                            <input type="text" class="form-control" asp-for="Text" value="@Model.Text">
+                            <textarea type="text" class="form-control" asp-for="Text" value="@Model.Text"></textarea>
                             <input type="hidden" class="form-control" asp-for="Id" value="@Model.Id">
                         </div>
                         <span asp-validation-for="@Model.Text" class="text-danger"></span>
@@ -54,5 +54,14 @@
 @section Scripts {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
+    <script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: "textarea",
+            plugins: [
+                "image paste table link code media"
+            ]
+        });
+    </script>
 }
 

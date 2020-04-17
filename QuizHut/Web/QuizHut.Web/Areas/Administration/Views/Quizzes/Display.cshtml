@@ -81,7 +81,7 @@
                 </tr>
                 <tr class="table-active bg-white">
                     <th scope="row">Description</th>
-                    <td>@Model.Details.Description</td>
+                    <td>@Html.Raw(Model.Details.SanitizedDescription)</td>
                 </tr>
                 <tr class="table-active bg-light">
                     <th scope="row">Timer</th>

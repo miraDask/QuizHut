@@ -57,14 +57,14 @@
     <hr>
     @foreach (var question in Model.Questions.OrderBy(x => x.Number))
     {
-        <div class=" mb-2">
-            <span class="pr-2">@question.Number.</span>@question.Text
+        <div class="mb-2 d-inline-block">
+            <span class="pr-2">@question.Number.</span>@Html.Raw(question.SanitizedText)
         </div>
         foreach (var answer in question.Answers)
         {
             <div>
                 <input type="checkbox" class="mr-2">
-                <label>@answer.Text</label>
+                <label>@Html.Raw(answer.SanitizedText)</label>
             </div>
         }
         <hr>

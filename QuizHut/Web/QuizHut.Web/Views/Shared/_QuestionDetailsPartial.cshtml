@@ -6,156 +6,160 @@
     var deleteTarget = "#" + deleteId;
 }
 
-<div class="form-group flex-grow-1 d-inline">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 py-2 pr-1">
-        <div class="container">
-            <h5 class="mb-0">Question  @Model.Number</h5>
-            <button class="navbar-toggler collapsed bg-primary mx-1"
-                    type="button" data-toggle="collapse"
-                    data-target="@target"
-                    aria-controls="@navbarNavDropdownId"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-primary col-lg-12"
-                                asp-area="Administration"
-                                asp-action="ApendAnswerInput"
-                                asp-controller="Answers"
-                                asp-route-id="@Model.Id">
-                            Add Answer
-                        </a>
-                    </li>
-                    <li class="nav-item m-1">
-                        <!-- button that opens the modal -->
-                        <a class="nav-link btn btn-primary col-lg-12" data-toggle="modal" data-target="@deleteTarget">
-                            Delete
-                        </a>
-                        <!-- the modal -->
-                        <div class="modal fade" id="@deleteId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body text-center">
-                                        <h5>Are you sure you want to delete this question?</h5>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a asp-area="Administration"
-                                           asp-action="Delete"
-                                           asp-controller="Questions"
-                                           asp-route-id="@Model.Id"
-                                           class="btn btn-success">
-                                            Delete
-                                        </a>
-                                        <a class="btn btn-danger" data-dismiss="modal">No!</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item m-1">
-                        <a asp-area="Administration"
-                           asp-action="EditQuestionInput"
-                           asp-controller="Questions"
-                           asp-route-id="@Model.Id"
-                           asp-route-page="@Model.Number"
-                           class="nav-link  btn btn-primary col-lg-12">
-                            Edit
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <input type="text"
-           class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate"
-           disabled
-           name="@Model.Text"
-           value="@Model.Text">
-    @*answers*@
-    @for (int i = 0; i < Model.Answers.Count; i++)
-    {
-        var answerNavbarNavDropdownId = "answerNavbarNavDropdown" + Model.Number + i;
-        var targetAnswer = "#" + answerNavbarNavDropdownId;
-        var deleteAnswerId = "answer" + Model.Number + i;
-        var targetDeleteAnswer = "#" + deleteAnswerId;
-        var answer = Model.Answers[i];
-
-        <div class="form-group flex-grow-1 d-inline">
-            <nav class="navbar navbar-expand-lg  bg-light navbar-dark p-0">
-                <div class="container">
-                    <div class="form-group mb-0">
-                        <div class="mt-2">
-                            <input type="checkbox" disabled asp-for="@answer.IsRightAnswer" value="true">
-                            <label class="display-6">Answer</label>
-                        </div>
-                    </div>
-                    <button class="navbar-toggler collapsed bg-primary mr-2"
-                            type="button" data-toggle="collapse"
-                            data-target="@targetAnswer"
-                            aria-controls="@answerNavbarNavDropdownId"
-                            aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse text-center collapse" id="@answerNavbarNavDropdownId">
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item m-1">
-                                <!-- button that opens the modal -->
-                                <button type="button" class="nav-link btn btn-primary col-12" data-toggle="modal" data-target="@targetDeleteAnswer">
-                                    Delete
-                                </button>
-                                <!-- the modal -->
-                                <div class="modal fade" id="@deleteAnswerId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body text-center">
-                                                <h5>Are you sure you want to delete this answer?</h5>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a class="btn btn-success"
-                                                   asp-action="Delete"
-                                                   asp-controller="Answers"
-                                                   asp-route-id="@answer.Id">
-                                                    Delete
-                                                </a>
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
-                                            </div>
+    <div class="form-group flex-grow-1 d-inline">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-neutral mt-4 py-2 pr-1">
+            <div class="container">
+                <h5 class="mb-0">Question  @Model.Number</h5>
+                <button class="navbar-toggler collapsed bg-primary mx-1"
+                        type="button" data-toggle="collapse"
+                        data-target="@target"
+                        aria-controls="@navbarNavDropdownId"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse text-center collapse" id="@navbarNavDropdownId">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item m-1">
+                            <a class="nav-link  btn btn-primary col-lg-12"
+                               asp-area="Administration"
+                               asp-action="ApendAnswerInput"
+                               asp-controller="Answers"
+                               asp-route-id="@Model.Id">
+                                Add Answer
+                            </a>
+                        </li>
+                        <li class="nav-item m-1">
+                            <!-- button that opens the modal -->
+                            <a class="nav-link btn btn-primary col-lg-12" data-toggle="modal" data-target="@deleteTarget">
+                                Delete
+                            </a>
+                            <!-- the modal -->
+                            <div class="modal fade" id="@deleteId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <h5>Are you sure you want to delete this question?</h5>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a asp-area="Administration"
+                                               asp-action="Delete"
+                                               asp-controller="Questions"
+                                               asp-route-id="@Model.Id"
+                                               class="btn btn-success">
+                                                Delete
+                                            </a>
+                                            <a class="btn btn-danger" data-dismiss="modal">No!</a>
                                         </div>
                                     </div>
                                 </div>
-                            </li>
-                            <li class="nav-item m-1">
-                                <a class="nav-link  btn btn-primary"
-                                   asp-action="EditAnswerInput"
-                                   asp-controller="Answers"
-                                   asp-route-id="@answer.Id">
-                                    Edit
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+                        </li>
+                        <li class="nav-item m-1">
+                            <a asp-area="Administration"
+                               asp-action="EditQuestionInput"
+                               asp-controller="Questions"
+                               asp-route-id="@Model.Id"
+                               asp-route-page="@Model.Number"
+                               class="nav-link  btn btn-primary col-lg-12">
+                                Edit
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </nav>
-            <input type="text"
-                   class="form-control form-control-lg flex-grow-1 mr-2 d-inline text-truncate"
-                   disabled
-                   asp-for="@answer.Text"
-                   value="@answer.Text">
-        </div>
-    }
-</div>
+            </div>
+        </nav>
+        <table class="table table-hover bg-light">
+            <thead>
+            <tr>
+                <td scope="col" class="pb-0 pl-3">@Html.Raw(Model.SanitizedText)</td>
+            </tr>
+            </thead>
+        </table>
+        @*answers*@
+        @for (int i = 0; i < Model.Answers.Count; i++)
+        {
+            var answerNavbarNavDropdownId = "answerNavbarNavDropdown" + Model.Number + i;
+            var targetAnswer = "#" + answerNavbarNavDropdownId;
+            var deleteAnswerId = "answer" + Model.Number + i;
+            var targetDeleteAnswer = "#" + deleteAnswerId;
+            var answer = Model.Answers[i];
+
+            <div class="form-group flex-grow-1 d-inline">
+                <nav class="navbar navbar-expand-lg table-active navbar-dark p-0">
+                    <div class="container">
+                        <div class="form-group mb-0">
+                            <div class="mt-2">
+                                <input type="checkbox" disabled asp-for="@answer.IsRightAnswer" value="true">
+                                <label class="display-6">Answer</label>
+                            </div>
+                        </div>
+                        <button class="navbar-toggler collapsed bg-primary mr-2"
+                                type="button" data-toggle="collapse"
+                                data-target="@targetAnswer"
+                                aria-controls="@answerNavbarNavDropdownId"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="navbar-collapse text-center collapse" id="@answerNavbarNavDropdownId">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item m-1">
+                                    <!-- button that opens the modal -->
+                                    <button type="button" class="nav-link btn btn-primary col-12" data-toggle="modal" data-target="@targetDeleteAnswer">
+                                        Delete
+                                    </button>
+                                    <!-- the modal -->
+                                    <div class="modal fade" id="@deleteAnswerId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <h5>Are you sure you want to delete this answer?</h5>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a class="btn btn-success"
+                                                       asp-action="Delete"
+                                                       asp-controller="Answers"
+                                                       asp-route-id="@answer.Id">
+                                                        Delete
+                                                    </a>
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="nav-item m-1">
+                                    <a class="nav-link  btn btn-primary"
+                                       asp-action="EditAnswerInput"
+                                       asp-controller="Answers"
+                                       asp-route-id="@answer.Id">
+                                        Edit
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td scope="col" class="pb-0 pl-3 bg-light">@Html.Raw(answer.SanitizedText)</td>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        }
+    </div>

@@ -3,7 +3,7 @@
   "defaultProvider": "jsdelivr",
   "libraries": [
     {
-      "library": "jquery@3.4.1",
+      "library": "jquery@3.5.0",
       "destination": "wwwroot/lib/jquery/",
       "files": [
         "dist/jquery.min.js",
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "library": "@fortawesome/fontawesome-free@5.12.1",
+      "library": "@fortawesome/fontawesome-free@5.13.0",
       "destination": "wwwroot/lib/fontawesome/",
       "files": [
         "webfonts/fa-brands-400.eot",
@@ -64,6 +64,23 @@
       "destination": "wwwroot/lib/signalr/",
       "files": [
         "dist/browser/signalr.min.js"
+      ]
+    },
+    {
+      "library": "tinymce@5.2.1",
+      "destination": "wwwroot/lib/tinymce/",
+      "files": [
+        "tinymce.min.js",
+        "themes/silver/theme.min.js",
+        "skins/ui/oxide/content.min.css",
+        "skins/ui/oxide/skin.min.css",
+        "skins/content/default/content.min.css",
+        "plugins/image/plugin.min.js",
+        "plugins/paste/plugin.min.js",
+        "plugins/table/plugin.min.js",
+        "plugins/link/plugin.min.js",
+        "plugins/code/plugin.min.js",
+        "plugins/media/plugin.min.js"
       ]
     }
 

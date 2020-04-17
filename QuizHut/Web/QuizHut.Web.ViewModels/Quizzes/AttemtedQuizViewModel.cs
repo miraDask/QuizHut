@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using Ganss.XSS;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
 
@@ -17,6 +18,8 @@
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public string SanitizedDescription => new HtmlSanitizer().Sanitize(this.Description);
 
         public int Timer { get; set; }
 

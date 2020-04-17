@@ -43,7 +43,7 @@
                         <h4 class="card-title">@Model.Name</h4>
                         <input type="hidden" asp-for="@Model.Name" value="@Model.Name" />
                         <p class="card-text border-top pt-2" style="display: block;">
-                            <span class="text-primary mr-1">∗</span>@Model.Description
+                            <span class="text-primary mr-1">∗</span>@Html.Raw(Model.SanitizedDescription)
                         </p>
                     </div>
                     <div class="card-footer py-3">
@@ -52,7 +52,12 @@
                         </div>
                         <div class="row mx-1 text-white">
                             <a id="start" class="btn btn-danger col-md-4 mt-5 offset-md-1">Start</a>
-                            <a class="btn btn-success col-md-4 mt-md-5 mt-2 offset-md-2" asp-area="@area" asp-action="Index" asp-controller="Home">Cancel</a>
+                            <a class="btn btn-success col-md-4 mt-md-5 mt-2 offset-md-2"
+                               asp-area="@area"
+                               asp-action="Index"
+                               asp-controller="Home">
+                            Cancel
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -98,7 +103,7 @@
                         </div>
 
                         <div class="card-title text-center m-1">
-                            <h4>@question.Text</h4>
+                            <h4 class="quiz">@Html.Raw(question.SanitizedText)</h4>
                         </div>
                         <hr>
                         <div class="card-body px-4">
@@ -108,9 +113,8 @@
                                 <div class="form-group mb-0">
                                     <div class="mt-2">
                                         @Html.EditorFor(x => x.Questions[i].Answers[j].IsRightAnswerAssumption)
-                                        <h6 class="d-inline-block mt-0 ml-1">@answer.Text</h6>
+                                        <h6 class="d-inline-block mt-0 ml-1 quiz">@Html.Raw(answer.SanitizedText)</h6>
                                         @Html.HiddenFor(model => model.Questions[i].Answers[j].Id)
-
                                     </div>
                                 </div>
                             }

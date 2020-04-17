@@ -54,6 +54,7 @@
                 {
                     Name = $"Test quiz {i}",
                     Password = new Password() { Content = $"password{i}" },
+                    Description = $"<p>This is test quiz {i}</p>",
                 };
 
                 await dbContext.Quizzes.AddAsync(quiz);
@@ -62,7 +63,7 @@
                 {
                     var question = new Question()
                     {
-                        Text = $"Question {j}",
+                        Text = $"<p>Question {j}</p>",
                         Number = j,
                     };
 
@@ -70,7 +71,7 @@
                     {
                         var answer = new Answer
                         {
-                            Text = l % 2 == 0 ? "True answer" : "False answer",
+                            Text = l % 2 == 0 ? "<p>True answer</p>" : "<p>False answer</p>",
                             IsRightAnswer = l % 2 == 0 ? true : false,
                         };
 
@@ -88,7 +89,12 @@
             }
         }
 
-        private static async Task<string> CreateUser(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, string name, string email, string roleName = null)
+        private static async Task<string> CreateUser(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager,
+            string name,
+            string email,
+            string roleName = null)
         {
             var user = new ApplicationUser
             {

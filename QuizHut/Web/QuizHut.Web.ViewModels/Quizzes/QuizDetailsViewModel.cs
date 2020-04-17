@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using AutoMapper;
+    using Ganss.XSS;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
     using QuizHut.Web.ViewModels.Questions;
@@ -16,6 +17,8 @@
         public string EventName { get; set; }
 
         public string Description { get; set; }
+
+        public string SanitizedDescription => new HtmlSanitizer().Sanitize(this.Description);
 
         public string Password { get; set; }
 
