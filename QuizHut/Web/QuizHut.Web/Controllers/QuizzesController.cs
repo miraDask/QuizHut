@@ -12,6 +12,7 @@
     using QuizHut.Services.Results;
     using QuizHut.Web.Common;
     using QuizHut.Web.Infrastructure.Helpers;
+    using QuizHut.Web.ViewModels.Answers;
     using QuizHut.Web.ViewModels.Questions;
     using QuizHut.Web.ViewModels.Quizzes;
 
@@ -19,6 +20,7 @@
     public class QuizzesController : Controller
     {
         private readonly IResultHelper resultHelper;
+        private readonly IShuffler shuffler;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
         private readonly IResultsService resultService;
@@ -26,12 +28,14 @@
 
         public QuizzesController(
             IResultHelper resultHelper,
+            IShuffler shuffler,
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
             IResultsService resultService,
             IQuestionsService questionsService)
         {
             this.resultHelper = resultHelper;
+            this.shuffler = shuffler;
             this.userManager = userManager;
             this.quizService = quizService;
             this.resultService = resultService;
@@ -61,6 +65,11 @@
 
             this.ViewData["Area"] = roles.Count > 0 ? Constants.AdminArea : string.Empty;
             var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);
+            foreach (var question in quizModel.Questions)
+            {
+                question.Answers = this.shuffler.Shuffle<AttemtedQuizAnswerViewModel>(question.Answers);
+            }
+
             return this.View(quizModel);
         }
 

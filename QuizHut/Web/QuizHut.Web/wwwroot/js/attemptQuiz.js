@@ -29,6 +29,10 @@
 
     function startQuizEventHandler(mins) {
         $(startBtn).click(function () {
+            $(window).bind('beforeunload', function () {
+                return 'Are you sure you want to leave?';
+            });
+
             if (mins) {
                 $('#clockdiv').show();
                 startTimer();
@@ -140,4 +144,6 @@
             return new Date(dt.getTime() + minutes * 60000).toString();
         }
     }
+
+    
 })
