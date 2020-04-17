@@ -248,69 +248,85 @@
             Assert.False(resultModelCollection.First().IsAssigned);
         }
 
-        //[Fact]
-        //public async Task HasUserPermitionShouldReturnTrueIfTheUserIsTheCreator()
-        //{
-        //    var creatorId = Guid.NewGuid().ToString();
-        //    var quizId = await this.CreateQuizAsync("Test Quiz", creatorId);
-        //    var result = await this.Service.HasUserPermition(creatorId, quizId);
+        [Fact]
+        public async Task HasUserPermitionShouldReturnTrueIfTheUserIsTheCreator()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz", creatorId);
+            var result = await this.Service.HasUserPermition(creatorId, quizId, true);
 
-        //    Assert.True(result);
-        //}
+            Assert.True(result[0]);
+            Assert.True(result[1]);
+        }
 
-        //[Fact]
-        //public async Task HasUserPermitionShouldReturnFalseIfTheQuizIsAssignedToUnActiveEvent()
-        //{
-        //    var creatorId = Guid.NewGuid().ToString();
-        //    var quizId = await this.CreateQuizAsync("Test Quiz", creatorId);
-        //    var eventId = await this.CreateEventAsync(Status.Pending);
-        //    await this.AssignEventToQuizAsync(quizId, eventId);
+        [Fact]
+        public async Task HasUserPermitionShouldReturnFalseIfUserIdExistsInMemoryCache()
+        {
+            var quizId = await this.CreateQuizAsync("Test Quiz");
+            var isQuizTaken = true;
+            var result = await this.Service.HasUserPermition(Guid.NewGuid().ToString(), quizId, isQuizTaken);
 
-        //    var result = await this.Service.HasUserPermition(Guid.NewGuid().ToString(), quizId);
+            Assert.False(result[0]);
+            Assert.False(result[1]);
+        }
 
-        //    Assert.False(result);
-        //}
+        [Fact]
+        public async Task HasUserPermitionShouldReturnFalseIfTheQuizIsAssignedToUnActiveEvent()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz", creatorId);
+            var eventId = await this.CreateEventAsync(Status.Pending);
+            await this.AssignEventToQuizAsync(quizId, eventId);
 
-        //[Fact]
-        //public async Task HasUserPermitionShouldReturnFalseIfTheQuizIsAlreadyTakenFromTheStudent()
-        //{
-        //    var studentId = Guid.NewGuid().ToString();
-        //    var quizId = await this.CreateQuizAsync("Test Quiz");
-        //    var eventId = await this.CreateEventAsync(Status.Active);
-        //    await this.AssignEventToQuizAsync(quizId, eventId);
-        //    await this.CreateResultAsync(studentId, eventId);
+            var result = await this.Service.HasUserPermition(Guid.NewGuid().ToString(), quizId, false);
 
-        //    var result = await this.Service.HasUserPermition(studentId, quizId);
+            Assert.False(result[0]);
+            Assert.False(result[1]);
+        }
 
-        //    Assert.False(result);
-        //}
+        [Fact]
+        public async Task HasUserPermitionShouldReturnFalseIfTheQuizIsAlreadyTakenFromTheStudent()
+        {
+            var studentId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz");
+            var eventId = await this.CreateEventAsync(Status.Active);
+            await this.AssignEventToQuizAsync(quizId, eventId);
+            await this.CreateResultAsync(studentId, eventId);
 
-        //[Fact]
-        //public async Task HasUserPermitionShouldReturnFalseIfStudentIsNotInTheAssignedToTheEventGroup()
-        //{
-        //    var studentId = Guid.NewGuid().ToString();
-        //    var quizId = await this.CreateQuizAsync("Test Quiz");
-        //    var eventId = await this.CreateEventAsync(Status.Active);
-        //    await this.AssignEventToQuizAsync(quizId, eventId);
+            var result = await this.Service.HasUserPermition(studentId, quizId, false);
 
-        //    var result = await this.Service.HasUserPermition(studentId, quizId);
+            Assert.False(result[0]);
+            Assert.False(result[1]);
+        }
 
-        //    Assert.False(result);
-        //}
+        [Fact]
+        public async Task HasUserPermitionShouldReturnFalseIfStudentIsNotInTheAssignedToTheEventGroup()
+        {
+            var studentId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz");
+            var eventId = await this.CreateEventAsync(Status.Active);
+            await this.AssignEventToQuizAsync(quizId, eventId);
 
-        //[Fact]
-        //public async Task HasUserPermitionShouldReturnTrueIfStudentIsInTheAssignedToTheEventGroup()
-        //{
-        //    var studentId = Guid.NewGuid().ToString();
-        //    var quizId = await this.CreateQuizAsync("Test Quiz");
-        //    var eventId = await this.CreateEventAsync(Status.Active);
-        //    await this.AssignEventToQuizAsync(quizId, eventId);
-        //    await this.CreateGroupAndAssignStudentAndEventAsync(studentId, eventId);
+            var result = await this.Service.HasUserPermition(studentId, quizId, false);
 
-        //    var result = await this.Service.HasUserPermition(studentId, quizId);
+            Assert.False(result[0]);
+            Assert.False(result[1]);
+        }
 
-        //    Assert.True(result);
-        //}
+        [Fact]
+        public async Task HasUserPermitionShouldReturnTrueIfStudentIsInTheAssignedToTheEventGroup()
+        {
+            var studentId = Guid.NewGuid().ToString();
+            var quizId = await this.CreateQuizAsync("Test Quiz");
+            var eventId = await this.CreateEventAsync(Status.Active);
+            await this.AssignEventToQuizAsync(quizId, eventId);
+            await this.CreateGroupAndAssignStudentAndEventAsync(studentId, eventId);
+
+            var result = await this.Service.HasUserPermition(studentId, quizId, false);
+
+            Assert.True(result[0]);
+            Assert.False(result[1]);
+        }
 
         [Fact]
         public async Task GetAllPerPageAsyncShouldReturnCorrectModelCollection()

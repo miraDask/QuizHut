@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Http;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
@@ -67,12 +67,6 @@
             if (userHasPermitionToTakeTheQuiz)
             {
                 await next();
-
-                if (!isCreator)
-                {
-                    var cacheEntryOptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(2));
-                    await this.distributedCache.SetStringAsync(user.Id, "true", cacheEntryOptions);
-                }
             }
         }
     }

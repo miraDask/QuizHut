@@ -37,6 +37,8 @@
                 $(window).unbind('beforeunload');
             });
 
+            ajaxSendQuizId();
+
             if (mins) {
                 $('#clockdiv').show();
                 startTimer();
@@ -50,6 +52,15 @@
             $('#first').click(loadPreviousQuestion);
             $('#last').click(loadNextQuestion);
         })
+    }
+
+    function ajaxSendQuizId() {
+        var id = $('#quizId').val();
+        $.ajax({
+            type: "POST",
+            url: '/Quizzes/StartedQuizAjaxCall',
+            data: { id : id} ,
+        });
     }
 
     function loadQuestion(e) {

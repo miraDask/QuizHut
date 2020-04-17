@@ -1,5 +1,6 @@
 ﻿namespace QuizHut.Web.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -112,6 +113,21 @@
             };
 
             return this.View(resultModel);
+        }
+
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<JsonResult> StartedQuizAjaxCall(string id)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var creatorId = await this.quizService.GetCreatorIdByQuizIdAsync(id);
+            if (userId != creatorId)
+            {
+                var cacheEntryOptions = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromDays(2));
+                await this.distributedCache.SetStringAsync(userId, "true", cacheEntryOptions);
+            }
+
+            return this.Json("Ok");
         }
     }
 }
