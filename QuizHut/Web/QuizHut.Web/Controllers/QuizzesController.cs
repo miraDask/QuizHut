@@ -5,12 +5,14 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Caching.Distributed;
     using QuizHut.Common;
     using QuizHut.Data.Models;
     using QuizHut.Services.Questions;
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.Results;
     using QuizHut.Web.Common;
+    using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.Infrastructure.Helpers;
     using QuizHut.Web.ViewModels.Answers;
     using QuizHut.Web.ViewModels.Questions;
@@ -24,6 +26,7 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
         private readonly IResultsService resultService;
+        private readonly IDistributedCache distributedCache;
         private readonly IQuestionsService questionsService;
 
         public QuizzesController(
@@ -32,6 +35,7 @@
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
             IResultsService resultService,
+            IDistributedCache distributedCache,
             IQuestionsService questionsService)
         {
             this.resultHelper = resultHelper;
@@ -39,29 +43,17 @@
             this.userManager = userManager;
             this.quizService = quizService;
             this.resultService = resultService;
+            this.distributedCache = distributedCache;
             this.questionsService = questionsService;
         }
 
+        [ServiceFilter(typeof(PermissionActionFilter))]
         public async Task<IActionResult> Start(string password, string id)
         {
             id ??= await this.quizService.GetQuizIdByPasswordAsync(password);
 
             var user = await this.userManager.GetUserAsync(this.User);
             var roles = await this.userManager.GetRolesAsync(user);
-            var userHasPermitionToTakeTheQuiz = await this.quizService.HasUserPermition(user.Id, id);
-
-            if (!userHasPermitionToTakeTheQuiz)
-            {
-                var controller = roles.Count > 0 ? "Home" : "Students";
-                var routObject = new
-                {
-                    password,
-                    area = roles.Count > 0 ? GlobalConstants.Administration : string.Empty,
-                    errorText = GlobalConstants.ErrorMessages.PermissionDenied,
-                };
-
-                return this.RedirectToAction("Index", controller, routObject);
-            }
 
             this.ViewData["Area"] = roles.Count > 0 ? Constants.AdminArea : string.Empty;
             var quizModel = await this.quizService.GetQuizByIdAsync<AttemtedQuizViewModel>(id);

@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
@@ -95,6 +96,13 @@
                 options.EnableDetailedErrors = true;
             });
 
+            services.AddDistributedSqlServerCache(options =>
+            {
+                options.ConnectionString = this.configuration.GetConnectionString("DefaultConnection");
+                options.SchemaName = "dbo";
+                options.TableName = "Cache";
+            });
+
             // Data repositories
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
@@ -116,6 +124,7 @@
             services.AddTransient<IStudentsGroupsService, StudentsGroupsService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<IScheduledJobsService, ScheduledJobsService>();
+            services.AddTransient<PermissionActionFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
