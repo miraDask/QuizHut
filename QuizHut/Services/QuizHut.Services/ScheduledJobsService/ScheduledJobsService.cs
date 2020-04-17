@@ -90,22 +90,14 @@
                 .FirstOrDefaultAsync();
 
             var studentNames = await this.GetStudentsNamesByEventIdAsync(eventId);
+            var adminUpdate = status == Status.Active ? "ActiveEventUpdate" : "EndedEventUpdate";
+            var studentUpdate = status == Status.Active ? "NewActiveEventMessage" : "NewEndedEventMessage";
 
-            if (status == Status.Active)
+            await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync(adminUpdate, @event.Name);
+
+            foreach (var name in studentNames.Distinct())
             {
-                await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("ActiveEventUpdate", @event.Name);
-                foreach (var name in studentNames)
-                {
-                    await this.hub.Clients.Group(name).SendAsync("NewActiveEventMessage");
-                }
-            }
-            else
-            {
-                await this.hub.Clients.Group(GlobalConstants.AdministratorRoleName).SendAsync("EndedEventUpdate", @event.Name);
-                foreach (var name in studentNames)
-                {
-                    await this.hub.Clients.Group(name).SendAsync("NewEndedEventMessage");
-                }
+                await this.hub.Clients.Group(name).SendAsync(studentUpdate);
             }
 
             if (@event.QuizId == null || @event.Status == status)
