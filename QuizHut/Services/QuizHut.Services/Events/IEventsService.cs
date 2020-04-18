@@ -1,19 +1,21 @@
 ﻿namespace QuizHut.Services.Events
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using QuizHut.Data.Common.Enumerations;
+    using QuizHut.Data.Models;
 
     public interface IEventsService
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId);
 
-        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null);
+        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string searchQuery = null);
 
         Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId);
 
-        int GetAllEventsCount(string creatorId = null);
+        int GetAllEventsCount(string creatorId = null, Func<Event, bool> filter = null);
 
         int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId);
 

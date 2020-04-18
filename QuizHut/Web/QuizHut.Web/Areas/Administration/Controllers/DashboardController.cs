@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -85,22 +86,24 @@
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]
-        public async Task<IActionResult> ResultsAll(string x, string y, int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> ResultsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var allEventsCount = this.eventService.GetAllEventsCount();
             int pagesCount = 0;
             var model = new EventsListAllViewModel<EventSimpleViewModel>()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
-                SearchType = y,
-                SearchString = x,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
+
+            int allEventsCount = searchText != null ? allEventsCount = this.eventService.GetAllEventsCount(null, x => x.Name.Contains(searchText))
+                                                    : this.eventService.GetAllEventsCount();
 
             if (allEventsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
-                var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage);
+                var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage, null, searchText);
                 model.PagesCount = pagesCount;
                 model.Events = events;
             }

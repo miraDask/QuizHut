@@ -7,96 +7,95 @@
         <div class="component">
             <form method="get" class="form-subscribe form-inline my-4" asp-action="ResultsAll" asp-controller="Dashboard">
                 Search by:
-                <select class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="y">
-                    <option value="name" selected="@(Model.SearchType == "name" ? true : false)">name</option>
-                    <option value="date" selected="@(Model.SearchType == "date" ? true : false)">date</option>
-                    <option value="score">score</option>
+                <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
+                    <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
                 </select>
                 <div class="form-group flex-grow-1">
                     <label class="sr-only" for="email4">Email</label>
-                    <input type="text" class="form-control flex-grow-1 mr-2" id="email4" placeholder="Search text here..." name="x" value="@Model.SearchString">
-                    <button type="submit" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                    <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                           placeholder="Enter event name here..." name="searchText" value="@Model.SearchString">
+                    <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0" disabled>Search</button>
                 </div>
             </form>
-            </div>
-            <div class="component">
-                <div class="card">
-                    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
-                        <div class="container my-1">
-                            <h5 class="mb-0">All Results</h5>
-                        </div>
-                    </nav>
-                    <table class="table table-hover col-12 mb-0">
-                        <tbody>
-                            @foreach (var _event in Model.Events)
-                            {
-                                <tr class="table-info">
-                                    <th scope="row" class="pt-3">@_event.Name</th>
-                                    <th scope="row" class="pt-3 text-center"></th>
-                                    <td class="text-right">
-                                        <a type="submit" class="btn btn-outline-info py-1"
-                                           asp-area="Administration"
-                                           asp-action="EventResultsDetails"
-                                           asp-controller="Results" asp-route-id="@_event.Id">
-                                            View Results
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @if (Model.PagesCount > 1)
-            {
-                var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
-                var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
-
-                <div class="text-center mt-4">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item @disabledLeftArrow">
-                            <a class="page-link"
-                               asp-area="Administration"
-                               asp-controller="Dashboard"
-                               asp-action="ResultsAll"
-                               asp-route-page="@Model.PreviousPage"
-                               asp-route-x="@Model.SearchString" asp-route-y="@Model.SearchType">
-
-                                <i class="fas fa-long-arrow-alt-left"></i>
-                            </a>
-                        </li>
-                        @for (int i = 1; i <= Model.PagesCount; i++)
-                        {
-                            var active = i == Model.CurrentPage ? "active" : string.Empty;
-
-                            <li class="page-item @active">
-                                <a class="page-link"
-                                   asp-area="Administration"
-                                   asp-controller="Dashboard"
-                                   asp-action="ResultsAll"
-                                   asp-route-page="@i"  asp-route-x="@Model.SearchString" asp-route-y="@Model.SearchType">
-                                    @i
-                                </a>
-                            </li>
-                        }
-                        <li class="page-item @disabledRightArrow">
-                            <a class="page-link"
-                               asp-area="Administration"
-                               asp-controller="Dashboard"
-                               asp-action="ResultsAll"
-                               asp-route-page="@Model.NextPage"  asp-route-x="@Model.SearchString" asp-route-y="@Model.SearchType">
-                                <i class="fas fa-long-arrow-alt-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            }
         </div>
-        @section InnerNav
-{
-            @await Html.PartialAsync("_DashboardNavBarPartial")
+        <div class="component">
+            <div class="card">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+                    <div class="container my-1">
+                        <h5 class="mb-0">All Results</h5>
+                    </div>
+                </nav>
+                <table class="table table-hover col-12 mb-0">
+                    <tbody>
+                        @foreach (var _event in Model.Events)
+                        {
+                            <tr class="table-info">
+                                <th scope="row" class="pt-3">@_event.Name</th>
+                                <th scope="row" class="pt-3 text-center"></th>
+                                <td class="text-right">
+                                    <a type="submit" class="btn btn-outline-info py-1"
+                                       asp-area="Administration"
+                                       asp-action="EventResultsDetails"
+                                       asp-controller="Results" asp-route-id="@_event.Id">
+                                        View Results
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @if (Model.PagesCount > 1)
+        {
+            var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+            var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+            <div class="text-center mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @disabledLeftArrow">
+                        <a class="page-link"
+                           asp-area="Administration"
+                           asp-controller="Dashboard"
+                           asp-action="ResultsAll"
+                           asp-route-page="@Model.PreviousPage"
+                           asp-route-searchText="@Model.SearchString" asp-route-searchCriteria="@Model.SearchType">
+
+                            <i class="fas fa-long-arrow-alt-left"></i>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= Model.PagesCount; i++)
+                    {
+                        var active = i == Model.CurrentPage ? "active" : string.Empty;
+
+                        <li class="page-item @active">
+                            <a class="page-link"
+                               asp-area="Administration"
+                               asp-controller="Dashboard"
+                               asp-action="ResultsAll"
+                               asp-route-page="@i" asp-route-searchText="@Model.SearchString" asp-route-searchCriteria="@Model.SearchType">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    <li class="page-item @disabledRightArrow">
+                        <a class="page-link"
+                           asp-area="Administration"
+                           asp-controller="Dashboard"
+                           asp-action="ResultsAll"
+                           asp-route-page="@Model.NextPage" asp-route-searchText="@Model.SearchString" asp-route-searchCriteria="@Model.SearchType">
+                            <i class="fas fa-long-arrow-alt-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         }
-        @section Scripts
+    </div>
+@section InnerNav
 {
-            <script src="~/js/navigation.js" asp-append-version="true"></script>
-        }
+    @await Html.PartialAsync("_DashboardNavBarPartial")
+}
+@section Scripts
+{
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
+    <script src="~/js/search.js" asp-append-version="true"></script>
+}

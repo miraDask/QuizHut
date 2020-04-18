@@ -3,6 +3,21 @@
     ViewData["Title"] = "All Events";
 }
 <div class="container">
+    <div class="component">
+        <form method="get" class="form-subscribe form-inline my-4" asp-action="EventsAll" asp-controller="Dashboard">
+            Search by:
+            <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="y">
+                <option value="name" selected="@(Model.SearchType == "name" ? true : false)">name</option>
+                <option value="date" selected="@(Model.SearchType == "date" ? true : false)">date</option>
+                <option value="score" selected="@(Model.SearchType == "score" ? true : false)">score</option>
+            </select>
+            <div class="form-group flex-grow-1">
+                <label class="sr-only" for="email4">Email</label>
+                <input id="input" type="text" class="form-control flex-grow-1 mr-2" placeholder="Choose criteria and type to search..." name="x" value="@Model.SearchString">
+                <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0" disabled>Search</button>
+            </div>
+        </form>
+    </div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
         <div class="container my-1">
             <h5 class="mb-0">All Events</h5>
@@ -100,7 +115,7 @@
                    asp-area="Administration"
                    asp-controller="Dashboard"
                    asp-action="EventsAll"
-                   asp-route-page="@Model.PreviousPage">
+                   asp-route-page="@Model.PreviousPage" asp-route-x="@Model.SearchString" asp-route-y="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-left"></i>
                 </a>
             </li>
@@ -112,7 +127,7 @@
                        asp-area="Administration"
                        asp-controller="Dashboard"
                        asp-action="EventsAll"
-                       asp-route-page="@i">
+                       asp-route-page="@i" asp-route-x="@Model.SearchString" asp-route-y="@Model.SearchType">
                         @i
                     </a>
                 </li>
@@ -122,7 +137,7 @@
                    asp-area="Administration"
                    asp-controller="Dashboard"
                    asp-action="EventsAll"
-                   asp-route-page="@Model.NextPage">
+                   asp-route-page="@Model.NextPage" asp-route-x="@Model.SearchString" asp-route-y="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-right"></i>
                 </a>
             </li>
@@ -139,4 +154,5 @@
 {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
     <script src="~/js/statusUpdates.js" asp-append-version="true"></script>
+    <script src="~/js/search.js" asp-append-version="true"></script>
 }

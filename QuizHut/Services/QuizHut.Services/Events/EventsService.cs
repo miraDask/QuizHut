@@ -84,13 +84,18 @@
               .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null)
+        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string searchQuery = null)
         {
             var query = this.repository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            if (searchQuery != null)
+            {
+                query = query.Where(x => x.Name.Contains(searchQuery));
             }
 
             return await query
@@ -296,13 +301,18 @@
             return query.Count();
         }
 
-        public int GetAllEventsCount(string creatorId = null)
+        public int GetAllEventsCount(string creatorId = null, Func<Event, bool> filter = null)
         {
             var query = this.repository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            if (filter != null)
+            {
+                query = query.Where(filter).AsQueryable();
             }
 
             return query.Count();
