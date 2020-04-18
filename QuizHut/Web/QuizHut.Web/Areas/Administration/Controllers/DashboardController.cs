@@ -1,7 +1,6 @@
 ﻿namespace QuizHut.Web.Areas.Administration.Controllers
 {
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -97,13 +96,13 @@
                 SearchString = searchText,
             };
 
-            int allEventsCount = searchText != null ? allEventsCount = this.eventService.GetAllEventsCount(null, x => x.Name.Contains(searchText))
+            var searchOptions = searchText == null ? null : new string[] { searchCriteria, searchText };
+            int allEventsCount = searchText != null ? allEventsCount = this.eventService.GetAllEventsCount(null, searchOptions)
                                                     : this.eventService.GetAllEventsCount();
 
             if (allEventsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
-                var searchOptions = searchText == null ? null : new string[] { searchCriteria, searchText };
                 var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage, null, searchOptions);
                 model.PagesCount = pagesCount;
                 model.Events = events;

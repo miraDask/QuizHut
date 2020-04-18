@@ -307,7 +307,7 @@
             return query.Count();
         }
 
-        public int GetAllEventsCount(string creatorId = null, Func<Event, bool> filter = null)
+        public int GetAllEventsCount(string creatorId = null, string[] searchOptions = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -316,9 +316,10 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            if (filter != null)
+            if (searchOptions != null)
             {
-                query = query.Where(filter).AsQueryable();
+                var filter = this.expressionBuilder.GetExpression<Event>(searchOptions[0], searchOptions[1]);
+                query = query.Where(filter);
             }
 
             return query.Count();

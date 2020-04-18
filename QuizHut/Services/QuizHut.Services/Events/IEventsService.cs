@@ -16,7 +16,7 @@
 
         Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId);
 
-        int GetAllEventsCount(string creatorId = null, Func<Event, bool> filter = null);
+        int GetAllEventsCount(string creatorId = null, string[] searchOptions = null);
 
         int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId);
 

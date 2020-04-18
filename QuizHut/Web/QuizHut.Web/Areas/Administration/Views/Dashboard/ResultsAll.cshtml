@@ -22,7 +22,7 @@
             <div class="card">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
                     <div class="container my-1">
-                        <h5 class="mb-0">All Results</h5>
+                        <h5 class="mb-0">@(Model.Events.Count() > 0 ? "All Results" : "No Results Found, Try Again!")</h5>
                     </div>
                 </nav>
                 <table class="table table-hover col-12 mb-0">
