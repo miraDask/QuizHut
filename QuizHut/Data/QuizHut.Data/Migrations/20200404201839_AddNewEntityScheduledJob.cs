@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Data.Migrations
 {
     using System;
+
     using Microsoft.EntityFrameworkCore.Migrations;
 
     public partial class AddNewEntityScheduledJob : Migration

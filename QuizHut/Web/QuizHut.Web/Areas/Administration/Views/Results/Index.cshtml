@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity;
 @using QuizHut.Data.Models;
 @inject UserManager<ApplicationUser> userManager
-@model EventsListAllViewModel
+@model EventsListAllViewModel<EventSimpleViewModel>
 @{
     ViewData["Title"] = "Results";
 }
@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body p-0 mt-2">
                     <h4 class="card-title pl-3 mb-4">Last Active Events</h4>
-                    @await Component.InvokeAsync("Results", new { status = ModelCostants.StatusActive, principal = this.User})
+                    @await Component.InvokeAsync("Results", new { status = Status.Active, principal = this.User})
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="card-body p-0 mt-2">
                     <h4 class="card-title pl-3 mb-4">Last Ended Events</h4>
-                    @await Component.InvokeAsync("Results", new { status = ModelCostants.StatusEnded, principal = this.User })
+                    @await Component.InvokeAsync("Results", new { status = Status.Ended, principal = this.User })
                 </div>
             </div>
         </div>

@@ -85,20 +85,22 @@
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]
-        public async Task<IActionResult> ResultsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> ResultsAll(string x, string y, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var allEventsCount = this.eventService.GetAllEventsCount();
             int pagesCount = 0;
-            var model = new EventsListAllViewModel()
+            var model = new EventsListAllViewModel<EventSimpleViewModel>()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
+                SearchType = y,
+                SearchString = x,
             };
 
             if (allEventsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
-                var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage);
+                var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage);
                 model.PagesCount = pagesCount;
                 model.Events = events;
             }
@@ -111,7 +113,7 @@
         {
             var allEventsCount = this.eventService.GetAllEventsCount();
             int pagesCount = 0;
-            var model = new EventsListAllViewModel()
+            var model = new EventsListAllViewModel<EventListViewModel>()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,

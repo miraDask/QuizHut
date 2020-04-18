@@ -43,9 +43,6 @@
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<Event, EventDetailsViewModel>()
-            //.ForMember(
-            //      x => x.QuizId,
-            //      opt => opt.MapFrom(x => x.QuizId))
             .ForMember(
                   x => x.QuizName,
                   opt => opt.MapFrom(x => x.Quiz.Name));

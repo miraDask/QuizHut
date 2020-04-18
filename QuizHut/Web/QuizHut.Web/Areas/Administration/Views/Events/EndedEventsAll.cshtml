@@ -1,4 +1,4 @@
-﻿@model EventsListAllViewModel
+﻿@model EventsListAllViewModel<EventSimpleViewModel>
 @{
     ViewData["Title"] = "All Ended Events";
 }
@@ -19,7 +19,11 @@
                                     <th scope="row" class="pt-3">@_event.Name</th>
                                     <th scope="row" class="pt-3 text-center"></th>
                                     <td class="text-right">
-                                        <a type="submit" class="btn btn-outline-danger py-1" asp-area="Administration" asp-action="EventResultsDetails" asp-controller="Results" asp-route-id="@_event.Id">
+                                        <a type="submit" class="btn btn-outline-danger py-1" 
+                                           asp-area="Administration"
+                                           asp-action="EventResultsDetails"
+                                           asp-controller="Results"
+                                           asp-route-id="@_event.Id">
                                             View Results
                                         </a>
                                     </td>

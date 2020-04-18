@@ -55,7 +55,7 @@
             var allEventsCreatedByTeacher = this.service.GetAllEventsCount(userId);
             int pagesCount = 0;
 
-            var model = new EventsListAllViewModel()
+            var model = new EventsListAllViewModel<EventListViewModel>()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
@@ -251,7 +251,7 @@
             var allActiveEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Active, userId);
             int pagesCount = 0;
 
-            var model = new EventsListAllViewModel()
+            var model = new EventsListAllViewModel<EventSimpleViewModel>()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
@@ -260,7 +260,7 @@
             if (allActiveEventsCreatedByTeacher > 0)
             {
                 pagesCount = (int)Math.Ceiling(allActiveEventsCreatedByTeacher / (decimal)countPerPage);
-                var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventListViewModel>(page, countPerPage, Status.Active, userId);
+                var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventSimpleViewModel>(page, countPerPage, Status.Active, userId);
                 model.Events = events;
                 model.PagesCount = pagesCount;
             }
@@ -274,7 +274,7 @@
             var allEndedEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Ended, userId);
             int pagesCount = 0;
 
-            var model = new EventsListAllViewModel()
+            var model = new EventsListAllViewModel<EventSimpleViewModel>()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
@@ -283,7 +283,7 @@
             if (allEndedEventsCreatedByTeacher > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEndedEventsCreatedByTeacher / (decimal)countPerPage);
-                var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventListViewModel>(page, countPerPage, Status.Ended, userId);
+                var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventSimpleViewModel>(page, countPerPage, Status.Ended, userId);
                 model.Events = events;
                 model.PagesCount = pagesCount;
             }

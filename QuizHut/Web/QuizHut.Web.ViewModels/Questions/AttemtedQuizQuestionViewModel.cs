@@ -1,7 +1,7 @@
 ﻿namespace QuizHut.Web.ViewModels.Quizzes
 {
     using System.Collections.Generic;
-   
+
     using Ganss.XSS;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;

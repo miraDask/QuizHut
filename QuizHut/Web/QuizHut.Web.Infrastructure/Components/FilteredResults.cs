@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Web.ViewModels.Events;
@@ -22,10 +23,10 @@
             this.eventService = eventService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string status, ClaimsPrincipal principal)
+        public async Task<IViewComponentResult> InvokeAsync(Status status, ClaimsPrincipal principal)
         {
             var userId = this.userManager.GetUserId(principal);
-            var eventsModel = await this.eventService.GetAllByCreatorIdAsync<EventListViewModel>(userId);
+            var eventsModel = await this.eventService.GetAllByCreatorIdAsync<EventSimpleViewModel>(userId);
             eventsModel = eventsModel.Where(x => x.Status == status).ToList();
             return this.View(eventsModel);
         }

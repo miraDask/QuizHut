@@ -2,18 +2,22 @@
 {
     using System.Collections.Generic;
 
-    public class EventsListAllViewModel
+    public class EventsListAllViewModel<T>
     {
         public EventsListAllViewModel()
         {
-            this.Events = new HashSet<EventListViewModel>();
+            this.Events = new HashSet<T>();
         }
 
-        public IEnumerable<EventListViewModel> Events { get; set; }
+        public IEnumerable<T> Events { get; set; }
 
         public int PagesCount { get; set; }
 
         public int CurrentPage { get; set; }
+
+        public string SearchType { get; set; }
+
+        public string SearchString { get; set; }
 
         public int NextPage
         {
