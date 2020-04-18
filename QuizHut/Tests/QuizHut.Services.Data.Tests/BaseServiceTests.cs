@@ -26,6 +26,7 @@
     using QuizHut.Services.Results;
     using QuizHut.Services.ScheduledJobsService;
     using QuizHut.Services.StudentsGroups;
+    using QuizHut.Services.Tools.Expressions;
     using QuizHut.Services.Users;
     using QuizHut.Web;
     using QuizHut.Web.ViewModels.Events;
@@ -82,6 +83,7 @@
             services.AddTransient(typeof(ILogger<>), typeof(Logger<>));
             services.AddTransient(typeof(ILoggerFactory), typeof(LoggerFactory));
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(new LoggerFactory(), "SendGridKey"));
+            services.AddTransient<IExpressionBuilder, ExpressionBuilder>();
             services.AddTransient<IQuizzesService, QuizzesService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IAnswersService, AnswersService>();

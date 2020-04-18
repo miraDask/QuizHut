@@ -27,6 +27,7 @@
     <ProjectReference Include="..\..\Web\QuizHut.Web.ViewModels\QuizHut.Web.ViewModels.csproj" />
     <ProjectReference Include="..\QuizHut.Services.Mapping\QuizHut.Services.Mapping.csproj" />
     <ProjectReference Include="..\QuizHut.Services.Messaging\QuizHut.Services.Messaging.csproj" />
+    <ProjectReference Include="..\QuizHut.Services.Tools\QuizHut.Services.Tools.csproj" />
   </ItemGroup>
 
 </Project>

@@ -103,7 +103,8 @@
             if (allEventsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
-                var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage, null, searchText);
+                var searchOptions = searchText == null ? null : new string[] { searchCriteria, searchText };
+                var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage, null, searchOptions);
                 model.PagesCount = pagesCount;
                 model.Events = events;
             }

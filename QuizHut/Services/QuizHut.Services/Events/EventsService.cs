@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.SignalR;
@@ -19,6 +20,7 @@
     using QuizHut.Services.Messaging;
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.ScheduledJobsService;
+    using QuizHut.Services.Tools.Expressions;
     using TimeZoneConverter;
 
     public class EventsService : IEventsService
@@ -28,6 +30,7 @@
         private readonly IEventsGroupsService eventsGroupsService;
         private readonly IScheduledJobsService scheduledJobsService;
         private readonly IEmailSender emailSender;
+        private readonly IExpressionBuilder expressionBuilder;
         private readonly IHubContext<QuizHub> hub;
 
         public EventsService(
@@ -36,6 +39,7 @@
             IEventsGroupsService eventsGroupsService,
             IScheduledJobsService scheduledJobsService,
             IEmailSender emailSender,
+            IExpressionBuilder expressionBuilder,
             IHubContext<QuizHub> hub)
         {
             this.repository = repository;
@@ -43,6 +47,7 @@
             this.eventsGroupsService = eventsGroupsService;
             this.scheduledJobsService = scheduledJobsService;
             this.emailSender = emailSender;
+            this.expressionBuilder = expressionBuilder;
             this.hub = hub;
         }
 
@@ -84,7 +89,7 @@
               .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string searchQuery = null)
+        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string[] searchOptions = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -93,9 +98,10 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            if (searchQuery != null)
+            if (searchOptions != null)
             {
-                query = query.Where(x => x.Name.Contains(searchQuery));
+                var filter = this.expressionBuilder.GetExpression<Event>(searchOptions[0], searchOptions[1]);
+                query = query.Where(filter);
             }
 
             return await query

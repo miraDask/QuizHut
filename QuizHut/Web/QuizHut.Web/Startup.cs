@@ -36,6 +36,7 @@
     using QuizHut.Services.Results;
     using QuizHut.Services.ScheduledJobsService;
     using QuizHut.Services.StudentsGroups;
+    using QuizHut.Services.Tools.Expressions;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.Infrastructure.Helpers;
@@ -113,6 +114,7 @@
             services.AddTransient<IResultHelper, ResultHelper>();
             services.AddTransient<IDateTimeConverter, DateTimeConverter>();
             services.AddTransient<IShuffler, Shuffler>();
+            services.AddTransient<IExpressionBuilder, ExpressionBuilder>();
             services.AddTransient<IQuizzesService, QuizzesService>();
             services.AddTransient<IQuestionsService, QuestionsService>();
             services.AddTransient<IAnswersService, AnswersService>();

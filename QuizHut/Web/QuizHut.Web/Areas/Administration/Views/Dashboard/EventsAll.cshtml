@@ -7,9 +7,9 @@
         <form method="get" class="form-subscribe form-inline my-4" asp-action="EventsAll" asp-controller="Dashboard">
             Search by:
             <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="y">
-                <option value="name" selected="@(Model.SearchType == "name" ? true : false)">name</option>
-                <option value="date" selected="@(Model.SearchType == "date" ? true : false)">date</option>
-                <option value="score" selected="@(Model.SearchType == "score" ? true : false)">score</option>
+                <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
+                <option value="Date" selected="@(Model.SearchType == "Date" ? true : false)">date</option>
+                <option value="Status" selected="@(Model.SearchType == "Status" ? true : false)">status</option>
             </select>
             <div class="form-group flex-grow-1">
                 <label class="sr-only" for="email4">Email</label>

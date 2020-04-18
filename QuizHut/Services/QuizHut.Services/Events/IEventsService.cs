@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     using QuizHut.Data.Common.Enumerations;
@@ -11,7 +12,7 @@
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId);
 
-        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string searchQuery = null);
+        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string[] searchOptions = null);
 
         Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId);
 
