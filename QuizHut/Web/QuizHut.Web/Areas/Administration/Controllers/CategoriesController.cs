@@ -36,22 +36,22 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllCategoriesCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> AllCategoriesCreatedByTeacher(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var allCategoriesCreatedByTeacherCount = this.service.GetAllCategoriesCount(userId);
-            int pagesCount = 0;
 
             var model = new CategoriesListAllViewModel()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allCategoriesCreatedByTeacherCount = this.service.GetAllCategoriesCount(userId, searchCriteria, searchText);
             if (allCategoriesCreatedByTeacherCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allCategoriesCreatedByTeacherCount / (decimal)countPerPage);
-                var categories = await this.service.GetAllPerPage<CategoryViewModel>(page, countPerPage, userId);
+                var categories = await this.service.GetAllPerPage<CategoryViewModel>(page, countPerPage, userId, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var category in categories)
                 {
@@ -59,7 +59,7 @@
                 }
 
                 model.Categories = categories;
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allCategoriesCreatedByTeacherCount / (decimal)countPerPage);
             }
 
             return this.View(model);

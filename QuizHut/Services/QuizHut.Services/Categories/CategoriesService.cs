@@ -7,17 +7,22 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
+    using QuizHut.Services.Tools.Expressions;
 
     public class CategoriesService : ICategoriesService
     {
+        private readonly IExpressionBuilder expressionBuilder;
         private readonly IDeletableEntityRepository<Category> repository;
         private readonly IDeletableEntityRepository<Quiz> quizRepository;
 
         public CategoriesService(
+            IExpressionBuilder expressionBuilder,
             IDeletableEntityRepository<Category> repository,
             IDeletableEntityRepository<Quiz> quizRepository)
         {
+            this.expressionBuilder = expressionBuilder;
             this.repository = repository;
             this.quizRepository = quizRepository;
         }
@@ -30,14 +35,29 @@
             return category.Id;
         }
 
-        public async Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId)
-        => await this.repository.AllAsNoTracking()
-                .Where(x => x.CreatorId == creatorId)
+        public async Task<IEnumerable<T>> GetAllPerPage<T>(
+            int page,
+            int countPerPage,
+            string creatorId,
+            string searchCriteria = null,
+            string searchText = null)
+        {
+            var query = this.repository.AllAsNoTracking()
+                .Where(x => x.CreatorId == creatorId);
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Category>(searchCriteria, searchText);
+                query = query.Where(filter);
+            }
+
+            return await query
                 .OrderByDescending(x => x.CreatedOn)
                 .Skip(countPerPage * (page - 1))
                 .Take(countPerPage)
                 .To<T>()
                 .ToListAsync();
+        }
 
         public async Task AssignQuizzesToCategoryAsync(string id, IEnumerable<string> quizzesIds)
         {
@@ -107,7 +127,17 @@
             .To<T>()
             .FirstOrDefaultAsync();
 
-        public int GetAllCategoriesCount(string creatorId)
-        => this.repository.AllAsNoTracking().Where(x => x.CreatorId == creatorId).Count();
+        public int GetAllCategoriesCount(string creatorId, string searchCriteria = null, string searchText = null)
+        {
+            var query = this.repository.AllAsNoTracking().Where(x => x.CreatorId == creatorId);
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Category>(searchCriteria, searchText);
+                query = query.Where(filter);
+            }
+
+            return query.Count();
+        }
     }
 }

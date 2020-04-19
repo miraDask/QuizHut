@@ -5,7 +5,7 @@
 
     public interface ICategoriesService
     {
-        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId);
+        Task<IEnumerable<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId, string searchCriteria = null, string searchText = null);
 
         Task<T> GetByIdAsync<T>(string id);
 
@@ -19,6 +19,6 @@
 
         Task DeleteQuizFromCategoryAsync(string categoryId, string quizId);
 
-        int GetAllCategoriesCount(string creatorId);
+        int GetAllCategoriesCount(string creatorId, string searchCriteria = null, string searchText = null);
     }
 }
