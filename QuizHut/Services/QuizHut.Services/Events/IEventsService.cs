@@ -1,13 +1,9 @@
 ﻿namespace QuizHut.Services.Events
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     using QuizHut.Data.Common.Enumerations;
-    using QuizHut.Data.Models;
-    using QuizHut.Services.Tools.Search;
 
     public interface IEventsService
     {

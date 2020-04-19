@@ -11,7 +11,6 @@
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
-    using QuizHut.Services.Tools.Search;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.Infrastructure.Helpers;

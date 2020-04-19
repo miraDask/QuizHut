@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.SignalR;
@@ -21,7 +20,6 @@
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.ScheduledJobsService;
     using QuizHut.Services.Tools.Expressions;
-    using QuizHut.Services.Tools.Search;
     using TimeZoneConverter;
 
     public class EventsService : IEventsService
