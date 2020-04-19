@@ -23,25 +23,23 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllStudentsAddedByTeacher(string invalidEmail, int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> AllStudentsAddedByTeacher(string invalidEmail, string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var allStudentsAddedByTeacherCount = this.service.GetAllStudentsCount(userId);
-            int pagesCount = 0;
 
             var model = new AllStudentsAddedByTeacherViewModel()
             {
                 NewStudent = new StudentInputViewModel(),
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
             };
 
+            var allStudentsAddedByTeacherCount = this.service.GetAllStudentsCount(userId, searchCriteria, searchText);
             if (allStudentsAddedByTeacherCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allStudentsAddedByTeacherCount / (decimal)countPerPage);
-                var students = await this.service.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage, userId);
+                var students = await this.service.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage, userId, searchCriteria, searchText);
                 model.Students = students;
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allStudentsAddedByTeacherCount / (decimal)countPerPage);
             }
 
             if (invalidEmail != null)

@@ -102,8 +102,8 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
-            if (searchCriteria != null && !nameInputIsEmpty)
+            var emptyNameInput = searchText == null && searchCriteria == ServicesConstants.Name;
+            if (searchCriteria != null && !emptyNameInput)
             {
                 var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
                 query = query.Where(filter);
@@ -321,8 +321,8 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
-            if (searchCriteria != null && !nameInputIsEmpty)
+            var emptyNameInput = searchText == null && searchCriteria == ServicesConstants.Name;
+            if (searchCriteria != null && !emptyNameInput)
             {
                 var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
                 query = query.Where(filter);

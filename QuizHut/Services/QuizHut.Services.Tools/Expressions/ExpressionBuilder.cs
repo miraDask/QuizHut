@@ -14,6 +14,7 @@
         private const string LastName = "LastName";
         private const string StatusEnded = "Ended";
         private const string StatusActive = "Active";
+        private const string StatusPending = "Pending";
         private const string StatusString = "Status";
         private const string Assigned = "Assigned";
         private const string Unassigned = "Unassigned";
@@ -30,9 +31,11 @@
                 case FirstName:
                 case LastName:
                 case Email:
-                    return this.GetContainsMethod<T>(queryType, queryValue, parameter);
+                    var expressionBody = this.GetContainsMethod<T>(queryType, queryValue, parameter);
+                    return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);
                 case StatusEnded:
                 case StatusActive:
+                case StatusPending:
                     return this.GetEqualMethod<T>(queryType, queryValue, parameter, true);
                 case Assigned:
                     return this.GetEqualMethod<T>(queryType, queryValue, parameter, false);
@@ -45,7 +48,7 @@
             }
         }
 
-        private Expression<Func<T, bool>> GetContainsMethod<T>(string queryType, string queryValue, ParameterExpression parameter)
+        private MethodCallExpression GetContainsMethod<T>(string queryType, string queryValue, ParameterExpression parameter)
         {
             var nameOfProperty = this.GetParameterName(queryType);
             var property = Expression.PropertyOrField(parameter, nameOfProperty);
@@ -53,8 +56,7 @@
             MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[0]);
             var call = Expression.Call(property, toLowerMethod);
             var constant = Expression.Constant(queryValue.ToLower(), typeof(string));
-            var expressionBody = Expression.Call(call, method, constant);
-            return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);
+            return Expression.Call(call, method, constant);
         }
 
         private Expression<Func<T, bool>> GetEqualMethod<T>(string queryType, string queryValue, ParameterExpression parameter, bool equality)
@@ -96,6 +98,7 @@
             {
                 StatusActive => Status.Active,
                 StatusEnded => Status.Ended,
+                StatusPending => Status.Pending,
                 Unassigned => null,
                 Assigned => null,
                 _ => throw new InvalidFilterCriteriaException(),
@@ -107,6 +110,7 @@
             switch (queryType)
             {
                 case StatusActive:
+                case StatusPending:
                 case StatusEnded: return StatusString;
                 case Name:
                 case FirstName:

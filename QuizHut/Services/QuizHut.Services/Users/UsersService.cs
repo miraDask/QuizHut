@@ -120,8 +120,12 @@
                 query = query.Where(x => x.TeacherId == teacherId);
             }
 
-            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
-            if (searchCriteria != null && !nameInputIsEmpty)
+            var emptySearchIsAlowed = searchText == null
+               && (searchCriteria == ServicesConstants.StatusActive
+               || searchCriteria == ServicesConstants.StatusEnded
+               || searchCriteria == ServicesConstants.Assigned
+               || searchCriteria == ServicesConstants.Unassigned);
+            if (searchCriteria != null && emptySearchIsAlowed)
             {
                 var filter = this.expressionBuilder.GetExpression<ApplicationUser>(searchCriteria, searchText);
                 query = query.Where(filter);
@@ -144,8 +148,12 @@
                 query = query.Where(x => x.TeacherId == teacherId);
             }
 
-            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
-            if (searchCriteria != null && !nameInputIsEmpty)
+            var emptySearchIsAlowed = searchText == null
+               && (searchCriteria == ServicesConstants.StatusActive
+               || searchCriteria == ServicesConstants.StatusEnded
+               || searchCriteria == ServicesConstants.Assigned
+               || searchCriteria == ServicesConstants.Unassigned);
+            if (searchCriteria != null && emptySearchIsAlowed)
             {
                 var filter = this.expressionBuilder.GetExpression<ApplicationUser>(searchCriteria, searchText);
                 query = query.Where(filter);

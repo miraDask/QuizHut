@@ -15,6 +15,11 @@
         public const string SenderEmail = "quizhutproject@gmail.com";
         public const string SenderName = "QuizHut team";
         public const string StringToReplace = "{password}";
+        public const string StatusActive = "Active";
+        public const string StatusEnded = "Ended";
+        public const string StatusPending = "Pending";
+        public const string Unassigned = "Unassigned";
+        public const string Assigned = "Assigned";
         public const string Name = "Name";
     }
 }

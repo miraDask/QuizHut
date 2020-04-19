@@ -58,6 +58,8 @@
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
             var allEventsCreatedByTeacher = this.service.GetAllEventsCount(userId, searchCriteria, searchText);
