@@ -247,47 +247,48 @@
             return this.RedirectToAction("EventDetails", new { id = eventId });
         }
 
-        public async Task<IActionResult> ActiveEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> ActiveEventsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var allActiveEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Active, userId);
-            int pagesCount = 0;
 
             var model = new EventsListAllViewModel<EventSimpleViewModel>()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allActiveEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Active, userId, searchCriteria, searchText);
             if (allActiveEventsCreatedByTeacher > 0)
             {
-                pagesCount = (int)Math.Ceiling(allActiveEventsCreatedByTeacher / (decimal)countPerPage);
-                var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventSimpleViewModel>(page, countPerPage, Status.Active, userId);
+                var events = await this.service
+                    .GetAllPerPageByCreatorIdAndStatus<EventSimpleViewModel>(page, countPerPage, Status.Active, userId, searchCriteria, searchText);
                 model.Events = events;
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allActiveEventsCreatedByTeacher / (decimal)countPerPage);
             }
 
             return this.View(model);
         }
 
-        public async Task<IActionResult> EndedEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> EndedEventsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var allEndedEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Ended, userId);
-            int pagesCount = 0;
 
             var model = new EventsListAllViewModel<EventSimpleViewModel>()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allEndedEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Ended, userId, searchCriteria, searchText);
             if (allEndedEventsCreatedByTeacher > 0)
             {
-                pagesCount = (int)Math.Ceiling(allEndedEventsCreatedByTeacher / (decimal)countPerPage);
-                var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventSimpleViewModel>(page, countPerPage, Status.Ended, userId);
+                var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventSimpleViewModel>(page, countPerPage, Status.Ended, userId, searchCriteria, searchText);
                 model.Events = events;
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allEndedEventsCreatedByTeacher / (decimal)countPerPage);
             }
 
             return this.View(model);

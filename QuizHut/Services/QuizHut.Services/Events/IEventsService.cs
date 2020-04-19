@@ -11,11 +11,11 @@
 
         Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string searchCriteria = null, string searchText = null);
 
-        Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId);
+        Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId, string searchCriteria = null, string searchText = null);
 
         int GetAllEventsCount(string creatorId = null, string searchCriteria = null, string searchText = null);
 
-        int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId);
+        int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId, string searchCriteria = null, string searchText = null);
 
         Task<IList<T>> GetAllFiteredByStatusAndGroupAsync<T>(Status status, string groupId, string creatorId = null);
 

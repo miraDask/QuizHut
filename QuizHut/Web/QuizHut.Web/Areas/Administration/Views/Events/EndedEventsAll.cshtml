@@ -5,6 +5,20 @@
 
     <div class="col-md-10 mb-4 ml-md-5">
         <div class="component">
+            <form method="get" class="form-subscribe form-inline mb-4" asp-action="EndedEventsAll" asp-controller="Events">
+                Search by:
+                <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
+                    <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
+                </select>
+                <div class="form-group flex-grow-1">
+                    <label class="sr-only" for="email4">Email</label>
+                    <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                           placeholder="Choose criteria and type to search..." name="searchText" value="@Model.SearchString">
+                    <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                </div>
+            </form>
+        </div>
+        <div class="component">
             <div class="card">
                 <div class="card-header">
                     <i class="fas fa-circle text-danger"></i> Results for:
@@ -19,7 +33,7 @@
                                     <th scope="row" class="pt-3">@_event.Name</th>
                                     <th scope="row" class="pt-3 text-center"></th>
                                     <td class="text-right">
-                                        <a type="submit" class="btn btn-outline-danger py-1" 
+                                        <a type="submit" class="btn btn-outline-danger py-1"
                                            asp-area="Administration"
                                            asp-action="EventResultsDetails"
                                            asp-controller="Results"
@@ -45,7 +59,9 @@
                            asp-area="Administration"
                            asp-controller="Events"
                            asp-action="EndedEventsAll"
-                           asp-route-page="@Model.PreviousPage">
+                           asp-route-page="@Model.PreviousPage"
+                           asp-route-searchText="@Model.SearchString"
+                           asp-route-searchCriteria="@Model.SearchType">
                             <i class="fas fa-long-arrow-alt-left"></i>
                         </a>
                     </li>
@@ -57,7 +73,9 @@
                                asp-area="Administration"
                                asp-controller="Events"
                                asp-action="EndedEventsAll"
-                               asp-route-page="@i">
+                               asp-route-page="@i"
+                               asp-route-searchText="@Model.SearchString"
+                               asp-route-searchCriteria="@Model.SearchType">
                                 @i
                             </a>
                         </li>
@@ -67,7 +85,9 @@
                            asp-area="Administration"
                            asp-controller="Events"
                            asp-action="EndedEventsAll"
-                           asp-route-page="@Model.NextPage">
+                           asp-route-page="@Model.NextPage"
+                           asp-route-searchText="@Model.SearchString"
+                           asp-route-searchCriteria="@Model.SearchType">
                             <i class="fas fa-long-arrow-alt-right"></i>
                         </a>
                     </li>

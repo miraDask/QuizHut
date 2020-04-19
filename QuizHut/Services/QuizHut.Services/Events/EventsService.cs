@@ -117,15 +117,29 @@
                    .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId)
-        => await this.repository
-                     .AllAsNoTracking()
-                     .Where(x => x.Status == status && x.CreatorId == creatorId)
-                     .OrderByDescending(x => x.CreatedOn)
-                     .Skip(countPerPage * (page - 1))
-                     .Take(countPerPage)
-                     .To<T>()
-                     .ToListAsync();
+        public async Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(
+            int page,
+            int countPerPage,
+            Status status,
+            string creatorId,
+            string searchCriteria = null,
+            string searchText = null)
+        {
+            var query = this.repository.AllAsNoTracking().Where(x => x.Status == status && x.CreatorId == creatorId);
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
+                query = query.Where(filter);
+            }
+
+            return await query
+                   .OrderByDescending(x => x.CreatedOn)
+                   .Skip(countPerPage * (page - 1))
+                   .Take(countPerPage)
+                   .To<T>()
+                   .ToListAsync();
+        }
 
         public async Task<IList<T>> GetAllFiteredByStatusAndGroupAsync<T>(
             Status status, string groupId, string creatorId = null)
@@ -331,11 +345,22 @@
             return query.Count();
         }
 
-        public int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId)
-        => this.repository
-               .AllAsNoTracking()
-               .Where(x => x.Status == status && x.CreatorId == creatorId)
-               .Count();
+        public int GetEventsCountByCreatorIdAndStatus(
+            Status status,
+            string creatorId,
+            string searchCriteria = null,
+            string searchText = null)
+        {
+            var query = this.repository.AllAsNoTracking().Where(x => x.Status == status && x.CreatorId == creatorId);
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
+                query = query.Where(filter);
+            }
+
+            return query.Count();
+        }
 
         private async Task<string[]> GetStudentsNamesByEventIdAsync(string id)
         => await this.repository
