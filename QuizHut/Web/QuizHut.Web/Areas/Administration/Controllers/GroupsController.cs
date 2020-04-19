@@ -44,22 +44,22 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllGroupsCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> AllGroupsCreatedByTeacher(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var allGroupsCreatedByTeacherCount = this.service.GetAllGroupsCount(userId);
-            int pagesCount = 0;
 
             var model = new GroupsListAllViewModel()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allGroupsCreatedByTeacherCount = this.service.GetAllGroupsCount(userId, searchCriteria, searchText);
             if (allGroupsCreatedByTeacherCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allGroupsCreatedByTeacherCount / (decimal)countPerPage);
-                var groups = await this.service.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, userId);
+                var groups = await this.service.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, userId, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var group in groups)
                 {
@@ -67,7 +67,7 @@
                 }
 
                 model.Groups = groups;
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allGroupsCreatedByTeacherCount / (decimal)countPerPage);
             }
 
             return this.View(model);
