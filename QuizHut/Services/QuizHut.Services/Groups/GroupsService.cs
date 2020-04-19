@@ -7,6 +7,7 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
     using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.StudentsGroups;
@@ -14,7 +15,6 @@
 
     public class GroupsService : IGroupsService
     {
-        private const string Name = "Name";
         private readonly IDeletableEntityRepository<Group> repository;
         private readonly IStudentsGroupsService studentsGroupsService;
         private readonly IExpressionBuilder expressionBuilder;
@@ -129,7 +129,7 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            var nameInputIsEmpty = searchText == null && searchCriteria == Name;
+            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
             if (searchCriteria != null && !nameInputIsEmpty)
             {
                 var filter = this.expressionBuilder.GetExpression<Group>(searchCriteria, searchText);
@@ -153,7 +153,7 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            var nameInputIsEmpty = searchText == null && searchCriteria == Name;
+            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
             if (searchCriteria != null && !nameInputIsEmpty)
             {
                 var filter = this.expressionBuilder.GetExpression<Group>(searchCriteria, searchText);

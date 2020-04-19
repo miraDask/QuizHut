@@ -8,18 +8,23 @@
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
+    using QuizHut.Services.Tools.Expressions;
 
     public class QuizzesService : IQuizzesService
     {
         private readonly IDeletableEntityRepository<Quiz> quizRepository;
+        private readonly IExpressionBuilder expressionBuilder;
         private readonly IRepository<Password> passwordRepository;
 
         public QuizzesService(
             IDeletableEntityRepository<Quiz> quizRepository,
+            IExpressionBuilder expressionBuilder,
             IRepository<Password> passwordRepository)
         {
             this.quizRepository = quizRepository;
+            this.expressionBuilder = expressionBuilder;
             this.passwordRepository = passwordRepository;
         }
 
@@ -199,13 +204,25 @@
                 .Select(x => x.CreatorId)
                 .FirstOrDefaultAsync();
 
-        public async Task<IEnumerable<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null)
+        public async Task<IEnumerable<T>> GetAllPerPageAsync<T>(
+            int page,
+            int countPerPage,
+            string creatorId = null,
+            string searchCriteria = null,
+            string searchText = null)
         {
             var query = this.quizRepository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
+            if (searchCriteria != null && !nameInputIsEmpty)
+            {
+                var filter = this.expressionBuilder.GetExpression<Quiz>(searchCriteria, searchText);
+                query = query.Where(filter);
             }
 
             return await query.OrderByDescending(x => x.CreatedOn)
@@ -215,13 +232,20 @@
             .ToListAsync();
         }
 
-        public int GetAllQuizzesCount(string creatorId = null)
+        public int GetAllQuizzesCount(string creatorId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.quizRepository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
+            if (searchCriteria != null && !nameInputIsEmpty)
+            {
+                var filter = this.expressionBuilder.GetExpression<Quiz>(searchCriteria, searchText);
+                query = query.Where(filter);
             }
 
             return query.Count();

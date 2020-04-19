@@ -12,7 +12,10 @@
         private const string StatusEnded = "Ended";
         private const string StatusActive = "Active";
         private const string StatusString = "Status";
+        private const string Assigned = "Assigned";
+        private const string Unassigned = "Unassigned";
         private const string Email = "Email";
+        private const string EventId = "EventId";
         private const string ParameterName = "x";
 
         public Expression<Func<T, bool>> GetExpression<T>(string queryType, string queryValue)
@@ -27,7 +30,11 @@
                     return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);
                 case StatusEnded:
                 case StatusActive:
-                    return this.GetEqualMethod<T>(queryType, queryValue, parameter);
+                    return this.GetEqualMethod<T>(queryType, queryValue, parameter, true);
+                case Assigned:
+                    return this.GetEqualMethod<T>(queryType, queryValue, parameter, false);
+                case Unassigned:
+                    return this.GetEqualMethod<T>(queryType, queryValue, parameter, true);
                 default:
                     return null;
             }
@@ -44,18 +51,30 @@
             return Expression.Call(call, method, constant);
         }
 
-        private Expression<Func<T, bool>> GetEqualMethod<T>(string queryType, string queryValue, ParameterExpression parameter)
+        private Expression<Func<T, bool>> GetEqualMethod<T>(string queryType, string queryValue, ParameterExpression parameter, bool equality)
         {
             var nameOfProperty = this.GetParameterName(queryType);
             Expression property = Expression.Property(parameter, nameOfProperty);
-            Expression right = Expression.Constant(queryType == StatusActive ? Status.Active : Status.Ended);
-            var call = Expression.Equal(property, right);
+            Expression right = Expression.Constant(this.GetType(queryType));
+            var call = equality == true ? Expression.Equal(property, right) : Expression.NotEqual(property, right);
             if (queryValue != null)
             {
                 call = Expression.AndAlso(call, this.GetContainsMethod<T>(Name, queryValue, parameter));
             }
 
             return Expression.Lambda<Func<T, bool>>(call, parameter);
+        }
+
+        private object GetType(string queryType)
+        {
+            return queryType switch
+            {
+                StatusActive => Status.Active,
+                StatusEnded => Status.Ended,
+                Unassigned => null,
+                Assigned => null,
+                _ => throw new InvalidFilterCriteriaException(),
+            };
         }
 
         private string GetParameterName(string queryType)
@@ -66,6 +85,8 @@
                 case StatusActive:
                 case StatusEnded: return StatusString;
                 case Email: return queryType;
+                case Assigned:
+                case Unassigned: return EventId;
 
                 // case "creation": return "CreatedOn";
                 // case "Date": return "ActivationDateAndTime";

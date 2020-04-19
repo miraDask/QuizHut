@@ -87,11 +87,10 @@
         [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> ResultsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            int pagesCount = 0;
             var model = new EventsListAllViewModel<EventSimpleViewModel>()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
                 SearchType = searchCriteria,
                 SearchString = searchText,
             };
@@ -100,9 +99,8 @@
 
             if (allEventsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
                 var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage, null, searchCriteria, searchText);
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
                 model.Events = events;
             }
 
@@ -112,11 +110,10 @@
         [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> EventsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            int pagesCount = 0;
             var model = new EventsListAllViewModel<EventListViewModel>()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
                 SearchType = searchCriteria,
                 SearchString = searchText,
             };
@@ -125,7 +122,6 @@
 
             if (allEventsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
                 var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage, null, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var @event in events)
@@ -134,7 +130,7 @@
                     @event.StartDate = this.dateTimeConverter.GetDate(@event.ActivationDateAndTime, timeZoneIana);
                 }
 
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
                 model.Events = events;
             }
 
@@ -144,11 +140,10 @@
         [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> GroupsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            int pagesCount = 0;
             var model = new GroupsListAllViewModel()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
                 SearchType = searchCriteria,
                 SearchString = searchText,
             };
@@ -156,7 +151,6 @@
             var allGroupsCount = this.groupsService.GetAllGroupsCount(null, searchCriteria, searchText);
             if (allGroupsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allGroupsCount / (decimal)countPerPage);
                 var groups = await this.groupsService.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, null, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var group in groups)
@@ -165,34 +159,34 @@
                 }
 
                 model.Groups = groups;
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allGroupsCount / (decimal)countPerPage);
             }
 
             return this.View(model);
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]
-        public async Task<IActionResult> QuizzesAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> QuizzesAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var allQuizzesCount = this.quizzesService.GetAllQuizzesCount();
-            int pagesCount = 0;
             var model = new QuizzesAllListingViewModel()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allQuizzesCount = this.quizzesService.GetAllQuizzesCount(null, searchCriteria, searchText);
             if (allQuizzesCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allQuizzesCount / (decimal)countPerPage);
-                var quizzes = await this.quizzesService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage);
+                var quizzes = await this.quizzesService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, null, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var quiz in quizzes)
                 {
                     quiz.CreatedOnDate = this.dateTimeConverter.GetDate(quiz.CreatedOn, timeZoneIana);
                 }
 
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allQuizzesCount / (decimal)countPerPage);
                 model.Quizzes = quizzes;
             }
 
@@ -202,20 +196,17 @@
         [SetDashboardRequestToTrueInSessionActionFilter]
         public async Task<IActionResult> StudentsAll(int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var allStudentsCount = this.userService.GetAllStudentsCount();
-            int pagesCount = 0;
             var model = new StudentsAllViewModel()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
             };
 
+            var allStudentsCount = this.userService.GetAllStudentsCount();
             if (allStudentsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allStudentsCount / (decimal)countPerPage);
-                var students = await this.userService.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage);
-                model.Students = students;
-                model.PagesCount = pagesCount;
+                model.Students = await this.userService.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage);
+                model.PagesCount = (int)Math.Ceiling(allStudentsCount / (decimal)countPerPage);
             }
 
             return this.View(model);

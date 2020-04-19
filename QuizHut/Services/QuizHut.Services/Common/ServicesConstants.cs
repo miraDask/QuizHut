@@ -15,5 +15,6 @@
         public const string SenderEmail = "quizhutproject@gmail.com";
         public const string SenderName = "QuizHut team";
         public const string StringToReplace = "{password}";
+        public const string Name = "Name";
     }
 }

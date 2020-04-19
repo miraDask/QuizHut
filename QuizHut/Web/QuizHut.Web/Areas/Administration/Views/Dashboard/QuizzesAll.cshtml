@@ -2,83 +2,100 @@
 @{
     ViewData["Title"] = "Quizzes";
 }
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
-        <div class="container my-1">
-            <h5 class="mb-0">All Quizzes</h5>
+    <div class="container">
+        <div class="component">
+            <form method="get" class="form-subscribe form-inline my-4" asp-action="QuizzesAll" asp-controller="Dashboard">
+                Search by:
+                <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
+                    <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
+                    @*<option value="Date" selected="@(Model.SearchType == "Date" ? true : false)">date</option>*@
+                <option value="Assigned" selected="@(Model.SearchType == "Assigned" ? true : false)">assigned</option>
+                    <option value="Unassigned" selected="@(Model.SearchType == "Unassigned" ? true : false)">unassigned</option>
+                </select>
+                <div class="form-group flex-grow-1">
+                    <label class="sr-only" for="email4">Email</label>
+                    <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                           placeholder="Choose criteria and type to search..." name="searchText" value="@Model.SearchString">
+                    <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                </div>
+            </form>
         </div>
-    </nav>
-    <table class="table table-hover mb-0">
-        <thead>
-            <tr class="table-active bg-white">
-                <th scope="col">Name</th>
-                <th scope="col">Created On</th>
-                <th scope="col">Questions</th>
-                <th scope="col">Is Assigned</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Quizzes.Any())
-            {
-                var count = 0;
-                foreach (var quiz in Model.Quizzes)
+        <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+            <div class="container my-1">
+                <h5 class="mb-0">All Quizzes</h5>
+            </div>
+        </nav>
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr class="table-active bg-white">
+                    <th scope="col">Name</th>
+                    <th scope="col">Created On</th>
+                    <th scope="col">Questions</th>
+                    <th scope="col">Is Assigned</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Quizzes.Any())
                 {
-                    var targetId = "quiz" + count.ToString();
-                    var target = "#" + targetId;
-                    <tr class="table-warning">
-                        <th scope="row" class="pt-4">@quiz.Name</th>
-                        <td class="pt-4">@quiz.CreatedOnDate</td>
-                        <td class="pt-4">@quiz.QuestionsCount</td>
-                        <td style="color:@quiz.Color" class="pt-4"><i class="fas fa-circle"></i></td>
-                        <td>
-                            <form method="post" class="component  navbar-expand-lg text-right">
-                                <ul class="navbar-nav ml-auto">
-                                    <li class="nav-item m-1">
-                                        <a class="nav-link  btn btn-white" asp-action="Display" asp-controller="Quizzes" asp-route-id="@quiz.Id">
-                                            <i class="far fa-edit"></i>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item m-1">
-                                        <!-- button that opens the modal -->
-                                        <button type="button" class="nav-link  btn btn-white col-12" data-toggle="modal" data-target="@target">
-                                            <i class="far fa-times-circle"></i>
-                                        </button>
-                                        <!-- the modal -->
-                                        <div class="modal fade" id="@targetId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body text-center">
-                                                        <h5>Are you sure you want to delete this quiz?</h5>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a class="btn btn-success"
-                                                           asp-action="DeleteQuiz"
-                                                           asp-controller="Quizzes"
-                                                           asp-route-id="@quiz.Id">
-                                                            Delete
-                                                        </a>
-                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                    var count = 0;
+                    foreach (var quiz in Model.Quizzes)
+                    {
+                        var targetId = "quiz" + count.ToString();
+                        var target = "#" + targetId;
+                        <tr class="table-warning">
+                            <th scope="row" class="pt-4">@quiz.Name</th>
+                            <td class="pt-4">@quiz.CreatedOnDate</td>
+                            <td class="pt-4">@quiz.QuestionsCount</td>
+                            <td style="color:@quiz.Color" class="pt-4"><i class="fas fa-circle"></i></td>
+                            <td>
+                                <form method="post" class="component  navbar-expand-lg text-right">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item m-1">
+                                            <a class="nav-link  btn btn-white" asp-action="Display" asp-controller="Quizzes" asp-route-id="@quiz.Id">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-1">
+                                            <!-- button that opens the modal -->
+                                            <button type="button" class="nav-link  btn btn-white col-12" data-toggle="modal" data-target="@target">
+                                                <i class="far fa-times-circle"></i>
+                                            </button>
+                                            <!-- the modal -->
+                                            <div class="modal fade" id="@targetId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            <h5>Are you sure you want to delete this quiz?</h5>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-success"
+                                                               asp-action="DeleteQuiz"
+                                                               asp-controller="Quizzes"
+                                                               asp-route-id="@quiz.Id">
+                                                                Delete
+                                                            </a>
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </form>
-                        </td>
-                    </tr>
+                                        </li>
+                                    </ul>
+                                </form>
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 @if (Model.PagesCount > 1)
 {
     var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
@@ -90,7 +107,9 @@
                    asp-area="Administration"
                    asp-controller="Dashboard"
                    asp-action="QuizzesAll"
-                   asp-route-page="@Model.PreviousPage">
+                   asp-route-page="@Model.PreviousPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-left"></i>
                 </a>
             </li>
@@ -102,7 +121,9 @@
                        asp-area="Administration"
                        asp-controller="Dashboard"
                        asp-action="QuizzesAll"
-                       asp-route-page="@i">
+                       asp-route-page="@i"
+                       asp-route-searchText="@Model.SearchString"
+                       asp-route-searchCriteria="@Model.SearchType">
                         @i
                     </a>
                 </li>
@@ -112,7 +133,9 @@
                    asp-area="Administration"
                    asp-controller="Dashboard"
                    asp-action="QuizzesAll"
-                   asp-route-page="@Model.NextPage">
+                   asp-route-page="@Model.NextPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-right"></i>
                 </a>
             </li>
