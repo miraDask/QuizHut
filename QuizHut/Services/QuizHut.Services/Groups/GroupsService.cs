@@ -10,20 +10,25 @@
     using QuizHut.Services.EventsGroups;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.StudentsGroups;
+    using QuizHut.Services.Tools.Expressions;
 
     public class GroupsService : IGroupsService
     {
+        private const string Name = "Name";
         private readonly IDeletableEntityRepository<Group> repository;
         private readonly IStudentsGroupsService studentsGroupsService;
+        private readonly IExpressionBuilder expressionBuilder;
         private readonly IEventsGroupsService eventsGroupsService;
 
         public GroupsService(
             IDeletableEntityRepository<Group> repository,
             IStudentsGroupsService studentsGroupsService,
+            IExpressionBuilder expressionBuilder,
             IEventsGroupsService eventsGroupsService)
         {
             this.repository = repository;
             this.studentsGroupsService = studentsGroupsService;
+            this.expressionBuilder = expressionBuilder;
             this.eventsGroupsService = eventsGroupsService;
         }
 
@@ -110,13 +115,25 @@
             .To<T>()
             .ToListAsync();
 
-        public async Task<IList<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null)
+        public async Task<IList<T>> GetAllPerPageAsync<T>(
+            int page,
+            int countPerPage,
+            string creatorId = null,
+            string searchCriteria = null,
+            string searchText = null)
         {
             var query = this.repository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            var nameInputIsEmpty = searchText == null && searchCriteria == Name;
+            if (searchCriteria != null && !nameInputIsEmpty)
+            {
+                var filter = this.expressionBuilder.GetExpression<Group>(searchCriteria, searchText);
+                query = query.Where(filter);
             }
 
             return await query
@@ -127,13 +144,20 @@
                    .ToListAsync();
         }
 
-        public int GetAllGroupsCount(string creatorId = null)
+        public int GetAllGroupsCount(string creatorId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            var nameInputIsEmpty = searchText == null && searchCriteria == Name;
+            if (searchCriteria != null && !nameInputIsEmpty)
+            {
+                var filter = this.expressionBuilder.GetExpression<Group>(searchCriteria, searchText);
+                query = query.Where(filter);
             }
 
             return query.Count();

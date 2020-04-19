@@ -142,20 +142,22 @@
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]
-        public async Task<IActionResult> GroupsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> GroupsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var allGroupsCount = this.groupsService.GetAllGroupsCount();
             int pagesCount = 0;
             var model = new GroupsListAllViewModel()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allGroupsCount = this.groupsService.GetAllGroupsCount(null, searchCriteria, searchText);
             if (allGroupsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allGroupsCount / (decimal)countPerPage);
-                var groups = await this.groupsService.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage);
+                var groups = await this.groupsService.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, null, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var group in groups)
                 {

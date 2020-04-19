@@ -7,13 +7,13 @@
     {
         Task<IList<T>> GetAllAsync<T>(string creatorId = null, string eventId = null);
 
-        Task<IList<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null);
+        Task<IList<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null, string searchCriteria = null, string searchText = null);
 
         Task<string> CreateGroupAsync(string name, string creatorId);
 
         Task<T> GetGroupModelAsync<T>(string groupId);
 
-        int GetAllGroupsCount(string creatorId = null);
+        int GetAllGroupsCount(string creatorId = null, string searchCriteria = null, string searchText = null);
 
         Task<IEnumerable<T>> GetAllByEventIdAsync<T>(string eventId);
 
