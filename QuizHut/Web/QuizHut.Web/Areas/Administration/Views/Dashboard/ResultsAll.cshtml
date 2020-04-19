@@ -60,7 +60,8 @@
                            asp-controller="Dashboard"
                            asp-action="ResultsAll"
                            asp-route-page="@Model.PreviousPage"
-                           asp-route-searchText="@Model.SearchString" asp-route-searchCriteria="@Model.SearchType">
+                           asp-route-searchText="@Model.SearchString"
+                           asp-route-searchCriteria="@Model.SearchType">
 
                             <i class="fas fa-long-arrow-alt-left"></i>
                         </a>
@@ -74,7 +75,9 @@
                                asp-area="Administration"
                                asp-controller="Dashboard"
                                asp-action="ResultsAll"
-                               asp-route-page="@i" asp-route-searchText="@Model.SearchString" asp-route-searchCriteria="@Model.SearchType">
+                               asp-route-page="@i"
+                               asp-route-searchText="@Model.SearchString"
+                               asp-route-searchCriteria="@Model.SearchType">
                                 @i
                             </a>
                         </li>
@@ -84,7 +87,9 @@
                            asp-area="Administration"
                            asp-controller="Dashboard"
                            asp-action="ResultsAll"
-                           asp-route-page="@Model.NextPage" asp-route-searchText="@Model.SearchString" asp-route-searchCriteria="@Model.SearchType">
+                           asp-route-page="@Model.NextPage"
+                           asp-route-searchText="@Model.SearchString"
+                           asp-route-searchCriteria="@Model.SearchType">
                             <i class="fas fa-long-arrow-alt-right"></i>
                         </a>
                     </li>

@@ -2,111 +2,129 @@
 @{
     ViewData["Title"] = "All Events Created By Teacher";
 }
-<div class="container">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
-        <div class="container">
-            <h5 class="mb-0">Events Managment</h5>
-            <button class="navbar-toggler collapsed bg-info"
-                    type="button" data-toggle="collapse"
-                    data-target="#navbarNavDropdown-3"
-                    aria-controls="navbarNavDropdown-3"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item m-1">
-                        <a class="nav-link  btn btn-info" asp-action="EventInput" asp-controller="Events">
-                            <i class="fas fa-plus-circle"></i>
-                            <span class="text-white">Add New</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+
+    <div class="container">
+        <div class="component">
+            <form method="get" class="form-subscribe form-inline mb-4" asp-action="AllEventsCreatedByTeacher" asp-controller="Events">
+                Search by:
+                <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
+                    <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
+                    @*<option value="Date" selected="@(Model.SearchType == "Date" ? true : false)">date</option>*@
+                    <option value="Active" selected="@(Model.SearchType == "Active" ? true : false)">active</option>
+                    <option value="Ended" selected="@(Model.SearchType == "Ended" ? true : false)">ended</option>
+                </select>
+                <div class="form-group flex-grow-1">
+                    <label class="sr-only" for="email4">Email</label>
+                    <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                           placeholder="Choose criteria and type to search..." name="searchText" value="@Model.SearchString">
+                    <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                </div>
+            </form>
         </div>
-    </nav>
-    <table class="table table-hover mb-0">
-        <thead>
-            <tr class="table-active bg-white">
-                <th scope="col">Name</th>
-                <th scope="col">Start</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Status</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Events.Any())
-            {
-                var count = 0;
-                foreach (var _event in Model.Events)
+        <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
+            <div class="container">
+                <h5 class="mb-0">Events Managment</h5>
+                <button class="navbar-toggler collapsed bg-info"
+                        type="button" data-toggle="collapse"
+                        data-target="#navbarNavDropdown-3"
+                        aria-controls="navbarNavDropdown-3"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse text-center collapse" id="navbarNavDropdown-3">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item m-1">
+                            <a class="nav-link  btn btn-info" asp-action="EventInput" asp-controller="Events">
+                                <i class="fas fa-plus-circle"></i>
+                                <span class="text-white">Add New</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr class="table-active bg-white">
+                    <th scope="col">Name</th>
+                    <th scope="col">Start</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Events.Any())
                 {
-                    var targetId = "event" + count.ToString();
-                    var target = "#" + targetId;
-                    var color = _event.Status == ModelCostants.StatusActive
-                        ? ModelCostants.ColorActive :
-                        _event.Status == ModelCostants.StatusEnded
-                        ? ModelCostants.ColorEnded
-                        : ModelCostants.ColorPending;
-                    <tr class="table-info">
-                        <th scope="row" class="pt-4">@_event.Name</th>
-                        <td class="pt-4">@_event.StartDate</td>
-                        <td class="pt-4">@_event.Duration</td>
-                        <td style="color:@color" class="status pt-4" data="@_event.Id">@_event.Status</td>
-                        <td>
-                            <div class="component navbar-expand-lg text-right">
-                                <ul class="navbar-nav ml-auto">
-                                    <li class="nav-item m-1">
-                                        <a type="submit" class="nav-link  btn btn-white"
-                                           asp-area="Administration"
-                                           asp-action="EventDetails"
-                                           asp-controller="Events"
-                                           asp-route-id="@_event.Id">
-                                            <i class="far fa-edit"></i>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item m-1">
-                                        <!-- button that opens the modal -->
-                                        <button type="button" class="nav-link  btn btn-white col-12" data-toggle="modal" data-target="@target">
-                                            <i class="far fa-times-circle"></i>
-                                        </button>
-                                        <!-- the modal -->
-                                        <div class="modal fade" id="@targetId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body text-center">
-                                                        <h5>Are you sure you want to delete this event?</h5>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a class="btn btn-success"
-                                                           asp-area="Administration"
-                                                           asp-action="Delete"
-                                                           asp-controller="Events"
-                                                           asp-route-id="@_event.Id">
-                                                            Delete
-                                                        </a>
-                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                    var count = 0;
+                    foreach (var _event in Model.Events)
+                    {
+                        var targetId = "event" + count.ToString();
+                        var target = "#" + targetId;
+                        var color = _event.Status == ModelCostants.StatusActive
+                            ? ModelCostants.ColorActive :
+                            _event.Status == ModelCostants.StatusEnded
+                            ? ModelCostants.ColorEnded
+                            : ModelCostants.ColorPending;
+                        <tr class="table-info">
+                            <th scope="row" class="pt-4">@_event.Name</th>
+                            <td class="pt-4">@_event.StartDate</td>
+                            <td class="pt-4">@_event.Duration</td>
+                            <td style="color:@color" class="status pt-4" data="@_event.Id">@_event.Status</td>
+                            <td>
+                                <div class="component navbar-expand-lg text-right">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item m-1">
+                                            <a type="submit" class="nav-link  btn btn-white"
+                                               asp-area="Administration"
+                                               asp-action="EventDetails"
+                                               asp-controller="Events"
+                                               asp-route-id="@_event.Id">
+                                                <i class="far fa-edit"></i>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item m-1">
+                                            <!-- button that opens the modal -->
+                                            <button type="button" class="nav-link  btn btn-white col-12" data-toggle="modal" data-target="@target">
+                                                <i class="far fa-times-circle"></i>
+                                            </button>
+                                            <!-- the modal -->
+                                            <div class="modal fade" id="@targetId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            <h5>Are you sure you want to delete this event?</h5>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a class="btn btn-success"
+                                                               asp-area="Administration"
+                                                               asp-action="Delete"
+                                                               asp-controller="Events"
+                                                               asp-route-id="@_event.Id">
+                                                                Delete
+                                                            </a>
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 }
-            }
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 @if (Model.PagesCount > 1)
 {
     var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
@@ -118,7 +136,9 @@
                    asp-area="Administration"
                    asp-controller="Events"
                    asp-action="AllEventsCreatedByTeacher"
-                   asp-route-page="@Model.PreviousPage">
+                   asp-route-page="@Model.PreviousPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-left"></i>
                 </a>
             </li>
@@ -130,7 +150,9 @@
                        asp-area="Administration"
                        asp-controller="Events"
                        asp-action="AllEventsCreatedByTeacher"
-                       asp-route-page="@i">
+                       asp-route-page="@i"
+                       asp-route-searchText="@Model.SearchString"
+                       asp-route-searchCriteria="@Model.SearchType">
                         @i
                     </a>
                 </li>
@@ -140,7 +162,9 @@
                    asp-area="Administration"
                    asp-controller="Events"
                    asp-action="AllEventsCreatedByTeacher"
-                   asp-route-page="@Model.NextPage">
+                   asp-route-page="@Model.NextPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-right"></i>
                 </a>
             </li>

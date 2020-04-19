@@ -49,10 +49,9 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllEventsCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> AllEventsCreatedByTeacher(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var allEventsCreatedByTeacher = this.service.GetAllEventsCount(userId);
             int pagesCount = 0;
 
             var model = new EventsListAllViewModel<EventListViewModel>()
@@ -61,10 +60,11 @@
                 PagesCount = pagesCount,
             };
 
+            var allEventsCreatedByTeacher = this.service.GetAllEventsCount(userId, searchCriteria, searchText);
             if (allEventsCreatedByTeacher > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCreatedByTeacher / (decimal)countPerPage);
-                var events = await this.service.GetAllPerPage<EventListViewModel>(page, countPerPage, userId);
+                var events = await this.service.GetAllPerPage<EventListViewModel>(page, countPerPage, userId, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var @event in events)
                 {
