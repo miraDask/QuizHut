@@ -15,8 +15,8 @@
 
         Task DeleteFromTeacherListAsync(string studentId, string teacherId);
 
-        int GetAllStudentsCount(string teacher = null);
+        int GetAllStudentsCount(string teacher = null, string searchCriteria = null, string searchText = null);
 
-        Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(int page, int countPerPage, string teacherId = null);
+        Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(int page, int countPerPage, string teacherId = null, string searchCriteria = null, string searchText = null);
     }
 }

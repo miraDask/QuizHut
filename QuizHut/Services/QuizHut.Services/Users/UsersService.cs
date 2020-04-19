@@ -7,23 +7,24 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
-    using QuizHut.Services.StudentsGroups;
+    using QuizHut.Services.Tools.Expressions;
 
     public class UsersService : IUsersService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
         private readonly IDeletableEntityRepository<ApplicationRole> roleRepository;
-        private readonly IStudentsGroupsService studentsGroupsService;
+        private readonly IExpressionBuilder expressionBuilder;
 
         public UsersService(
             IDeletableEntityRepository<ApplicationUser> userRepository,
             IDeletableEntityRepository<ApplicationRole> roleRepository,
-            IStudentsGroupsService studentsGroupsService)
+            IExpressionBuilder expressionBuilder)
         {
             this.userRepository = userRepository;
             this.roleRepository = roleRepository;
-            this.studentsGroupsService = studentsGroupsService;
+            this.expressionBuilder = expressionBuilder;
         }
 
         public async Task<bool> AddStudentAsync(string email, string teacherId)
@@ -110,7 +111,7 @@
             .To<T>()
             .ToListAsync();
 
-        public int GetAllStudentsCount(string teacherId = null)
+        public int GetAllStudentsCount(string teacherId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.userRepository.AllAsNoTracking().Where(x => !x.Roles.Any());
 
@@ -119,16 +120,35 @@
                 query = query.Where(x => x.TeacherId == teacherId);
             }
 
+            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
+            if (searchCriteria != null && !nameInputIsEmpty)
+            {
+                var filter = this.expressionBuilder.GetExpression<ApplicationUser>(searchCriteria, searchText);
+                query = query.Where(filter);
+            }
+
             return query.Count();
         }
 
-        public async Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(int page, int countPerPage, string teacherId = null)
+        public async Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(
+            int page,
+            int countPerPage,
+            string teacherId = null,
+            string searchCriteria = null,
+            string searchText = null)
         {
             var query = this.userRepository.AllAsNoTracking().Where(x => !x.Roles.Any());
 
             if (teacherId != null)
             {
                 query = query.Where(x => x.TeacherId == teacherId);
+            }
+
+            var nameInputIsEmpty = searchText == null && searchCriteria == ServicesConstants.Name;
+            if (searchCriteria != null && !nameInputIsEmpty)
+            {
+                var filter = this.expressionBuilder.GetExpression<ApplicationUser>(searchCriteria, searchText);
+                query = query.Where(filter);
             }
 
             return await query.OrderByDescending(x => x.CreatedOn)

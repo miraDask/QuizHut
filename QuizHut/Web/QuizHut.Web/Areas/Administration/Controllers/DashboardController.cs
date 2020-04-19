@@ -194,18 +194,20 @@
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]
-        public async Task<IActionResult> StudentsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> StudentsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var model = new StudentsAllViewModel()
             {
                 CurrentPage = page,
                 PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
-            var allStudentsCount = this.userService.GetAllStudentsCount();
+            var allStudentsCount = this.userService.GetAllStudentsCount(null, searchCriteria, searchText);
             if (allStudentsCount > 0)
             {
-                model.Students = await this.userService.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage);
+                model.Students = await this.userService.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage, null, searchCriteria, searchText);
                 model.PagesCount = (int)Math.Ceiling(allStudentsCount / (decimal)countPerPage);
             }
 

@@ -9,6 +9,9 @@
     public class ExpressionBuilder : IExpressionBuilder
     {
         private const string Name = "Name";
+        private const string FullName = "FullName";
+        private const string FirstName = "FirstName";
+        private const string LastName = "LastName";
         private const string StatusEnded = "Ended";
         private const string StatusActive = "Active";
         private const string StatusString = "Status";
@@ -21,13 +24,13 @@
         public Expression<Func<T, bool>> GetExpression<T>(string queryType, string queryValue)
         {
             var parameter = Expression.Parameter(typeof(T), ParameterName);
-            MethodCallExpression expressionBody;
-
             switch (queryType)
             {
                 case Name:
-                    expressionBody = this.GetContainsMethod<T>(queryType, queryValue, parameter);
-                    return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);
+                case FirstName:
+                case LastName:
+                case Email:
+                    return this.GetContainsMethod<T>(queryType, queryValue, parameter);
                 case StatusEnded:
                 case StatusActive:
                     return this.GetEqualMethod<T>(queryType, queryValue, parameter, true);
@@ -35,12 +38,14 @@
                     return this.GetEqualMethod<T>(queryType, queryValue, parameter, false);
                 case Unassigned:
                     return this.GetEqualMethod<T>(queryType, queryValue, parameter, true);
+                case FullName:
+                    return this.GetFullNameConcatMethod<T>(queryValue, parameter);
                 default:
                     return null;
             }
         }
 
-        private MethodCallExpression GetContainsMethod<T>(string queryType, string queryValue, ParameterExpression parameter)
+        private Expression<Func<T, bool>> GetContainsMethod<T>(string queryType, string queryValue, ParameterExpression parameter)
         {
             var nameOfProperty = this.GetParameterName(queryType);
             var property = Expression.PropertyOrField(parameter, nameOfProperty);
@@ -48,7 +53,8 @@
             MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[0]);
             var call = Expression.Call(property, toLowerMethod);
             var constant = Expression.Constant(queryValue.ToLower(), typeof(string));
-            return Expression.Call(call, method, constant);
+            var expressionBody = Expression.Call(call, method, constant);
+            return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);
         }
 
         private Expression<Func<T, bool>> GetEqualMethod<T>(string queryType, string queryValue, ParameterExpression parameter, bool equality)
@@ -63,6 +69,25 @@
             }
 
             return Expression.Lambda<Func<T, bool>>(call, parameter);
+        }
+
+        private Expression<Func<T, bool>> GetFullNameConcatMethod<T>(string queryValue, ParameterExpression parameter)
+        {
+            var firstNameroperty = Expression.PropertyOrField(parameter, FirstName);
+            var lastNameroperty = Expression.PropertyOrField(parameter, LastName);
+
+            var toLowerMethod = typeof(string).GetMethod("ToLower", new Type[0]);
+            var concatMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
+            var conntaisMethod = typeof(string).GetMethod("Contains", new Type[] { typeof(string) });
+
+            var firstNameToLowerCall = Expression.Call(firstNameroperty, toLowerMethod);
+            var lastNameToLowerCall = Expression.Call(lastNameroperty, toLowerMethod);
+
+            var concatCall = Expression.Call(concatMethod, firstNameToLowerCall, lastNameToLowerCall);
+            queryValue = string.Join(string.Empty, queryValue.Split(new[] { ' ', ',', '.', ':', '=', ';' }, StringSplitOptions.RemoveEmptyEntries));
+            var constant = Expression.Constant(queryValue, typeof(string));
+            var expressionBody = Expression.Call(concatCall, conntaisMethod, constant);
+            return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);
         }
 
         private object GetType(string queryType)
@@ -81,9 +106,11 @@
         {
             switch (queryType)
             {
-                case Name: return queryType;
                 case StatusActive:
                 case StatusEnded: return StatusString;
+                case Name:
+                case FirstName:
+                case LastName:
                 case Email: return queryType;
                 case Assigned:
                 case Unassigned: return EventId;
