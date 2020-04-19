@@ -21,6 +21,7 @@
     using QuizHut.Services.Quizzes;
     using QuizHut.Services.ScheduledJobsService;
     using QuizHut.Services.Tools.Expressions;
+    using QuizHut.Services.Tools.Search;
     using TimeZoneConverter;
 
     public class EventsService : IEventsService
@@ -89,7 +90,7 @@
               .ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string[] searchOptions = null)
+        public async Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -98,9 +99,10 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            if (searchOptions != null)
+            var nameInputIsEmpty = searchText == null && searchCriteria == "Name";
+            if (searchCriteria != null && !nameInputIsEmpty)
             {
-                var filter = this.expressionBuilder.GetExpression<Event>(searchOptions[0], searchOptions[1]);
+                var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
                 query = query.Where(filter);
             }
 
@@ -307,7 +309,7 @@
             return query.Count();
         }
 
-        public int GetAllEventsCount(string creatorId = null, string[] searchOptions = null)
+        public int GetAllEventsCount(string creatorId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -316,9 +318,10 @@
                 query = query.Where(x => x.CreatorId == creatorId);
             }
 
-            if (searchOptions != null)
+            var nameInputIsEmpty = searchText == null && searchCriteria == "Name";
+            if (searchCriteria != null && !nameInputIsEmpty)
             {
-                var filter = this.expressionBuilder.GetExpression<Event>(searchOptions[0], searchOptions[1]);
+                var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
                 query = query.Where(filter);
             }
 

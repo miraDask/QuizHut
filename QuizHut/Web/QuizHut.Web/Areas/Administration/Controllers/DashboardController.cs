@@ -11,6 +11,7 @@
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Quizzes;
+    using QuizHut.Services.Tools.Search;
     using QuizHut.Services.Users;
     using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.Infrastructure.Helpers;
@@ -96,13 +97,12 @@
                 SearchString = searchText,
             };
 
-            var searchOptions = searchText == null ? null : new string[] { searchCriteria, searchText };
-            int allEventsCount = this.eventService.GetAllEventsCount(null, searchOptions);
+            int allEventsCount = this.eventService.GetAllEventsCount(null, searchCriteria, searchText);
 
             if (allEventsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
-                var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage, null, searchOptions);
+                var events = await this.eventService.GetAllPerPage<EventSimpleViewModel>(page, countPerPage, null, searchCriteria, searchText);
                 model.PagesCount = pagesCount;
                 model.Events = events;
             }
@@ -122,13 +122,12 @@
                 SearchString = searchText,
             };
 
-            var searchOptions = searchCriteria == null ? null : new string[] { searchCriteria, searchText };
-            int allEventsCount = this.eventService.GetAllEventsCount(null, searchOptions);
+            int allEventsCount = this.eventService.GetAllEventsCount(null, searchCriteria, searchText);
 
             if (allEventsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
-                var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage, null, searchOptions);
+                var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage, null, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var @event in events)
                 {

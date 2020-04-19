@@ -9,12 +9,14 @@
                 Search by:
                 <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
                     <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
+                    <option value="Active" selected="@(Model.SearchType == "Active" ? true : false)">active</option>
+                    <option value="Ended" selected="@(Model.SearchType == "Ended" ? true : false)">ended</option>
                 </select>
                 <div class="form-group flex-grow-1">
                     <label class="sr-only" for="email4">Email</label>
                     <input id="input" type="text" class="form-control flex-grow-1 mr-2"
                            placeholder="Enter event name here..." name="searchText" value="@Model.SearchString">
-                    <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0" disabled>Search</button>
+                    <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
                 </div>
             </form>
         </div>

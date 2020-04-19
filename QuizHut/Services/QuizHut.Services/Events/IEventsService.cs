@@ -7,16 +7,17 @@
 
     using QuizHut.Data.Common.Enumerations;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Tools.Search;
 
     public interface IEventsService
     {
         Task<IList<T>> GetAllByCreatorIdAsync<T>(string creatorId);
 
-        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string[] searchOptions = null);
+        Task<IList<T>> GetAllPerPage<T>(int page, int countPerPage, string creatorId = null, string searchCriteria = null, string searchText = null);
 
         Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId);
 
-        int GetAllEventsCount(string creatorId = null, string[] searchOptions = null);
+        int GetAllEventsCount(string creatorId = null, string searchCriteria = null, string searchText = null);
 
         int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId);
 

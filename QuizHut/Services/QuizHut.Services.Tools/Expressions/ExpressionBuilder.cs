@@ -39,12 +39,12 @@
         private MethodCallExpression GetContainsMethod<T>(string queryType, string queryValue, ParameterExpression parameter)
         {
             var nameOfProperty = this.GetParameterName(queryType);
+            var property = Expression.PropertyOrField(parameter, nameOfProperty);
             MethodInfo method = typeof(string).GetMethod("Contains", new Type[] { typeof(string) });
             MethodInfo toLowerMethod = typeof(string).GetMethod("ToLower", new Type[0]);
-          
-            var property = Expression.PropertyOrField(parameter, nameOfProperty);
             var call = Expression.Call(property, toLowerMethod);
-            return Expression.Call(call, method, Expression.Constant(queryValue.ToLower(), typeof(string))); 
+            var constant = Expression.Constant(queryValue.ToLower(), typeof(string));
+            return Expression.Call(call, method, constant); 
         }
 
         private Expression<Func<T, bool>> GetEqualMethod<T>(string queryType, string queryValue, ParameterExpression parameter)
