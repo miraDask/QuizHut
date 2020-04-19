@@ -32,6 +32,8 @@
                 NewStudent = new StudentInputViewModel(),
                 CurrentPage = page,
                 PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
             var allStudentsAddedByTeacherCount = this.service.GetAllStudentsCount(userId, searchCriteria, searchText);
