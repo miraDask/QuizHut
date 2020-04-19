@@ -106,22 +106,22 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllQuizzesCreatedByTeacher(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> AllQuizzesCreatedByTeacher(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var allQuizzesCreatedByTeacher = this.quizService.GetAllQuizzesCount(userId);
-            var pagesCount = 0;
 
             var model = new QuizzesAllListingViewModel()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allQuizzesCreatedByTeacher = this.quizService.GetAllQuizzesCount(userId, searchCriteria, searchText);
             if (allQuizzesCreatedByTeacher > 0)
             {
-                pagesCount = (int)Math.Ceiling(allQuizzesCreatedByTeacher / (decimal)countPerPage);
-                var quizzes = await this.quizService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, userId);
+                var quizzes = await this.quizService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, userId, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var quiz in quizzes)
                 {
@@ -129,7 +129,7 @@
                 }
 
                 model.Quizzes = quizzes;
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allQuizzesCreatedByTeacher / (decimal)countPerPage);
             }
 
             return this.View(model);

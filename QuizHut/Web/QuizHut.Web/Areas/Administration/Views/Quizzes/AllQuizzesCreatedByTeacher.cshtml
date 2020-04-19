@@ -4,6 +4,23 @@
 }
 
 <div class="container">
+    <div class="component">
+        <form method="get" class="form-subscribe form-inline mb-4" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">
+            Search by:
+            <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
+                <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
+                @*<option value="Date" selected="@(Model.SearchType == "Date" ? true : false)">creation</option>*@
+                <option value="Assigned" selected="@(Model.SearchType == "Assigned" ? true : false)">assigned</option>
+                <option value="Unassigned" selected="@(Model.SearchType == "Unassigned" ? true : false)">unassigned</option>
+            </select>
+            <div class="form-group flex-grow-1">
+                <label class="sr-only" for="email4">Email</label>
+                <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                       placeholder="Choose criteria and type to search..." name="searchText" value="@Model.SearchString">
+                <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+            </div>
+        </form>
+    </div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
         <div class="container">
             <h5 class="mb-0">Quizzes Managment</h5>
@@ -109,7 +126,9 @@
                    asp-area="Administration"
                    asp-controller="Quizzes"
                    asp-action="AllQuizzesCreatedByTeacher"
-                   asp-route-page="@Model.PreviousPage">
+                   asp-route-page="@Model.PreviousPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-left"></i>
                 </a>
             </li>
@@ -121,7 +140,9 @@
                        asp-area="Administration"
                        asp-controller="Quizzes"
                        asp-action="AllQuizzesCreatedByTeacher"
-                       asp-route-page="@i">
+                       asp-route-page="@i"
+                       asp-route-searchText="@Model.SearchString"
+                       asp-route-searchCriteria="@Model.SearchType">
                         @i
                     </a>
                 </li>
@@ -131,7 +152,9 @@
                    asp-area="Administration"
                    asp-controller="Quizzes"
                    asp-action="AllQuizzesCreatedByTeacher"
-                   asp-route-page="@Model.NextPage">
+                   asp-route-page="@Model.NextPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
                     <i class="fas fa-long-arrow-alt-right"></i>
                 </a>
             </li>
