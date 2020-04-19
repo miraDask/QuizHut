@@ -6,15 +6,17 @@
     <div class="component">
         <form method="get" class="form-subscribe form-inline my-4" asp-action="EventsAll" asp-controller="Dashboard">
             Search by:
-            <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="y">
+            <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
                 <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
-                <option value="Date" selected="@(Model.SearchType == "Date" ? true : false)">date</option>
-                <option value="Status" selected="@(Model.SearchType == "Status" ? true : false)">status</option>
+                @*<option value="Date" selected="@(Model.SearchType == "Date" ? true : false)">date</option>*@
+                <option value="Active" selected="@(Model.SearchType == "Active" ? true : false)">active</option>
+                <option value="Ended" selected="@(Model.SearchType == "Ended" ? true : false)">ended</option>
             </select>
             <div class="form-group flex-grow-1">
                 <label class="sr-only" for="email4">Email</label>
-                <input id="input" type="text" class="form-control flex-grow-1 mr-2" placeholder="Choose criteria and type to search..." name="x" value="@Model.SearchString">
-                <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0" disabled>Search</button>
+                <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                       placeholder="Choose criteria and type to search..." name="searchText" value="@Model.SearchString">
+                <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0" >Search</button>
             </div>
         </form>
     </div>

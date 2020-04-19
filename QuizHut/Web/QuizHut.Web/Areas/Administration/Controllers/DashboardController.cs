@@ -97,8 +97,7 @@
             };
 
             var searchOptions = searchText == null ? null : new string[] { searchCriteria, searchText };
-            int allEventsCount = searchText != null ? allEventsCount = this.eventService.GetAllEventsCount(null, searchOptions)
-                                                    : this.eventService.GetAllEventsCount();
+            int allEventsCount = this.eventService.GetAllEventsCount(null, searchOptions);
 
             if (allEventsCount > 0)
             {
@@ -112,20 +111,24 @@
         }
 
         [SetDashboardRequestToTrueInSessionActionFilter]
-        public async Task<IActionResult> EventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> EventsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            var allEventsCount = this.eventService.GetAllEventsCount();
             int pagesCount = 0;
             var model = new EventsListAllViewModel<EventListViewModel>()
             {
                 CurrentPage = page,
                 PagesCount = pagesCount,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
+
+            var searchOptions = searchCriteria == null ? null : new string[] { searchCriteria, searchText };
+            int allEventsCount = this.eventService.GetAllEventsCount(null, searchOptions);
 
             if (allEventsCount > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCount / (decimal)countPerPage);
-                var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage);
+                var events = await this.eventService.GetAllPerPage<EventListViewModel>(page, countPerPage, null, searchOptions);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var @event in events)
                 {
