@@ -22,13 +22,15 @@
 
         public const string StatusCodePath = "/Home/StatusCode?code={0}";
 
-        public const int CookieTimeOut = 4;
+        public const int CookieTimeOut = 1;
 
         public const string Empty = "empty";
 
         public const string DashboardRequest = "DashboardRequest";
 
         public const string PageToReturnTo = "Page";
+
+        public const string SplitOption = ", ";
 
         public static class DataSeeding
         {

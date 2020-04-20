@@ -1,0 +1,35 @@
+﻿@model UserInputViewModel
+@{
+    ViewData["Title"] = "_AddNewUserPartial";
+    var errorMessage = @Model.Email == GlobalConstants.Empty
+       ? GlobalConstants.ErrorMessages.EmptyEmailField : $"There is no user with email {@Model.Email}";
+}
+@if (Model.IsNotAdded)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        <i class="fa fa-exclamation-circle"></i>
+        <strong>On no!</strong> @errorMessage Try again !
+    </div>
+}
+<div class="component bg-light">
+    <form method="post" class="container p-0" asp-action="AddRole" asp-controller="Dashboard">
+        <div class="px-3 pb-0 pt-4">
+            <div class="input-group">
+                <input type="email" asp-for="@Model.Email" class="form-control col-8 ml-2 p-2" placeholder="Email">
+                <select class="custom-select col-2 mx-1 rounded" asp-for="@Model.RoleName">
+                    <option value="Teacher">Teacher</option>
+                    <option value="Administrator">Admin</option>
+                </select>
+
+                <button type="submit" class="btn btn-primary col-2">
+                    <span>Add</span>
+                </button>
+            </div>
+        </div>
+        <span asp-validation-for="@Model.Email" class="text-danger ml-5"></span>
+    </form>
+</div>
+

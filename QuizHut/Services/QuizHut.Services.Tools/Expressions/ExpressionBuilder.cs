@@ -12,6 +12,8 @@
         private const string FullName = "FullName";
         private const string FirstName = "FirstName";
         private const string LastName = "LastName";
+        private const string Administrator = "Administrator";
+        private const string Teacher = "Teacher";
         private const string StatusEnded = "Ended";
         private const string StatusActive = "Active";
         private const string StatusPending = "Pending";
@@ -22,7 +24,7 @@
         private const string EventId = "EventId";
         private const string ParameterName = "x";
 
-        public Expression<Func<T, bool>> GetExpression<T>(string queryType, string queryValue)
+        public Expression<Func<T, bool>> GetExpression<T>(string queryType, string queryValue, string roleId = null)
         {
             var parameter = Expression.Parameter(typeof(T), ParameterName);
             switch (queryType)
@@ -42,6 +44,8 @@
                 case Unassigned:
                     return this.GetEqualMethod<T>(queryType, queryValue, parameter, true);
                 case FullName:
+                case Administrator:
+                case Teacher:
                     return this.GetFullNameConcatMethod<T>(queryValue, parameter);
                 default:
                     return null;
@@ -75,15 +79,15 @@
 
         private Expression<Func<T, bool>> GetFullNameConcatMethod<T>(string queryValue, ParameterExpression parameter)
         {
-            var firstNameroperty = Expression.PropertyOrField(parameter, FirstName);
-            var lastNameroperty = Expression.PropertyOrField(parameter, LastName);
+            var firstNameProperty = Expression.PropertyOrField(parameter, FirstName);
+            var lastNameProperty = Expression.PropertyOrField(parameter, LastName);
 
             var toLowerMethod = typeof(string).GetMethod("ToLower", new Type[0]);
             var concatMethod = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
             var conntaisMethod = typeof(string).GetMethod("Contains", new Type[] { typeof(string) });
 
-            var firstNameToLowerCall = Expression.Call(firstNameroperty, toLowerMethod);
-            var lastNameToLowerCall = Expression.Call(lastNameroperty, toLowerMethod);
+            var firstNameToLowerCall = Expression.Call(firstNameProperty, toLowerMethod);
+            var lastNameToLowerCall = Expression.Call(lastNameProperty, toLowerMethod);
 
             var concatCall = Expression.Call(concatMethod, firstNameToLowerCall, lastNameToLowerCall);
             queryValue = string.Join(string.Empty, queryValue.Split(new[] { ' ', ',', '.', ':', '=', ';' }, StringSplitOptions.RemoveEmptyEntries));

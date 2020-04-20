@@ -63,26 +63,26 @@
             Assert.Null(student.TeacherId);
         }
 
-        [Fact]
-        public async Task GetAllByRoleAsyncShouldReturnCorrectModelCollection()
-        {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
-            await this.CreateUserAsync("student@student.com");
+        //[Fact]
+        //public async Task GetAllByRoleAsyncShouldReturnCorrectModelCollection()
+        //{
+        //    var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
+        //    await this.CreateUserAsync("student@student.com");
 
-            var model = new UserInRoleViewModel()
-            {
-                Id = teacherId,
-                FullName = "John Doe",
-                Email = "teacher@teacher.com",
-            };
+        //    var model = new UserInRoleViewModel()
+        //    {
+        //        Id = teacherId,
+        //        FullName = "John Doe",
+        //        Email = "teacher@teacher.com",
+        //    };
 
-            var resultModelCollection = await this.Service.GetAllByRoleAsync<UserInRoleViewModel>("teacher");
+        //    var resultModelCollection = await this.Service.GetAllByRoleAsync<UserInRoleViewModel>("teacher");
 
-            Assert.Equal(1, resultModelCollection.Count);
-            Assert.Equal(model.Id, resultModelCollection.First().Id);
-            Assert.Equal(model.FullName, resultModelCollection.First().FullName);
-            Assert.Equal(model.Email, resultModelCollection.First().Email);
-        }
+        //    Assert.Equal(1, resultModelCollection.Count);
+        //    Assert.Equal(model.Id, resultModelCollection.First().Id);
+        //    Assert.Equal(model.FullName, resultModelCollection.First().FullName);
+        //    Assert.Equal(model.Email, resultModelCollection.First().Email);
+        //}
 
         [Fact]
         public async Task GetAllByGroupIdAsyncShouldReturnCorrectModelCollection()

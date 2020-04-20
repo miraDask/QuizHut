@@ -30,6 +30,7 @@
         private readonly IQuizzesService quizzesService;
         private readonly IDateTimeConverter dateTimeConverter;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
 
         public DashboardController(
             IUsersService userService,
@@ -37,7 +38,8 @@
             IGroupsService groupsService,
             IQuizzesService quizzesService,
             IDateTimeConverter dateTimeConverter,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager)
         {
             this.userService = userService;
             this.eventService = eventService;
@@ -45,32 +47,61 @@
             this.quizzesService = quizzesService;
             this.dateTimeConverter = dateTimeConverter;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public IActionResult Index(string invalidEmail, string roleName)
+        public async Task<IActionResult> Index(string invalidEmail, string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
-            if (invalidEmail != null)
+            var model = new DashboardIndexViewModel()
             {
-                return this.View(new InvalidUserEmailViewModel() { Email = invalidEmail, RoleName = roleName });
+                NewUser = new UserInputViewModel(),
+                CurrentPage = page,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
+            };
+
+            ApplicationRole role = null;
+            if (searchCriteria == GlobalConstants.AdministratorRoleName || searchCriteria == GlobalConstants.TeacherRoleName)
+            {
+                role = await this.roleManager.FindByNameAsync(searchCriteria);
             }
 
-            return this.View();
+            var usersInRolesCount = this.userService.GetAllInRolesCount(searchCriteria, searchText, role?.Id);
+            if (usersInRolesCount > 0)
+            {
+                var users = await this.userService.GetAllInRolesPerPageAsync<UserInRoleViewModel>(page, countPerPage, searchCriteria, searchText, role?.Id);
+                foreach (var user in users)
+                {
+                    var appUser = await this.userManager.FindByIdAsync(user.Id);
+                    var roles = await this.userManager.GetRolesAsync(appUser);
+                    user.Role = string.Join(GlobalConstants.SplitOption, roles);
+                }
+
+                model.Users = users;
+                model.PagesCount = (int)Math.Ceiling(usersInRolesCount / (decimal)countPerPage);
+            }
+
+            model.NewUser.IsNotAdded = invalidEmail != null ? true : false;
+            model.NewUser.Email = invalidEmail ?? null;
+
+            return this.View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRole(UsersInRoleAllViewModel model)
+        public async Task<IActionResult> AddRole(UserInputViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.RedirectToAction("Index", new { invalidEmail = GlobalConstants.Empty, roleName = model.RoleName });
             }
 
-            var user = await this.userManager.FindByEmailAsync(model.NewUser.Email);
+            var user = await this.userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
             {
-                return this.RedirectToAction("Index", new { invalidEmail = model.NewUser.Email, roleName = model.RoleName });
+                return this.RedirectToAction("Index", new { invalidEmail = model.Email, roleName = model.RoleName });
             }
 
             await this.userManager.AddToRoleAsync(user, model.RoleName);

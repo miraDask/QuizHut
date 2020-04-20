@@ -83,13 +83,12 @@
                 page = this.HttpContext.Session.GetInt32(GlobalConstants.PageToReturnTo) ?? 1;
             }
 
-            var pagesCount = 0;
             var quizDetails = await this.quizService.GetQuizByIdAsync<QuizDetailsViewModel>(id);
             var model = new QuizDetailsPagingModel()
             {
                 Details = quizDetails,
                 CurrentPage = (int)page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
             };
 
             var questionsCount = this.questionsService.GetAllByQuizIdCount(id);

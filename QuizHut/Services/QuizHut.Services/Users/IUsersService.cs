@@ -7,7 +7,17 @@
     {
         Task<IList<T>> GetAllStudentsAsync<T>(string teacherId = null, string groupId = null);
 
-        Task<IList<T>> GetAllByRoleAsync<T>(string roleName);
+        Task<IList<T>> GetAllInRolesPerPageAsync<T>(
+            int page,
+            int countPerPage,
+            string searchCriteria = null,
+            string searchText = null,
+            string roleId = null);
+
+        int GetAllInRolesCount(
+            string searchCriteria = null,
+            string searchText = null,
+            string roleId = null);
 
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
 

@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
+    using QuizHut.Common;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -89,18 +90,45 @@
             return await query.Where(x => !x.Roles.Any()).To<T>().ToListAsync();
         }
 
-        public async Task<IList<T>> GetAllByRoleAsync<T>(string roleName)
+        public async Task<IList<T>> GetAllInRolesPerPageAsync<T>(
+            int page,
+            int countPerPage,
+            string searchCriteria = null,
+            string searchText = null,
+            string roleId = null)
         {
-            var roleId = await this.roleRepository
-                .AllAsNoTracking()
-                .Where(x => x.Name == roleName)
-                .Select(x => x.Id).FirstOrDefaultAsync();
+            var query = this.userRepository.AllAsNoTracking();
+            query = roleId != null
+                ? query.Where(x => x.Roles.Any(x => x.RoleId == roleId))
+                : query.Where(x => x.Roles.Any());
 
-            return await this.userRepository
-                   .AllAsNoTracking()
-                   .Where(x => x.Roles.Any(x => x.RoleId == roleId))
-                   .To<T>()
-                   .ToListAsync();
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<ApplicationUser>(searchCriteria, searchText, roleId);
+                query = query.Where(filter);
+            }
+
+            return await query.OrderByDescending(x => x.CreatedOn)
+            .Skip(countPerPage * (page - 1))
+            .Take(countPerPage)
+            .To<T>()
+            .ToListAsync();
+        }
+
+        public int GetAllInRolesCount(string searchCriteria = null, string searchText = null, string roleId = null)
+        {
+            var query = this.userRepository.AllAsNoTracking().Where(x => x.Roles.Any());
+            query = roleId != null
+                           ? query.Where(x => x.Roles.Any(x => x.RoleId == roleId))
+                           : query.Where(x => x.Roles.Any());
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<ApplicationUser>(searchCriteria, searchText, roleId);
+                query = query.Where(filter);
+            }
+
+            return query.Count();
         }
 
         public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)

@@ -88,7 +88,7 @@
             services.AddSession(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.IdleTimeout = TimeSpan.FromMinutes(GlobalConstants.CookieTimeOut);
+                options.IdleTimeout = TimeSpan.FromDays(GlobalConstants.CookieTimeOut);
                 options.Cookie.IsEssential = true;
             });
 

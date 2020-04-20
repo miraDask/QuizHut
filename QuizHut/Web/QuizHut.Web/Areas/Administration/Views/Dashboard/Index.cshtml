@@ -1,41 +1,172 @@
-﻿@model InvalidUserEmailViewModel
+﻿@model DashboardIndexViewModel
 @{
     ViewData["Title"] = "Index";
-    var invalidEmail = Model != null ? Model.Email : null;
+
+
 }
-<div class="row">
-    <div class="mt-2 mb-5 col-md-8">
-        @if (Model != null && Model.RoleName == GlobalConstants.AdministratorRoleName)
-        {
-            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.AdministratorRoleName, invalidEmail = invalidEmail })
-            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.TeacherRoleName })
-        }
-        else if (Model != null && Model.RoleName == GlobalConstants.TeacherRoleName)
-        {
-            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.AdministratorRoleName })
-            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.TeacherRoleName, invalidEmail = invalidEmail })
-        }
-        else
-        {
-            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.AdministratorRoleName })
-            @await Component.InvokeAsync("UsersInRole", new { roleName = GlobalConstants.TeacherRoleName })
-        }
+    <div class="row">
+        <div class="mt-2 mb-5 col-md-9">
+            <div class="component">
+                <form method="get" class="form-subscribe form-inline mb-4" asp-action="Index" asp-controller="Dashboard">
+                    Search by:
+                    <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
+                        <option value="Administrator" selected="@(Model.SearchType == "Administrator" ? true : false)">admins</option>
+                        <option value="Teacher" selected="@(Model.SearchType == "Teacher" ? true : false)">teachers</option>
+                        <option value="FullName" selected="@(Model.SearchType == "FullName" ? true : false)">full name</option>
+                        <option value="FirstName" selected="@(Model.SearchType == "FirstName" ? true : false)">first name</option>
+                        <option value="LastName" selected="@(Model.SearchType == "LastName" ? true : false)">last name</option>
+                        <option value="Email" selected="@(Model.SearchType == "Email" ? true : false)">email</option>
+                    </select>
+                    <div class="form-group flex-grow-1">
+                        <label class="sr-only" for="email4">Email</label>
+                        <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                               placeholder="Choose criteria and type to search..." name="searchText" value="@Model.SearchString">
+                        <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+                    </div>
+                </form>
+            </div>
+            @await Html.PartialAsync("_AddNewUserPartial", @Model.NewUser)
+            <div class="navbar navbar-expand-lg navbar-dark bg-neutral p-3">
+                <h5 class="mb-0">Roles Managment</h5>
+            </div>
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr class="table-active bg-white">
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Users.Any())
+                    {
+                        var count = 0;
+                        @foreach (var user in Model.Users)
+                        {
+                            count++;
+                            <tr class="table-warning">
+                                <th scope="row" class="pt-4">@user.FullName</th>
+                                <td class="pt-4">@user.Email</td>
+                                <td class="pt-4">@user.Role</td>
+                                <td>
+                                    @if (user.Role.Split(GlobalConstants.SplitOption).Length == 1)
+                                    {
+                                        <a class="btn btn-primary"
+                                           asp-action="Delete" ,
+                                           asp-controller="Dashboard"
+                                           asp-area="Administration"
+                                           asp-route-id="@user.Id"
+                                           asp-route-roleName="@user.Role">
+                                            Delete
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Delete
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item"
+                                                   asp-action="Delete" ,
+                                                   asp-controller="Dashboard"
+                                                   asp-area="Administration"
+                                                   asp-route-id="@user.Id"
+                                                   asp-route-roleName="@GlobalConstants.AdministratorRoleName">Administrator</a>
+                                                <a class="dropdown-item"
+                                                   asp-action="Delete" ,
+                                                   asp-controller="Dashboard"
+                                                   asp-area="Administration"
+                                                   asp-route-id="@user.Id"
+                                                   asp-route-roleName="@GlobalConstants.TeacherRoleName">Teacher</a>
+                                            </div>
+                                        </div>
+                                    }
+                                    @*<div class="component  navbar-expand-lg text-right">
+                                    <ul class="navbar-nav ml-auto">
+
+                                        <li class="nav-item m-1">
+                                            <a class="nav-link btn btn-white"
+                                               asp-action="Delete" ,
+                                               asp-controller="Dashboard"
+                                               asp-area="Administration"
+                                               asp-route-id="@user.Id"
+                                               asp-route-roleName="@user.Role">
+                                                Delete
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+
+            @if (Model.PagesCount > 1)
+            {
+                var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+                var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+                <div class="text-center mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @disabledLeftArrow">
+                            <a class="page-link"
+                               asp-area="Administration"
+                               asp-controller="Dashboard"
+                               asp-action="Index"
+                               asp-route-page="@Model.PreviousPage"
+                               asp-route-searchText="@Model.SearchString"
+                               asp-route-searchCriteria="@Model.SearchType">
+                                <i class="fas fa-long-arrow-alt-left"></i>
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= Model.PagesCount; i++)
+                        {
+                            var active = i == Model.CurrentPage ? "active" : string.Empty;
+                            <li class="page-item @active">
+                                <a class="page-link"
+                                   asp-area="Administration"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index"
+                                   asp-route-page="@i"
+                                   asp-route-searchText="@Model.SearchString"
+                                   asp-route-searchCriteria="@Model.SearchType">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                        <li class="page-item @disabledRightArrow">
+                            <a class="page-link"
+                               asp-area="Administration"
+                               asp-controller="Dashboard"
+                               asp-action="Index"
+                               asp-route-page="@Model.NextPage"
+                               asp-route-searchText="@Model.SearchString"
+                               asp-route-searchCriteria="@Model.SearchType">
+                                <i class="fas fa-long-arrow-alt-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            }
+        </div>
+        <aside class="col-md-3">
+            <div>
+                <a href="/hangfire" target="_blank" class="btn btn-primary manage-account-btn ml-4 mb-5">
+                    Event Scheduler
+                    <i class="far fa-arrow-alt-circle-right ml-1"></i>
+                </a>
+            </div>
+            <div class="headline headline-md">
+                <h4 class="text-center">Last Updates</h4>
+                <hr>
+                <ul id="updates" class="navbar-nav">
+                </ul>
+            </div>
+        </aside>
     </div>
-    <aside class="col-md-4">
-        <div>
-            <a href="/hangfire" target="_blank" class="btn btn-primary manage-account-btn ml-4 mb-5">
-                Event Status Scheduler
-                <i class="far fa-arrow-alt-circle-right ml-1"></i>
-            </a>
-        </div>
-        <div class="headline headline-md">
-            <h4 class="text-center">Last Updates</h4>
-            <hr>
-            <ul id="updates" class="navbar-nav">
-            </ul>
-        </div>
-    </aside>
-</div>
 @section InnerNav
 {
     @await Html.PartialAsync("_DashboardNavBarPartial")

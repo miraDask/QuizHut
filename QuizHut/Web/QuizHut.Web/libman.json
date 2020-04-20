@@ -67,6 +67,19 @@
       ]
     },
     {
+      "library": "popper.js@1.16.1",
+      "destination": "wwwroot/lib/popper/",
+      "compileOnSave": true,
+      "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+          "popper.js": [ "wwwroot/lib/popper.js" ] //use this instead of wwwroot/lib/@types/popper.js which is incompatible
+        },
+        "typeRoots": [ "wwwroot/lib/@types" ]
+      },
+      "include": [ "wwwroot/js/**/*.ts" ]
+    },
+    {
       "library": "tinymce@5.2.1",
       "destination": "wwwroot/lib/tinymce/",
       "files": [
