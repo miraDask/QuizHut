@@ -52,44 +52,44 @@
             Assert.IsAssignableFrom<IEnumerable<ScoreViewModel>>(resultModelCollection);
         }
 
-        [Fact]
-        public async Task GetAllResultsByEventIdAsyncShouldReturnCorrectModelCollection()
-        {
-            var firstStudentId = await this.CreateStudentAsync();
-            var secondStudentId = await this.CreateStudentAsync();
+        //[Fact]
+        //public async Task GetAllResultsByEventIdAsyncShouldReturnCorrectModelCollection()
+        //{
+        //    var firstStudentId = await this.CreateStudentAsync();
+        //    var secondStudentId = await this.CreateStudentAsync();
 
-            var activationDate = DateTime.UtcNow;
-            var eventInfo = await this.CreateEventAsync("First event", activationDate);
-            var eventId = eventInfo[0];
-            var groupName = await this.AssignStudentsToGroupAsync(new string[] { firstStudentId, secondStudentId });
+        //    var activationDate = DateTime.UtcNow;
+        //    var eventInfo = await this.CreateEventAsync("First event", activationDate);
+        //    var eventId = eventInfo[0];
+        //    var groupName = await this.AssignStudentsToGroupAsync(new string[] { firstStudentId, secondStudentId });
 
-            await this.CreateResultAsync(firstStudentId, 2, 10, eventId);
-            await this.CreateResultAsync(secondStudentId, 15, 15, eventId);
+        //    await this.CreateResultAsync(firstStudentId, 2, 10, eventId);
+        //    await this.CreateResultAsync(secondStudentId, 15, 15, eventId);
 
-            var firstModel = new ResultViewModel()
-            {
-                StudentName = "First Name Last Name",
-                StudentEmail = "email@email.com",
-                Score = "2/10",
-            };
+        //    var firstModel = new ResultViewModel()
+        //    {
+        //        StudentName = "First Name Last Name",
+        //        StudentEmail = "email@email.com",
+        //        Score = "2/10",
+        //    };
 
-            var secondModel = new ResultViewModel()
-            {
-                StudentName = "First Name Last Name",
-                StudentEmail = "email@email.com",
-                Score = "15/15",
-            };
+        //    var secondModel = new ResultViewModel()
+        //    {
+        //        StudentName = "First Name Last Name",
+        //        StudentEmail = "email@email.com",
+        //        Score = "15/15",
+        //    };
 
-            var resultModelCollection = await this.Service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
+        //    var resultModelCollection = await this.Service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
 
-            Assert.Equal(firstModel.StudentName, resultModelCollection.Last().StudentName);
-            Assert.Equal(firstModel.StudentEmail, resultModelCollection.First().StudentEmail);
-            Assert.Equal(firstModel.Score, resultModelCollection.First().Score);
-            Assert.Equal(secondModel.StudentName, resultModelCollection.Last().StudentName);
-            Assert.Equal(secondModel.StudentEmail, resultModelCollection.Last().StudentEmail);
-            Assert.Equal(secondModel.Score, resultModelCollection.Last().Score);
-            Assert.Equal(2, resultModelCollection.Count());
-        }
+        //    Assert.Equal(firstModel.StudentName, resultModelCollection.Last().StudentName);
+        //    Assert.Equal(firstModel.StudentEmail, resultModelCollection.First().StudentEmail);
+        //    Assert.Equal(firstModel.Score, resultModelCollection.First().Score);
+        //    Assert.Equal(secondModel.StudentName, resultModelCollection.Last().StudentName);
+        //    Assert.Equal(secondModel.StudentEmail, resultModelCollection.Last().StudentEmail);
+        //    Assert.Equal(secondModel.Score, resultModelCollection.Last().Score);
+        //    Assert.Equal(2, resultModelCollection.Count());
+        //}
 
         [Fact]
         public async Task CreateResultAsyncShouldCreateNewResultInDb()

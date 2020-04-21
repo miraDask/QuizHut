@@ -50,28 +50,28 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> Results(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> Results(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var allResultsCount = this.resultService.GetResultsCountByStudentId(studentId);
-            int pagesCount = 0;
             var model = new StudentResultsViewModel()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allResultsCount = this.resultService.GetResultsCountByStudentId(studentId, searchCriteria, searchText);
             if (allResultsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allResultsCount / (decimal)countPerPage);
-                var results = await this.resultService.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage);
+                var results = await this.resultService.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage, searchCriteria, searchText);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var result in results)
                 {
                     result.Date = this.dateTimeConverter.GetDate(result.EventActivationDateAndTime, timeZoneIana);
                 }
 
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allResultsCount / (decimal)countPerPage);
                 model.Results = results;
             }
 

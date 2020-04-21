@@ -12,6 +12,8 @@
         private const string FullName = "FullName";
         private const string FirstName = "FirstName";
         private const string LastName = "LastName";
+        private const string QuizName = "QuizName";
+        private const string EventName = "EventName";
         private const string Administrator = "Administrator";
         private const string Teacher = "Teacher";
         private const string StatusEnded = "Ended";
@@ -33,6 +35,8 @@
                 case FirstName:
                 case LastName:
                 case Email:
+                case EventName:
+                case QuizName:
                     var expressionBody = this.GetContainsMethod<T>(queryType, queryValue, parameter);
                     return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);
                 case StatusEnded:
@@ -119,12 +123,11 @@
                 case Name:
                 case FirstName:
                 case LastName:
+                case EventName:
+                case QuizName:
                 case Email: return queryType;
                 case Assigned:
                 case Unassigned: return EventId;
-
-                // case "creation": return "CreatedOn";
-                // case "Date": return "ActivationDateAndTime";
                 default: throw new InvalidFilterCriteriaException();
             }
         }

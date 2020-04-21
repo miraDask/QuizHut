@@ -9,13 +9,13 @@
 
         Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id);
 
-        int GetResultsCountByStudentId(string id);
+        int GetResultsCountByStudentId(string id, string searchCriteria = null, string searchText = null);
 
         int GetAllResultsByEventAndGroupCount(string eventId, string groupId);
 
         Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId);
 
-        Task<IEnumerable<T>> GetPerPageByStudentIdAsync<T>(string id, int page, int countPerPage);
+        Task<IEnumerable<T>> GetPerPageByStudentIdAsync<T>(string id, int page, int countPerPage, string searchCriteria = null, string searchText = null);
 
         Task<IEnumerable<T>> GetAllResultsByEventAndGroupPerPageAsync<T>(string eventId, string groupId, int page, int countPerPage);
     }

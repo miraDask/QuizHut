@@ -4,9 +4,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using QuizHut.Data.Models;
     using QuizHut.Services.Events;
     using QuizHut.Services.Groups;
     using QuizHut.Services.Results;

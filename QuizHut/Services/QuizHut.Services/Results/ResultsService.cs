@@ -7,19 +7,24 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
+    using QuizHut.Services.Tools.Expressions;
 
     public class ResultsService : IResultsService
     {
         private readonly IDeletableEntityRepository<Result> repository;
         private readonly IDeletableEntityRepository<Event> eventRepository;
+        private readonly IExpressionBuilder expressionBuilder;
 
         public ResultsService(
             IDeletableEntityRepository<Result> repository,
-            IDeletableEntityRepository<Event> eventRepository)
+            IDeletableEntityRepository<Event> eventRepository,
+            IExpressionBuilder expressionBuilder)
         {
             this.repository = repository;
             this.eventRepository = eventRepository;
+            this.expressionBuilder = expressionBuilder;
         }
 
         public async Task<IEnumerable<T>> GetAllResultsByEventAndGroupPerPageAsync<T>(string eventId, string groupId, int page, int countPerPage)
@@ -79,15 +84,23 @@
             return result.Id;
         }
 
-        public async Task<IEnumerable<T>> GetPerPageByStudentIdAsync<T>(string id, int page, int countPerPage)
-       => await this.repository
-           .AllAsNoTracking()
-           .Where(x => x.StudentId == id)
-           .OrderByDescending(x => x.CreatedOn)
-           .Skip(countPerPage * (page - 1))
-           .Take(countPerPage)
-           .To<T>()
-           .ToListAsync();
+        public async Task<IEnumerable<T>> GetPerPageByStudentIdAsync<T>(string id, int page, int countPerPage, string searchCriteria = null, string searchText = null)
+        {
+            var query = this.repository.AllAsNoTracking().Where(x => x.StudentId == id);
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Result>(searchCriteria, searchText);
+                query = query.Where(filter);
+            }
+
+            return await query
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(countPerPage * (page - 1))
+                .Take(countPerPage)
+                .To<T>()
+                .ToListAsync();
+        }
 
         public async Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id)
         => await this.repository
@@ -97,17 +110,18 @@
             .To<T>()
             .ToListAsync();
 
-        public int GetResultsCountByStudentId(string id)
-         => this.repository
-            .AllAsNoTracking()
-            .Where(x => x.StudentId == id)
-            .Count();
+        public int GetResultsCountByStudentId(string id, string searchCriteria = null, string searchText = null)
+        {
+            var query = this.repository.AllAsNoTracking().Where(x => x.StudentId == id);
 
-        public int GetResultsCountByGroupId(string id)
-         => this.repository
-            .AllAsNoTracking()
-            .Where(x => x.EventId == id)
-            .Count();
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Result>(searchCriteria, searchText);
+                query = query.Where(filter);
+            }
+
+            return query.Count();
+        }
 
         public async Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId)
         => await this.repository.AllAsNoTracking()
