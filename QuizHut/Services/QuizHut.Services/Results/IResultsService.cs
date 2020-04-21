@@ -11,10 +11,12 @@
 
         int GetResultsCountByStudentId(string id);
 
+        int GetAllResultsByEventAndGroupCount(string eventId, string groupId);
+
         Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId);
 
         Task<IEnumerable<T>> GetPerPageByStudentIdAsync<T>(string id, int page, int countPerPage);
 
-        Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName);
+        Task<IEnumerable<T>> GetAllResultsByEventAndGroupPerPageAsync<T>(string eventId, string groupId, int page, int countPerPage);
     }
 }

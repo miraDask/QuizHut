@@ -1,28 +1,31 @@
-﻿@model EventWithGroupAndQuizNamesViewModel
+﻿@model EventWithGroupViewModel
 @{
     ViewData["Title"] = "Event Results Details";
+    var selectList = Model.Groups.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id , Selected = x.Id == Model.Group.Id ? true : false });
 }
 
-<div class="card">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
-        <div class="container pl-0">
-            @if (Model.IsDeleted)
-            {
-                <h5 class="mb-0 p-2">Event: <span class="text-primary">@Model.Name</span> (deleted)</h5>
-            }
-            else
-            {
-                <h5 class="mb-0 p-2">Event: <span class="text-primary">@Model.Name</span></h5>
-            }
-        </div>
-    </nav>
-    @if (Model.GroupsNames.Any())
-    {
-        @foreach (var name in Model.GroupsNames)
+<div class="container text-center">
+    <div class="mb-0 pt-2 pb-3">
+        <h5>
+            @Model.Name  @(Model.IsDeleted ? "(deleted)" : "")
+        </h5>
+    </div>
+    <form method="post" class="form-inline mb-4 offset-3" asp-action="EventResultsDetails" asp-controller="Results">
+        <select class="custom-select col-5 ml-0"
+                asp-items="@selectList"
+                name="groupId">
+        </select>
+        <button type="submit" class="btn btn-primary ml-3">
+            <span>Select Group</span>
+        </button>
+        <input type="hidden" name="eventId" value="@Model.Id" />
+    </form>
+    <div class="card">
+        @if (Model.Groups.Any())
         {
             <nav class="navbar navbar-expand-lg navbar-light bg-primary p-2">
                 <div class="container pl-0">
-                    <h5 class="mb-0 p-2 text-white">Results for  @name  group:</h5>
+                    <h5 class="mb-0 p-2 text-white">Results for  @Model.Group.Name  group:</h5>
                 </div>
             </nav>
 
@@ -35,13 +38,67 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @await Component.InvokeAsync("ResultsByGroup", new { groupName = @name, eventId = @Model.Id })
+                    @foreach (var result in Model.Group.Results)
+                    {
+                        <tr class="table-danger">
+                            <th scope="row">@result.StudentName</th>
+                            <td>@result.StudentEmail</td>
+                            <td class="text-center">@result.Score</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         }
+    </div>
+    @if (Model.PagesCount > 1)
+    {
+        var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
+        var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+        <div class="text-center mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @disabledLeftArrow">
+                    <a class="page-link"
+                       asp-area="Administration"
+                       asp-action="EventResultsDetails"
+                       asp-controller="Results"
+                       asp-route-page="@Model.PreviousPage"
+                       asp-route-eventId="@Model.Id"
+                       asp-route-groupId="@Model.Group.Id">
+
+                        <i class="fas fa-long-arrow-alt-left"></i>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.PagesCount; i++)
+                {
+                    var active = i == Model.CurrentPage ? "active" : string.Empty;
+
+                    <li class="page-item @active">
+                        <a class="page-link"
+                           asp-area="Administration"
+                           asp-action="EventResultsDetails"
+                           asp-controller="Results"
+                           asp-route-page="@i"
+                           asp-route-eventId="@Model.Id"
+                           asp-route-groupId="@Model.Group.Id">
+                            @i
+                        </a>
+                    </li>
+                }
+                <li class="page-item @disabledRightArrow">
+                    <a class="page-link"
+                       asp-area="Administration"
+                       asp-action="EventResultsDetails"
+                       asp-controller="Results"
+                       asp-route-page="@Model.NextPage"
+                       asp-route-eventId="@Model.Id"
+                       asp-route-groupId="@Model.Group.Id">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
     }
 </div>
-<a class="btn btn-outline-primary offset-md-4 col-md-4 mt-4 d-inline-block" onClick="history.go(-1); return false;">Go Back</a>
 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) && this.ViewData[GlobalConstants.DashboardRequest] != null)
 {
     @section InnerNav

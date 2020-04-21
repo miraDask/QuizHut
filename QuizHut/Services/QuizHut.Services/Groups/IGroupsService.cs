@@ -17,6 +17,8 @@
 
         Task<IEnumerable<T>> GetAllByEventIdAsync<T>(string eventId);
 
+        Task<T> GetEventsFirstGroupAsync<T>(string eventId);
+
         Task AssignEventsToGroupAsync(string groupId, IList<string> eventsIds);
 
         Task AssignStudentsToGroupAsync(string groupId, IList<string> studentsIds);

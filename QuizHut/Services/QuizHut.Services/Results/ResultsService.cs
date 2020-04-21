@@ -22,14 +22,23 @@
             this.eventRepository = eventRepository;
         }
 
-        public async Task<IEnumerable<T>> GetAllResultsByEventIdAsync<T>(string eventId, string groupName)
+        public async Task<IEnumerable<T>> GetAllResultsByEventAndGroupPerPageAsync<T>(string eventId, string groupId, int page, int countPerPage)
         => await this.repository
-        .AllAsNoTracking()
-        .Where(x => x.EventId == eventId)
-        .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Name == groupName))
-        .OrderBy(x => x.CreatedOn)
-        .To<T>()
-        .ToListAsync();
+                     .AllAsNoTracking()
+                     .Where(x => x.EventId == eventId)
+                     .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Id == groupId))
+                     .OrderBy(x => x.CreatedOn)
+                     .Skip(countPerPage * (page - 1))
+                     .Take(countPerPage)
+                     .To<T>()
+                     .ToListAsync();
+
+        public int GetAllResultsByEventAndGroupCount(string eventId, string groupId)
+        => this.repository
+               .AllAsNoTracking()
+               .Where(x => x.EventId == eventId)
+               .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Id == groupId))
+               .Count();
 
         public async Task<string> CreateResultAsync(string studentId, int points, int maxPoints, string quizId)
         {
@@ -92,6 +101,12 @@
          => this.repository
             .AllAsNoTracking()
             .Where(x => x.StudentId == id)
+            .Count();
+
+        public int GetResultsCountByGroupId(string id)
+         => this.repository
+            .AllAsNoTracking()
+            .Where(x => x.EventId == id)
             .Count();
 
         public async Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId)

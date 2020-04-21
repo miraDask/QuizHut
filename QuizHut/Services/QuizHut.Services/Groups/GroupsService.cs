@@ -162,5 +162,12 @@
 
             return query.Count();
         }
+
+        public async Task<T> GetEventsFirstGroupAsync<T>(string eventId)
+        => await this.repository
+            .AllAsNoTracking()
+            .Where(x => x.EventsGroups.Any(x => x.EventId == eventId))
+            .To<T>()
+            .FirstOrDefaultAsync();
     }
 }

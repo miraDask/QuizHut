@@ -18,8 +18,8 @@
 
         public async Task<IViewComponentResult> InvokeAsync(string groupName, string eventId)
         {
-            var resultsModel = await this.service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
-            return this.View(resultsModel);
+            //var resultsModel = await this.service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
+            return this.View();
         }
     }
 }
