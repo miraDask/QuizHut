@@ -78,22 +78,23 @@
             return this.View(model);
         }
 
-        public async Task<IActionResult> StudentActiveEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> StudentActiveEventsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var allActiveEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Active);
-            int pagesCount = 0;
             var model = new StudentEventsViewModel<StudentActiveEventViewModel>()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allActiveEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Active, searchCriteria, searchText);
             if (allActiveEventsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allActiveEventsCount / (decimal)countPerPage);
                 var activeEvents = await this.eventsService
-               .GetPerPageByStudentIdFilteredByStatusAsync<StudentActiveEventViewModel>(Status.Active, studentId, page, countPerPage, false);
+               .GetPerPageByStudentIdFilteredByStatusAsync<StudentActiveEventViewModel>(
+                    Status.Active, studentId, page, countPerPage, false, searchCriteria, searchText);
 
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var activeEvent in activeEvents)
@@ -101,29 +102,30 @@
                     activeEvent.Duration = this.dateTimeConverter.GetDurationString(activeEvent.ActivationDateAndTime, activeEvent.DurationOfActivity, timeZoneIana);
                 }
 
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allActiveEventsCount / (decimal)countPerPage);
                 model.Events = activeEvents;
             }
 
             return this.View(model);
         }
 
-        public async Task<IActionResult> StudentEndedEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> StudentEndedEventsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var allEndedEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Ended);
-            int pagesCount = 0;
             var model = new StudentEventsViewModel<StudentEndedEventViewModel>()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allEndedEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Ended, searchCriteria, searchText);
             if (allEndedEventsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allEndedEventsCount / (decimal)countPerPage);
                 var endedEvents = await this.eventsService
-               .GetPerPageByStudentIdFilteredByStatusAsync<StudentEndedEventViewModel>(Status.Ended, studentId, page, countPerPage, true);
+               .GetPerPageByStudentIdFilteredByStatusAsync<StudentEndedEventViewModel>(
+                    Status.Ended, studentId, page, countPerPage, true, searchCriteria, searchText);
                 var scores = await this.resultService.GetAllByStudentIdAsync<ScoreViewModel>(studentId);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
 
@@ -138,29 +140,30 @@
                     endenEvent.Date = this.dateTimeConverter.GetDate(endenEvent.ActivationDateAndTime, timeZoneIana);
                 }
 
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allEndedEventsCount / (decimal)countPerPage);
                 model.Events = endedEvents;
             }
 
             return this.View(model);
         }
 
-        public async Task<IActionResult> StudentPendingEventsAll(int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> StudentPendingEventsAll(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var studentId = this.userManager.GetUserId(this.User);
-            var allPendingEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending);
-            int pagesCount = 0;
             var model = new StudentEventsViewModel<StudentPendingEventViewModel>()
             {
                 CurrentPage = page,
-                PagesCount = pagesCount,
+                PagesCount = 0,
+                SearchType = searchCriteria,
+                SearchString = searchText,
             };
 
+            var allPendingEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending, searchCriteria, searchText);
             if (allPendingEventsCount > 0)
             {
-                pagesCount = (int)Math.Ceiling(allPendingEventsCount / (decimal)countPerPage);
                 var pendingEvents = await this.eventsService
-               .GetPerPageByStudentIdFilteredByStatusAsync<StudentPendingEventViewModel>(Status.Pending, studentId, page, countPerPage, false);
+               .GetPerPageByStudentIdFilteredByStatusAsync<StudentPendingEventViewModel>(
+                    Status.Pending, studentId, page, countPerPage, false, searchCriteria, searchText);
 
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var pendingEvent in pendingEvents)
@@ -169,7 +172,7 @@
                     pendingEvent.Date = this.dateTimeConverter.GetDate(pendingEvent.ActivationDateAndTime, timeZoneIana);
                 }
 
-                model.PagesCount = pagesCount;
+                model.PagesCount = (int)Math.Ceiling(allPendingEventsCount / (decimal)countPerPage);
                 model.Events = pendingEvents;
             }
 

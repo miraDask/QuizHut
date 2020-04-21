@@ -2,7 +2,21 @@
 @{
     ViewData["Title"] = "Student Ended Events All";
 }
-
+<div class="component">
+    <form method="get" class="form-subscribe form-inline my-4" asp-area="" asp-action="StudentEndedEventsAll" asp-controller="Students">
+        Search by:
+        <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
+            <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">event name</option>
+            <option value="QuizName" selected="@(Model.SearchType == "QuizName" ? true : false)">quiz name</option>
+        </select>
+        <div class="form-group flex-grow-1">
+            <label class="sr-only" for="email4">Email</label>
+            <input id="input" type="text" class="form-control flex-grow-1 mr-2"
+                   placeholder="Enter name here..." name="searchText" value="@Model.SearchString">
+            <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
+        </div>
+    </form>
+</div>
 <div class="col-md-12 mb-4">
     <div class="card">
         <nav class="navbar navbar-expand-lg navbar-dark bg-danger p-2">
@@ -46,17 +60,39 @@
     <div class="text-center mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item @disabledLeftArrow">
-                <a class="page-link" href="/Students/StudentEndedEventsAll?page=@Model.PreviousPage"><i class="fas fa-long-arrow-alt-left"></i></a>
+                <a class="page-link"
+                   asp-area=""
+                   asp-controller="Students"
+                   asp-action="StudentEndedEventsAll"
+                   asp-route-page="@Model.PreviousPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
+                    <i class="fas fa-long-arrow-alt-left"></i>
+                </a>
             </li>
             @for (int i = 1; i <= Model.PagesCount; i++)
             {
                 var active = i == Model.CurrentPage ? "active" : string.Empty;
                 <li class="page-item @active">
-                    <a class="page-link" href="/Students/StudentEndedEventsAll?page=@i">@i</a>
+                    <a class="page-link"
+                       asp-area=""
+                       asp-controller="Students"
+                       asp-action="StudentEndedEventsAll"
+                       asp-route-page="@i"
+                       asp-route-searchText="@Model.SearchString"
+                       asp-route-searchCriteria="@Model.SearchType">@i</a>
                 </li>
             }
             <li class="page-item @disabledRightArrow">
-                <a class="page-link" href="/Students/StudentEndedEventsAll?page=@Model.NextPage"><i class="fas fa-long-arrow-alt-right"></i></a>
+                <a class="page-link"
+                   asp-area=""
+                   asp-controller="Students"
+                   asp-action="StudentEndedEventsAll"
+                   asp-route-page="@Model.NextPage"
+                   asp-route-searchText="@Model.SearchString"
+                   asp-route-searchCriteria="@Model.SearchType">
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                </a>
             </li>
         </ul>
     </div>

@@ -70,7 +70,14 @@
                  .To<T>()
                  .ToListAsync();
 
-        public async Task<IList<T>> GetPerPageByStudentIdFilteredByStatusAsync<T>(Status status, string studentId, int page, int countPerPage, bool withDeleted)
+        public async Task<IList<T>> GetPerPageByStudentIdFilteredByStatusAsync<T>(
+            Status status,
+            string studentId,
+            int page,
+            int countPerPage,
+            bool withDeleted,
+            string searchCriteria = null,
+            string searchText = null)
         {
             var query = withDeleted == true ? this.repository.AllAsNoTrackingWithDeleted() : this.repository.AllAsNoTracking();
             query = query.Where(x => x.EventsGroups.Any(x => x.Group.StudentstGroups.Any(x => x.StudentId == studentId)));
@@ -78,6 +85,12 @@
             if (status == Status.Active)
             {
                 query = query.Where(x => !x.Results.Any(x => x.StudentId == studentId));
+            }
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
+                query = query.Where(filter);
             }
 
             return await query.Where(x => x.Status == status)
@@ -311,7 +324,7 @@
             }
         }
 
-        public int GetEventsCountByStudentIdAndStatus(string id, Status status)
+        public int GetEventsCountByStudentIdAndStatus(string id, Status status, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository
                             .AllAsNoTracking()
@@ -321,6 +334,12 @@
             if (status == Status.Active)
             {
                 query = query.Where(x => !x.Results.Any(x => x.StudentId == id));
+            }
+
+            if (searchCriteria != null && searchText != null)
+            {
+                var filter = this.expressionBuilder.GetExpression<Event>(searchCriteria, searchText);
+                query = query.Where(filter);
             }
 
             return query.Count();

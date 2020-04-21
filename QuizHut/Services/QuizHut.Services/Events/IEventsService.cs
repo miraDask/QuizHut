@@ -19,9 +19,16 @@
 
         Task<IList<T>> GetAllFiteredByStatusAndGroupAsync<T>(Status status, string groupId, string creatorId = null);
 
-        Task<IList<T>> GetPerPageByStudentIdFilteredByStatusAsync<T>(Status status, string studentId, int page, int countPerPage, bool withDeleted);
+        Task<IList<T>> GetPerPageByStudentIdFilteredByStatusAsync<T>(
+            Status status,
+            string studentId,
+            int page,
+            int countPerPage,
+            bool withDeleted,
+            string searchCriteria = null,
+            string searchText = null);
 
-        int GetEventsCountByStudentIdAndStatus(string id, Status status);
+        int GetEventsCountByStudentIdAndStatus(string id, Status status, string searchCriteria = null, string searchText = null);
 
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
 

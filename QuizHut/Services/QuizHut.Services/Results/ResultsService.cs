@@ -7,7 +7,6 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Tools.Expressions;
 
