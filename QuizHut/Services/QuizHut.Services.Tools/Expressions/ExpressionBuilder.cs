@@ -1,6 +1,7 @@
 ﻿namespace QuizHut.Services.Tools.Expressions
 {
     using System;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
 
@@ -94,7 +95,7 @@
             var lastNameToLowerCall = Expression.Call(lastNameProperty, toLowerMethod);
 
             var concatCall = Expression.Call(concatMethod, firstNameToLowerCall, lastNameToLowerCall);
-            queryValue = string.Join(string.Empty, queryValue.Split(new[] { ' ', ',', '.', ':', '=', ';' }, StringSplitOptions.RemoveEmptyEntries));
+            queryValue = string.Join(string.Empty, queryValue.Split(new[] { ' ', ',', '.', ':', '=', ';' }, StringSplitOptions.RemoveEmptyEntries)).ToLower();
             var constant = Expression.Constant(queryValue, typeof(string));
             var expressionBody = Expression.Call(concatCall, conntaisMethod, constant);
             return Expression.Lambda<Func<T, bool>>(expressionBody, parameter);

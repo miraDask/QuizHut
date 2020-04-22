@@ -19,8 +19,8 @@
         [Fact]
         public async Task AddStudentAsyncShouldReturnTrueIfStudentIsSuccessfullyAdded()
         {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com");
-            var studentId = await this.CreateUserAsync("student@student.com");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers");
+            var studentId = await this.CreateUserAsync("student@student.com", "Student", "Student");
 
             var result = await this.Service.AddStudentAsync("student@student.com", teacherId);
 
@@ -36,7 +36,7 @@
         [Fact]
         public async Task AddStudentAsyncShouldReturnFalseIfStudentIsNotFound()
         {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers");
 
             var result = await this.Service.AddStudentAsync("student@student.com", teacherId);
 
@@ -49,8 +49,8 @@
         [Fact]
         public async Task DeleteFromTeacherListAsyncShouldRemoveStudentSuccessfully()
         {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com");
-            var studentId = await this.CreateUserAsync("student@student.com");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers");
+            var studentId = await this.CreateUserAsync("student@student.com", "Student", "Student");
 
             await this.AddStudentAsync(studentId, teacherId);
             await this.Service.DeleteFromTeacherListAsync(studentId, teacherId);
@@ -63,32 +63,93 @@
             Assert.Null(student.TeacherId);
         }
 
-        //[Fact]
-        //public async Task GetAllByRoleAsyncShouldReturnCorrectModelCollection()
-        //{
-        //    var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
-        //    await this.CreateUserAsync("student@student.com");
+        [Fact]
+        public async Task GetAllInRolesPerPageAsyncShouldReturnCorrectModelCollection()
+        {
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers", "Teacher");
+            await this.CreateUserAsync("student@student.com", "Student", "Student");
 
-        //    var model = new UserInRoleViewModel()
-        //    {
-        //        Id = teacherId,
-        //        FullName = "John Doe",
-        //        Email = "teacher@teacher.com",
-        //    };
+            var model = new UserInRoleViewModel()
+            {
+                Id = teacherId,
+                FullName = "John Doe",
+                Email = "teacher@teacher.com",
+            };
 
-        //    var resultModelCollection = await this.Service.GetAllByRoleAsync<UserInRoleViewModel>("teacher");
+            var resultModelCollection = await this.Service.GetAllInRolesPerPageAsync<UserInRoleViewModel>(1, 1);
 
-        //    Assert.Equal(1, resultModelCollection.Count);
-        //    Assert.Equal(model.Id, resultModelCollection.First().Id);
-        //    Assert.Equal(model.FullName, resultModelCollection.First().FullName);
-        //    Assert.Equal(model.Email, resultModelCollection.First().Email);
-        //}
+            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(model.Id, resultModelCollection.First().Id);
+            Assert.Equal(model.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(model.Email, resultModelCollection.First().Email);
+        }
+
+        [Theory]
+        [InlineData("Administrator", null)]
+        [InlineData("Administrator", "N")]
+        [InlineData("Administrator", "JO")]
+        [InlineData("Administrator", "d")]
+        [InlineData("FullName", "N")]
+        [InlineData("FirstName", "JO")]
+        [InlineData("LastName", "d")]
+        [InlineData("Email", "N")]
+        public async Task GetAllInRolesPerPageAsyncShouldFilterCorectlyWhenSearchCriteriaIsAdminAndSearchTextIsPassed(string searchCriteria, string searchText)
+        {
+            await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teacers", "Teacher");
+            await this.CreateUserAsync("student@student.com", "Student", "Student");
+            var adminId = await this.CreateUserAsync("admin@admin.com", "John", "Doe", "Administrator");
+
+            var adminModel = new UserInRoleViewModel()
+            {
+                Id = adminId,
+                FullName = "John Doe",
+                Email = "admin@admin.com",
+            };
+
+            var resultModelCollection = await this.Service.GetAllInRolesPerPageAsync<UserInRoleViewModel>(1, 1, searchCriteria, searchText);
+
+            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(adminModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(adminModel.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(adminModel.Email, resultModelCollection.First().Email);
+        }
+
+
+        [Theory]
+        [InlineData("Teacher", null)]
+        [InlineData("Teacher", "N")]
+        [InlineData("Teacher", "JO")]
+        [InlineData("Teacher", "d")]
+        [InlineData("FullName", "N")]
+        [InlineData("FirstName", "JO")]
+        [InlineData("LastName", "d")]
+        [InlineData("Email", "T")]
+        public async Task GetAllInRolesPerPageAsyncShouldFilterCorectlyWhenSearchCriteriaIsTeacherAndSearchTextIsPassed(string searchCriteria, string searchText)
+        {
+            await this.CreateUserAsync("admin@admin.com", "Admin", "Admin", "Administrator");
+            await this.CreateUserAsync("student@student.com", "Student", "Student");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "John", "Doe", "Teacher");
+
+            var teacherModel = new UserInRoleViewModel()
+            {
+                Id = teacherId,
+                FullName = "John Doe",
+                Email = "teacher@teacher.com",
+            };
+
+            var resultModelCollection = await this.Service.GetAllInRolesPerPageAsync<UserInRoleViewModel>(1, 1, searchCriteria, searchText);
+
+            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(teacherModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(teacherModel.FullName, resultModelCollection.First().FullName);
+            Assert.Equal(teacherModel.Email, resultModelCollection.First().Email);
+        }
 
         [Fact]
         public async Task GetAllByGroupIdAsyncShouldReturnCorrectModelCollection()
         {
-            await this.CreateUserAsync("teacher@teacher.com");
-            var studentId = await this.CreateUserAsync("student@student.com");
+            await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers");
+            var studentId = await this.CreateUserAsync("student@student.com", "Student", "Student");
             var groupId = await this.AssignStudentToGroupAsync(studentId);
 
             var model = new StudentViewModel()
@@ -110,11 +171,11 @@
         [Fact]
         public async Task GetAllStudentsCountShouldReturnCorrectCountOfAllStudent()
         {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
-            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers", "Teacher");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com", "Student", "Student");
             await this.AddStudentAsync(firstStudentId, teacherId);
 
-            await this.CreateUserAsync("student2@student.com");
+            await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
 
             var studentsAllCount = this.Service.GetAllStudentsCount();
             var studentsWithSameTeacherCount = this.Service.GetAllStudentsCount(teacherId);
@@ -126,8 +187,8 @@
         [Fact]
         public async Task GetAllStudentsAsyncShouldReturnCorrectModelCollection()
         {
-            await this.CreateUserAsync("teacher@teacher.com", "teacher");
-            var studentId = await this.CreateUserAsync("student@student.com");
+            await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teacers", "Teacher");
+            var studentId = await this.CreateUserAsync("student@student.com", "John", "Doe");
 
             var model = new StudentViewModel()
             {
@@ -148,12 +209,12 @@
         [Fact]
         public async Task GetAllStudentsAsyncShouldReturnAllStudentsWithSameTeacherWhenTeacherIdIsPassed()
         {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
-            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers", "Teacher");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com", "Student", "Student");
             await this.AddStudentAsync(firstStudentId, teacherId);
-            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            var secondStudentId = await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
             await this.AddStudentAsync(secondStudentId, teacherId);
-            await this.CreateUserAsync("student3@student.com");
+            await this.CreateUserAsync("student3@student.com", "Student3", "Student3");
 
             var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>(teacherId);
 
@@ -165,12 +226,12 @@
         {
             var group = await this.CreateGroupAsync();
 
-            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com", "Student", "Student");
             await this.AssignStudentToGroupAsync(firstStudentId, group.Id);
-            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            var secondStudentId = await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
             await this.AssignStudentToGroupAsync(secondStudentId, group.Id);
 
-            await this.CreateUserAsync("student3@student.com");
+            await this.CreateUserAsync("student3@student.com", "Student3", "Student3");
 
             var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>(null, group.Id);
 
@@ -181,16 +242,16 @@
         public async Task GetAllStudentsAsyncShouldReturnAllStudentsWhitSameTeacherWhichIdIsPassedAndThatAreNotInTheGroupWhichIdIsPassed()
         {
             var group = await this.CreateGroupAsync();
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "teacher");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers", "Teacher");
 
-            var firstStudentId = await this.CreateUserAsync("student1@student.com");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com", "Student", "Student");
             await this.AddStudentAsync(firstStudentId, teacherId);
 
-            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            var secondStudentId = await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
             await this.AddStudentAsync(secondStudentId, teacherId);
             await this.AssignStudentToGroupAsync(secondStudentId, group.Id);
 
-            var thirdStudentId = await this.CreateUserAsync("student3@student.com");
+            var thirdStudentId = await this.CreateUserAsync("student3@student.com", "Student3", "Student3");
             await this.AssignStudentToGroupAsync(thirdStudentId, group.Id);
 
             var model = new StudentViewModel()
@@ -203,7 +264,7 @@
 
             var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>(teacherId, group.Id);
 
-            Assert.Equal(1, resultModelCollection.Count);
+            Assert.Equal(1, resultModelCollection.Count());
             Assert.Equal(model.Id, resultModelCollection.First().Id);
             Assert.Equal(model.FullName, resultModelCollection.First().FullName);
             Assert.Equal(model.Email, resultModelCollection.First().Email);
@@ -212,8 +273,8 @@
         [Fact]
         public async Task GetAllStudentsPerPageAsyncShouldReturnCorrectModelCollectionIfTeacherIdIsNull()
         {
-            var firstStudentId = await this.CreateUserAsync("student1@student.com");
-            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com", "Student", "Student");
+            var secondStudentId = await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
 
             var firstModel = new StudentViewModel()
             {
@@ -248,10 +309,10 @@
         [Fact]
         public async Task GetAllStudentsPerPageAsyncShouldReturnCorrectModelCollectionIfTeacherIdIsPassed()
         {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers");
 
-            await this.CreateUserAsync("student1@student.com");
-            var secondStudentId = await this.CreateUserAsync("student2@student.com");
+            await this.CreateUserAsync("student1@student.com", "Student", "Student");
+            var secondStudentId = await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
             await this.AddStudentAsync(secondStudentId, teacherId);
 
             var secondModel = new StudentViewModel()
@@ -274,8 +335,8 @@
         [Fact]
         public async Task GetAllStudentsPerPageAsyncShouldSkipCorrectly()
         {
-            var firstStudentId = await this.CreateUserAsync("student1@student.com");
-            await this.CreateUserAsync("student2@student.com");
+            var firstStudentId = await this.CreateUserAsync("student1@student.com", "Student", "Student");
+            await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
 
             var firstModel = new StudentViewModel()
             {
@@ -302,7 +363,7 @@
         {
             for (int i = 1; i <= countPerPage * 2; i++)
             {
-                await this.CreateUserAsync($"student{i}@student.com");
+                await this.CreateUserAsync($"student{i}@student.com", "Student", "Student");
             }
 
             var resultModelCollection = await this.Service.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage);
@@ -345,12 +406,12 @@
             this.DbContext.Entry<ApplicationUser>(teacher).State = EntityState.Detached;
         }
 
-        private async Task<string> CreateUserAsync(string email, string roleName = null)
+        private async Task<string> CreateUserAsync(string email, string firstName, string lastName, string roleName = null)
         {
             var user = new ApplicationUser()
             {
-                FirstName = "John",
-                LastName = "Doe",
+                FirstName = firstName,
+                LastName = lastName,
                 Email = email,
                 UserName = email,
             };

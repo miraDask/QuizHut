@@ -52,44 +52,111 @@
             Assert.IsAssignableFrom<IEnumerable<ScoreViewModel>>(resultModelCollection);
         }
 
-        //[Fact]
-        //public async Task GetAllResultsByEventIdAsyncShouldReturnCorrectModelCollection()
-        //{
-        //    var firstStudentId = await this.CreateStudentAsync();
-        //    var secondStudentId = await this.CreateStudentAsync();
+        [Fact]
+        public async Task GetAllResultsByEventAndGroupPerPageAsyncShouldReturnCorrectModelCollection()
+        {
+            var firstStudentId = await this.CreateStudentAsync();
+            var secondStudentId = await this.CreateStudentAsync();
 
-        //    var activationDate = DateTime.UtcNow;
-        //    var eventInfo = await this.CreateEventAsync("First event", activationDate);
-        //    var eventId = eventInfo[0];
-        //    var groupName = await this.AssignStudentsToGroupAsync(new string[] { firstStudentId, secondStudentId });
+            var activationDate = DateTime.UtcNow;
+            var eventInfo = await this.CreateEventAsync("First event", activationDate);
+            var eventId = eventInfo[0];
+            var groupId = await this.AssignStudentsToGroupAsync(new string[] { firstStudentId, secondStudentId });
 
-        //    await this.CreateResultAsync(firstStudentId, 2, 10, eventId);
-        //    await this.CreateResultAsync(secondStudentId, 15, 15, eventId);
+            await this.CreateResultAsync(firstStudentId, 2, 10, eventId);
+            await this.CreateResultAsync(secondStudentId, 15, 15, eventId);
 
-        //    var firstModel = new ResultViewModel()
-        //    {
-        //        StudentName = "First Name Last Name",
-        //        StudentEmail = "email@email.com",
-        //        Score = "2/10",
-        //    };
+            var firstModel = new ResultViewModel()
+            {
+                StudentName = "First Name Last Name",
+                StudentEmail = "email@email.com",
+                Score = "2/10",
+            };
 
-        //    var secondModel = new ResultViewModel()
-        //    {
-        //        StudentName = "First Name Last Name",
-        //        StudentEmail = "email@email.com",
-        //        Score = "15/15",
-        //    };
+            var secondModel = new ResultViewModel()
+            {
+                StudentName = "First Name Last Name",
+                StudentEmail = "email@email.com",
+                Score = "15/15",
+            };
 
-        //    var resultModelCollection = await this.Service.GetAllResultsByEventIdAsync<ResultViewModel>(eventId, groupName);
+            var resultModelCollection = await this.Service.GetAllResultsByEventAndGroupPerPageAsync<ResultViewModel>(eventId, groupId, 1, 2);
 
-        //    Assert.Equal(firstModel.StudentName, resultModelCollection.Last().StudentName);
-        //    Assert.Equal(firstModel.StudentEmail, resultModelCollection.First().StudentEmail);
-        //    Assert.Equal(firstModel.Score, resultModelCollection.First().Score);
-        //    Assert.Equal(secondModel.StudentName, resultModelCollection.Last().StudentName);
-        //    Assert.Equal(secondModel.StudentEmail, resultModelCollection.Last().StudentEmail);
-        //    Assert.Equal(secondModel.Score, resultModelCollection.Last().Score);
-        //    Assert.Equal(2, resultModelCollection.Count());
-        //}
+            Assert.Equal(firstModel.StudentName, resultModelCollection.Last().StudentName);
+            Assert.Equal(firstModel.StudentEmail, resultModelCollection.First().StudentEmail);
+            Assert.Equal(firstModel.Score, resultModelCollection.First().Score);
+            Assert.Equal(secondModel.StudentName, resultModelCollection.Last().StudentName);
+            Assert.Equal(secondModel.StudentEmail, resultModelCollection.Last().StudentEmail);
+            Assert.Equal(secondModel.Score, resultModelCollection.Last().Score);
+            Assert.Equal(2, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetAllResultsByEventAndGroupPerPageAsyncShouldSkipCorrectly()
+        {
+            var firstStudentId = await this.CreateStudentAsync();
+            var secondStudentId = await this.CreateStudentAsync();
+
+            var activationDate = DateTime.UtcNow;
+            var eventInfo = await this.CreateEventAsync("First event", activationDate);
+            var eventId = eventInfo[0];
+            var groupId = await this.AssignStudentsToGroupAsync(new string[] { firstStudentId, secondStudentId });
+
+            await this.CreateResultAsync(firstStudentId, 2, 10, eventId);
+            await this.CreateResultAsync(secondStudentId, 15, 15, eventId);
+
+            var secondModel = new ResultViewModel()
+            {
+                StudentName = "First Name Last Name",
+                StudentEmail = "email@email.com",
+                Score = "15/15",
+            };
+
+            var resultModelCollection = await this.Service.GetAllResultsByEventAndGroupPerPageAsync<ResultViewModel>(eventId, groupId, 2, 1);
+
+            Assert.Equal(secondModel.StudentName, resultModelCollection.Last().StudentName);
+            Assert.Equal(secondModel.StudentEmail, resultModelCollection.Last().StudentEmail);
+            Assert.Equal(secondModel.Score, resultModelCollection.Last().Score);
+            Assert.Single(resultModelCollection);
+        }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(1, 10)]
+        public async Task GetAllResultsByEventAndGroupPerPageAsyncShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        {
+            var groupId = await this.CreateGroupAsync();
+            var eventInfo = await this.CreateEventAsync("First Event", DateTime.UtcNow);
+
+            for (int i = 0; i < countPerPage * 2; i++)
+            {
+                var studentId = await this.CreateStudentAsync();
+                await this.AssignStudentToGroupAsync(studentId, groupId);
+                await this.CreateResultAsync(studentId, 5, 10, eventInfo[0]);
+            }
+
+            var resultModelCollection = await this.Service.GetAllResultsByEventAndGroupPerPageAsync<ResultViewModel>(eventInfo[0], groupId, page, countPerPage);
+
+            Assert.Equal(countPerPage, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetAllResultsByEventAndGroupCountShouldReturnCorrectCount()
+        {
+            var firstStudentId = await this.CreateStudentAsync();
+            var secondStudentId = await this.CreateStudentAsync();
+            var eventInfo = await this.CreateEventAsync("First Event", DateTime.UtcNow);
+            var groupId = await this.CreateGroupAsync();
+            await this.AssignStudentToGroupAsync(firstStudentId, groupId);
+            await this.AssignStudentToGroupAsync(secondStudentId, groupId);
+
+            await this.CreateResultAsync(firstStudentId, 2, 10, eventInfo[0]);
+            await this.CreateResultAsync(firstStudentId, 5, 10, eventInfo[0]);
+
+            var count = this.Service.GetAllResultsByEventAndGroupCount(eventInfo[0], groupId);
+
+            Assert.Equal(2, count);
+        }
 
         [Fact]
         public async Task CreateResultAsyncShouldCreateNewResultInDb()
@@ -105,7 +172,7 @@
         }
 
         [Fact]
-        public async Task GetResultsCountByStudentIdShouldReturnCorrectCount()
+        public async Task GetResultsCountByStudentIdShouldReturnCorrectCountWithEmptyCriteriaAndText()
         {
             var studentId = await this.CreateStudentAsync();
             var firstEventInfo = await this.CreateEventAsync("First Event", DateTime.UtcNow);
@@ -115,6 +182,29 @@
             await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
 
             var count = this.Service.GetResultsCountByStudentId(studentId);
+
+            Assert.Equal(2, count);
+        }
+
+        [Theory]
+        [InlineData("EventName", null)]
+        [InlineData("QuizName", null)]
+        [InlineData("EventName", "event")]
+        [InlineData("QuizName", "quiz")]
+        [InlineData("EventName", "EvEnt")]
+        [InlineData("QuizName", "QuIz")]
+        [InlineData("EventName", "n")]
+        [InlineData("QuizName", "Z")]
+        public async Task GetResultsCountByStudentIdShouldReturnCorrectCountWithSearchCriteriaAndSerchTextPassed(string searchCriteria, string searchText)
+        {
+            var studentId = await this.CreateStudentAsync();
+            var firstEventInfo = await this.CreateEventAsync("First Event", DateTime.UtcNow);
+            var secondEventInfo = await this.CreateEventAsync("Second Event", DateTime.UtcNow);
+
+            await this.CreateResultAsync(studentId, 2, 10, firstEventInfo[0]);
+            await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
+
+            var count = this.Service.GetResultsCountByStudentId(studentId, searchCriteria, searchText);
 
             Assert.Equal(2, count);
         }
@@ -237,7 +327,23 @@
             }
 
             await this.DbContext.SaveChangesAsync();
-            return group.Name;
+            return group.Id;
+        }
+
+        private async Task AssignStudentToGroupAsync(string studentId, string groupId)
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var group = await this.DbContext.Groups.Where(x => x.Id == groupId).FirstOrDefaultAsync();
+
+            var studentGroup = new StudentGroup() { StudentId = studentId, GroupId = group.Id };
+            await this.DbContext.StudentsGroups.AddAsync(studentGroup);
+            var student = await this.DbContext.Users.FirstOrDefaultAsync(x => x.Id == studentId);
+            student.StudentsInGroups.Add(studentGroup);
+            this.DbContext.Update(student);
+
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Group>(group).State = EntityState.Detached;
+            this.DbContext.Entry<ApplicationUser>(student).State = EntityState.Detached;
         }
 
         private async Task CreateResultAsync(string studentId, int points, int maxPoints, string eventId)
@@ -303,6 +409,19 @@
             await this.DbContext.SaveChangesAsync();
             this.DbContext.Entry<ApplicationUser>(student).State = EntityState.Detached;
             return student.Id;
+        }
+
+        private async Task<string> CreateGroupAsync()
+        {
+            var group = new Group()
+            {
+                Name = "Group",
+            };
+
+            await this.DbContext.Groups.AddAsync(group);
+            await this.DbContext.SaveChangesAsync();
+            this.DbContext.Entry<Group>(group).State = EntityState.Detached;
+            return group.Id;
         }
     }
 }
