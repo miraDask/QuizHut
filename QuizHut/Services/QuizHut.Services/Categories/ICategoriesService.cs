@@ -13,6 +13,8 @@
 
         Task AssignQuizzesToCategoryAsync(string id, IEnumerable<string> quizzesIds);
 
+        Task<IEnumerable<T>> GetAllByCreatorIdAsync<T>(string creatorId);
+
         Task DeleteAsync(string id);
 
         Task UpdateNameAsync(string id, string newName);

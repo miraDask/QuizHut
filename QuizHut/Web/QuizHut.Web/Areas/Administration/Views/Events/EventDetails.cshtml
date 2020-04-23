@@ -22,11 +22,11 @@
             <div class="navbar-collapse text-center collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">
                     @*@if (Model.Status != Status.Ended)
-                    {*@
+                        {*@
                     <li class="nav-item m-1">
                         <a class="btn btn-primary col-12" asp-action="EditEventDetails" asp-controller="Events" asp-route-id="@Model.Id">Edit</a>
                     </li>
-                        @*//}*@
+                    @*//}*@
                     <li class="nav-item m-1">
                         <!-- button that opens the modal -->
                         <button type="button" class="btn btn-primary mr-md-3 col-12" data-toggle="modal" data-target="#event">
@@ -109,7 +109,7 @@
                         <li class="nav-item m-1">
                             <a asp-area="Administration"
                                asp-action="AssignQuizToEvent"
-                               asp-controller="Events")
+                               asp-controller="Events" )
                                asp-route-id="@Model.Id"
                                class="nav-link btn btn-primary mr-3">
                                 Add New
@@ -250,37 +250,39 @@
                                 View
                             </a>
                         </li>
-                        <li class="nav-item m-1">
-                            <!-- button that opens the modal -->
-                            <button type="button" class="btn btn-primary mr-md-3 col-12" data-toggle="modal" data-target="#group">
-                                Delete
-                            </button>
-                            <!-- the modal -->
-                            <div class="modal fade" id="group" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <h5>Are you sure you want to remove group @group.Name from this event?</h5>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <form method="post" asp-action="DeleteGroupFromEvent" asp-controller="Events">
-                                                <input type="hidden" name="groupId" value="@group.Id" />
-                                                <input type="hidden" name="eventId" value="@Model.Id" />
-                                                <button type="submit" class="btn btn-success">Delete</button>
-                                            </form>
-                                            <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                        @if (Model.Status != Status.Ended)
+                        {
+                            <li class="nav-item m-1">
+                                <!-- button that opens the modal -->
+                                <button type="button" class="btn btn-primary mr-md-3 col-12" data-toggle="modal" data-target="#group">
+                                    Delete
+                                </button>
+                                <!-- the modal -->
+                                <div class="modal fade" id="group" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Attention!</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <h5>Are you sure you want to remove group @group.Name from this event?</h5>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form method="post" asp-action="DeleteGroupFromEvent" asp-controller="Events">
+                                                    <input type="hidden" name="groupId" value="@group.Id" />
+                                                    <input type="hidden" name="eventId" value="@Model.Id" />
+                                                    <button type="submit" class="btn btn-success">Delete</button>
+                                                </form>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">No!</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
-
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

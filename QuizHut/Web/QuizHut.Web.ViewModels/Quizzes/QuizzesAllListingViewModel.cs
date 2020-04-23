@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using QuizHut.Web.ViewModels.Categories;
+
     public class QuizzesAllListingViewModel
     {
         public QuizzesAllListingViewModel()
@@ -10,6 +12,10 @@
         }
 
         public IEnumerable<QuizListViewModel> Quizzes { get; set; }
+
+        public IEnumerable<CategorySimpleViewModel> Categories { get; set; }
+
+        public CategorySimpleViewModel CurrentCategory { get; set; }
 
         public int PagesCount { get; set; }
 

@@ -209,13 +209,19 @@
             int countPerPage,
             string creatorId = null,
             string searchCriteria = null,
-            string searchText = null)
+            string searchText = null,
+            string categoryId = null)
         {
             var query = this.quizRepository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            if (categoryId != null)
+            {
+                query = query.Where(x => x.CategoryId == categoryId);
             }
 
             var emptyNameInput = searchText == null && searchCriteria == ServicesConstants.Name;
@@ -232,13 +238,18 @@
             .ToListAsync();
         }
 
-        public int GetAllQuizzesCount(string creatorId = null, string searchCriteria = null, string searchText = null)
+        public int GetAllQuizzesCount(string creatorId = null, string searchCriteria = null, string searchText = null, string categoryId = null)
         {
             var query = this.quizRepository.AllAsNoTracking();
 
             if (creatorId != null)
             {
                 query = query.Where(x => x.CreatorId == creatorId);
+            }
+
+            if (categoryId != null)
+            {
+                query = query.Where(x => x.CategoryId == categoryId);
             }
 
             var emptyNameInput = searchText == null && searchCriteria == ServicesConstants.Name;

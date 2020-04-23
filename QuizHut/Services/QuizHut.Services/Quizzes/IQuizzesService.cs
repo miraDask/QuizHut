@@ -9,7 +9,13 @@
 
         Task<IList<T>> GetAllUnAssignedToEventAsync<T>(string creatorId = null);
 
-        Task<IEnumerable<T>> GetAllPerPageAsync<T>(int page, int countPerPage, string creatorId = null, string searchCriteria = null, string searchText = null);
+        Task<IEnumerable<T>> GetAllPerPageAsync<T>(
+            int page,
+            int countPerPage,
+            string creatorId = null,
+            string searchCriteria = null,
+            string searchText = null,
+            string categoryId = null);
 
         Task<IList<T>> GetAllByCategoryIdAsync<T>(string id);
 
@@ -33,6 +39,6 @@
 
         Task AssignQuizToEventAsync(string eventId, string quizId);
 
-        int GetAllQuizzesCount(string creatorId = null, string searchCriteria = null, string searchText = null);
+        int GetAllQuizzesCount(string creatorId = null, string searchCriteria = null, string searchText = null, string categoryId = null);
     }
 }

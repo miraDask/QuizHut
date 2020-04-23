@@ -1,15 +1,34 @@
 ﻿@model QuizzesAllListingViewModel
 @{
     ViewData["Title"] = "Quizzes";
+    IEnumerable<SelectListItem> selectList;
+    if (Model.CurrentCategory != null)
+    {
+        selectList = Model.Categories.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id, Selected = x.Id == Model.CurrentCategory.Id ? true : false });
+    }
+    else
+    {
+        selectList = Model.Categories.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id });
+    }
+    
+    var categoryId = Model.CurrentCategory != null ? Model.CurrentCategory.Id : null;
 }
 
 <div class="container">
     <div class="component">
+        <form method="post" class="form-inline mb-4 offset-3" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">
+            <select class="custom-select col-5 ml-0"
+                    asp-items="selectList"
+                    name="categoryId">
+            </select>
+            <button type="submit" class="btn btn-primary ml-3">
+                <span>Select Category</span>
+            </button>
+        </form>
         <form method="get" class="form-subscribe form-inline mb-4" asp-action="AllQuizzesCreatedByTeacher" asp-controller="Quizzes">
             Search by:
             <select id="select" class="btn btn-light mt-0 mt-md-3 mt-lg-0 ml-2 mr-3" name="searchCriteria">
                 <option value="Name" selected="@(Model.SearchType == "Name" ? true : false)">name</option>
-                @*<option value="Date" selected="@(Model.SearchType == "Date" ? true : false)">creation</option>*@
                 <option value="Assigned" selected="@(Model.SearchType == "Assigned" ? true : false)">assigned</option>
                 <option value="Unassigned" selected="@(Model.SearchType == "Unassigned" ? true : false)">unassigned</option>
             </select>
@@ -19,6 +38,7 @@
                        placeholder="Choose criteria and enter your text to search..." name="searchText" value="@Model.SearchString">
                 <button type="submit" id="search" class="btn btn-primary mt-0 mt-md-3 mt-lg-0">Search</button>
             </div>
+            <input type="hidden" name="categoryId" value="@categoryId" />
         </form>
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-neutral p-2">
@@ -49,7 +69,7 @@
             <tr class="table-active bg-white">
                 <th scope="col">Name</th>
                 <th scope="col">Created On</th>
-                <th scope="col">Questions</th>
+                <th scope="col">Category</th>
                 <th scope="col">Is Assigned</th>
                 <th scope="col">Action</th>
             </tr>
@@ -65,7 +85,7 @@
                     <tr class="table-warning">
                         <th scope="row" class="pt-4">@quiz.Name</th>
                         <td class="pt-4">@quiz.CreatedOnDate</td>
-                        <td class="pt-4">@quiz.QuestionsCount</td>
+                        <td class="pt-4">@quiz.CategoryName</td>
                         <td style="color:@quiz.Color" class="pt-4"><i class="fas fa-circle"></i></td>
                         <td>
                             <form method="post" class="component  navbar-expand-lg text-right">
@@ -119,6 +139,7 @@
 {
     var disabledLeftArrow = Model.CurrentPage == 1 ? "disabled" : string.Empty;
     var disabledRightArrow = Model.CurrentPage == Model.PagesCount ? "disabled" : string.Empty;
+
     <div class="text-center mt-4">
         <ul class="pagination justify-content-center">
             <li class="page-item @disabledLeftArrow">
@@ -128,7 +149,8 @@
                    asp-action="AllQuizzesCreatedByTeacher"
                    asp-route-page="@Model.PreviousPage"
                    asp-route-searchText="@Model.SearchString"
-                   asp-route-searchCriteria="@Model.SearchType">
+                   asp-route-searchCriteria="@Model.SearchType"
+                   asp-route-categoryId="@categoryId">
                     <i class="fas fa-long-arrow-alt-left"></i>
                 </a>
             </li>
@@ -142,7 +164,8 @@
                        asp-action="AllQuizzesCreatedByTeacher"
                        asp-route-page="@i"
                        asp-route-searchText="@Model.SearchString"
-                       asp-route-searchCriteria="@Model.SearchType">
+                       asp-route-searchCriteria="@Model.SearchType"
+                       asp-route-categoryId="@categoryId">
                         @i
                     </a>
                 </li>
@@ -154,7 +177,8 @@
                    asp-action="AllQuizzesCreatedByTeacher"
                    asp-route-page="@Model.NextPage"
                    asp-route-searchText="@Model.SearchString"
-                   asp-route-searchCriteria="@Model.SearchType">
+                   asp-route-searchCriteria="@Model.SearchType"
+                   asp-route-categoryId="@categoryId">
                     <i class="fas fa-long-arrow-alt-right"></i>
                 </a>
             </li>

@@ -10,11 +10,13 @@
     using QuizHut.Common;
     using QuizHut.Common.Hubs;
     using QuizHut.Data.Models;
+    using QuizHut.Services.Categories;
     using QuizHut.Services.Questions;
     using QuizHut.Services.Quizzes;
     using QuizHut.Web.Common;
     using QuizHut.Web.Infrastructure.Filters;
     using QuizHut.Web.Infrastructure.Helpers;
+    using QuizHut.Web.ViewModels.Categories;
     using QuizHut.Web.ViewModels.Questions;
     using QuizHut.Web.ViewModels.Quizzes;
     using Rotativa.AspNetCore;
@@ -26,6 +28,7 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IQuizzesService quizService;
         private readonly IQuestionsService questionsService;
+        private readonly ICategoriesService categoriesService;
         private readonly IDateTimeConverter dateTimeConverter;
         private readonly IHubContext<QuizHub> hub;
 
@@ -33,12 +36,14 @@
             UserManager<ApplicationUser> userManager,
             IQuizzesService quizService,
             IQuestionsService questionsService,
+            ICategoriesService categoriesService,
             IDateTimeConverter dateTimeConverter,
             IHubContext<QuizHub> hub)
         {
             this.userManager = userManager;
             this.quizService = quizService;
             this.questionsService = questionsService;
+            this.categoriesService = categoriesService;
             this.dateTimeConverter = dateTimeConverter;
             this.hub = hub;
         }
@@ -105,7 +110,7 @@
         }
 
         [ClearDashboardRequestInSessionActionFilterAttribute]
-        public async Task<IActionResult> AllQuizzesCreatedByTeacher(string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
+        public async Task<IActionResult> AllQuizzesCreatedByTeacher(string categoryId, string searchText, string searchCriteria, int page = 1, int countPerPage = PerPageDefaultValue)
         {
             var userId = this.userManager.GetUserId(this.User);
 
@@ -115,12 +120,14 @@
                 PagesCount = 0,
                 SearchType = searchCriteria,
                 SearchString = searchText,
+                Categories = await this.categoriesService.GetAllByCreatorIdAsync<CategorySimpleViewModel>(userId),
+                CurrentCategory = categoryId == null ? null : await this.categoriesService.GetByIdAsync<CategorySimpleViewModel>(categoryId),
             };
 
-            var allQuizzesCreatedByTeacher = this.quizService.GetAllQuizzesCount(userId, searchCriteria, searchText);
+            var allQuizzesCreatedByTeacher = this.quizService.GetAllQuizzesCount(userId, searchCriteria, searchText, categoryId);
             if (allQuizzesCreatedByTeacher > 0)
             {
-                var quizzes = await this.quizService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, userId, searchCriteria, searchText);
+                var quizzes = await this.quizService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, userId, searchCriteria, searchText, categoryId);
                 var timeZoneIana = this.Request.Cookies[GlobalConstants.Coockies.TimeZoneIana];
                 foreach (var quiz in quizzes)
                 {
@@ -136,9 +143,9 @@
 
         [HttpPost]
         [ModelStateValidationActionFilterAttribute]
-        public IActionResult AllQuizzesCreatedByTeacher(QuizzesAllListingViewModel model)
+        public IActionResult AllQuizzesCreatedByTeacher(string categoryId)
         {
-            return this.View(model);
+            return this.RedirectToAction("AllQuizzesCreatedByTeacher", new { categoryId });
         }
 
         [HttpPost]

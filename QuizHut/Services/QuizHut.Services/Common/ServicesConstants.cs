@@ -17,5 +17,6 @@
         public const string Unassigned = "Unassigned";
         public const string Assigned = "Assigned";
         public const string Name = "Name";
+        public const string Category = "Category";
     }
 }

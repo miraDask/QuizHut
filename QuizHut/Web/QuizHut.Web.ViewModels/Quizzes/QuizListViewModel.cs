@@ -15,6 +15,8 @@
 
         public int QuestionsCount { get; set; }
 
+        public string CategoryName { get; set; }
+
         public string CreatedOnDate { get; set; }
 
         public DateTime CreatedOn { get; set; }

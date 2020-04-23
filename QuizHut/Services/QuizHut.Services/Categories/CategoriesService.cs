@@ -7,7 +7,6 @@
     using Microsoft.EntityFrameworkCore;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
-    using QuizHut.Services.Common;
     using QuizHut.Services.Mapping;
     using QuizHut.Services.Tools.Expressions;
 
@@ -139,5 +138,12 @@
 
             return query.Count();
         }
+
+        public async Task<IEnumerable<T>> GetAllByCreatorIdAsync<T>(string creatorId)
+        => await this.repository
+           .AllAsNoTracking()
+           .Where(x => x.CreatorId == creatorId)
+           .To<T>()
+           .ToListAsync();
     }
 }
