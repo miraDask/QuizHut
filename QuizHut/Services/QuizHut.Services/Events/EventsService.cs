@@ -277,8 +277,9 @@
             var nowHours = timeNow.Hours;
             var startMins = timeToStart.Minutes;
             var nowMins = timeNow.Minutes;
+            var invalidStartingTime = startHours < nowHours || (startHours == nowHours && startMins < nowMins);
 
-            if (startHours < nowHours || (startHours == nowHours && startMins < nowMins))
+            if (userLocalTimeNow.Date == activationDateAndTimeToUserLocalTime.Date && invalidStartingTime)
             {
                 return ServicesConstants.InvalidStartingTime;
             }

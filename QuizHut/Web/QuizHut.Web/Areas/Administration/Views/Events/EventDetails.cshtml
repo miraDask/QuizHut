@@ -286,11 +286,6 @@
             </div>
         </nav>
     }
-    <a class="btn btn-outline-primary offset-md-4 col-md-4 mt-2 d-inline-block"
-       asp-action="AllEventsCreatedByTeacher"
-       asp-controller="Events">
-        Go Back
-    </a>
 </div>
 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName) && this.ViewData[GlobalConstants.DashboardRequest] != null)
 {

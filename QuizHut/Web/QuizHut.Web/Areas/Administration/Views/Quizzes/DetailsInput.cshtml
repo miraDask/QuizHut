@@ -51,7 +51,7 @@
                         </textarea>
                         <div class="mt-4"><label asp-for="@Model.Timer">Set Timer</label></div>
                         <div class="input-group">
-                            <input type="number" asp-for="@Model.Timer" class="form-control" placeholder="minutes">
+                            <input type="number" asp-for="@Model.Timer" min="0" step="1" class="form-control" placeholder="minutes">
                         </div>
                         <p class="card-text text-primary ">
                             <span class="mr-1">∗</span>
