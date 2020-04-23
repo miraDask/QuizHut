@@ -9,9 +9,7 @@ namespace QuizHut.Web.Areas.Identity.Pages.Account.Manage
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
     using QuizHut.Data.Models;
-    using QuizHut.Web.Infrastructure.Filters;
 
-    [OverrideDefoultLayoutPageFilter]
     public class ChangePasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

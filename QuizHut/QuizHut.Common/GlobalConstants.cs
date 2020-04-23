@@ -68,5 +68,14 @@
         {
             public const string TimeZoneIana = "timeZoneIana";
         }
+
+        public static class EmailSender
+        {
+            public const string EventInvitationSubject = "Event invitation";
+            public const string ConfirmEmailSubject = "Confirm your email";
+            public const string SenderEmail = "quizhutproject@gmail.com";
+            public const string SenderName = "QuizHut team";
+            public const string StringToReplace = "{password}";
+        }
     }
 }

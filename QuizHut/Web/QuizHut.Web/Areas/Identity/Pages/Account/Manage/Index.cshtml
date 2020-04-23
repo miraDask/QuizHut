@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
+     if (this.User.IsInRole(GlobalConstants.AdministratorRoleName)  || this.User.IsInRole(GlobalConstants.TeacherRoleName)) {
+        ViewData["Layout"] = GlobalConstants.AdminLayout;
+    }
 }
 
 <h4>@ViewData["Title"]</h4>

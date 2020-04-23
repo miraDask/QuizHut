@@ -311,15 +311,15 @@
                     Emails = x.EventsGroups.SelectMany(x => x.Group.StudentstGroups.Select(x => x.Student.Email)),
                 }).FirstOrDefaultAsync();
 
-            emailHtmlContent = emailHtmlContent.Replace(ServicesConstants.StringToReplace, eventInfo.Password);
+            emailHtmlContent = emailHtmlContent.Replace(GlobalConstants.EmailSender.StringToReplace, eventInfo.Password);
 
             foreach (var email in eventInfo.Emails)
             {
                 await this.emailSender.SendEmailAsync(
-                    ServicesConstants.SenderEmail,
-                    ServicesConstants.SenderName,
+                    GlobalConstants.EmailSender.SenderEmail,
+                    GlobalConstants.EmailSender.SenderName,
                     email,
-                    ServicesConstants.EventInvitationSubject,
+                    GlobalConstants.EmailSender.EventInvitationSubject,
                     emailHtmlContent);
             }
         }

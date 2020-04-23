@@ -11,10 +11,6 @@
         public const string InvalidDurationOfActivity =
             "Invalid time for edning event. Time for ending should not be earlier than the time when event starts or the same!";
 
-        public const string EventInvitationSubject = "Event invitation";
-        public const string SenderEmail = "quizhutproject@gmail.com";
-        public const string SenderName = "QuizHut team";
-        public const string StringToReplace = "{password}";
         public const string StatusActive = "Active";
         public const string StatusEnded = "Ended";
         public const string StatusPending = "Pending";

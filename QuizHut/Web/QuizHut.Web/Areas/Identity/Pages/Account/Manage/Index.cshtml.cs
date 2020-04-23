@@ -11,9 +11,7 @@ namespace QuizHut.Web.Areas.Identity.Pages.Account.Manage
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using QuizHut.Data.Models;
-    using QuizHut.Web.Infrastructure.Filters;
 
-    [OverrideDefoultLayoutPageFilter]
     public partial class IndexModel : PageModel
     {
         private readonly UserManager<ApplicationUser> userManager;
