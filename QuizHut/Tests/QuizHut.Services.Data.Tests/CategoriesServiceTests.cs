@@ -18,7 +18,7 @@
         private ICategoriesService Service => this.ServiceProvider.GetRequiredService<ICategoriesService>();
 
         [Fact]
-        public async Task A_GetByIdAsyncShouldReturnCorrectModel()
+        public async Task GetByIdAsyncShouldReturnCorrectModel()
         {
             var creatorId = await this.CreateUserAsync();
             var category = await this.CreateCategoryAsync("Category 1", creatorId);
@@ -39,7 +39,7 @@
         }
 
         [Fact]
-        public async Task B_GetAllPerPageShouldReturnCorrectModelCollection()
+        public async Task GetAllPerPageShouldReturnCorrectModelCollection()
         {
             var creatorId = Guid.NewGuid().ToString();
             var firstCategory = await this.CreateCategoryAsync("Category 1", creatorId);
@@ -74,7 +74,42 @@
         }
 
         [Fact]
-        public async Task C_GetAllCategoriesCountShouldReturnCorrectCount()
+        public async Task GetAllByCreatorIdAsyncShouldReturnCorrectModelCollection()
+        {
+            var creatorId = Guid.NewGuid().ToString();
+            var firstCategory = await this.CreateCategoryAsync("Category 1", creatorId);
+            var secondCategory = await this.CreateCategoryAsync("Category 2", creatorId);
+
+            var firstModel = new CategoryViewModel()
+            {
+                Name = firstCategory.Name,
+                Id = firstCategory.Id,
+                QuizzesCount = firstCategory.Quizzes.Count().ToString(),
+                CreatedOn = firstCategory.CreatedOn,
+            };
+
+            var secondModel = new CategoryViewModel()
+            {
+                Name = secondCategory.Name,
+                Id = secondCategory.Id,
+                QuizzesCount = secondCategory.Quizzes.Count().ToString(),
+                CreatedOn = secondCategory.CreatedOn,
+            };
+
+            var resultModelCollection = await this.Service.GetAllPerPage<CategoryViewModel>(1, 2, creatorId);
+            Assert.Equal(firstModel.Id, resultModelCollection.Last().Id);
+            Assert.Equal(firstModel.Name, resultModelCollection.Last().Name);
+            Assert.Equal(firstModel.QuizzesCount, resultModelCollection.Last().QuizzesCount);
+            Assert.Equal(firstModel.CreatedOn, resultModelCollection.Last().CreatedOn);
+            Assert.Equal(secondModel.Id, resultModelCollection.First().Id);
+            Assert.Equal(secondModel.Name, resultModelCollection.First().Name);
+            Assert.Equal(secondModel.QuizzesCount, resultModelCollection.First().QuizzesCount);
+            Assert.Equal(secondModel.CreatedOn, resultModelCollection.First().CreatedOn);
+            Assert.Equal(2, resultModelCollection.Count());
+        }
+
+        [Fact]
+        public async Task GetAllCategoriesCountShouldReturnCorrectCount()
         {
             var creatorId = Guid.NewGuid().ToString();
             await this.CreateCategoryAsync("first category", creatorId);
@@ -83,7 +118,7 @@
         }
 
         [Fact]
-        public async Task D_CreateCategoryAsyncShouldCreateNewCategoryInDb()
+        public async Task CreateCategoryAsyncShouldCreateNewCategoryInDb()
         {
             var creatorId = Guid.NewGuid().ToString();
             await this.CreateCategoryAsync(creatorId);
@@ -98,7 +133,7 @@
         }
 
         [Fact]
-        public async Task E_GetAllPerPageShouldSkipCorrectly()
+        public async Task GetAllPerPageShouldSkipCorrectly()
         {
             var creatorId = await this.CreateUserAsync();
             var firstCategory = await this.CreateCategoryAsync("Category 1", creatorId);
@@ -124,7 +159,7 @@
         [Theory]
         [InlineData(1, 5)]
         [InlineData(1, 1000)]
-        public async Task F_GetAllPerPageShouldTakeCorrectCountPerPage(int page, int countPerPage)
+        public async Task GetAllPerPageShouldTakeCorrectCountPerPage(int page, int countPerPage)
         {
             var creatorId = await this.CreateUserAsync();
             for (int i = 0; i < countPerPage * 2; i++)
@@ -138,7 +173,7 @@
         }
 
         [Fact]
-        public async Task G_UpdateNameAsyncShouldUpdateCorrectly()
+        public async Task UpdateNameAsyncShouldUpdateCorrectly()
         {
             var category = await this.CreateCategoryAsync("Category");
 
@@ -149,7 +184,7 @@
         }
 
         [Fact]
-        public async Task H_DeleteAsyncShouldDeleteCorrectly()
+        public async Task DeleteAsyncShouldDeleteCorrectly()
         {
             var firstCategory = await this.CreateCategoryAsync("Category 1");
             await this.Service.DeleteAsync(firstCategory.Id);
@@ -161,7 +196,7 @@
         }
 
         [Fact]
-        public async Task I_AssignQuizzesToCategoryAsyncShouldAssignQuizzesCorrectly()
+        public async Task AssignQuizzesToCategoryAsyncShouldAssignQuizzesCorrectly()
         {
             var firstQuizId = this.CreateQuiz(name: "First quiz");
             var secondQuizId = this.CreateQuiz(name: "Second quiz");
@@ -181,7 +216,7 @@
         }
 
         [Fact]
-        public async Task J_DeleteQuizFromCategoryAsyncShouldUnAssignQuizCorrectly()
+        public async Task DeleteQuizFromCategoryAsyncShouldUnAssignQuizCorrectly()
         {
             var firstCategory = await this.CreateCategoryAsync("Category 2");
 

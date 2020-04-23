@@ -66,13 +66,13 @@
         [Fact]
         public async Task GetAllInRolesPerPageAsyncShouldReturnCorrectModelCollection()
         {
-            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers", "Teacher");
+            var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teacher", "Teacher");
             await this.CreateUserAsync("student@student.com", "Student", "Student");
 
             var model = new UserInRoleViewModel()
             {
                 Id = teacherId,
-                FullName = "John Doe",
+                FullName = "Teacher Teacher",
                 Email = "teacher@teacher.com",
             };
 
@@ -89,7 +89,7 @@
         [InlineData("Administrator", "N")]
         [InlineData("Administrator", "JO")]
         [InlineData("Administrator", "d")]
-        [InlineData("FullName", "N")]
+        [InlineData("FullName", "john")]
         [InlineData("FirstName", "JO")]
         [InlineData("LastName", "d")]
         [InlineData("Email", "N")]
@@ -113,7 +113,6 @@
             Assert.Equal(adminModel.FullName, resultModelCollection.First().FullName);
             Assert.Equal(adminModel.Email, resultModelCollection.First().Email);
         }
-
 
         [Theory]
         [InlineData("Teacher", null)]
@@ -155,7 +154,7 @@
             var model = new StudentViewModel()
             {
                 Id = studentId,
-                FullName = "John Doe",
+                FullName = "Student Student",
                 Email = "student@student.com",
                 IsAssigned = false,
             };
@@ -182,6 +181,18 @@
 
             Assert.Equal(2, studentsAllCount);
             Assert.Equal(1, studentsWithSameTeacherCount);
+        }
+
+        [Fact]
+        public async Task GetAllInRolesCountShouldReturnCorrectCount()
+        {
+            await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teacers", "Teacher");
+            await this.CreateUserAsync("admin@admin.com", "Admin", "Admin", "Administrator");
+            await this.CreateUserAsync("student@student.com", "Student", "Student");
+
+            var usersInRole = this.Service.GetAllInRolesCount();
+
+            Assert.Equal(2, usersInRole);
         }
 
         [Fact]
@@ -239,7 +250,7 @@
         }
 
         [Fact]
-        public async Task GetAllStudentsAsyncShouldReturnAllStudentsWhitSameTeacherWhichIdIsPassedAndThatAreNotInTheGroupWhichIdIsPassed()
+        public async Task GetAllStudentsAsyncShouldReturnAllStudentsWithSameTeacherWhichIdIsPassedAndThatAreNotInTheGroupWhichIdIsPassed()
         {
             var group = await this.CreateGroupAsync();
             var teacherId = await this.CreateUserAsync("teacher@teacher.com", "Teacher", "Teachers", "Teacher");
@@ -257,14 +268,14 @@
             var model = new StudentViewModel()
             {
                 Id = firstStudentId,
-                FullName = "John Doe",
+                FullName = "Student Student",
                 Email = "student1@student.com",
                 IsAssigned = false,
             };
 
             var resultModelCollection = await this.Service.GetAllStudentsAsync<StudentViewModel>(teacherId, group.Id);
 
-            Assert.Equal(1, resultModelCollection.Count());
+            Assert.Single(resultModelCollection);
             Assert.Equal(model.Id, resultModelCollection.First().Id);
             Assert.Equal(model.FullName, resultModelCollection.First().FullName);
             Assert.Equal(model.Email, resultModelCollection.First().Email);
@@ -279,7 +290,7 @@
             var firstModel = new StudentViewModel()
             {
                 Id = firstStudentId,
-                FullName = "John Doe",
+                FullName = "Student Student",
                 Email = "student1@student.com",
                 IsAssigned = false,
             };
@@ -287,7 +298,7 @@
             var secondModel = new StudentViewModel()
             {
                 Id = secondStudentId,
-                FullName = "John Doe",
+                FullName = "Student2 Student2",
                 Email = "student2@student.com",
                 IsAssigned = false,
             };
@@ -318,7 +329,7 @@
             var secondModel = new StudentViewModel()
             {
                 Id = secondStudentId,
-                FullName = "John Doe",
+                FullName = "Student2 Student2",
                 Email = "student2@student.com",
                 IsAssigned = false,
             };
@@ -341,7 +352,7 @@
             var firstModel = new StudentViewModel()
             {
                 Id = firstStudentId,
-                FullName = "John Doe",
+                FullName = "Student Student",
                 Email = "student1@student.com",
                 IsAssigned = false,
             };

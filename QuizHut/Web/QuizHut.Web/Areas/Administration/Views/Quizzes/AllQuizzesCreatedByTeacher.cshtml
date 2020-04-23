@@ -1,16 +1,11 @@
 ﻿@model QuizzesAllListingViewModel
 @{
     ViewData["Title"] = "Quizzes";
-    IEnumerable<SelectListItem> selectList;
-    if (Model.CurrentCategory != null)
-    {
-        selectList = Model.Categories.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id, Selected = x.Id == Model.CurrentCategory.Id ? true : false });
-    }
-    else
-    {
-        selectList = Model.Categories.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id });
-    }
-    
+     
+    var selectList = Model.CurrentCategory != null 
+    ? Model.Categories.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id, Selected = x.Id == Model.CurrentCategory.Id ? true : false })
+    : Model.Categories.Select(x => new SelectListItem() { Text = x.Name, Value = x.Id });
+
     var categoryId = Model.CurrentCategory != null ? Model.CurrentCategory.Id : null;
 }
 
@@ -20,6 +15,12 @@
             <select class="custom-select col-5 ml-0"
                     asp-items="selectList"
                     name="categoryId">
+                @if (Model.CurrentCategory == null)
+                {
+                    <option selected>
+                        Filter By Category
+                    </option>
+                }
             </select>
             <button type="submit" class="btn btn-primary ml-3">
                 <span>Select Category</span>

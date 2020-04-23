@@ -186,6 +186,27 @@
         }
 
         [Fact]
+        public async Task GetEventsFirstGroupAsyncShouldReturnCorrectModel()
+        {
+            var firstgroupId = await this.CreateGroupAsync(null, "First Group");
+            await this.CreateGroupAsync();
+            var eventId = await this.CreateEventAsync("Event", DateTime.UtcNow);
+            await this.AssignEventToGroupAsync(eventId, firstgroupId);
+
+            var model = new GroupWithEventResultsViewModel()
+            {
+                Id = firstgroupId,
+                Name = "First Group",
+            };
+
+            var resultModel = await this.Service.GetEventsFirstGroupAsync<GroupWithEventResultsViewModel>(eventId);
+
+            Assert.Equal(model.Id, resultModel.Id);
+            Assert.Equal(model.Name, resultModel.Name);
+            Assert.Empty(resultModel.Results);
+        }
+
+        [Fact]
         public async Task GetAllByEventIdAsyncShouldReturnCorrectModelCollection()
         {
             var eventId = Guid.NewGuid().ToString();
