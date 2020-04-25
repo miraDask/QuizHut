@@ -207,7 +207,7 @@
                 SearchString = searchText,
             };
 
-            var allQuizzesCount = this.quizzesService.GetAllQuizzesCount(null, searchCriteria, searchText);
+            var allQuizzesCount = await this.quizzesService.GetAllQuizzesCountAsync(null, searchCriteria, searchText);
             if (allQuizzesCount > 0)
             {
                 var quizzes = await this.quizzesService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, null, searchCriteria, searchText);

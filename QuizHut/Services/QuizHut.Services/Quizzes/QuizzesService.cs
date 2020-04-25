@@ -238,7 +238,7 @@
             .ToListAsync();
         }
 
-        public int GetAllQuizzesCount(string creatorId = null, string searchCriteria = null, string searchText = null, string categoryId = null)
+        public async Task<int> GetAllQuizzesCountAsync(string creatorId = null, string searchCriteria = null, string searchText = null, string categoryId = null)
         {
             var query = this.quizRepository.AllAsNoTracking();
 
@@ -259,7 +259,7 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         public async Task<string> GetQuizNameByIdAsync(string id)

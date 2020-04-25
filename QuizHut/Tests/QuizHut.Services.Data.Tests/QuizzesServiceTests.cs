@@ -103,8 +103,8 @@
             await this.CreateQuizAsync("First Quiz", firstCreatorId);
             await this.CreateQuizAsync("Second Quiz", secondCreatorId);
 
-            var caseWhenCreatorIdIsPassedCount = this.Service.GetAllQuizzesCount(firstCreatorId);
-            var caseWhenNoCreatorIdIsPassedCount = this.Service.GetAllQuizzesCount();
+            var caseWhenCreatorIdIsPassedCount = await this.Service.GetAllQuizzesCountAsync(firstCreatorId);
+            var caseWhenNoCreatorIdIsPassedCount = await this.Service.GetAllQuizzesCountAsync();
 
             Assert.Equal(1, caseWhenCreatorIdIsPassedCount);
             Assert.Equal(2, caseWhenNoCreatorIdIsPassedCount);

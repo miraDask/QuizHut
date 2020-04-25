@@ -124,7 +124,7 @@
                 CurrentCategory = categoryId == null ? null : await this.categoriesService.GetByIdAsync<CategorySimpleViewModel>(categoryId),
             };
 
-            var allQuizzesCreatedByTeacher = this.quizService.GetAllQuizzesCount(userId, searchCriteria, searchText, categoryId);
+            var allQuizzesCreatedByTeacher = await this.quizService.GetAllQuizzesCountAsync(userId, searchCriteria, searchText, categoryId);
             if (allQuizzesCreatedByTeacher > 0)
             {
                 var quizzes = await this.quizService.GetAllPerPageAsync<QuizListViewModel>(page, countPerPage, userId, searchCriteria, searchText, categoryId);

@@ -39,6 +39,6 @@
 
         Task AssignQuizToEventAsync(string eventId, string quizId);
 
-        int GetAllQuizzesCount(string creatorId = null, string searchCriteria = null, string searchText = null, string categoryId = null);
+        Task<int> GetAllQuizzesCountAsync(string creatorId = null, string searchCriteria = null, string searchText = null, string categoryId = null);
     }
 }
