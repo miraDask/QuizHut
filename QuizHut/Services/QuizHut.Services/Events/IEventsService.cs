@@ -13,9 +13,9 @@
 
         Task<IList<T>> GetAllPerPageByCreatorIdAndStatus<T>(int page, int countPerPage, Status status, string creatorId, string searchCriteria = null, string searchText = null);
 
-        int GetAllEventsCount(string creatorId = null, string searchCriteria = null, string searchText = null);
+        Task<int> GetAllEventsCountAsync(string creatorId = null, string searchCriteria = null, string searchText = null);
 
-        int GetEventsCountByCreatorIdAndStatus(Status status, string creatorId, string searchCriteria = null, string searchText = null);
+        Task<int> GetEventsCountByCreatorIdAndStatusAsync(Status status, string creatorId, string searchCriteria = null, string searchText = null);
 
         Task<IList<T>> GetAllFiteredByStatusAndGroupAsync<T>(Status status, string groupId, string creatorId = null);
 
@@ -28,7 +28,7 @@
             string searchCriteria = null,
             string searchText = null);
 
-        int GetEventsCountByStudentIdAndStatus(string id, Status status, string searchCriteria = null, string searchText = null);
+        Task<int> GetEventsCountByStudentIdAndStatusAsync(string id, Status status, string searchCriteria = null, string searchText = null);
 
         Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId);
 

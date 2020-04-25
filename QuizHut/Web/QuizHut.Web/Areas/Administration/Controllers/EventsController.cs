@@ -62,7 +62,7 @@
                 SearchString = searchText,
             };
 
-            var allEventsCreatedByTeacher = this.service.GetAllEventsCount(userId, searchCriteria, searchText);
+            var allEventsCreatedByTeacher = await this.service.GetAllEventsCountAsync(userId, searchCriteria, searchText);
             if (allEventsCreatedByTeacher > 0)
             {
                 pagesCount = (int)Math.Ceiling(allEventsCreatedByTeacher / (decimal)countPerPage);
@@ -259,7 +259,7 @@
                 SearchString = searchText,
             };
 
-            var allActiveEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Active, userId, searchCriteria, searchText);
+            var allActiveEventsCreatedByTeacher = await this.service.GetEventsCountByCreatorIdAndStatusAsync(Status.Active, userId, searchCriteria, searchText);
             if (allActiveEventsCreatedByTeacher > 0)
             {
                 var events = await this.service
@@ -283,7 +283,7 @@
                 SearchString = searchText,
             };
 
-            var allEndedEventsCreatedByTeacher = this.service.GetEventsCountByCreatorIdAndStatus(Status.Ended, userId, searchCriteria, searchText);
+            var allEndedEventsCreatedByTeacher = await this.service.GetEventsCountByCreatorIdAndStatusAsync(Status.Ended, userId, searchCriteria, searchText);
             if (allEndedEventsCreatedByTeacher > 0)
             {
                 var events = await this.service.GetAllPerPageByCreatorIdAndStatus<EventSimpleViewModel>(page, countPerPage, Status.Ended, userId, searchCriteria, searchText);

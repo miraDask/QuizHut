@@ -325,7 +325,7 @@
             }
         }
 
-        public int GetEventsCountByStudentIdAndStatus(string id, Status status, string searchCriteria = null, string searchText = null)
+        public async Task<int> GetEventsCountByStudentIdAndStatusAsync(string id, Status status, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository
                             .AllAsNoTracking()
@@ -343,10 +343,10 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
-        public int GetAllEventsCount(string creatorId = null, string searchCriteria = null, string searchText = null)
+        public async Task<int> GetAllEventsCountAsync(string creatorId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -362,10 +362,10 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
-        public int GetEventsCountByCreatorIdAndStatus(
+        public async Task<int> GetEventsCountByCreatorIdAndStatusAsync(
             Status status,
             string creatorId,
             string searchCriteria = null,
@@ -379,7 +379,7 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         private async Task<string[]> GetStudentsNamesByEventIdAsync(string id)

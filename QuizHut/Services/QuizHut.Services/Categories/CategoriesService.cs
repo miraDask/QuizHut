@@ -126,7 +126,7 @@
             .To<T>()
             .FirstOrDefaultAsync();
 
-        public int GetAllCategoriesCount(string creatorId, string searchCriteria = null, string searchText = null)
+        public async Task<int> GetAllCategoriesCountAsync(string creatorId, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository.AllAsNoTracking().Where(x => x.CreatorId == creatorId);
 
@@ -136,7 +136,7 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllByCreatorIdAsync<T>(string creatorId)

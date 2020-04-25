@@ -48,7 +48,7 @@
                 SearchString = searchText,
             };
 
-            var allCategoriesCreatedByTeacherCount = this.service.GetAllCategoriesCount(userId, searchCriteria, searchText);
+            var allCategoriesCreatedByTeacherCount = await this.service.GetAllCategoriesCountAsync(userId, searchCriteria, searchText);
             if (allCategoriesCreatedByTeacherCount > 0)
             {
                 var categories = await this.service.GetAllPerPage<CategoryViewModel>(page, countPerPage, userId, searchCriteria, searchText);

@@ -641,7 +641,7 @@
             await this.CreateEventAsync("First Event", DateTime.UtcNow, creatorId);
             await this.CreateEventAsync("Second Event", DateTime.UtcNow, creatorId);
 
-            var count = this.Service.GetEventsCountByCreatorIdAndStatus(Status.Pending, creatorId);
+            var count = await this.Service.GetEventsCountByCreatorIdAndStatusAsync(Status.Pending, creatorId);
 
             Assert.Equal(2, count);
         }
@@ -657,7 +657,7 @@
             await this.AssignStudentToEvent(studentId, secondEventId);
             var thirdEventId = await this.CreateEventAsync("Third Event", DateTime.UtcNow, creatorId);
             await this.AssignStudentToEvent(studentId, thirdEventId);
-            var count = this.Service.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending);
+            var count = await this.Service.GetEventsCountByStudentIdAndStatusAsync(studentId, Status.Pending);
 
             Assert.Equal(2, count);
         }
@@ -697,8 +697,8 @@
             await this.CreateEventAsync("First Event", DateTime.UtcNow, firstCreatorId);
             await this.CreateEventAsync("Second Event", DateTime.UtcNow, secondCreatorId);
 
-            var caseWhenCreatorIdIsPassedCount = this.Service.GetAllEventsCount(firstCreatorId);
-            var caseWhenNoCreatorIdIsPassedCount = this.Service.GetAllEventsCount();
+            var caseWhenCreatorIdIsPassedCount = await this.Service.GetAllEventsCountAsync(firstCreatorId);
+            var caseWhenNoCreatorIdIsPassedCount = await this.Service.GetAllEventsCountAsync();
 
             Assert.Equal(1, caseWhenCreatorIdIsPassedCount);
             Assert.Equal(2, caseWhenNoCreatorIdIsPassedCount);

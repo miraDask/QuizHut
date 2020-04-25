@@ -126,7 +126,7 @@
                 SearchString = searchText,
             };
 
-            int allEventsCount = this.eventService.GetAllEventsCount(null, searchCriteria, searchText);
+            int allEventsCount = await this.eventService.GetAllEventsCountAsync(null, searchCriteria, searchText);
 
             if (allEventsCount > 0)
             {
@@ -149,7 +149,7 @@
                 SearchString = searchText,
             };
 
-            int allEventsCount = this.eventService.GetAllEventsCount(null, searchCriteria, searchText);
+            int allEventsCount = await this.eventService.GetAllEventsCountAsync(null, searchCriteria, searchText);
 
             if (allEventsCount > 0)
             {

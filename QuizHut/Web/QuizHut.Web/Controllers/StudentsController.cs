@@ -89,7 +89,7 @@
                 SearchString = searchText,
             };
 
-            var allActiveEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Active, searchCriteria, searchText);
+            var allActiveEventsCount = await this.eventsService.GetEventsCountByStudentIdAndStatusAsync(studentId, Status.Active, searchCriteria, searchText);
             if (allActiveEventsCount > 0)
             {
                 var activeEvents = await this.eventsService
@@ -120,7 +120,7 @@
                 SearchString = searchText,
             };
 
-            var allEndedEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Ended, searchCriteria, searchText);
+            var allEndedEventsCount = await this.eventsService.GetEventsCountByStudentIdAndStatusAsync(studentId, Status.Ended, searchCriteria, searchText);
             if (allEndedEventsCount > 0)
             {
                 var endedEvents = await this.eventsService
@@ -158,7 +158,7 @@
                 SearchString = searchText,
             };
 
-            var allPendingEventsCount = this.eventsService.GetEventsCountByStudentIdAndStatus(studentId, Status.Pending, searchCriteria, searchText);
+            var allPendingEventsCount = await this.eventsService.GetEventsCountByStudentIdAndStatusAsync(studentId, Status.Pending, searchCriteria, searchText);
             if (allPendingEventsCount > 0)
             {
                 var pendingEvents = await this.eventsService

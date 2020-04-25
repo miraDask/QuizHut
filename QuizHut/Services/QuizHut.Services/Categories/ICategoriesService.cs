@@ -21,6 +21,6 @@
 
         Task DeleteQuizFromCategoryAsync(string categoryId, string quizId);
 
-        int GetAllCategoriesCount(string creatorId, string searchCriteria = null, string searchText = null);
+        Task<int> GetAllCategoriesCountAsync(string creatorId, string searchCriteria = null, string searchText = null);
     }
 }

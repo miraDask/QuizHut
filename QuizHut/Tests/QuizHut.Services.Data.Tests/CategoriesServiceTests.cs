@@ -113,7 +113,7 @@
         {
             var creatorId = Guid.NewGuid().ToString();
             await this.CreateCategoryAsync("first category", creatorId);
-            var categoriesCount = this.Service.GetAllCategoriesCount(creatorId);
+            var categoriesCount = await this.Service.GetAllCategoriesCountAsync(creatorId);
             Assert.Equal(1, categoriesCount);
         }
 
