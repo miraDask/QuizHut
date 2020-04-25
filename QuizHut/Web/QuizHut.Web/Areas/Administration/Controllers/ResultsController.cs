@@ -45,7 +45,7 @@
                 eventModel.Group = groupId != null ? await this.groupsService.GetGroupModelAsync<GroupWithEventResultsViewModel>(groupId)
                     : await this.groupsService.GetEventsFirstGroupAsync<GroupWithEventResultsViewModel>(eventId);
                 groupId ??= eventModel.Group.Id;
-                var resultsCount = this.resultsService.GetAllResultsByEventAndGroupCount(eventId, groupId);
+                var resultsCount = await this.resultsService.GetAllResultsByEventAndGroupCountAsync(eventId, groupId);
                 if (resultsCount > 0)
                 {
                     var results = await this.resultsService.GetAllResultsByEventAndGroupPerPageAsync<ResultViewModel>(eventId, groupId, page, countPerPage);

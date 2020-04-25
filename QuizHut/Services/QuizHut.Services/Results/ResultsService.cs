@@ -37,12 +37,12 @@
                      .To<T>()
                      .ToListAsync();
 
-        public int GetAllResultsByEventAndGroupCount(string eventId, string groupId)
-        => this.repository
-               .AllAsNoTracking()
-               .Where(x => x.EventId == eventId)
-               .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Id == groupId))
-               .Count();
+        public async Task<int> GetAllResultsByEventAndGroupCountAsync(string eventId, string groupId)
+        => await this.repository
+                 .AllAsNoTracking()
+                 .Where(x => x.EventId == eventId)
+                 .Where(x => x.Student.StudentsInGroups.Any(x => x.Group.Id == groupId))
+                 .CountAsync();
 
         public async Task<string> CreateResultAsync(string studentId, int points, int maxPoints, string quizId)
         {
@@ -109,7 +109,7 @@
             .To<T>()
             .ToListAsync();
 
-        public int GetResultsCountByStudentId(string id, string searchCriteria = null, string searchText = null)
+        public async Task<int> GetResultsCountByStudentIdAsync(string id, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository.AllAsNoTracking().Where(x => x.StudentId == id);
 
@@ -119,7 +119,7 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         public async Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId)

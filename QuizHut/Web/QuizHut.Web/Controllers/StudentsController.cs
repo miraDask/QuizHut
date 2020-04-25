@@ -61,7 +61,7 @@
                 SearchString = searchText,
             };
 
-            var allResultsCount = this.resultService.GetResultsCountByStudentId(studentId, searchCriteria, searchText);
+            var allResultsCount = await this.resultService.GetResultsCountByStudentIdAsync(studentId, searchCriteria, searchText);
             if (allResultsCount > 0)
             {
                 var results = await this.resultService.GetPerPageByStudentIdAsync<StudentResultViewModel>(studentId, page, countPerPage, searchCriteria, searchText);

@@ -153,7 +153,7 @@
             await this.CreateResultAsync(firstStudentId, 2, 10, eventInfo[0]);
             await this.CreateResultAsync(firstStudentId, 5, 10, eventInfo[0]);
 
-            var count = this.Service.GetAllResultsByEventAndGroupCount(eventInfo[0], groupId);
+            var count = await this.Service.GetAllResultsByEventAndGroupCountAsync(eventInfo[0], groupId);
 
             Assert.Equal(2, count);
         }
@@ -181,7 +181,7 @@
             await this.CreateResultAsync(studentId, 2, 10, firstEventInfo[0]);
             await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
 
-            var count = this.Service.GetResultsCountByStudentId(studentId);
+            var count = await this.Service.GetResultsCountByStudentIdAsync(studentId);
 
             Assert.Equal(2, count);
         }
@@ -204,7 +204,7 @@
             await this.CreateResultAsync(studentId, 2, 10, firstEventInfo[0]);
             await this.CreateResultAsync(studentId, 5, 10, secondEventInfo[0]);
 
-            var count = this.Service.GetResultsCountByStudentId(studentId, searchCriteria, searchText);
+            var count = await this.Service.GetResultsCountByStudentIdAsync(studentId, searchCriteria, searchText);
 
             Assert.Equal(2, count);
         }

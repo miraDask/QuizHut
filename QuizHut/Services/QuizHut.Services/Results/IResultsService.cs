@@ -9,9 +9,9 @@
 
         Task<IEnumerable<T>> GetAllByStudentIdAsync<T>(string id);
 
-        int GetResultsCountByStudentId(string id, string searchCriteria = null, string searchText = null);
+        Task<int> GetResultsCountByStudentIdAsync(string id, string searchCriteria = null, string searchText = null);
 
-        int GetAllResultsByEventAndGroupCount(string eventId, string groupId);
+        Task<int> GetAllResultsByEventAndGroupCountAsync(string eventId, string groupId);
 
         Task<string> GetQuizNameByEventIdAndStudentIdAsync(string eventId, string studentId);
 
