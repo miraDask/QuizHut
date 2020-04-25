@@ -88,8 +88,8 @@
             .To<T>()
             .ToListAsync();
 
-        public int GetAllByQuizIdCount(string id)
-        => this.repository.AllAsNoTracking().Where(x => x.QuizId == id).Count();
+        public async Task<int> GetAllByQuizIdCountAsync(string id)
+        => await this.repository.AllAsNoTracking().Where(x => x.QuizId == id).CountAsync();
 
         public async Task<T> GetQuestionByQuizIdAndNumberAsync<T>(string quizId, int number)
         => await this.repository.AllAsNoTracking()

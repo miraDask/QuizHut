@@ -56,7 +56,7 @@
                 SearchString = searchText,
             };
 
-            var allGroupsCreatedByTeacherCount = this.service.GetAllGroupsCount(userId, searchCriteria, searchText);
+            var allGroupsCreatedByTeacherCount = await this.service.GetAllGroupsCountAsync(userId, searchCriteria, searchText);
             if (allGroupsCreatedByTeacherCount > 0)
             {
                 var groups = await this.service.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, userId, searchCriteria, searchText);

@@ -128,7 +128,7 @@
             var quizId = await this.CreateQuizAsync();
             await this.Service.CreateQuestionAsync(quizId, "First Question");
             await this.Service.CreateQuestionAsync(quizId, "Second Question");
-            var count = this.Service.GetAllByQuizIdCount(quizId);
+            var count = await this.Service.GetAllByQuizIdCountAsync(quizId);
 
             Assert.Equal(2, count);
         }

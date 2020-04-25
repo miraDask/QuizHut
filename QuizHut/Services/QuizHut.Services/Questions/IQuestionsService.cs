@@ -19,6 +19,6 @@
 
         Task<IList<T>> GetAllByQuizIdAsync<T>(string id);
 
-        int GetAllByQuizIdCount(string id);
+        Task<int> GetAllByQuizIdCountAsync(string id);
     }
 }

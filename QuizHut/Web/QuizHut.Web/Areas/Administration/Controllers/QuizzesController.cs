@@ -96,7 +96,7 @@
                 PagesCount = 0,
             };
 
-            var questionsCount = this.questionsService.GetAllByQuizIdCount(id);
+            var questionsCount = await this.questionsService.GetAllByQuizIdCountAsync(id);
 
             if (questionsCount > 0)
             {
