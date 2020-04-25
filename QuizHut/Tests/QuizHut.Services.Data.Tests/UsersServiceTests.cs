@@ -176,8 +176,8 @@
 
             await this.CreateUserAsync("student2@student.com", "Student2", "Student2");
 
-            var studentsAllCount = this.Service.GetAllStudentsCount();
-            var studentsWithSameTeacherCount = this.Service.GetAllStudentsCount(teacherId);
+            var studentsAllCount = await this.Service.GetAllStudentsCountAsync();
+            var studentsWithSameTeacherCount = await this.Service.GetAllStudentsCountAsync(teacherId);
 
             Assert.Equal(2, studentsAllCount);
             Assert.Equal(1, studentsWithSameTeacherCount);
@@ -190,7 +190,7 @@
             await this.CreateUserAsync("admin@admin.com", "Admin", "Admin", "Administrator");
             await this.CreateUserAsync("student@student.com", "Student", "Student");
 
-            var usersInRole = this.Service.GetAllInRolesCount();
+            var usersInRole = await this.Service.GetAllInRolesCountAsync();
 
             Assert.Equal(2, usersInRole);
         }

@@ -36,7 +36,7 @@
                 SearchString = searchText,
             };
 
-            var allStudentsAddedByTeacherCount = this.service.GetAllStudentsCount(userId, searchCriteria, searchText);
+            var allStudentsAddedByTeacherCount = await this.service.GetAllStudentsCountAsync(userId, searchCriteria, searchText);
             if (allStudentsAddedByTeacherCount > 0)
             {
                 var students = await this.service.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage, userId, searchCriteria, searchText);

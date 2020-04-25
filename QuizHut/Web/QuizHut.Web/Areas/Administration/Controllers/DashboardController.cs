@@ -68,7 +68,7 @@
                 role = await this.roleManager.FindByNameAsync(searchCriteria);
             }
 
-            var usersInRolesCount = this.userService.GetAllInRolesCount(searchCriteria, searchText, role?.Id);
+            var usersInRolesCount = await this.userService.GetAllInRolesCountAsync(searchCriteria, searchText, role?.Id);
             if (usersInRolesCount > 0)
             {
                 var users = await this.userService.GetAllInRolesPerPageAsync<UserInRoleViewModel>(page, countPerPage, searchCriteria, searchText, role?.Id);
@@ -235,7 +235,7 @@
                 SearchString = searchText,
             };
 
-            var allStudentsCount = this.userService.GetAllStudentsCount(null, searchCriteria, searchText);
+            var allStudentsCount = await this.userService.GetAllStudentsCountAsync(null, searchCriteria, searchText);
             if (allStudentsCount > 0)
             {
                 model.Students = await this.userService.GetAllStudentsPerPageAsync<StudentViewModel>(page, countPerPage, null, searchCriteria, searchText);

@@ -14,7 +14,7 @@
             string searchText = null,
             string roleId = null);
 
-        int GetAllInRolesCount(
+        Task<int> GetAllInRolesCountAsync(
             string searchCriteria = null,
             string searchText = null,
             string roleId = null);
@@ -25,7 +25,7 @@
 
         Task DeleteFromTeacherListAsync(string studentId, string teacherId);
 
-        int GetAllStudentsCount(string teacher = null, string searchCriteria = null, string searchText = null);
+        Task<int> GetAllStudentsCountAsync(string teacher = null, string searchCriteria = null, string searchText = null);
 
         Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(int page, int countPerPage, string teacherId = null, string searchCriteria = null, string searchText = null);
     }

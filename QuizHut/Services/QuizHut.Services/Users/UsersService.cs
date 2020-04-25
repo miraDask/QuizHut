@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
-    using QuizHut.Common;
     using QuizHut.Data.Common.Repositories;
     using QuizHut.Data.Models;
     using QuizHut.Services.Mapping;
@@ -115,7 +114,7 @@
             .ToListAsync();
         }
 
-        public int GetAllInRolesCount(string searchCriteria = null, string searchText = null, string roleId = null)
+        public async Task<int> GetAllInRolesCountAsync(string searchCriteria = null, string searchText = null, string roleId = null)
         {
             var query = this.userRepository.AllAsNoTracking().Where(x => x.Roles.Any());
             query = roleId != null
@@ -128,7 +127,7 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         public async Task<IList<T>> GetAllByGroupIdAsync<T>(string groupId)
@@ -138,7 +137,7 @@
             .To<T>()
             .ToListAsync();
 
-        public int GetAllStudentsCount(string teacherId = null, string searchCriteria = null, string searchText = null)
+        public async Task<int> GetAllStudentsCountAsync(string teacherId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.userRepository.AllAsNoTracking().Where(x => !x.Roles.Any());
 
@@ -153,7 +152,7 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllStudentsPerPageAsync<T>(
