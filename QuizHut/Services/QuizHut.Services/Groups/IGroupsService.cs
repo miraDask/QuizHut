@@ -13,7 +13,7 @@
 
         Task<T> GetGroupModelAsync<T>(string groupId);
 
-        int GetAllGroupsCount(string creatorId = null, string searchCriteria = null, string searchText = null);
+        Task<int> GetAllGroupsCountAsync(string creatorId = null, string searchCriteria = null, string searchText = null);
 
         Task<IEnumerable<T>> GetAllByEventIdAsync<T>(string eventId);
 

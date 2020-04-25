@@ -179,7 +179,7 @@
                 SearchString = searchText,
             };
 
-            var allGroupsCount = this.groupsService.GetAllGroupsCount(null, searchCriteria, searchText);
+            var allGroupsCount = await this.groupsService.GetAllGroupsCountAsync(null, searchCriteria, searchText);
             if (allGroupsCount > 0)
             {
                 var groups = await this.groupsService.GetAllPerPageAsync<GroupListViewModel>(page, countPerPage, null, searchCriteria, searchText);

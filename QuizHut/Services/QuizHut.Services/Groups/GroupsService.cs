@@ -144,7 +144,7 @@
                    .ToListAsync();
         }
 
-        public int GetAllGroupsCount(string creatorId = null, string searchCriteria = null, string searchText = null)
+        public async Task<int> GetAllGroupsCountAsync(string creatorId = null, string searchCriteria = null, string searchText = null)
         {
             var query = this.repository.AllAsNoTracking();
 
@@ -160,7 +160,7 @@
                 query = query.Where(filter);
             }
 
-            return query.Count();
+            return await query.CountAsync();
         }
 
         public async Task<T> GetEventsFirstGroupAsync<T>(string eventId)

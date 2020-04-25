@@ -157,8 +157,8 @@
                 await this.CreateGroupAsync(currentCreator);
             }
 
-            var caseWithCreatorIdPassedCount = this.Service.GetAllGroupsCount(creatorId);
-            var caseNoCreatorIdPassedCount = this.Service.GetAllGroupsCount();
+            var caseWithCreatorIdPassedCount = await this.Service.GetAllGroupsCountAsync(creatorId);
+            var caseNoCreatorIdPassedCount = await this.Service.GetAllGroupsCountAsync();
 
             Assert.Equal(2, caseWithCreatorIdPassedCount);
             Assert.Equal(4, caseNoCreatorIdPassedCount);
