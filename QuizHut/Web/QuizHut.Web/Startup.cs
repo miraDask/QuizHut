@@ -81,7 +81,7 @@
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews(configure =>
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
-            services.AddRazorPages();
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSingleton(this.configuration);
 

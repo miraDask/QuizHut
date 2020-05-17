@@ -5,7 +5,7 @@
 <div class="col-12 offset-md-2 col-md-8 row">
 
 
-    <form method="post" class="col-12">
+    <form id="form" method="post" class="col-12" asp-action="AddNewQuestion" asp-controller="Questions" asp-area="Administration">
         <div class="component">
             <div class="card mb-3">
                 <div class="card-header text-warning" style="font-size: xx-large">
@@ -24,7 +24,7 @@
                     </div>
                     <span asp-validation-for="@Model.Text" class="text-danger"></span>
                     <div class="row mx-1 text-white">
-                        <button id="addQuestion" type="submit" class="btn btn-primary col-md-5 mt-5" asp-action="AddNewQuestion" asp-controller="Questions" asp-area="Administration">Add Question</button>
+                        <button id="submitButton" type="submit" class="btn btn-primary col-md-5 mt-5">Add Question</button>
                         <div class="col-1 mr-4"></div>
                         <a class="btn btn-primary col-md-5 mt-5" asp-area="Administration" asp-action="Display" asp-controller="Quizzes">Cancel</a>
                     </div>
@@ -46,15 +46,7 @@
 @section Scripts {
     <script src="~/js/navigation.js" asp-append-version="true"></script>
     <partial name="_ValidationScriptsPartial" />
+
     <script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function () {
-            tinymce.init({
-                selector: "textarea",
-                plugins: [
-                    "image paste table link code media"
-                ]
-            });
-        });
-    </script>
+    <script src="~/js/tinymcSetup.js" asp-append-version="true"></script>
 }
