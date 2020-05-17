@@ -17,7 +17,7 @@
 }
 <div class="container-fluid">
     <div class="col-12 offset-md-2 col-md-8 row">
-        <form id="quizNameCard" method="post" asp-action="DetailsInput" asp-controller="Quizzes" asp-area="Administration" class="col-12">
+        <form id="form" method="post" asp-action="DetailsInput" asp-controller="Quizzes" asp-area="Administration" class="col-12">
             <div class="component">
                 <div class="card mb-3 mt-3">
                     <div class="card-header text-warning" style="font-size: xx-large">
@@ -72,12 +72,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-            tinymce.init({
-                selector: "textarea",
-                plugins: [
-                    "image paste table link code media"
-                ]
-            });
-    </script>
+    <script src="~/js/tinymcSetup.js" asp-append-version="true"></script>
 }
