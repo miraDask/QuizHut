@@ -18,7 +18,7 @@ This project is the defense project for ASP.NET Core (part of the C# Web Module 
 - You can comment the following line in Startup.cs, but that way you would not be able to send emails:  
   >services.AddTransient<IEmailSender>(x => new SendGridEmailSender(new LoggerFactory(), this.configuration["Sendgrid"])); (line 113)
 - For testing email sending you should have your own key for Sendgrid and add it in secrets.json 
-   (secrets.json file can be found when open Solution Explorer -> right click on QuizHut.Web project -> Manage User Secrets).
+   (secrets.json file can be found: -> open Solution Explorer -> right click on QuizHut.Web project -> Manage User Secrets).
    Then add object like this:
    > { "Sendgrid": "your api key"}
   
